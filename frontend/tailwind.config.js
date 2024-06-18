@@ -13,6 +13,7 @@ export default {
       s90: "90vh",
       s100: "100vh",
       hfull: "100%",
+      h50: "50%"
     },
     colors: {
       light: "#f0f2f5",
