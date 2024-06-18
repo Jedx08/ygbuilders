@@ -33,14 +33,16 @@ const Auth = () => {
       <div className="grid grid-cols-1 place-items-center h-s80 bg-light font-pops">
         <div className="grid grid-cols-3 w-1/2 h-s60 rounded-lg bg-white shadow-lg overflow-hidden">
           {/* Introduction */}
-          <div className="col-span-2 p-3 text-white bg-pouch bg-center bg-cover">
+          <div className="col-span-2 p-3 text-white bg-dark bg-center bg-cover">
             <div className="text-center mb-10">
-              <h1 className="font-black text-4xl mt-5">YOUR GROSS</h1>
+              <h1 className="font-extrabold text-5xl mt-5 text-greens">
+                Your Gross
+              </h1>
             </div>
             <div className="">
               <h1 className="font-bold text-7xl ml-5">Track</h1>
               <h1 className="font-bold text-7xl ml-5">Your</h1>
-              <h1 className="font-bold text-7xl ml-5">Earnings</h1>
+              <h1 className="font-bold text-7xl ml-5 text-oranges">Earnings</h1>
             </div>
           </div>
 

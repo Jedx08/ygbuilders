@@ -16,6 +16,7 @@ export default {
     },
     colors: {
       light: "#f0f2f5",
+      dark: "#1c1e21",
       white: "#fff",
       greens: "#2ec4b6",
       lgreens: "#3cd5c5",
