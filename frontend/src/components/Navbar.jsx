@@ -1,15 +1,26 @@
 import logo from "../media/sample-logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
 import {
   faHouse,
   faChartLine,
   faCircleUser,
 } from "@fortawesome/free-solid-svg-icons";
+import useAuth from "../hooks/useAuth";
 
 const Navbar = () => {
+  const { setAuth } = useAuth();
+
+  const navigate = useNavigate();
+
+  const logout = () => {
+    setAuth({});
+    navigate("/login");
+  };
+
   return (
     <>
-      <div className="flex justify-between p-2">
+      <div className="flex justify-between p-2 font-pops">
         <div className="border rounded-[50%] overflow-hidden grid place-items-center">
           <img src={logo} className="w-12" />
         </div>
@@ -35,10 +46,12 @@ const Navbar = () => {
             </li>
             <li>
               <div>
-                <FontAwesomeIcon
-                  icon={faCircleUser}
-                  className="text-3xl text-[#9F9F9F]"
-                />
+                <button onClick={logout}>
+                  <FontAwesomeIcon
+                    icon={faCircleUser}
+                    className="text-3xl text-[#9F9F9F]"
+                  />
+                </button>
               </div>
             </li>
           </ul>

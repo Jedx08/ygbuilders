@@ -11,7 +11,7 @@ const PersonalForm = () => {
     useContext(CalendarContext);
 
   return (
-    <div className="h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-70">
+    <div className="font-pops h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-70">
       <form className="rounded-md bg-white overflow-hidden px-5">
         <div className="flex items-center justify-center relative w-full">
           <div className="text-center mt-6">

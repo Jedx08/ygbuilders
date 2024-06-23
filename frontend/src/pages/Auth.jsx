@@ -5,8 +5,13 @@ import "slick-carousel/slick/slick-theme.css";
 import LoginForm from "../components/LoginForm";
 import RegisterForm from "../components/RegisterForm";
 import Footer from "../components/Footer";
+import useAuth from "../hooks/useAuth";
 
 const Auth = () => {
+  const { auth } = useAuth();
+
+  console.log(auth);
+
   let sliderRef = useRef(null);
   const next = () => {
     sliderRef.slickNext();
@@ -20,6 +25,7 @@ const Auth = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false,
+    swipe: false,
   };
   return (
     <>

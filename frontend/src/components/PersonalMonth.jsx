@@ -23,7 +23,7 @@ const PersonalMonth = ({ month }) => {
   return (
     <>
       <Navbar />
-      <div className="bg-light">
+      <div className="bg-light font-pops">
         <div>
           <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5">
             <div>

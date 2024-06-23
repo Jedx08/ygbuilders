@@ -11,8 +11,8 @@ import styled from "styled-components";
 const Footer = () => {
   return (
     <>
-      <footer className="bg-white">
-        <div className="flex justify-center space-x-2 w-8/12 mx-auto font-pops py-4">
+      <footer className="bg-white font-pops">
+        <div className="flex justify-center space-x-2 w-8/12 mx-auto py-4">
           <div className="w-4/12">
             <p className="text-sm font-semibold mb-1">Follow us:</p>
             <div className="flex space-x-4">
