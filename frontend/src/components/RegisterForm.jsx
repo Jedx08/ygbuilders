@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
@@ -7,13 +8,16 @@ import {
   faExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "../api/axios";
+import useAuth from "../hooks/useAuth";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const REGISTER_URL = "/register";
 
 const RegisterForm = ({ previous }) => {
-  const errRef = useRef();
+  const navigate = useNavigate();
+
+  const { setAuth } = useAuth();
 
   const [username, setUsername] = useState("");
   const [validUsername, setValidUsername] = useState(false);
@@ -67,16 +71,17 @@ const RegisterForm = ({ previous }) => {
           withCredentials: true,
         }
       );
-      console.log(response.data);
-      console.log(response.accessToken);
-      console.log(JSON.stringify(response));
+
+      const accessToken = response?.data?.accessToken;
+      setAuth({ username, accessToken });
       setSuccess("Success");
+
       setTimeout(() => {
         setUsername("");
         setPassword("");
         setMatchPassword("");
         setSuccess(false);
-        previous();
+        navigate("/");
       }, 1300);
     } catch (err) {
       if (!err?.response) {
@@ -86,7 +91,6 @@ const RegisterForm = ({ previous }) => {
       } else {
         setErrMsg("Registration Failed");
       }
-      errRef.current.focus();
     }
   };
 
@@ -239,10 +243,7 @@ const RegisterForm = ({ previous }) => {
               </div>
             </div>
             {errMsg && (
-              <p
-                ref={errRef}
-                className="text-sm text-semibold text-oranges text-center mt-2"
-              >
+              <p className="text-sm text-semibold text-oranges text-center mt-2">
                 {errMsg}
                 <FontAwesomeIcon
                   icon={faExclamation}

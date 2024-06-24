@@ -6,15 +6,15 @@ import {
   faChartLine,
   faCircleUser,
 } from "@fortawesome/free-solid-svg-icons";
-import useAuth from "../hooks/useAuth";
+import useLogout from "../hooks/useLogout";
 
 const Navbar = () => {
-  const { setAuth } = useAuth();
+  const logout = useLogout();
 
   const navigate = useNavigate();
 
-  const logout = () => {
-    setAuth({});
+  const signOut = async () => {
+    await logout();
     navigate("/login");
   };
 
@@ -46,7 +46,7 @@ const Navbar = () => {
             </li>
             <li>
               <div>
-                <button onClick={logout}>
+                <button onClick={signOut}>
                   <FontAwesomeIcon
                     icon={faCircleUser}
                     className="text-3xl text-[#9F9F9F]"

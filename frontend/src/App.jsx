@@ -6,25 +6,28 @@ import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import NotFound from "./pages/NotFound";
 import RequireAuth from "./components/RequireAuth";
+import PersistLogin from "./components/PersistLogin";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        {/* Public Routes */}
-        <Route path="login" element={<Auth />} />
+    <>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          {/* Protected Routes */}
+          <Route element={<PersistLogin />}>
+            <Route path="login" element={<Auth />} />
+            <Route element={<RequireAuth />}>
+              <Route path="/" element={<Home />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="personal" element={<Personal />} />
+            </Route>
+          </Route>
 
-        {/* Protected Routes */}
-        <Route element={<RequireAuth />}>
-          <Route path="/" element={<Home />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="personal" element={<Personal />} />
+          {/* Catch All */}
+          <Route path="*" element={<NotFound />} />
         </Route>
-
-        {/* Catch All */}
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    </Routes>
+      </Routes>
+    </>
   );
 }
 

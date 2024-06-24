@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamation } from "@fortawesome/free-solid-svg-icons";
@@ -10,7 +10,6 @@ const LOGIN_URL = "/login";
 const LoginForm = ({ next }) => {
   const { setAuth } = useAuth();
 
-  const errRef = useRef();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
@@ -35,8 +34,7 @@ const LoginForm = ({ next }) => {
         }
       );
       const accessToken = response?.data?.accessToken;
-      setAuth({ username, password, accessToken });
-      console.log(username, password, accessToken);
+      setAuth({ username, accessToken });
       setUsername("");
       setPassword("");
       setSuccess("Success");
@@ -53,7 +51,6 @@ const LoginForm = ({ next }) => {
       } else {
         setErrMsg("Login Failed");
       }
-      errRef.current.focus();
     }
   };
 
@@ -96,10 +93,7 @@ const LoginForm = ({ next }) => {
             </div>
 
             {errMsg && (
-              <p
-                ref={errRef}
-                className="text-sm text-semibold text-oranges text-center mt-2"
-              >
+              <p className="text-sm text-semibold text-oranges text-center mt-2">
                 {errMsg}
                 <FontAwesomeIcon
                   icon={faExclamation}
@@ -140,7 +134,11 @@ const LoginForm = ({ next }) => {
         <div>
           <button
             className="bg-oranges py-1 px-6 rounded-md font-bold text-white hover:bg-loranges"
-            onClick={next}
+            onClick={() => {
+              setUsername("");
+              setPassword("");
+              next();
+            }}
           >
             Create Account
           </button>
