@@ -1,6 +1,6 @@
 import logo from "../media/sample-logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   faHouse,
   faChartLine,
@@ -22,26 +22,34 @@ const Navbar = () => {
     <>
       <div className="flex justify-between p-2 font-pops">
         <div className="border rounded-[50%] overflow-hidden grid place-items-center">
-          <img src={logo} className="w-12" />
+          <Link to="/">
+            <img src={logo} className="w-12" />
+          </Link>
         </div>
         <div className="grid place-items-center">
           <ul className="flex space-x-3 items-center">
             <li>
-              <div className="flex space-x-1">
-                <FontAwesomeIcon
-                  icon={faHouse}
-                  className="text-2xl text-greens"
-                />
-                <p className="font-extrabold text-lgreens">Home</p>
-              </div>
+              <Link to="/">
+                <div className="flex space-x-1">
+                  <FontAwesomeIcon
+                    icon={faHouse}
+                    className="text-2xl text-greens hover:text-lgreens"
+                  />
+                  <p className="font-extrabold text-lgreens hover:text-greens">
+                    Home
+                  </p>
+                </div>
+              </Link>
             </li>
             <li>
               <div className="flex space-x-1">
                 <FontAwesomeIcon
                   icon={faChartLine}
-                  className="text-2xl text-oranges"
+                  className="text-2xl text-oranges hover:text-loranges"
                 />
-                <p className="font-extrabold text-loranges">Summary</p>
+                <p className="font-extrabold text-loranges hover:text-oranges">
+                  Summary
+                </p>
               </div>
             </li>
             <li>

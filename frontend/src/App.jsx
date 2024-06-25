@@ -18,8 +18,8 @@ function App() {
             <Route path="login" element={<Auth />} />
             <Route element={<RequireAuth />}>
               <Route path="/" element={<Home />} />
-              <Route path="dashboard" element={<Dashboard />} />
               <Route path="personal" element={<Personal />} />
+              <Route path="dashboard" element={<Dashboard />} />
             </Route>
           </Route>
 
