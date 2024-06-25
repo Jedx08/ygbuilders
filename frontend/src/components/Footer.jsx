@@ -5,15 +5,16 @@ import {
   faTiktok,
   faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
+import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import styled from "styled-components";
 
 const Footer = () => {
   return (
     <>
-    <footer>
-        <div className="flex justify-center space-x-2 w-8/12 mx-auto font-pops">
+      <footer className="bg-white font-pops">
+        <div className="flex justify-center space-x-2 w-8/12 mx-auto py-4">
           <div className="w-4/12">
-            <p className="text-sm">Follow us:</p>
+            <p className="text-sm font-semibold mb-1">Follow us:</p>
             <div className="flex space-x-4">
               <div className="rounded-full overflow-hidden bg-facebook text-white w-10 h-[2.5rem] text-center content-center">
                 <FontAwesomeIcon
@@ -42,23 +43,31 @@ const Footer = () => {
                 />
               </div>
             </div>
+            <div className="mt-3">
+              <p className="text-sm font-semibold">Contact us:</p>
+              <div className="flex space-x-2 items-center">
+                <div className="text-2xl text-[#ff4343]">
+                  <FontAwesomeIcon icon={faEnvelope} />
+                </div>
+                <div className="text-sm">email@yourgross.ph</div>
+              </div>
+            </div>
           </div>
           <div className="w-4/12">
-            <div>Your Gross @ 2024</div>
-            <br />
-            <div>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt
-              cumque reiciendis, sit, odit autem deleniti atque nam ratione
-              animi saepe perferendis placeat esse suscipit aut!
+            <div className="text-sm font-semibold mb-2">About Us</div>
+            <div className="text-sm">
+              kami pala ang Yourgross PH na binubuo ng 4 na miyembro na
+              nagbibigay serbisyo para sa mga taong gustong ma-subaybayan ang
+              kanilang pang araw araw na kita at gastusin.
             </div>
           </div>
         </div>
       </footer>
     </>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;
 
 const Instagram = styled.div`
   border-radius: 9999px;

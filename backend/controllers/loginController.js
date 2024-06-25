@@ -6,12 +6,12 @@ const handleLogin = async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password)
     return res
-      .sendStatus(400)
+      .status(400)
       .json({ message: "Username and Password are required." });
 
   const foundUser = await User.findOne({ username }).exec();
   if (!foundUser)
-    return res.sendStatus(401).json({
+    return res.status(401).json({
       message: "Your login credentials don't match an account in our system.",
     });
   // evaluate password
@@ -30,6 +30,7 @@ const handleLogin = async (req, res) => {
     // saving refresh token with current user
     foundUser.refreshToken = refreshToken;
     const result = await foundUser.save();
+    console.log(result);
 
     //create secure cookie with refresh token
     res.cookie("jwt", refreshToken, {

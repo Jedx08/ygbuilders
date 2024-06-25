@@ -24,6 +24,11 @@ const handleRegister = async (req, res) => {
       password: hashedPassword,
     });
 
+    console.log(created);
+    // res.status(201).json({ success: `New user ${username} created!` });
+
+    // Test Reg and AccessToken
+
     if (created) {
       const foundUser = await User.findOne({ username }).exec();
       const accessToken = jwt.sign(
@@ -31,6 +36,7 @@ const handleRegister = async (req, res) => {
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: "300s" }
       );
+      console.log(accessToken);
       const refreshToken = jwt.sign(
         { username: foundUser.username },
         process.env.REFRESH_TOKEN_SECRET,
@@ -39,6 +45,7 @@ const handleRegister = async (req, res) => {
       // saving refresh token with current user
       foundUser.refreshToken = refreshToken;
       const result = await foundUser.save();
+      console.log(result);
 
       //create secure cookie with refresh token
       res.cookie("jwt", refreshToken, {
@@ -50,14 +57,9 @@ const handleRegister = async (req, res) => {
 
       res.json({
         accessToken,
-        message: `${username} has been registered and logged in sucessfully!`,
       });
       console.log(accessToken);
     }
-
-    // res.json({
-    //   message: `${username} has been registered and logged in sucessfully!`,
-    // });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

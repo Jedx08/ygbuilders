@@ -13,10 +13,11 @@ export default {
       s90: "90vh",
       s100: "100vh",
       hfull: "100%",
-      h50: "50%"
+      h50: "50%",
     },
     colors: {
       light: "#f0f2f5",
+      dark: "#1c1e21",
       white: "#fff",
       greens: "#2ec4b6",
       lgreens: "#3cd5c5",
@@ -24,16 +25,15 @@ export default {
       loranges: "#fdac3a",
       facebook: "#1877f2",
     },
-    backgroundImage: {
-      pouch:
-        "url('https://images.pexels.com/videos/5197762/autumn-calm-cosy-drops-5197762.jpeg')",
-    },
     extend: {
       fontFamily: {
         pops: ["Poppins", "sans-serif"],
       },
       colors: {
         inputLight: "#c9ccd1",
+      },
+      backgroundImage: {
+        employee: "https://cdn-icons-png.flaticon.com/512/8327/8327833.png",
       },
     },
   },
