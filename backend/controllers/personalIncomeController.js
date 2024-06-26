@@ -1,9 +1,12 @@
 const Personal = require("../model/personalModel");
+const User = require("../model/userModel");
 const mongoose = require("mongoose");
 
 // get all data
 const getAllData = async (req, res) => {
-  const personal = await Personal.find({});
+  const user_id = req.user._id;
+
+  const personal = await Personal.find({ user_id });
 
   res.status(200).json(personal);
 };
@@ -19,12 +22,23 @@ const getData = async (req, res) => {
 
 // create data
 const createData = async (req, res) => {
-  const { gross, expenses, id, day } = req.body;
+  const { gross, expenses, id, day, username } = req.body;
+
+  if (!username) {
+    return res.status(400).json({ message: "Bad request" });
+  }
 
   const net = gross - expenses;
 
   try {
-    const personal = await Personal.create({ gross, expenses, net, id, day });
+    const personal = await Personal.create({
+      username,
+      gross,
+      expenses,
+      net,
+      id,
+      day,
+    });
     res.status(200).json(personal);
   } catch (error) {
     res.status(400).json({ error: error.message });
