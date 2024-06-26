@@ -1,13 +1,22 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CalendarContext } from "../context/CalendarContext";
 import dayjs from "dayjs";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import pouch from "../media/pouch.png";
 import expenses from "../media/expenses.png";
 import networth from "../media/networth.png";
 
 const PersonalDay = ({ day, rowIdx }) => {
-  const { monthIndex, setShowPersonalForm, setExactDaySelected } =
-    useContext(CalendarContext);
+  const {
+    monthIndex,
+    setShowPersonalForm,
+    setExactDaySelected,
+    setFormSelectedDate,
+    personalIncomeData,
+    dispatchPersonalIncomeData,
+  } = useContext(CalendarContext);
+  const axiosPrivate = useAxiosPrivate();
+  const [dayData, setDayData] = useState([]);
 
   const notThisMonth =
     day.format("MM") !==
@@ -50,6 +59,33 @@ const PersonalDay = ({ day, rowIdx }) => {
     return sunday ? "text-oranges" : "";
   }
 
+  useEffect(() => {
+    const getPersonalIncomeData = async () => {
+      const response = await axiosPrivate.get("/api/personal-income");
+      const json = await response.data;
+
+      if (response.status === 200) {
+        dispatchPersonalIncomeData({ type: "set", payload: json });
+        // setDayData(json);
+      } else {
+        throw new Error("Error getting data");
+      }
+    };
+    getPersonalIncomeData();
+  }, [dispatchPersonalIncomeData]);
+
+  useEffect(() => {
+    const personalIncomeDB = async () => {
+      const data = await personalIncomeData.filter(
+        (evnt) => dayjs(evnt.day).format("DD-MM-YY") === day.format("DD-MM-YY")
+      );
+
+      setDayData(data);
+    };
+
+    personalIncomeDB();
+  }, [personalIncomeData, day]);
+
   return (
     <>
       <div
@@ -73,8 +109,24 @@ const PersonalDay = ({ day, rowIdx }) => {
             {day.format("D")}
           </p>
           {/* data G, E, N */}
-          {/* <div className="flex space-x-8 text-xs font-semibold mt-3">
-            <div>
+          <div className="flex space-x-8 text-xs font-semibold mt-3">
+            {
+              /* displaying data on their respective date */
+
+              dayData.map((d, i) => (
+                <div
+                  className="text-sm text-center h-full"
+                  key={i}
+                  onClick={() => setFormSelectedDate(d)}
+                >
+                  <div>{d.gross}</div>
+                  <div>{d.expenses}</div>
+                  <div>{d.net}</div>
+                </div>
+              ))
+            }
+
+            {/* <div>
               <ul>
                 <li>
                   <div className="flex">
@@ -108,8 +160,8 @@ const PersonalDay = ({ day, rowIdx }) => {
                   <p>300</p>
                 </li>
               </ul>
-            </div>
-          </div> */}
+            </div> */}
+          </div>
         </header>
       </div>
     </>

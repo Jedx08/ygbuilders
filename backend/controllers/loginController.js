@@ -20,7 +20,7 @@ const handleLogin = async (req, res) => {
     const accessToken = jwt.sign(
       { username: foundUser.username },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "300s" }
+      { expiresIn: "1h" }
     );
     const refreshToken = jwt.sign(
       { username: foundUser.username },
@@ -40,7 +40,7 @@ const handleLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.json({ accessToken });
+    res.json({ username, accessToken });
   } else {
     res.status(401).json({
       message: "Your login credentials don't match an account in our system.",
