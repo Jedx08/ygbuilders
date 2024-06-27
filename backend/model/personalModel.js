@@ -9,6 +9,10 @@ const personalSchema = new Schema(
     day: Date,
     net: Number,
     id: Number,
+    user_id: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

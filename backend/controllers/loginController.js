@@ -30,7 +30,6 @@ const handleLogin = async (req, res) => {
     // saving refresh token with current user
     foundUser.refreshToken = refreshToken;
     const result = await foundUser.save();
-    console.log(result);
 
     //create secure cookie with refresh token
     res.cookie("jwt", refreshToken, {
@@ -40,7 +39,7 @@ const handleLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.json({ username, accessToken });
+    res.json({ accessToken });
   } else {
     res.status(401).json({
       message: "Your login credentials don't match an account in our system.",

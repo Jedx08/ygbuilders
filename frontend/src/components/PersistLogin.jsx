@@ -13,7 +13,11 @@ const PersistLogin = () => {
       try {
         await refresh();
       } catch (err) {
-        console.error(err);
+        if (err.response.status === 403) {
+          console.log("Please Login");
+        } else if (err.response.status === 401) {
+          console.log("Please Login");
+        }
       } finally {
         setIsLoading(false);
       }

@@ -4,11 +4,15 @@ const mongoose = require("mongoose");
 
 // get all data
 const getAllData = async (req, res) => {
-  const user_id = req.user._id;
+  const users = req.user;
 
-  const personal = await Personal.find({ user_id });
-
-  res.status(200).json(personal);
+  try {
+    const user = await User.findOne({ username: users }).select("_id");
+    const personal = await Personal.find({ user_id: user._id });
+    res.status(200).json(personal);
+  } catch (err) {
+    res.status(400).json(err);
+  }
 };
 
 // get single data
@@ -22,17 +26,15 @@ const getData = async (req, res) => {
 
 // create data
 const createData = async (req, res) => {
-  const { gross, expenses, id, day, username } = req.body;
-
-  if (!username) {
-    return res.status(400).json({ message: "Bad request" });
-  }
+  const { gross, expenses, id, day } = req.body;
 
   const net = gross - expenses;
 
   try {
+    const users = req.user;
+    const user = await User.findOne({ username: users }).select("_id");
     const personal = await Personal.create({
-      username,
+      user_id: user._id,
       gross,
       expenses,
       net,
