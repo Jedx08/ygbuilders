@@ -39,9 +39,24 @@ const PersonalForm = () => {
     if (!gross && !expenses) {
       return setError("Please fill atleast one of the fields");
     }
+
+    // Update data
     if (formSelectedDate) {
-      dispatchPersonalIncomeData({ type: "update", payload: data });
+      try {
+        const response = await axiosPrivate.patch(
+          "/api/personal-income/" + formSelectedDate._id,
+          JSON.stringify(data)
+        );
+        if (response.status === 200) {
+          setShowPersonalForm(false);
+          setError(null);
+          dispatchPersonalIncomeData({ type: "update", payload: data });
+        }
+      } catch (err) {
+        setError(err);
+      }
     } else {
+      // Create data
       try {
         const response = await axiosPrivate.post(
           "/api/personal-income",

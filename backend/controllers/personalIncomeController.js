@@ -51,11 +51,21 @@ const createData = async (req, res) => {
 const updateData = async (req, res) => {
   const { id } = req.params;
 
-  const personal = await Personal.findByIdAndUpdate(id, {
-    ...req.body,
-  });
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "Invalid Data" });
+  }
 
-  res.status(200).json(personal);
+  try {
+    const personal = await Personal.findByIdAndUpdate(
+      { _id: id },
+      {
+        ...req.body,
+      }
+    );
+    res.status(200).json(personal);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 };
 
 // delete data

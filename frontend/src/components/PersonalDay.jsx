@@ -88,6 +88,7 @@ const PersonalDay = ({ day, rowIdx }) => {
 
   return (
     <>
+      {}
       <div
         className={`border border-light bg-white flex flex-col ${hover()} ${cursor()}`}
         onClick={toggleForm}
@@ -108,60 +109,53 @@ const PersonalDay = ({ day, rowIdx }) => {
           >
             {day.format("D")}
           </p>
-          {/* data G, E, N */}
-          <div className="flex space-x-8 text-xs font-semibold mt-3">
-            {
-              /* displaying data on their respective date */
 
-              dayData.map((d, i) => (
-                <div
-                  className="text-sm text-center h-full"
-                  key={i}
-                  onClick={() => setFormSelectedDate(d)}
-                >
-                  <div>{d.gross}</div>
-                  <div>{d.expenses}</div>
-                  <div>{d.net}</div>
+          {
+            /* displaying data on their respective date */
+            dayData.map((d, i) => (
+              <div
+                className="flex space-x-8 text-xs font-semibold mt-3 border border-[red] max-h-max"
+                key={i}
+                onClick={() => setFormSelectedDate(d)}
+              >
+                <div>
+                  <ul>
+                    <li>
+                      <div className="flex">
+                        <img src={pouch} alt="Gross" className="h-4 w-4" />
+                        <p className="ml-1">:</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="flex">
+                        <img src={expenses} className="h-4 w-4" />
+                        <p className="ml-1">:</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="flex">
+                        <img src={networth} className="h-4 w-4" />
+                        <p className="ml-1">:</p>
+                      </div>
+                    </li>
+                  </ul>
                 </div>
-              ))
-            }
-
-            {/* <div>
-              <ul>
-                <li>
-                  <div className="flex">
-                    <img src={pouch} alt="Gross" className="h-4 w-4" />
-                    <p className="ml-1">:</p>
-                  </div>
-                </li>
-                <li>
-                  <div className="flex">
-                    <img src={expenses} className="h-4 w-4" />
-                    <p className="ml-1">:</p>
-                  </div>
-                </li>
-                <li>
-                  <div className="flex">
-                    <img src={networth} className="h-4 w-4" />
-                    <p className="ml-1">:</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div className="text-xs">
-              <ul>
-                <li>
-                  <p>500</p>
-                </li>
-                <li>
-                  <p>200</p>
-                </li>
-                <li>
-                  <p>300</p>
-                </li>
-              </ul>
-            </div> */}
-          </div>
+                <div className="text-xs">
+                  <ul>
+                    <li>
+                      <p>{d.gross}</p>
+                    </li>
+                    <li>
+                      <p>{d.expenses}</p>
+                    </li>
+                    <li>
+                      <p>{d.net}</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            ))
+          }
         </header>
       </div>
     </>
