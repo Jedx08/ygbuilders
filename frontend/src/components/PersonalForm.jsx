@@ -15,6 +15,7 @@ const PersonalForm = () => {
     setFormSelectedDate,
     exactDaySelected,
     dispatchPersonalIncomeData,
+    setDayLoading,
   } = useContext(CalendarContext);
 
   const [gross, setGross] = useState(
@@ -51,7 +52,7 @@ const PersonalForm = () => {
           dispatchPersonalIncomeData({ type: "update", payload: data });
           setError(null);
           setShowPersonalForm(false);
-          location.reload();
+          setDayLoading(true);
         }
       } catch (err) {
         setError(err);
@@ -72,12 +73,18 @@ const PersonalForm = () => {
           setFormSelectedDate(null);
           setError(null);
           setShowPersonalForm(false);
-          location.reload();
+          setDayLoading(true);
         }
       } catch (err) {
         console.error(err);
       }
     }
+  }
+
+  function closeForm(e) {
+    e.preventDefault();
+    setShowPersonalForm(false);
+    setFormSelectedDate(null);
   }
 
   return (
@@ -90,19 +97,18 @@ const PersonalForm = () => {
               {exactDaySelected.format("MMMM D, YYYY")}
             </p>
           </div>
-          <div className="absolute right-0 pr-2 mb-5">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                setShowPersonalForm(false);
-                setFormSelectedDate(null);
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faXmark}
-                className="text-xl text-loranges hover:text-oranges"
-              />
-            </button>
+          <div
+            onClick={(e) => (
+              e.preventDefault(),
+              setShowPersonalForm(false),
+              setFormSelectedDate(null)
+            )}
+            className="absolute right-0 pr-2 mb-5 cursor-pointer"
+          >
+            <FontAwesomeIcon
+              icon={faXmark}
+              className="text-xl text-loranges hover:text-oranges"
+            />
           </div>
         </div>
         <div className="px-5 mb-5 mt-5">

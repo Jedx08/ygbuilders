@@ -7,6 +7,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -16,12 +17,14 @@ const Footer = () => {
           <div className="w-4/12">
             <p className="text-sm font-semibold mb-1">Follow us:</p>
             <div className="flex space-x-4">
-              <div className="rounded-full overflow-hidden bg-facebook text-white w-10 h-[2.5rem] text-center content-center">
-                <FontAwesomeIcon
-                  className="text-3xl align-middle"
-                  icon={faFacebookF}
-                />
-              </div>
+              <Link to="https://www.facebook.com/undoxx">
+                <div className="rounded-full overflow-hidden bg-facebook text-white w-10 h-[2.5rem] text-center content-center">
+                  <FontAwesomeIcon
+                    className="text-3xl align-middle"
+                    icon={faFacebookF}
+                  />
+                </div>
+              </Link>
               <div className="rounded-full overflow-hidden bg-[#000] text-white w-10 h-[2.5rem] text-center content-center">
                 <FontAwesomeIcon
                   className="text-2xl inline-block align-middle"

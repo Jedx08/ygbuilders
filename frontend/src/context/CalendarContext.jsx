@@ -23,6 +23,7 @@ export const CalendarContextProvider = (props) => {
   const [showPersonalForm, setShowPersonalForm] = useState(false);
   const [formSelectedDate, setFormSelectedDate] = useState(null);
   const [exactDaySelected, setExactDaySelected] = useState(dayjs());
+  const [dayLoading, setDayLoading] = useState(true);
   const [personalIncomeData, dispatchPersonalIncomeData] = useReducer(
     personalIncomeDataReducer,
     []
@@ -47,6 +48,8 @@ export const CalendarContextProvider = (props) => {
         setExactDaySelected,
         personalIncomeData,
         dispatchPersonalIncomeData,
+        dayLoading,
+        setDayLoading,
       }}
     >
       {props.children}

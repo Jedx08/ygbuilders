@@ -51,6 +51,7 @@ const handleRegister = async (req, res) => {
         maxAge: 24 * 60 * 60 * 1000,
       });
 
+      console.log("New Account: ", username);
       res.json({ accessToken });
     }
   } catch (err) {
