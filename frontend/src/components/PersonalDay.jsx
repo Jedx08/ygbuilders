@@ -23,20 +23,13 @@ const PersonalDay = ({ day, rowIdx }) => {
     dayjs(new Date(dayjs().year(), monthIndex)).format("MM");
 
   function notMonthStyle() {
-    return notThisMonth ? "text-light" : "";
+    return notThisMonth ? "text-[#EEEEEE]" : "";
   }
 
   function currentDay() {
     return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")
       ? "bg-greens text-white rounded-full w-9"
       : "";
-  }
-
-  function toggleForm() {
-    return (
-      notThisMonth ? setShowPersonalForm(false) : setShowPersonalForm(true),
-      setExactDaySelected(day)
-    );
   }
 
   function cursor() {
@@ -86,6 +79,21 @@ const PersonalDay = ({ day, rowIdx }) => {
     personalIncomeDB();
   }, [personalIncomeData, day]);
 
+  function formData(arg) {
+    const data = personalIncomeData.filter(
+      (date) => dayjs(date.day).format("DD-MM-YY") === arg.format("DD-MM-YY")
+    );
+    setFormSelectedDate(data[0]);
+  }
+
+  function toggleForm() {
+    return (
+      notThisMonth ? setShowPersonalForm(false) : setShowPersonalForm(true),
+      setExactDaySelected(day),
+      formData(day)
+    );
+  }
+
   return (
     <>
       {}
@@ -114,28 +122,27 @@ const PersonalDay = ({ day, rowIdx }) => {
             /* displaying data on their respective date */
             dayData.map((d, i) => (
               <div
-                className="flex space-x-8 text-xs font-semibold mt-3 border border-[red] max-h-max"
+                className="flex space-x-6 text-xs font-semibold mt-3"
                 key={i}
-                onClick={() => setFormSelectedDate(d)}
               >
                 <div>
                   <ul>
                     <li>
                       <div className="flex">
                         <img src={pouch} alt="Gross" className="h-4 w-4" />
-                        <p className="ml-1">:</p>
+                        <p className="ml-1 text-[#D0D0D0]">:</p>
                       </div>
                     </li>
                     <li>
                       <div className="flex">
                         <img src={expenses} className="h-4 w-4" />
-                        <p className="ml-1">:</p>
+                        <p className="ml-1 text-[#D0D0D0]">:</p>
                       </div>
                     </li>
                     <li>
                       <div className="flex">
                         <img src={networth} className="h-4 w-4" />
-                        <p className="ml-1">:</p>
+                        <p className="ml-1 text-[#D0D0D0]">:</p>
                       </div>
                     </li>
                   </ul>
@@ -143,13 +150,19 @@ const PersonalDay = ({ day, rowIdx }) => {
                 <div className="text-xs">
                   <ul>
                     <li>
-                      <p>{d.gross}</p>
+                      <p className="text-greens">{d.gross}</p>
                     </li>
                     <li>
-                      <p>{d.expenses}</p>
+                      <p className="text-oranges">{d.expenses}</p>
                     </li>
                     <li>
-                      <p>{d.net}</p>
+                      <p
+                        className={`${
+                          d.net < 0 ? "text-[red]" : "text-lgreens"
+                        }`}
+                      >
+                        {d.net}
+                      </p>
                     </li>
                   </ul>
                 </div>

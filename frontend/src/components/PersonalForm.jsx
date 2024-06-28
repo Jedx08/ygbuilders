@@ -12,8 +12,8 @@ const PersonalForm = () => {
   const {
     setShowPersonalForm,
     formSelectedDate,
+    setFormSelectedDate,
     exactDaySelected,
-    personlIncomeData,
     dispatchPersonalIncomeData,
   } = useContext(CalendarContext);
 
@@ -48,9 +48,10 @@ const PersonalForm = () => {
           JSON.stringify(data)
         );
         if (response.status === 200) {
-          setShowPersonalForm(false);
-          setError(null);
           dispatchPersonalIncomeData({ type: "update", payload: data });
+          setError(null);
+          setShowPersonalForm(false);
+          location.reload();
         }
       } catch (err) {
         setError(err);
@@ -64,12 +65,14 @@ const PersonalForm = () => {
         );
 
         if (response.status === 200) {
-          setShowPersonalForm(false);
-          setError(null);
           dispatchPersonalIncomeData({
             type: "create",
             payload: response.data,
           });
+          setFormSelectedDate(null);
+          setError(null);
+          setShowPersonalForm(false);
+          location.reload();
         }
       } catch (err) {
         console.error(err);
@@ -92,6 +95,7 @@ const PersonalForm = () => {
               onClick={(e) => {
                 e.preventDefault();
                 setShowPersonalForm(false);
+                setFormSelectedDate(null);
               }}
             >
               <FontAwesomeIcon
