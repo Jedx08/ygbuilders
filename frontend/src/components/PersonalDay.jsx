@@ -22,53 +22,21 @@ const PersonalDay = ({ day, rowIdx }) => {
   const axiosPrivate = useAxiosPrivate();
   const [dayData, setDayData] = useState([]);
 
-  const notThisMonth =
-    day.format("MM") !==
-    dayjs(new Date(dayjs().year(), monthIndex)).format("MM");
-
-  function notMonthStyle() {
-    return notThisMonth ? "text-[#EEEEEE]" : "";
-  }
-
-  function currentDay() {
-    return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")
-      ? "bg-greens text-white rounded-full w-9"
-      : "";
-  }
-
-  function cursor() {
-    return notThisMonth ? "cursor-default" : "cursor-pointer";
-  }
-
-  function hover() {
-    return notThisMonth ? "" : "hover:border-loranges";
-  }
-
-  function sunday() {
-    const sunday = day.format("dddd").toUpperCase() === "SUNDAY";
-
-    return sunday ? "text-oranges" : "";
-  }
-
-  function saturday() {
-    const sunday = day.format("dddd").toUpperCase() === "SATURDAY";
-
-    return sunday ? "text-oranges" : "";
-  }
-
   useEffect(() => {
-    const getPersonalIncomeData = async () => {
-      const response = await axiosPrivate.get("/api/personal-income");
-      const json = await response.data;
+    setTimeout(() => {
+      const getPersonalIncomeData = async () => {
+        const response = await axiosPrivate.get("/api/personal-income");
+        const json = await response.data;
 
-      if (response.status === 200) {
-        dispatchPersonalIncomeData({ type: "set", payload: json });
-      } else {
-        throw new Error("Error getting data");
-      }
-    };
-    getPersonalIncomeData();
-    setDayLoading(false);
+        if (response.status === 200) {
+          dispatchPersonalIncomeData({ type: "set", payload: json });
+        } else {
+          throw new Error("Error getting data");
+        }
+      };
+      getPersonalIncomeData();
+      setDayLoading(false);
+    }, 2000);
   }, [dispatchPersonalIncomeData, dayLoading]);
 
   useEffect(() => {
@@ -82,6 +50,23 @@ const PersonalDay = ({ day, rowIdx }) => {
 
     personalIncomeDB();
   }, [personalIncomeData, day]);
+
+  const notThisMonth =
+    day.format("MM") !==
+    dayjs(new Date(dayjs().year(), monthIndex)).format("MM");
+
+  function currentDay() {
+    return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")
+      ? "bg-greens text-white rounded-full w-9"
+      : "";
+  }
+
+  function weekends() {
+    const sunday = day.format("dddd").toUpperCase() === "SUNDAY";
+    const saturday = day.format("dddd").toUpperCase() === "SATURDAY";
+
+    return sunday || saturday ? "text-oranges" : "";
+  }
 
   function formData(arg) {
     const data = personalIncomeData.filter(
@@ -101,7 +86,11 @@ const PersonalDay = ({ day, rowIdx }) => {
   return (
     <>
       <div
-        className={`border border-light bg-white flex flex-col ${hover()} ${cursor()}`}
+        className={`border border-light bg-white flex flex-col ${
+          notThisMonth
+            ? "cursor-default"
+            : "hover:border-loranges cursor-pointer"
+        }`}
         onClick={dayLoading ? null : toggleForm}
       >
         <header className="flex flex-col items-center">
@@ -109,14 +98,16 @@ const PersonalDay = ({ day, rowIdx }) => {
             /* display sunday - saturday */
             rowIdx === 0 && (
               <p
-                className={`select-none text-sm mb-1 font-bold relative mt-[-21px] ${sunday()} ${saturday()}`}
+                className={`select-none text-sm mb-1 font-bold relative mt-[-21px] ${weekends()}`}
               >
                 {day.format("dddd").toUpperCase()}
               </p>
             )
           }
           <p
-            className={`text-lg font-bold pt-1 mt-1 text-center ${notMonthStyle()} ${currentDay()}`}
+            className={`text-lg font-bold pt-1 mt-1 text-center ${
+              notThisMonth ? "text-[#EEEEEE]" : ""
+            } ${currentDay()}`}
           >
             {day.format("D")}
           </p>

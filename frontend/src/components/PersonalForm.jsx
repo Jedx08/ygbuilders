@@ -81,12 +81,6 @@ const PersonalForm = () => {
     }
   }
 
-  function closeForm(e) {
-    e.preventDefault();
-    setShowPersonalForm(false);
-    setFormSelectedDate(null);
-  }
-
   return (
     <div className="font-pops h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-70">
       <form className="rounded-md bg-white overflow-hidden px-5">

@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import PersonalDay from "./PersonalDay";
 import dayjs from "dayjs";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { CalendarContext } from "../context/CalendarContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight, faCaretLeft } from "@fortawesome/free-solid-svg-icons";
@@ -10,8 +10,12 @@ import Footer from "./Footer";
 import PersonalForm from "./PersonalForm";
 
 const PersonalMonth = ({ month }) => {
-  const { monthIndex, setMonthIndex, showPersonalForm } =
+  const { monthIndex, setMonthIndex, showPersonalForm, personalIncomeData } =
     useContext(CalendarContext);
+  const [monthData, setMonthData] = useState([]);
+  const [monthlyGross, setMonthlyGross] = useState(0);
+  const [monthlyExpenses, setMonthlyExpenses] = useState(0);
+  const [monthlyNet, setMonthlyNet] = useState(0);
 
   function handlePrevMonth() {
     setMonthIndex(monthIndex - 1);
@@ -19,6 +23,39 @@ const PersonalMonth = ({ month }) => {
   function handleNextMonth() {
     setMonthIndex(monthIndex + 1);
   }
+
+  useEffect(() => {
+    const personalIncomeDB = async () => {
+      const data = await personalIncomeData.filter(
+        (evnt) =>
+          dayjs(evnt.day).format("M-YY") ===
+          dayjs().month(monthIndex).format("M-YY")
+      );
+
+      setMonthData(data);
+    };
+
+    personalIncomeDB();
+  }, [personalIncomeData, monthIndex]);
+
+  useEffect(() => {
+    let g = 0;
+    let e = 0;
+    let n = 0;
+
+    const monthlyIncomeData = () => {
+      monthData.forEach((data) => {
+        g += data.gross;
+        e += data.expenses;
+        n += data.net;
+      });
+    };
+
+    monthlyIncomeData();
+    setMonthlyGross(g);
+    setMonthlyExpenses(e);
+    setMonthlyNet(n);
+  }, [monthData]);
 
   return (
     <>
@@ -29,7 +66,7 @@ const PersonalMonth = ({ month }) => {
             <div>
               <FontAwesomeIcon
                 icon={faCaretLeft}
-                className="text-oranges text-3xl hover:text-loranges"
+                className="text-oranges text-3xl hover:text-loranges cursor-pointer"
                 onClick={handlePrevMonth}
               />
             </div>
@@ -46,7 +83,7 @@ const PersonalMonth = ({ month }) => {
             <div>
               <FontAwesomeIcon
                 icon={faCaretRight}
-                className="text-oranges text-3xl hover:text-loranges"
+                className="text-oranges text-3xl hover:text-loranges cursor-pointer"
                 onClick={handleNextMonth}
               />
             </div>
@@ -62,6 +99,10 @@ const PersonalMonth = ({ month }) => {
             ))}
           </div>
         </div>
+
+        <div>{monthlyGross}</div>
+        <div>{monthlyExpenses}</div>
+        <div>{monthlyNet}</div>
 
         <Footer />
       </div>
