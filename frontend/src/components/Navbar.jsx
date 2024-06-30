@@ -42,15 +42,17 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <div className="flex space-x-1">
-                <FontAwesomeIcon
-                  icon={faChartLine}
-                  className="text-2xl text-oranges hover:text-loranges"
-                />
-                <p className="font-extrabold text-loranges hover:text-oranges">
-                  Summary
-                </p>
-              </div>
+              <Link to="/summary">
+                <div className="flex space-x-1">
+                  <FontAwesomeIcon
+                    icon={faChartLine}
+                    className="text-2xl text-oranges hover:text-loranges"
+                  />
+                  <p className="font-extrabold text-loranges hover:text-oranges">
+                    Summary
+                  </p>
+                </div>
+              </Link>
             </li>
             <li>
               <div>

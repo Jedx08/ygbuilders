@@ -19,6 +19,7 @@ function personalIncomeDataReducer(state, { type, payload }) {
 }
 
 export const CalendarContextProvider = (props) => {
+  const [monthlyData, setMonthlyData] = useState(null);
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
   const [showPersonalForm, setShowPersonalForm] = useState(false);
   const [formSelectedDate, setFormSelectedDate] = useState(null);
@@ -50,6 +51,8 @@ export const CalendarContextProvider = (props) => {
         dispatchPersonalIncomeData,
         dayLoading,
         setDayLoading,
+        monthlyData,
+        setMonthlyData,
       }}
     >
       {props.children}

@@ -23,20 +23,18 @@ const PersonalDay = ({ day, rowIdx }) => {
   const [dayData, setDayData] = useState([]);
 
   useEffect(() => {
-    setTimeout(() => {
-      const getPersonalIncomeData = async () => {
-        const response = await axiosPrivate.get("/api/personal-income");
-        const json = await response.data;
+    const getPersonalIncomeData = async () => {
+      const response = await axiosPrivate.get("/api/personal-income");
+      const json = await response.data;
 
-        if (response.status === 200) {
-          dispatchPersonalIncomeData({ type: "set", payload: json });
-        } else {
-          throw new Error("Error getting data");
-        }
-      };
-      getPersonalIncomeData();
-      setDayLoading(false);
-    }, 2000);
+      if (response.status === 200) {
+        dispatchPersonalIncomeData({ type: "set", payload: json });
+      } else {
+        throw new Error("Error getting data");
+      }
+    };
+    getPersonalIncomeData();
+    setDayLoading(false);
   }, [dispatchPersonalIncomeData, dayLoading]);
 
   useEffect(() => {
