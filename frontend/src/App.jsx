@@ -1,12 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 import Auth from "./pages/Auth";
-import Dashboard from "./pages/Dashboard";
 import Personal from "./pages/Personal";
 import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import NotFound from "./pages/NotFound";
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
+import Summary from "./pages/Summary";
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
             <Route element={<RequireAuth />}>
               <Route path="/" element={<Home />} />
               <Route path="personal" element={<Personal />} />
-              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="summary" element={<Summary />} />
             </Route>
           </Route>
 
