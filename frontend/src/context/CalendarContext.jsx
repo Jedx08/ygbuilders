@@ -18,14 +18,36 @@ function personalIncomeDataReducer(state, { type, payload }) {
   }
 }
 
+function personalExpensesDataReducer(state, { type, payload }) {
+  switch (type) {
+    case "set":
+      return [...payload];
+    case "create":
+      return [...state, payload];
+    case "update":
+      return state.map((evnt) => (evnt.id === payload.id ? payload : evnt));
+    case "delete":
+      return state.filter((evnt) => evnt.id !== payload.id);
+    default:
+      throw new Error();
+  }
+}
+
 export const CalendarContextProvider = (props) => {
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
   const [showPersonalForm, setShowPersonalForm] = useState(false);
   const [formSelectedDate, setFormSelectedDate] = useState(null);
   const [exactDaySelected, setExactDaySelected] = useState(dayjs());
-  const [dayLoading, setDayLoading] = useState(true);
+  const [dataLoading, setDataLoading] = useState(false);
+  const [showPersonalExpense, setShowPersonalExpenses] = useState(false);
+  const [showPersonalExpenseInput, setShowPersonalExpensesInput] =
+    useState(false);
   const [personalIncomeData, dispatchPersonalIncomeData] = useReducer(
     personalIncomeDataReducer,
+    []
+  );
+  const [personalExpensesData, dispatchPersonalExpensesData] = useReducer(
+    personalExpensesDataReducer,
     []
   );
 
@@ -48,8 +70,14 @@ export const CalendarContextProvider = (props) => {
         setExactDaySelected,
         personalIncomeData,
         dispatchPersonalIncomeData,
-        dayLoading,
-        setDayLoading,
+        dataLoading,
+        setDataLoading,
+        showPersonalExpense,
+        setShowPersonalExpenses,
+        personalExpensesData,
+        dispatchPersonalExpensesData,
+        showPersonalExpenseInput,
+        setShowPersonalExpensesInput,
       }}
     >
       {props.children}

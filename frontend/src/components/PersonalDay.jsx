@@ -8,7 +8,7 @@ import networth from "../media/networth.png";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-const PersonalDay = ({ day, rowIdx }) => {
+const PersonalDay = ({ day }) => {
   const {
     monthIndex,
     setShowPersonalForm,
@@ -16,40 +16,12 @@ const PersonalDay = ({ day, rowIdx }) => {
     setFormSelectedDate,
     personalIncomeData,
     dispatchPersonalIncomeData,
-    dayLoading,
-    setDayLoading,
+    dataLoading,
+    setDataLoading,
   } = useContext(CalendarContext);
   const axiosPrivate = useAxiosPrivate();
   const [dayData, setDayData] = useState([]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      const getPersonalIncomeData = async () => {
-        const response = await axiosPrivate.get("/api/personal-income");
-        const json = await response.data;
-
-        if (response.status === 200) {
-          dispatchPersonalIncomeData({ type: "set", payload: json });
-        } else {
-          throw new Error("Error getting data");
-        }
-      };
-      getPersonalIncomeData();
-      setDayLoading(false);
-    }, 2000);
-  }, [dispatchPersonalIncomeData, dayLoading]);
-
-  useEffect(() => {
-    const personalIncomeDB = async () => {
-      const data = await personalIncomeData.filter(
-        (evnt) => dayjs(evnt.day).format("DD-MM-YY") === day.format("DD-MM-YY")
-      );
-
-      setDayData(data);
-    };
-
-    personalIncomeDB();
-  }, [personalIncomeData, day]);
+  const [personalDataLoading, setPersonalDataLoading] = useState(true);
 
   const notThisMonth =
     day.format("MM") !==
@@ -59,13 +31,6 @@ const PersonalDay = ({ day, rowIdx }) => {
     return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")
       ? "bg-greens text-white rounded-full w-9"
       : "";
-  }
-
-  function weekends() {
-    const sunday = day.format("dddd").toUpperCase() === "SUNDAY";
-    const saturday = day.format("dddd").toUpperCase() === "SATURDAY";
-
-    return sunday || saturday ? "text-oranges" : "";
   }
 
   function formData(arg) {
@@ -83,6 +48,39 @@ const PersonalDay = ({ day, rowIdx }) => {
     );
   }
 
+  useEffect(() => {
+    const getPersonalIncomeData = async () => {
+      const response = await axiosPrivate.get("/api/personal-income");
+      const json = await response.data;
+
+      if (response.status === 200) {
+        dispatchPersonalIncomeData({ type: "set", payload: json });
+      } else {
+        throw new Error("Error getting data");
+      }
+    };
+
+    getPersonalIncomeData();
+    setDataLoading(false);
+  }, [dispatchPersonalIncomeData, dataLoading]);
+
+  useEffect(() => {
+    if (!dataLoading) {
+      const personalIncomeDB = async () => {
+        const data = await personalIncomeData.filter(
+          (evnt) =>
+            dayjs(evnt.day).format("DD-MM-YY") === day.format("DD-MM-YY")
+        );
+
+        setDayData(data);
+        setPersonalDataLoading(false);
+      };
+      personalIncomeDB();
+    } else {
+      setPersonalDataLoading(true);
+    }
+  }, [personalIncomeData, day]);
+
   return (
     <>
       <div
@@ -91,19 +89,9 @@ const PersonalDay = ({ day, rowIdx }) => {
             ? "cursor-default"
             : "hover:border-loranges cursor-pointer"
         }`}
-        onClick={dayLoading ? null : toggleForm}
+        onClick={personalDataLoading ? null : toggleForm}
       >
         <header className="flex flex-col items-center">
-          {
-            /* display sunday - saturday */
-            rowIdx === 0 && (
-              <p
-                className={`select-none text-sm mb-1 font-bold relative mt-[-21px] ${weekends()}`}
-              >
-                {day.format("dddd").toUpperCase()}
-              </p>
-            )
-          }
           <p
             className={`text-lg font-bold pt-1 mt-1 text-center ${
               notThisMonth ? "text-[#EEEEEE]" : ""
@@ -113,7 +101,7 @@ const PersonalDay = ({ day, rowIdx }) => {
           </p>
         </header>
 
-        {dayLoading ? (
+        {personalDataLoading ? (
           <div
             className={`flex items-center justify-center ${
               notThisMonth ? "hidden" : ""

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useRef, useContext, useState, useEffect } from "react";
 import pouchIcon from "../media/pouch.png";
 import expensesIcon from "../media/expenses.png";
 import networthIcon from "../media/networth.png";
@@ -15,8 +15,14 @@ const PersonalForm = () => {
     setFormSelectedDate,
     exactDaySelected,
     dispatchPersonalIncomeData,
-    setDayLoading,
+    setDataLoading,
   } = useContext(CalendarContext);
+
+  const grossRef = useRef();
+
+  useEffect(() => {
+    grossRef.current.focus();
+  }, []);
 
   const [gross, setGross] = useState(
     formSelectedDate ? formSelectedDate.gross : ""
@@ -52,7 +58,7 @@ const PersonalForm = () => {
           dispatchPersonalIncomeData({ type: "update", payload: data });
           setError(null);
           setShowPersonalForm(false);
-          setDayLoading(true);
+          setDataLoading(true);
         }
       } catch (err) {
         setError(err);
@@ -73,7 +79,7 @@ const PersonalForm = () => {
           setFormSelectedDate(null);
           setError(null);
           setShowPersonalForm(false);
-          setDayLoading(true);
+          setDataLoading(true);
         }
       } catch (err) {
         console.error(err);
@@ -114,6 +120,7 @@ const PersonalForm = () => {
             <div>
               <input
                 type="number"
+                ref={grossRef}
                 onChange={(e) => setGross(e.target.value)}
                 value={gross}
                 className="focus:outline-none focus:border-greens pl-4 py-1 caret-greens"
