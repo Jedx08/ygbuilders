@@ -9,7 +9,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight, faCaretLeft } from "@fortawesome/free-solid-svg-icons";
 import Footer from "../components/Footer";
 import Skeleton from "react-loading-skeleton";
-import { useLocation, useNavigate } from "react-router-dom";
 
 const Summary = () => {
   const { monthIndex, setMonthIndex } = useContext(CalendarContext);
@@ -31,15 +30,7 @@ const Summary = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  let { state } = useLocation();
-  const navigate = useNavigate();
   const getPersonalData = useGetData();
-
-  useEffect(() => {
-    if (state?.from !== "/personal") {
-      navigate("/");
-    }
-  }, []);
 
   useEffect(() => {
     let g = 0;
