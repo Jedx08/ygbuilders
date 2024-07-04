@@ -42,7 +42,7 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/summary">
+              <Link to="/summary" state={{ from: location.pathname }}>
                 <div className="flex space-x-1">
                   <FontAwesomeIcon
                     icon={faChartLine}

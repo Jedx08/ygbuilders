@@ -14,6 +14,7 @@ const handleLogin = async (req, res) => {
     return res.status(401).json({
       message: "Your login credentials don't match an account in our system.",
     });
+  const _id = foundUser?._id;
   // evaluate password
   const match = await bcrypt.compare(password, foundUser.password);
   if (match) {
@@ -39,7 +40,7 @@ const handleLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.json({ accessToken });
+    res.json({ accessToken, _id: _id.toString() });
   } else {
     res.status(401).json({
       message: "Your login credentials don't match an account in our system.",
