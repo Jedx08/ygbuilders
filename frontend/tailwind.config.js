@@ -14,6 +14,7 @@ export default {
       s100: "100vh",
       hfull: "100%",
       h50: "50%",
+      hfit: "fit-content",
     },
     colors: {
       light: "#f0f2f5",

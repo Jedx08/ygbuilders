@@ -6,6 +6,7 @@ const connectDB = require("./config/dbConnect");
 const personalIncome = require("./routes/personalIncome");
 const corsOptions = require("./config/corsOptions");
 const credentials = require("./middleware/credentials");
+const userRoute = require("./routes/userRoute");
 const registerRoute = require("./routes/registerRoute");
 const loginRoute = require("./routes/loginRoute");
 const logoutRoute = require("./routes/logoutRoute");
@@ -43,6 +44,9 @@ app.use(verifyJWT);
 
 // user data routes
 app.use("/api/personal-income", personalIncome);
+
+// user route
+app.use("/user", userRoute);
 
 // connect to DB
 mongoose.connection.once("open", () => {

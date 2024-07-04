@@ -2,19 +2,20 @@ import { useContext, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import useGetData from "../hooks/useGetData";
 import dayjs from "dayjs";
-import { Chart } from "chart.js/auto";
+import { Chart } from "chart.js/auto"; // core data for chart, do not remove
 import { Bar, Line, Pie } from "react-chartjs-2";
 import { CalendarContext } from "../context/CalendarContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight, faCaretLeft } from "@fortawesome/free-solid-svg-icons";
 import Footer from "../components/Footer";
+import Skeleton from "react-loading-skeleton";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Summary = () => {
-  const getPersonalData = useGetData();
-
-  const year = dayjs().year();
-
   const { monthIndex, setMonthIndex } = useContext(CalendarContext);
+
+  const year = dayjs().month(monthIndex).year();
+  const thisMonth = dayjs().month(monthIndex).format("MMMM");
 
   const [grossCount, setGrossCount] = useState([]);
   const [expensesCount, setExpensesCount] = useState([]);
@@ -30,6 +31,16 @@ const Summary = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  let { state } = useLocation();
+  const navigate = useNavigate();
+  const getPersonalData = useGetData();
+
+  useEffect(() => {
+    if (state?.from !== "/personal") {
+      navigate("/");
+    }
+  }, []);
+
   useEffect(() => {
     let g = 0;
     let e = 0;
@@ -38,21 +49,18 @@ const Summary = () => {
     const YearlyIncomeData = async () => {
       const yearData = await getPersonalData();
 
-      yearData
-        .filter(
-          (data) =>
-            dayjs(data.day).format("YY") ===
-            dayjs().month(monthIndex).format("YY")
-        )
-        .forEach((data) => {
-          g += data.gross;
-          e += data.expenses;
-          n += data.net;
-        });
+      yearData.filter((data) => {
+        if (
+          dayjs(data.day).format("YY") ===
+          dayjs().month(monthIndex).format("YY")
+        ) {
+          return (g += data.gross), (e += data.expenses), (n += data.net);
+        }
 
-      setyearlyGross(g);
-      setyearlyExpenses(e);
-      setyearlyNet(n);
+        setyearlyGross(g);
+        setyearlyExpenses(e);
+        setyearlyNet(n);
+      });
     };
 
     YearlyIncomeData();
@@ -139,7 +147,6 @@ const Summary = () => {
     <>
       <Navbar className="" />
       <div className=" bg-light font-pops">
-        {isLoading && <div>Loading...</div>}
         <div>
           <div>
             <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5 mb-5">
@@ -172,79 +179,132 @@ const Summary = () => {
         </div>
 
         <div className="bg-light font-pops pb-7">
-          <div className="w-[60%] mx-auto bg-white p-8 rounded-lg">
-            <Line
-              // options={options}
-              data={{
-                labels: dayCount,
-                datasets: [
-                  {
-                    label: "Gross",
-                    data: grossCount,
-                    borderColor: "#2ec4b6",
-                    backgroundColor: "#3cd5c5",
-                  },
-                  {
-                    label: "Expenses",
-                    data: expensesCount,
-                    borderColor: "#ff6384",
-                    backgroundColor: "#FA829C",
-                  },
-                  {
-                    label: "Net",
-                    data: netCount,
-                    borderColor: "#ff9f1c",
-                    backgroundColor: "#fdac3a",
-                  },
-                ],
-              }}
-            />
-          </div>
-
-          <div className="w-[60%] mx-auto m-5 grid grid-cols-3 mt-5 gap-5">
-            <div className="w-[100%] h-[100%] col-span-1 p-5 bg-white rounded-lg">
-              <Pie
+          {isLoading ? (
+            <div className="w-[60%] mx-auto bg-white p-8 rounded-lg flex items-center flex-col">
+              <div className="w-[35%]">
+                <Skeleton />
+              </div>
+              <div className="w-[100%]">
+                <Skeleton height={500} />
+              </div>
+            </div>
+          ) : (
+            <div className=" w-[60%] mx-auto bg-white p-8 rounded-lg shadow-lg">
+              <Line
+                className="w-full"
                 // options={options}
                 data={{
-                  labels: ["Gross", "Expenses", "Net"],
+                  labels: dayCount,
                   datasets: [
                     {
                       label: "Gross",
-                      data: [monthlyGross, monthlyExpenses, monthlyNet],
-                      backgroundColor: ["#2ec4b6", "#ff6384", "#ff9f1c"],
-                      hoverOffset: 6,
+                      data: grossCount,
+                      borderColor: "#2ec4b6",
+                      backgroundColor: "#3cd5c5",
+                    },
+                    {
+                      label: "Expenses",
+                      data: expensesCount,
+                      borderColor: "#ff6384",
+                      backgroundColor: "#FA829C",
+                    },
+                    {
+                      label: "Net",
+                      data: netCount,
+                      borderColor: "#ff9f1c",
+                      backgroundColor: "#fdac3a",
                     },
                   ],
                 }}
               />
             </div>
-            <div className="col-span-2 text-center bg-white rounded-lg">
-              <div className="text-xs py-2">Monthly Summary</div>
-              <div className="w-[60%] grid grid-cols-3 mx-auto">
-                <div>Gross:</div>
-                <div>Expenses:</div>
-                <div>Net:</div>
-              </div>
-              <div className="w-[60%] grid grid-cols-3 mx-auto mt-1 font-bold text-2xl">
-                <div>{monthlyGross}</div>
-                <div>{monthlyExpenses}</div>
-                <div>{monthlyNet}</div>
-              </div>
-              <div className="w-[80%] h-[70%] my-5 mx-auto">
-                <Bar
-                  data={{
-                    labels: ["Gross", "Expenses", "Net"],
-                    datasets: [
-                      {
-                        label: `Overall Summary (${year})`,
-                        data: [yearlyGross, yearlyExpenses, yearlyNet],
-                        backgroundColor: ["#2ec4b6", "#ff6384", "#ff9f1c"],
-                        borderRadius: 5,
-                      },
-                    ],
-                  }}
-                />
-              </div>
+          )}
+
+          <div className="w-[60%] mx-auto m-5 grid grid-cols-3 mt-5 gap-3 content-center">
+            <div className="w-[100%] col-span-1 p-5 bg-white rounded-lg  h-[fit-content] shadow-lg">
+              {isLoading ? (
+                <div>
+                  <Skeleton />
+                  <Skeleton height={300} />
+                </div>
+              ) : (
+                <>
+                  <div>
+                    <Pie
+                      className="w-full mb-2"
+                      // options={options}
+                      data={{
+                        labels: ["Gross", "Expenses", "Net"],
+                        datasets: [
+                          {
+                            label: "Gross",
+                            data: [monthlyGross, monthlyExpenses, monthlyNet],
+                            backgroundColor: ["#2ec4b6", "#ff6384", "#ff9f1c"],
+                            hoverOffset: 6,
+                          },
+                        ],
+                      }}
+                    />
+                  </div>
+                  <hr />
+                  <div className="text-center">
+                    <div className="text-xs py-2">
+                      Monthly Summary ({thisMonth})
+                    </div>
+                    <div className="w-[80%] grid grid-cols-3 mx-auto text-xs">
+                      <div>Gross:</div>
+                      <div>Expenses:</div>
+                      <div>Net:</div>
+                    </div>
+                    <div className="w-[80%] grid grid-cols-3 mx-auto mt-1 font-bold text-sm">
+                      <div>{monthlyGross}</div>
+                      <div>{monthlyExpenses}</div>
+                      <div>{monthlyNet}</div>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+            <div className=" col-span-2 text-center bg-white rounded-lg  shadow-lg">
+              {isLoading ? (
+                <div>
+                  <div className="w-[60%] mx-auto pt-2">
+                    <Skeleton className="my-2" />
+                    <Skeleton count={2} />
+                  </div>
+                  <Skeleton className="w-[80%] my-5" height={200} />
+                </div>
+              ) : (
+                <div>
+                  <div className="text-xs py-2">Yearly Summary ({year})</div>
+                  <div className="w-[60%] grid grid-cols-3 mx-auto">
+                    <div>Gross:</div>
+                    <div>Expenses:</div>
+                    <div>Net:</div>
+                  </div>
+                  <div className="w-[60%] grid grid-cols-3 mx-auto mt-1 font-bold text-2xl">
+                    <div>{yearlyGross}</div>
+                    <div>{yearlyExpenses}</div>
+                    <div>{yearlyNet}</div>
+                  </div>
+                  <hr className="w-[80%] mx-auto mt-2" />
+                  <div className="w-[80%] my-5 mx-auto">
+                    <Bar
+                      data={{
+                        labels: ["Gross", "Expenses", "Net"],
+                        datasets: [
+                          {
+                            label: `Overall Summary (${year})`,
+                            data: [yearlyGross, yearlyExpenses, yearlyNet],
+                            backgroundColor: ["#2ec4b6", "#ff6384", "#ff9f1c"],
+                            borderRadius: 5,
+                          },
+                        ],
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
