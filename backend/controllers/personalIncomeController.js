@@ -72,7 +72,11 @@ const updateData = async (req, res) => {
 const deleteData = async (req, res) => {
   const { id } = req.params;
 
-  const personal = await Personal.findByIdAndDelete(id);
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Invalid Data" });
+  }
+
+  const personal = await Personal.findByIdAndDelete({ _id: id });
 
   res.status(200).json(personal);
 };

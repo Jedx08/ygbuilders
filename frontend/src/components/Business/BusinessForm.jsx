@@ -1,18 +1,18 @@
 import { useContext, useState, useEffect } from "react";
-import pouchIcon from "../media/pouch.png";
-import expensesIcon from "../media/expenses.png";
-import networthIcon from "../media/networth.png";
+import pouchIcon from "../../media/pouch.png";
+import expensesIcon from "../../media/expenses.png";
+import networthIcon from "../../media/networth.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faXmark,
   faCircleCheck,
   faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { CalendarContext } from "../context/CalendarContext";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { CalendarContext } from "../../context/CalendarContext";
+import useAxiosPrivate from "../..useLogout/hooks/useAxiosPrivate";
 import { ThreeDot } from "react-loading-indicators";
 
-const PersonalForm = () => {
+const BusinessForm = () => {
   const axiosPrivate = useAxiosPrivate();
   const {
     setShowPersonalForm,
@@ -570,4 +570,4 @@ const PersonalForm = () => {
   );
 };
 
-export default PersonalForm;
+export default BusinessForm;

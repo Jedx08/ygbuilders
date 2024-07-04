@@ -26,7 +26,7 @@ const getExpensesData = async (req, res) => {
 
 // create data
 const createExpensesData = async (req, res) => {
-  const { title, amount } = req.body;
+  const { title, amount, month } = req.body;
 
   try {
     const users = req.user;
@@ -44,7 +44,7 @@ const createExpensesData = async (req, res) => {
 };
 
 // update data
-const updateData = async (req, res) => {
+const updateExpensesData = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -65,10 +65,22 @@ const updateData = async (req, res) => {
 };
 
 // delete data
-const deleteData = async (req, res) => {
+const deleteExpensesData = async (req, res) => {
   const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Invalid Data" });
+  }
 
   const personalMonth = await PersonalMonth.findByIdAndDelete({ _id: id });
 
   res.status(200).json(personalMonth);
+};
+
+module.exports = {
+  getAllExpensesData,
+  getExpensesData,
+  createExpensesData,
+  updateExpensesData,
+  deleteExpensesData,
 };

@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
-import PersonalDay from "./PersonalDay";
+import BusinessDay from "./BusinessDay";
 import dayjs from "dayjs";
 import { useContext } from "react";
-import { CalendarContext } from "../context/CalendarContext";
+import { CalendarContext } from "../../context/CalendarContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCaretRight,
   faCaretLeft,
   faPen,
 } from "@fortawesome/free-solid-svg-icons";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
-import PersonalForm from "./PersonalForm";
-import PMonthlyExpensesForm from "./PMonthlyExpensesForm";
-import expenses from "../media/expenses.png";
-import usePersonalExpenses from "../hooks/usePersonalExpenses";
+import Navbar from "./../Navbar";
+import Footer from "./../Footer";
+// import PersonalForm from "./PersonalForm";
+// import PMonthlyExpensesForm from "./PMonthlyExpensesForm";
+import expenses from "../../media/expenses.png";
+import usePersonalExpenses from "../../hooks/usePersonalExpenses";
 
-const PersonalMonth = ({ month }) => {
+const BusinessMonth = ({ month }) => {
   const {
     monthIndex,
     setMonthIndex,
@@ -94,7 +94,7 @@ const PersonalMonth = ({ month }) => {
             <div className="grid col-span-3 justify-end items-center mr-8">
               <div className="bg-white py-1 px-3 rounded-md">
                 <p className="text-xs font-semibold text-loranges">
-                  Monthly Bills, Loan etc...
+                  Monthly Capital, Bills etc...
                 </p>
                 <div className="flex items-center justify-center space-x-3">
                   <div className="flex items-center">
@@ -132,7 +132,7 @@ const PersonalMonth = ({ month }) => {
             {month.map((row, i) => (
               <React.Fragment key={i}>
                 {row.map((day, idx) => (
-                  <PersonalDay day={day} key={idx} rowIdx={i} />
+                  <BusinessDay day={day} key={idx} rowIdx={i} />
                 ))}
               </React.Fragment>
             ))}
@@ -150,4 +150,4 @@ const PersonalMonth = ({ month }) => {
   );
 };
 
-export default PersonalMonth;
+export default BusinessMonth;

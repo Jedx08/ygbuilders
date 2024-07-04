@@ -12,7 +12,7 @@ function personalIncomeDataReducer(state, { type, payload }) {
     case "update":
       return state.map((evnt) => (evnt.id === payload.id ? payload : evnt));
     case "delete":
-      return state.filter((evnt) => evnt.id !== payload.id);
+      return state.filter((evnt) => evnt._id !== payload._id);
     default:
       throw new Error();
   }
@@ -25,21 +25,24 @@ function personalExpensesDataReducer(state, { type, payload }) {
     case "create":
       return [...state, payload];
     case "update":
-      return state.map((evnt) => (evnt.id === payload.id ? payload : evnt));
+      return state.map((evnt) => (evnt._id === payload._id ? payload : evnt));
     case "delete":
-      return state.filter((evnt) => evnt.id !== payload.id);
+      return state.filter((evnt) => evnt._id !== payload._id);
     default:
       throw new Error();
   }
 }
 
 export const CalendarContextProvider = (props) => {
+  const [loadPage, setLoadPage] = useState(false);
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
   const [showPersonalForm, setShowPersonalForm] = useState(false);
   const [formSelectedDate, setFormSelectedDate] = useState(null);
   const [exactDaySelected, setExactDaySelected] = useState(dayjs());
-  const [dataLoading, setDataLoading] = useState(false);
-  const [showPersonalExpense, setShowPersonalExpenses] = useState(false);
+  const [personalIncomeLoading, setPersonalIncomeLoading] = useState(true);
+  const [personalExpensesLoading, setPersonalExpensesLoading] = useState(false);
+  const [showPersonalExpenseForm, setShowPersonalExpensesForm] =
+    useState(false);
   const [showPersonalExpenseInput, setShowPersonalExpensesInput] =
     useState(false);
   const [personalIncomeData, dispatchPersonalIncomeData] = useReducer(
@@ -70,14 +73,18 @@ export const CalendarContextProvider = (props) => {
         setExactDaySelected,
         personalIncomeData,
         dispatchPersonalIncomeData,
-        dataLoading,
-        setDataLoading,
-        showPersonalExpense,
-        setShowPersonalExpenses,
+        personalIncomeLoading,
+        setPersonalIncomeLoading,
+        showPersonalExpenseForm,
+        setShowPersonalExpensesForm,
         personalExpensesData,
         dispatchPersonalExpensesData,
         showPersonalExpenseInput,
         setShowPersonalExpensesInput,
+        personalExpensesLoading,
+        setPersonalExpensesLoading,
+        loadPage,
+        setLoadPage,
       }}
     >
       {props.children}

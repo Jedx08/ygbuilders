@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from "react";
-import { CalendarContext } from "../context/CalendarContext";
+import { CalendarContext } from "../../context/CalendarContext";
 import dayjs from "dayjs";
-import pouch from "../media/pouch.png";
-import expenses from "../media/expenses.png";
-import networth from "../media/networth.png";
+import pouch from "../../media/pouch.png";
+import expenses from "../../media/expenses.png";
+import networth from "../../media/networth.png";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import useGetData from "../hooks/useGetData";
+import useGetData from "../../hooks/useGetData";
 
-const PersonalDay = ({ day }) => {
+const BusinessDay = ({ day }) => {
   const {
     monthIndex,
     setShowPersonalForm,
@@ -157,4 +157,4 @@ const PersonalDay = ({ day }) => {
   );
 };
 
-export default PersonalDay;
+export default BusinessDay;

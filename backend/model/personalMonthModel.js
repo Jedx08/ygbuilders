@@ -4,9 +4,18 @@ const Schema = mongoose.Schema;
 
 const personalMonthlySchema = new Schema(
   {
-    title: String,
-    amount: Number,
-    month: String,
+    title: {
+      type: String,
+      required: true,
+    },
+    amount: {
+      type: Number,
+      required: true,
+    },
+    month: {
+      type: String,
+      required: true,
+    },
     user_id: {
       type: String,
       required: true,
@@ -15,4 +24,4 @@ const personalMonthlySchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("PersonalMonth", personalSchema);
+module.exports = mongoose.model("PersonalMonth", personalMonthlySchema);

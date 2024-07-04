@@ -6,6 +6,7 @@ import Layout from "./components/Layout";
 import NotFound from "./pages/NotFound";
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
+import Business from "./pages/Business";
 import Summary from "./pages/Summary";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route element={<RequireAuth />}>
               <Route path="/" element={<Home />} />
               <Route path="personal" element={<Personal />} />
+              <Route path="business" element={<Business />} />
               <Route path="summary" element={<Summary />} />
             </Route>
           </Route>
