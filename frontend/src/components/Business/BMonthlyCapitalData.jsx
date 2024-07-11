@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { CalendarContext } from "../context/CalendarContext";
+import { CalendarContext } from "../../context/CalendarContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleCheck,
@@ -7,18 +7,19 @@ import {
   faTrash,
   faPen,
 } from "@fortawesome/free-solid-svg-icons";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { ThreeDot } from "react-loading-indicators";
 
-const PMonthlyExpensesData = ({ expensesData }) => {
+const BMonthlyCapitalData = ({ capitalData }) => {
   const {
-    setPersonalExpensesLoading,
-    dispatchPersonalExpensesData,
+    setBusinessCapitalLoading,
+    dispatchBusinessCapitalData,
     setLoadPage,
   } = useContext(CalendarContext);
+
   const [editButton, setEditButton] = useState(false);
-  const [title, setTitle] = useState(expensesData ? expensesData.title : "");
-  const [amount, setAmount] = useState(expensesData ? expensesData.amount : "");
+  const [title, setTitle] = useState(capitalData ? capitalData.title : "");
+  const [amount, setAmount] = useState(capitalData ? capitalData.amount : "");
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleteStyle, setDeleteStyle] = useState(false);
   const [updateTitle, setUpdateTitle] = useState(title);
@@ -36,15 +37,15 @@ const PMonthlyExpensesData = ({ expensesData }) => {
 
     try {
       const response = await axiosPrivate.delete(
-        "/api/personal-expenses/" + expensesData._id
+        "/api/business-capital/" + capitalData._id
       );
 
       if (response.status === 200) {
-        dispatchPersonalExpensesData({
+        dispatchBusinessCapitalData({
           type: "delete",
           payload: response.data,
         });
-        setPersonalExpensesLoading(true);
+        setBusinessCapitalLoading(true);
         setLoadPage(false);
       }
     } catch (err) {
@@ -77,16 +78,17 @@ const PMonthlyExpensesData = ({ expensesData }) => {
 
     try {
       const response = await axiosPrivate.patch(
-        "/api/personal-expenses/" + expensesData._id,
+        "/api/business-capital/" + capitalData._id,
         JSON.stringify(data)
       );
+      const json = response.data;
       if (response.status === 200) {
-        dispatchPersonalExpensesData({
+        dispatchBusinessCapitalData({
           type: "update",
-          payload: response.data,
+          payload: json,
         });
         setEditButton(false);
-        setPersonalExpensesLoading(true);
+        setBusinessCapitalLoading(true);
         setLoadPage(false);
       }
     } catch (err) {
@@ -160,7 +162,7 @@ const PMonthlyExpensesData = ({ expensesData }) => {
                 <div onClick={() => setEditButton(true)}>
                   <FontAwesomeIcon
                     icon={faPen}
-                    className="text-greens hover:text-lgreens cursor-pointer text-xl"
+                    className="text-oranges hover:text-loranges cursor-pointer text-xl"
                   />
                 </div>
 
@@ -186,7 +188,7 @@ const PMonthlyExpensesData = ({ expensesData }) => {
                 <ThreeDot
                   style={{ fontSize: "7px" }}
                   variant="pulsate"
-                  color="#2ec4b6"
+                  color="#ff9f1c"
                   text=""
                   textColor=""
                 />
@@ -196,7 +198,7 @@ const PMonthlyExpensesData = ({ expensesData }) => {
                 <button onClick={handleUpdate}>
                   <FontAwesomeIcon
                     icon={faCircleCheck}
-                    className="text-greens cursor-pointer hover:text-lgreens text-2xl"
+                    className="text-oranges cursor-pointer hover:text-loranges text-2xl"
                   />
                 </button>
                 <div
@@ -242,7 +244,7 @@ const PMonthlyExpensesData = ({ expensesData }) => {
                 <div onClick={handleDelete}>
                   <FontAwesomeIcon
                     icon={faCircleCheck}
-                    className="text-lgreens cursor-pointer hover:text-greens text-xl"
+                    className="text-loranges cursor-pointer hover:text-oranges text-xl"
                   />
                 </div>
                 <div
@@ -264,4 +266,4 @@ const PMonthlyExpensesData = ({ expensesData }) => {
   );
 };
 
-export default PMonthlyExpensesData;
+export default BMonthlyCapitalData;

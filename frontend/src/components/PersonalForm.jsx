@@ -230,7 +230,10 @@ const PersonalForm = () => {
                 <img src={pouchIcon} className="w-6" />
               </div>
               <div className="ml-3">
-                <p>{gross}</p>
+                <p>
+                  <span className="text-[#2C2C2C] font-normal">&#x20B1; </span>
+                  {gross.toLocaleString()}
+                </p>
               </div>
             </div>
           ) : (
@@ -299,7 +302,10 @@ const PersonalForm = () => {
                 <img src={expensesIcon} className="w-6" />
               </div>
               <div className="ml-3">
-                <p>{expenses}</p>
+                <p>
+                  <span className="text-[#2C2C2C] font-normal">&#x20B1; </span>
+                  {expenses.toLocaleString()}
+                </p>
               </div>
             </div>
           ) : (
@@ -369,11 +375,12 @@ const PersonalForm = () => {
             <div className="flex items-center ml-4">
               {editData || confirmDelete ? (
                 <p
-                  className={`${
+                  className={`font-bold ${
                     gross - expenses < 0 ? "text-[red]" : "text-greens"
                   }`}
                 >
-                  {gross - expenses}
+                  <span className="text-[#2C2C2C] font-normal">&#x20B1; </span>
+                  {(gross - expenses).toLocaleString()}
                 </p>
               ) : (
                 <></>
@@ -381,7 +388,7 @@ const PersonalForm = () => {
 
               {updateData ? (
                 <p
-                  className={`${
+                  className={`font-bold ${
                     newGross - newExpenses < 0 ? "text-[red]" : "text-greens"
                   }`}
                 >
@@ -395,11 +402,12 @@ const PersonalForm = () => {
                 <></>
               ) : (
                 <p
-                  className={`${
+                  className={`font-bold ${
                     gross - expenses < 0 ? "text-[red]" : "text-greens"
                   }`}
                 >
-                  {gross - expenses}
+                  <span className="text-[#2C2C2C] font-normal">&#x20B1; </span>
+                  {(gross - expenses).toLocaleString()}
                 </p>
               )}
             </div>
@@ -541,12 +549,12 @@ const PersonalForm = () => {
               </>
             ) : (
               <>
-                <div
+                <button
                   onClick={handleSubmit}
                   className="bg-lgreens hover:bg-greens cursor-pointer rounded-md px-4 py-1"
                 >
                   <p className="text-white font-bold">Save changes</p>
-                </div>
+                </button>
 
                 <div
                   onClick={() => {

@@ -1,55 +1,50 @@
-const Business = require("../model/businessModel");
+const PersonalMonth = require("../model/personalMonthlyExpensesModel");
 const User = require("../model/userModel");
 const mongoose = require("mongoose");
 
 // get all data
-const getAllData = async (req, res) => {
+const getAllExpensesData = async (req, res) => {
   const users = req.user;
 
   try {
     const user = await User.findOne({ username: users }).select("_id");
-    const business = await Business.find({ user_id: user._id });
-    res.status(200).json(business);
+    const personalMonth = await PersonalMonth.find({ user_id: user._id });
+    res.status(200).json(personalMonth);
   } catch (err) {
     res.status(400).json(err);
   }
 };
 
 // get single data
-const getData = async (req, res) => {
+const getExpensesData = async (req, res) => {
   const { id } = req.params;
 
-  const business = await Business.findById(id);
+  const personal = await PersonalMonth.findById(id);
 
-  res.status(200).json(business);
+  res.status(200).json(personal);
 };
 
 // create data
-const createData = async (req, res) => {
-  const { capital, sales, expenses, id, day } = req.body;
-
-  const profit = sales - expenses - capital;
+const createExpensesData = async (req, res) => {
+  const { title, amount, month } = req.body;
 
   try {
     const users = req.user;
     const user = await User.findOne({ username: users }).select("_id");
-    const business = await Business.create({
+    const personalMonth = await PersonalMonth.create({
       user_id: user._id,
-      capital,
-      sales,
-      expenses,
-      profit,
-      id,
-      day,
+      title,
+      amount,
+      month,
     });
-    res.status(200).json(business);
+    res.status(200).json(personalMonth);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
 // update data
-const updateData = async (req, res) => {
+const updateExpensesData = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -57,35 +52,35 @@ const updateData = async (req, res) => {
   }
 
   try {
-    const business = await Business.findByIdAndUpdate(
+    const personalMonth = await PersonalMonth.findByIdAndUpdate(
       { _id: id },
       {
         ...req.body,
       }
     );
-    res.status(200).json(business);
+    res.status(200).json(personalMonth);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
 // delete data
-const deleteData = async (req, res) => {
+const deleteExpensesData = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ error: "Invalid Data" });
   }
 
-  const business = await Business.findByIdAndDelete({ _id: id });
+  const personalMonth = await PersonalMonth.findByIdAndDelete({ _id: id });
 
-  res.status(200).json(business);
+  res.status(200).json(personalMonth);
 };
 
 module.exports = {
-  getAllData,
-  getData,
-  createData,
-  updateData,
-  deleteData,
+  getAllExpensesData,
+  getExpensesData,
+  createExpensesData,
+  updateExpensesData,
+  deleteExpensesData,
 };

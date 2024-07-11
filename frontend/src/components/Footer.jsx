@@ -17,7 +17,7 @@ const Footer = () => {
           <div className="w-4/12">
             <p className="text-sm font-semibold mb-1">Follow us:</p>
             <div className="flex space-x-4">
-              <Link to="https://www.facebook.com/undoxx">
+              <Link to="https://www.facebook.com/undoxx" target="_blank">
                 <div className="rounded-full overflow-hidden bg-facebook text-white w-10 h-[2.5rem] text-center content-center">
                   <FontAwesomeIcon
                     className="text-3xl align-middle"

@@ -3,8 +3,11 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const connectDB = require("./config/dbConnect");
-const personalIncome = require("./routes/personalIncome");
-const personalMonth = require("./routes/personalMonth");
+const personalIncome = require("./routes/personalIncomeRoute");
+const personalMonthlyExpenses = require("./routes/personalMonthlyExpensesRoute");
+const businessIncome = require("./routes/businessIncomeRoute");
+const businessMonthlyExpenses = require("./routes/businessMonthlyExpensesRoute");
+const businessMonthlyCapital = require("./routes/businessMonthlyCapitalRoute");
 const corsOptions = require("./config/corsOptions");
 const credentials = require("./middleware/credentials");
 const userRoute = require("./routes/userRoute");
@@ -45,7 +48,10 @@ app.use(verifyJWT);
 
 // user data routes
 app.use("/api/personal-income", personalIncome);
-app.use("/api/personal-expenses", personalMonth);
+app.use("/api/personal-expenses", personalMonthlyExpenses);
+app.use("/api/business-income", businessIncome);
+app.use("/api/business-expenses", businessMonthlyExpenses);
+app.use("/api/business-capital", businessMonthlyCapital);
 
 // user route
 app.use("/user", userRoute);
