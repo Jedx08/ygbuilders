@@ -1,8 +1,8 @@
 import { getMonth } from "../utilities/getMonth";
 import { useContext, useEffect, useState } from "react";
 import { CalendarContext } from "../context/CalendarContext";
-// import { useLocation, useNavigate } from "react-router-dom";
 import BusinessMonth from "../components/business/BusinessMonth";
+// import { useLocation, useNavigate } from "react-router-dom";
 
 const Business = () => {
   const [currentMonth, setCurrentMonth] = useState(getMonth()); // to set current month in calendar
