@@ -5,7 +5,7 @@ const {
   createExpensesData,
   updateExpensesData,
   deleteExpensesData,
-} = require("../controllers/personalMonthController");
+} = require("../controllers/personalMonthlyExpensesController");
 
 const router = express.Router();
 

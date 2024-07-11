@@ -93,7 +93,7 @@ const PersonalMonth = ({ month }) => {
             </div>
             <div className="grid col-span-3 justify-end items-center mr-8">
               <div className="bg-white py-1 px-3 rounded-md">
-                <p className="text-xs font-semibold text-loranges">
+                <p className="text-sm font-bold text-loranges">
                   Monthly Bills, Loan etc...
                 </p>
                 <div className="flex items-center justify-center space-x-3">
@@ -103,7 +103,10 @@ const PersonalMonth = ({ month }) => {
                   </div>
                   <div>
                     <p className="text-md font-semibold text-[red]">
-                      {monthlyExpenses}
+                      <span className="text-[#2C2C2C] font-normal">
+                        &#x20B1;{" "}
+                      </span>
+                      {monthlyExpenses.toLocaleString()}
                     </p>
                   </div>
                   <div className="flex items-center">
@@ -119,7 +122,7 @@ const PersonalMonth = ({ month }) => {
             </div>
           </div>
 
-          <div className="bg-white grid grid-flow-col text-center text-sm font-bold rounded-md mt-3">
+          <div className="bg-white grid grid-flow-col text-center text-sm font-semibold rounded-md mt-3">
             <div className="text-loranges">SUN</div>
             <div className="text-lgreens">MON</div>
             <div className="text-lgreens">TUE</div>

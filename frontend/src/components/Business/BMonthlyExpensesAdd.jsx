@@ -1,6 +1,6 @@
 import { useEffect, useRef, useContext, useState } from "react";
-import { CalendarContext } from "../context/CalendarContext";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { CalendarContext } from "../../context/CalendarContext";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleCheck,
@@ -9,12 +9,12 @@ import {
 import dayjs from "dayjs";
 import { ThreeDot } from "react-loading-indicators";
 
-const PMonthlyExpensesAdd = () => {
+const BMonthlyExpensesAdd = () => {
   const {
     monthIndex,
-    setShowPersonalExpensesInput,
-    dispatchPersonalExpensesData,
-    setPersonalExpensesLoading,
+    setShowBusinessExpensesInput,
+    dispatchBusinessExpensesData,
+    setBusinessExpensesLoading,
     setLoadPage,
   } = useContext(CalendarContext);
   const [title, setTitle] = useState("");
@@ -55,17 +55,17 @@ const PMonthlyExpensesAdd = () => {
     // Create data
     try {
       const response = await axiosPrivate.post(
-        "/api/personal-expenses",
+        "/api/business-expenses",
         JSON.stringify(data)
       );
 
       if (response.status === 200) {
-        dispatchPersonalExpensesData({
+        dispatchBusinessExpensesData({
           type: "create",
           payload: response.data,
         });
-        setShowPersonalExpensesInput(false);
-        setPersonalExpensesLoading(true);
+        setShowBusinessExpensesInput(false);
+        setBusinessExpensesLoading(true);
         setLoadPage(false);
       }
     } catch (err) {
@@ -115,7 +115,7 @@ const PMonthlyExpensesAdd = () => {
               <ThreeDot
                 style={{ fontSize: "7px" }}
                 variant="pulsate"
-                color="#2ec4b6"
+                color="#ff9f1c"
                 text=""
                 textColor=""
               />
@@ -124,10 +124,10 @@ const PMonthlyExpensesAdd = () => {
                 <button onClick={handleSubmit}>
                   <FontAwesomeIcon
                     icon={faCircleCheck}
-                    className=" text-greens hover:text-lgreens text-2xl"
+                    className=" text-oranges hover:text-loranges text-2xl"
                   />
                 </button>
-                <div onClick={() => setShowPersonalExpensesInput(false)}>
+                <div onClick={() => setShowBusinessExpensesInput(false)}>
                   <FontAwesomeIcon
                     icon={faCircleXmark}
                     className=" text-[#FF4242] hover:text-[red] cursor-pointer text-2xl"
@@ -143,4 +143,4 @@ const PMonthlyExpensesAdd = () => {
   );
 };
 
-export default PMonthlyExpensesAdd;
+export default BMonthlyExpensesAdd;

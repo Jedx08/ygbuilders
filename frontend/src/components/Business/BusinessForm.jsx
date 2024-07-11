@@ -9,42 +9,44 @@ import {
   faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarContext } from "../../context/CalendarContext";
-import useAxiosPrivate from "../..useLogout/hooks/useAxiosPrivate";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { ThreeDot } from "react-loading-indicators";
 
 const BusinessForm = () => {
   const axiosPrivate = useAxiosPrivate();
   const {
-    setShowPersonalForm,
-    formSelectedDate,
-    setFormSelectedDate,
+    setShowBusinessForm,
+    businessFormSelectedDate,
+    setBusinessFormSelectedDate,
     exactDaySelected,
-    dispatchPersonalIncomeData,
-    setPersonalIncomeLoading,
+    setBusinessIncomeLoading,
+    dispatchBusinessIncomeData,
   } = useContext(CalendarContext);
 
-  const [isData, setIsData] = useState(true);
+  const [isData, setIsData] = useState(false);
   const [editData, setEditData] = useState(false);
-  const [updateData, setUpdateData] = useState(false);
+  const [showDeleteMsg, setShowDeleteMsg] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => {
-    if (formSelectedDate) {
-      setEditData(true);
-    } else {
-      setIsData(false);
+    if (businessFormSelectedDate) {
+      setIsData(true);
     }
-  }, [formSelectedDate]);
+  }, [businessFormSelectedDate]);
 
-  const [gross, setGross] = useState(
-    formSelectedDate ? formSelectedDate.gross : ""
+  const [capital, setCapital] = useState(
+    businessFormSelectedDate ? businessFormSelectedDate.capital : ""
+  );
+  const [sales, setSales] = useState(
+    businessFormSelectedDate ? businessFormSelectedDate.sales : ""
   );
   const [expenses, setExpenses] = useState(
-    formSelectedDate ? formSelectedDate.expenses : ""
+    businessFormSelectedDate ? businessFormSelectedDate.expenses : ""
   );
   const [error, setError] = useState("");
 
-  const [newGross, setNewGross] = useState(gross);
+  const [newCapital, setNewCapital] = useState(capital);
+  const [newSales, setNewSales] = useState(sales);
   const [newExpenses, setNewExpenses] = useState(expenses);
   const [errorStyle, setErrorStyle] = useState(false);
   const [addLoading, setAddLoading] = useState(false);
@@ -55,40 +57,49 @@ const BusinessForm = () => {
     e.preventDefault();
 
     const data = {
-      gross: +gross,
+      capital: +capital,
+      sales: +sales,
       expenses: +expenses,
-      net: gross - expenses,
+      profit: sales - expenses - capital,
       day: exactDaySelected.valueOf(),
-      id: formSelectedDate ? formSelectedDate.id : Date.now(),
+      id: businessFormSelectedDate ? businessFormSelectedDate.id : Date.now(),
     };
 
     const update = {
-      gross: +newGross,
+      capital: +newCapital,
+      sales: +newSales,
       expenses: +newExpenses,
-      net: +newGross - +newExpenses,
+      profit: newSales - newExpenses - newCapital,
       day: exactDaySelected.valueOf(),
-      id: formSelectedDate ? formSelectedDate.id : Date.now(),
+      id: businessFormSelectedDate ? businessFormSelectedDate.id : Date.now(),
     };
 
     // Update data
-    if (formSelectedDate) {
-      if (!newGross && !newExpenses) {
+    if (businessFormSelectedDate) {
+      if (!newCapital && !newSales && !newExpenses) {
         return (
           setError("Please fill out atleast one of the fields"),
           setErrorStyle(true)
         );
       }
 
-      if (isNaN(newGross)) {
+      if (isNaN(newCapital)) {
         return (
-          setError("Invalid value, Gross and Expenses must be a Number"),
+          setError("Invalid value, Gross, Sales and Expenses must be a Number"),
+          setErrorStyle(true)
+        );
+      }
+
+      if (isNaN(newSales)) {
+        return (
+          setError("Invalid value, Gross, Sales and Expenses must be a Number"),
           setErrorStyle(true)
         );
       }
 
       if (isNaN(newExpenses)) {
         return (
-          setError("Invalid value, Gross and Expenses must be a Number"),
+          setError("Invalid value, Gross, Sales and Expenses must be a Number"),
           setErrorStyle(true)
         );
       }
@@ -97,16 +108,16 @@ const BusinessForm = () => {
 
       try {
         const response = await axiosPrivate.patch(
-          "/api/personal-income/" + formSelectedDate._id,
+          "/api/business-income/" + businessFormSelectedDate._id,
           JSON.stringify(update)
         );
         const json = await response.data;
         if (response.status === 200) {
-          dispatchPersonalIncomeData({ type: "update", payload: json });
-          setFormSelectedDate(null);
-          setShowPersonalForm(false);
+          dispatchBusinessIncomeData({ type: "update", payload: json });
+          setBusinessFormSelectedDate(null);
+          setShowBusinessForm(false);
           setError(null);
-          setPersonalIncomeLoading(true);
+          setBusinessIncomeLoading(true);
         }
       } catch (err) {
         setError(err);
@@ -114,23 +125,36 @@ const BusinessForm = () => {
     } else {
       // Create data
       try {
-        if (!gross && !expenses) {
+        if (!capital && !sales && !expenses) {
           return (
             setError("Please fill out atleast one of the fields"),
             setErrorStyle(true)
           );
         }
 
-        if (isNaN(gross)) {
+        if (isNaN(capital)) {
           return (
-            setError("Invalid value, Gross and Expenses must be a Number"),
+            setError(
+              "Invalid value, Gross, Sales and Expenses must be a Number"
+            ),
+            setErrorStyle(true)
+          );
+        }
+
+        if (isNaN(sales)) {
+          return (
+            setError(
+              "Invalid value, Gross, Sales and Expenses must be a Number"
+            ),
             setErrorStyle(true)
           );
         }
 
         if (isNaN(expenses)) {
           return (
-            setError("Invalid value, Gross and Expenses must be a Number"),
+            setError(
+              "Invalid value, Gross, Sales and Expenses must be a Number"
+            ),
             setErrorStyle(true)
           );
         }
@@ -138,21 +162,21 @@ const BusinessForm = () => {
         setAddLoading(true);
 
         const response = await axiosPrivate.post(
-          "/api/personal-income",
+          "/api/business-income",
           JSON.stringify(data)
         );
         const json = await response.data;
 
         if (response.status === 200) {
-          dispatchPersonalIncomeData({
+          dispatchBusinessIncomeData({
             type: "create",
             payload: json,
           });
         }
-        setFormSelectedDate(null);
+        setBusinessFormSelectedDate(null);
         setError(null);
-        setShowPersonalForm(false);
-        setPersonalIncomeLoading(true);
+        setShowBusinessForm(false);
+        setBusinessIncomeLoading(true);
       } catch (err) {
         console.log(err);
       }
@@ -162,20 +186,21 @@ const BusinessForm = () => {
   // Delete Data
   async function handleDelete() {
     setDeleteLoading(true);
+
     try {
       const response = await axiosPrivate.delete(
-        "/api/personal-income/" + formSelectedDate._id
+        "/api/business-income/" + businessFormSelectedDate._id
       );
       const json = await response.data;
       if (response.status === 200) {
-        dispatchPersonalIncomeData({
+        dispatchBusinessIncomeData({
           type: "delete",
           payload: json,
         });
-        setFormSelectedDate(null);
+        setBusinessFormSelectedDate(null);
         setError(null);
-        setShowPersonalForm(false);
-        setPersonalIncomeLoading(true);
+        setShowBusinessForm(false);
+        setBusinessIncomeLoading(true);
       }
     } catch (err) {
       if (err.response?.status === 400) {
@@ -189,11 +214,12 @@ const BusinessForm = () => {
       <form className="rounded-md bg-white overflow-hidden w-80 px-5 shadow-lg">
         <div className="flex items-center justify-center relative w-full">
           <div className="text-center mt-6">
-            <h1 className="font-bold text-2xl text-greens">Personal Income</h1>
+            <h1 className="font-bold text-2xl text-oranges">Business Income</h1>
             <p className="text-xs font-semibold">
               {exactDaySelected.format("MMMM D, YYYY")}
             </p>
           </div>
+
           {/* Close button */}
           <div
             onClick={(e) => {
@@ -207,8 +233,8 @@ const BusinessForm = () => {
                 location.reload();
               }
               e.preventDefault(),
-                setShowPersonalForm(false),
-                setFormSelectedDate(null);
+                setShowBusinessForm(false),
+                setBusinessFormSelectedDate(null);
             }}
             className="absolute right-0 pr-2 mb-5 cursor-pointer"
           >
@@ -219,24 +245,58 @@ const BusinessForm = () => {
           </div>
         </div>
 
-        {/* Gross */}
+        {/* Capital */}
         <div className="mb-2 mt-5 w-48 mx-auto">
           <div className="flex items-center justify-center">
-            <label className="text-sm font-bold">Gross:</label>
+            <label className="text-sm font-bold">Capital:</label>
           </div>
-          {editData || confirmDelete ? (
-            <div className="flex py-1 bg-light rounded-md overflow-hidden">
-              <div className="pl-2">
-                <img src={pouchIcon} className="w-6" />
-              </div>
-              <div className="ml-3">
-                <p>{gross}</p>
-              </div>
-            </div>
-          ) : (
-            <></>
+          {/* Capital show current data & input */}
+          {isData && (
+            <>
+              {/* show input for update data */}
+              {editData && (
+                <div
+                  className={`flex border col-span-2 rounded-md overflow-hidden ${
+                    errorStyle ? "border-[red]" : "border-inputLight"
+                  }`}
+                >
+                  <div className="pl-2">
+                    <img src={pouchIcon} className="w-8 mt-1" />
+                  </div>
+                  <div>
+                    <input
+                      type="number"
+                      onChange={(e) => {
+                        setNewCapital(e.target.value),
+                          setError(""),
+                          setErrorStyle(false);
+                      }}
+                      value={newCapital}
+                      className="focus:outline-none pl-3 py-1 w-full"
+                    />
+                  </div>
+                </div>
+              )}
+              {/* show current data */}
+              {!editData && (
+                <div className="flex py-1 bg-light rounded-md overflow-hidden">
+                  <div className="pl-2">
+                    <img src={pouchIcon} className="w-6" />
+                  </div>
+                  <div className="ml-3">
+                    <p>
+                      <span className="text-[#2C2C2C] font-normal">
+                        &#x20B1;{" "}
+                      </span>
+                      {capital.toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </>
           )}
-          {updateData ? (
+          {/* show input for add data */}
+          {!isData && (
             <div
               className={`flex border col-span-2 rounded-md overflow-hidden ${
                 errorStyle ? "border-[red]" : "border-inputLight"
@@ -249,21 +309,70 @@ const BusinessForm = () => {
                 <input
                   type="number"
                   onChange={(e) => {
-                    setNewGross(e.target.value),
+                    setCapital(e.target.value),
                       setError(""),
                       setErrorStyle(false);
                   }}
-                  value={newGross}
+                  value={capital}
                   className="focus:outline-none pl-3 py-1 w-full"
                 />
               </div>
             </div>
-          ) : (
-            <></>
           )}
-          {isData ? (
-            <></>
-          ) : (
+        </div>
+
+        {/* Sales */}
+        <div className="w-48 mx-auto mb-5">
+          <div className="flex items-center justify-center">
+            <label className="text-sm font-bold">Sales:</label>
+          </div>
+          {/* Sales show current data & input */}
+          {isData && (
+            <>
+              {/* show input for update data */}
+              {editData && (
+                <div
+                  className={`flex border col-span-2 rounded-md overflow-hidden ${
+                    errorStyle ? "border-[red]" : "border-inputLight"
+                  }`}
+                >
+                  <div className="pl-2">
+                    <img src={pouchIcon} className="w-8 mt-1" />
+                  </div>
+                  <div>
+                    <input
+                      type="number"
+                      onChange={(e) => {
+                        setNewSales(e.target.value),
+                          setError(""),
+                          setErrorStyle(false);
+                      }}
+                      value={newSales}
+                      className="focus:outline-none pl-3 py-1 w-full"
+                    />
+                  </div>
+                </div>
+              )}
+              {/* show current data */}
+              {!editData && (
+                <div className="flex py-1 bg-light rounded-md overflow-hidden">
+                  <div className="pl-2">
+                    <img src={pouchIcon} className="w-6" />
+                  </div>
+                  <div className="ml-3">
+                    <p>
+                      <span className="text-[#2C2C2C] font-normal">
+                        &#x20B1;{" "}
+                      </span>
+                      {sales.toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+          {/* show input for add data */}
+          {!isData && (
             <div
               className={`flex border col-span-2 rounded-md overflow-hidden ${
                 errorStyle ? "border-[red]" : "border-inputLight"
@@ -276,12 +385,12 @@ const BusinessForm = () => {
                 <input
                   type="number"
                   onChange={(e) => {
-                    setGross(e.target.value),
+                    setSales(e.target.value),
                       setError(""),
                       setErrorStyle(false);
                   }}
-                  value={gross}
-                  className="focus:outline-none pl-3 py-1 w-full"
+                  value={sales}
+                  className={`focus:outline-none pl-3 py-1 w-full`}
                 />
               </div>
             </div>
@@ -293,53 +402,60 @@ const BusinessForm = () => {
           <div className="flex items-center justify-center">
             <label className="text-sm font-bold">Expenses:</label>
           </div>
-          {editData || confirmDelete ? (
-            <div className="flex py-1 col-span-2 bg-light rounded-md overflow-hidden">
-              <div className="pl-2">
-                <img src={expensesIcon} className="w-6" />
-              </div>
-              <div className="ml-3">
-                <p>{expenses}</p>
-              </div>
-            </div>
-          ) : (
-            <></>
+
+          {isData && (
+            <>
+              {/* show input for update data */}
+              {editData && (
+                <div
+                  className={`flex border col-span-2 rounded-md overflow-hidden ${
+                    errorStyle ? "border-[red]" : "border-inputLight"
+                  }`}
+                >
+                  <div className="pl-2">
+                    <img src={expensesIcon} className="w-8 mt-1" />
+                  </div>
+                  <div>
+                    <input
+                      type="number"
+                      onChange={(e) => {
+                        setNewExpenses(e.target.value),
+                          setError(""),
+                          setErrorStyle(false);
+                      }}
+                      value={newExpenses}
+                      className="focus:outline-none pl-3 py-1 w-full"
+                    />
+                  </div>
+                </div>
+              )}
+              {/* show current data */}
+              {!editData && (
+                <div className="flex py-1 bg-light rounded-md overflow-hidden">
+                  <div className="pl-2">
+                    <img src={expensesIcon} className="w-6" />
+                  </div>
+                  <div className="ml-3">
+                    <p>
+                      <span className="text-[#2C2C2C] font-normal">
+                        &#x20B1;{" "}
+                      </span>
+                      {expenses.toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </>
           )}
-          {updateData ? (
+          {/* show input for add data */}
+          {!isData && (
             <div
               className={`flex border col-span-2 rounded-md overflow-hidden ${
                 errorStyle ? "border-[red]" : "border-inputLight"
               }`}
             >
               <div className="pl-2">
-                <img src={expensesIcon} className="w-12" />
-              </div>
-              <div>
-                <input
-                  type="number"
-                  onChange={(e) => {
-                    setNewExpenses(e.target.value),
-                      setError(""),
-                      setErrorStyle(false);
-                  }}
-                  value={newExpenses}
-                  className="focus:outline-none pl-2 py-1 w-full"
-                />
-              </div>
-            </div>
-          ) : (
-            <></>
-          )}
-          {isData ? (
-            <></>
-          ) : (
-            <div
-              className={`flex border col-span-2 rounded-md overflow-hidden ${
-                errorStyle ? "border-[red]" : "border-inputLight"
-              }`}
-            >
-              <div className="pl-2">
-                <img src={expensesIcon} className="w-12" />
+                <img src={pouchIcon} className="w-8 mt-1" />
               </div>
               <div>
                 <input
@@ -350,66 +466,81 @@ const BusinessForm = () => {
                       setErrorStyle(false);
                   }}
                   value={expenses}
-                  className="focus:outline-none pl-2 py-1 w-full"
+                  className="focus:outline-none pl-3 py-1 w-full"
                 />
               </div>
             </div>
           )}
         </div>
 
-        {/* Net Pay */}
+        {/* Profit */}
         <div className="w-44 mx-auto px-4">
-          <div className="col-span-1 flex items-center justify-center">
-            <p className="text-sm font-bold">Net:</p>
-          </div>
-          <div className="flex bg-light rounded-md overflow-hidden">
-            <div className="pl-2">
-              <img src={networthIcon} className="w-8" />
-            </div>
-            <div className="flex items-center ml-4">
-              {editData || confirmDelete ? (
-                <p
-                  className={`${
-                    gross - expenses < 0 ? "text-[red]" : "text-greens"
-                  }`}
-                >
-                  {gross - expenses}
-                </p>
-              ) : (
-                <></>
-              )}
+          {/* show new profit */}
+          {editData && (
+            <>
+              <div className="col-span-1 flex items-center justify-center">
+                <p className="text-sm font-bold">Profit:</p>
+              </div>
+              <div className="flex bg-light rounded-md overflow-hidden">
+                <div className="pl-2">
+                  <img src={networthIcon} className="w-8" />
+                </div>
+                <div className="flex items-center ml-4">
+                  <p
+                    className={`font-bold ${
+                      newSales - newExpenses - newCapital < 0
+                        ? "text-[red]"
+                        : "text-greens"
+                    }`}
+                  >
+                    <span className="text-[#2C2C2C] font-normal">
+                      &#x20B1;{" "}
+                    </span>
+                    {newSales || newExpenses
+                      ? (newSales - newExpenses - newCapital).toLocaleString()
+                      : ""}
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
 
-              {updateData ? (
-                <p
-                  className={`${
-                    newGross - newExpenses < 0 ? "text-[red]" : "text-greens"
-                  }`}
-                >
-                  {newGross - newExpenses}
-                </p>
-              ) : (
-                <></>
-              )}
-
-              {isData ? (
-                <></>
-              ) : (
-                <p
-                  className={`${
-                    gross - expenses < 0 ? "text-[red]" : "text-greens"
-                  }`}
-                >
-                  {gross - expenses}
-                </p>
-              )}
-            </div>
-          </div>
+          {/* show current data */}
+          {!editData && (
+            <>
+              <div className="col-span-1 flex items-center justify-center">
+                <p className="text-sm font-bold">Profit:</p>
+              </div>
+              <div className="flex bg-light rounded-md overflow-hidden">
+                <div className="pl-2">
+                  <img src={networthIcon} className="w-8" />
+                </div>
+                <div className="flex items-center ml-4">
+                  <p
+                    className={`font-bold ${
+                      sales - expenses - capital < 0
+                        ? "text-[red]"
+                        : "text-greens"
+                    }`}
+                  >
+                    <span className="text-[#2C2C2C] font-normal">
+                      &#x20B1;{" "}
+                    </span>
+                    {sales || expenses
+                      ? (sales - expenses - capital).toLocaleString()
+                      : ""}
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Error Message */}
         <div className="text-xs text-center text-[red] mt-2 mb-10">{error}</div>
 
-        {confirmDelete ? (
+        {/* Confirm Delete */}
+        {confirmDelete && (
           <div className=" rounded-md mt-1 p-2 bg-light mb-3">
             <p className="text-xs text-center">
               Are you sure you want to remove{" "}
@@ -434,12 +565,14 @@ const BusinessForm = () => {
                   <div onClick={handleDelete}>
                     <FontAwesomeIcon
                       icon={faCircleCheck}
-                      className="text-lgreens cursor-pointer hover:text-greens text-xl"
+                      className="text-loranges cursor-pointer hover:text-oranges text-xl"
                     />
                   </div>
                   <div
                     onClick={() => {
-                      setConfirmDelete(false), setEditData(true);
+                      setConfirmDelete(false),
+                        setShowDeleteMsg(false),
+                        setEditData(false);
                     }}
                   >
                     <FontAwesomeIcon
@@ -451,119 +584,121 @@ const BusinessForm = () => {
               )}
             </div>
           </div>
-        ) : (
-          <></>
         )}
 
-        {/* Add buttons */}
-        {isData || addLoading ? (
-          <></>
-        ) : (
-          <div className="flex flex-col items-center mb-10">
-            <div className="mb-2">
-              <button
-                onClick={handleSubmit}
-                className="mx-auto py-1 rounded-md px-6 bg-greens font-bold text-white hover:bg-lgreens"
-              >
-                Add
-              </button>
-            </div>
-          </div>
-        )}
+        {!showDeleteMsg && (
+          <>
+            {/* Add, Edit & Delete button */}
+            {isData && (
+              <div className="flex justify-center space-x-4 mb-10">
+                {/* show save changes & back button */}
+                {editData && (
+                  <>
+                    {saveChangesLoading ? (
+                      <>
+                        <div className="bg-oranges rounded-md px-4 py-1">
+                          <p className="text-white font-bold">
+                            <ThreeDot
+                              style={{ fontSize: "7px" }}
+                              variant="pulsate"
+                              color="#fff"
+                              text=""
+                              textColor=""
+                            />
+                          </p>
+                        </div>
 
-        {addLoading ? (
-          <div className="flex flex-col items-center mb-10">
-            <div className="mb-2">
-              <div className="mx-auto py-1 rounded-md px-6 bg-lgreens font-bold text-white">
-                <ThreeDot
-                  style={{ fontSize: "7px" }}
-                  variant="pulsate"
-                  color="#fff"
-                  text=""
-                  textColor=""
-                />
+                        <div
+                          onClick={() => {
+                            location.reload();
+                          }}
+                          className="bg-[#FF4242] hover:bg-[red] cursor-pointer rounded-md px-4 py-1"
+                        >
+                          <p className="text-white font-bold">Cancel</p>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={handleSubmit}
+                          className="bg-loranges hover:bg-oranges cursor-pointer rounded-md px-4 py-1"
+                        >
+                          <p className="text-white font-bold">Save changes</p>
+                        </button>
+
+                        <div
+                          onClick={() => {
+                            setEditData(false),
+                              setError(""),
+                              setErrorStyle(false);
+                          }}
+                          className="bg-[#FF4242] hover:bg-[red] cursor-pointer rounded-md px-4 py-1"
+                        >
+                          <p className="text-white font-bold">Back</p>
+                        </div>
+                      </>
+                    )}
+                  </>
+                )}
+                {/* show edit & delete button */}
+                {!editData && (
+                  <>
+                    <div
+                      onClick={() => {
+                        setEditData(true);
+                      }}
+                      className="bg-loranges hover:bg-oranges cursor-pointer rounded-md px-4 py-1"
+                    >
+                      <p className="text-white font-bold">Edit</p>
+                    </div>
+                    <div
+                      onClick={() => {
+                        setShowDeleteMsg(true), setConfirmDelete(true);
+                      }}
+                      className="bg-[#FF4242] hover:bg-[red] cursor-pointer rounded-md px-4 py-1"
+                    >
+                      <p className="text-white font-bold">Delete</p>
+                    </div>
+                  </>
+                )}
               </div>
-            </div>
-          </div>
-        ) : (
-          <></>
-        )}
-
-        {/* Edit and Delete Button */}
-        {editData ? (
-          <div className="flex justify-center space-x-4 mb-10">
-            <div
-              onClick={() => {
-                setUpdateData(true), setEditData(false);
-              }}
-              className="bg-lgreens hover:bg-greens cursor-pointer rounded-md px-4 py-1"
-            >
-              <p className="text-white font-bold">Edit</p>
-            </div>
-            <div
-              onClick={() => {
-                setEditData(false), setConfirmDelete(true);
-              }}
-              className="bg-[#FF4242] hover:bg-[red] cursor-pointer rounded-md px-4 py-1"
-            >
-              <p className="text-white font-bold">Delete</p>
-            </div>
-          </div>
-        ) : (
-          <></>
-        )}
-
-        {/* Save changes and Cancel button */}
-        {updateData ? (
-          <div className="flex justify-center space-x-4 mb-10">
-            {saveChangesLoading ? (
+            )}
+            {/* show add button */}
+            {!isData && (
               <>
-                <div className="bg-greens rounded-md px-4 py-1">
-                  <p className="text-white font-bold">
-                    <ThreeDot
-                      style={{ fontSize: "7px" }}
-                      variant="pulsate"
-                      color="#fff"
-                      text=""
-                      textColor=""
-                    />
-                  </p>
-                </div>
-
-                <div
-                  onClick={() => {
-                    location.reload();
-                  }}
-                  className="bg-[#FF4242] hover:bg-[red] cursor-pointer rounded-md px-4 py-1"
-                >
-                  <p className="text-white font-bold">Cancel</p>
-                </div>
-              </>
-            ) : (
-              <>
-                <div
-                  onClick={handleSubmit}
-                  className="bg-lgreens hover:bg-greens cursor-pointer rounded-md px-4 py-1"
-                >
-                  <p className="text-white font-bold">Save changes</p>
-                </div>
-
-                <div
-                  onClick={() => {
-                    setEditData(true),
-                      setUpdateData(false),
-                      setError(""),
-                      setErrorStyle(false);
-                  }}
-                  className="bg-[#FF4242] hover:bg-[red] cursor-pointer rounded-md px-4 py-1"
-                >
-                  <p className="text-white font-bold">Back</p>
-                </div>
+                {addLoading ? (
+                  <>
+                    <div className="flex flex-col items-center mb-10">
+                      <div className="mb-2">
+                        <div className="mx-auto py-1 rounded-md px-6 bg-loranges font-bold text-white">
+                          <ThreeDot
+                            style={{ fontSize: "7px" }}
+                            variant="pulsate"
+                            color="#fff"
+                            text=""
+                            textColor=""
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex flex-col items-center mb-10">
+                      <div className="mb-2">
+                        <button
+                          onClick={handleSubmit}
+                          className="mx-auto py-1 rounded-md px-6 bg-oranges font-bold text-white hover:bg-loranges"
+                        >
+                          Add
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
               </>
             )}
-          </div>
-        ) : (
-          <></>
+          </>
         )}
       </form>
     </div>

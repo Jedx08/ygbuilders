@@ -11,26 +11,35 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "./../Navbar";
 import Footer from "./../Footer";
-// import PersonalForm from "./PersonalForm";
-// import PMonthlyExpensesForm from "./PMonthlyExpensesForm";
+import BusinessForm from "./BusinessForm";
 import expenses from "../../media/expenses.png";
-import usePersonalExpenses from "../../hooks/usePersonalExpenses";
+import BMonthlyExpensesForm from "./BMonthlyExpensesForm";
+import BMonthlyCapitalForm from "./BMonthlyCapitalForm";
+import useBusinessExpenses from "../../hooks/useBusinessExpenses";
+import useBusinessCapital from "../../hooks/useBusinessCapital";
 
 const BusinessMonth = ({ month }) => {
   const {
     monthIndex,
     setMonthIndex,
-    showPersonalForm,
-    showPersonalExpenseForm,
-    setShowPersonalExpensesForm,
-    personalExpensesData,
-    personalExpensesLoading,
-    setPersonalExpensesLoading,
+    showBusinessForm,
+    showBusinessExpenseForm,
+    setShowBusinessExpensesForm,
+    businessExpensesLoading,
+    setBusinessExpensesLoading,
+    businessExpensesData,
+    showBusinessCapitalForm,
+    businessCapitalLoading,
+    setBusinessCapitalLoading,
+    businessCapitalData,
+    setShowBusinessCapitalForm,
   } = useContext(CalendarContext);
 
-  const getPersonalExpenses = usePersonalExpenses();
+  const getBusinessExpenses = useBusinessExpenses();
+  const getBusinessCapital = useBusinessCapital();
 
   const [monthlyExpenses, setMonthlyExpenses] = useState("");
+  const [monthlyCapital, setMonthlyCapital] = useState("");
 
   function handlePrevMonth() {
     setMonthIndex(monthIndex - 1);
@@ -40,15 +49,18 @@ const BusinessMonth = ({ month }) => {
   }
 
   useEffect(() => {
-    getPersonalExpenses();
-    setPersonalExpensesLoading(false);
-  }, [personalExpensesLoading]);
+    getBusinessExpenses();
+    getBusinessCapital();
+    setBusinessExpensesLoading(false);
+    setBusinessCapitalLoading(false);
+  }, [businessExpensesLoading, businessCapitalLoading]);
 
   useEffect(() => {
     let mExpenses = 0;
-    if (!personalExpensesLoading) {
+    let mCapital = 0;
+    if (!businessExpensesLoading) {
       const getData = () => {
-        personalExpensesData.forEach((data) => {
+        businessExpensesData.forEach((data) => {
           if (data.month === dayjs().month(monthIndex).format("MMMM YYYY"))
             return (mExpenses += data.amount);
         });
@@ -57,7 +69,18 @@ const BusinessMonth = ({ month }) => {
       getData();
       setMonthlyExpenses(mExpenses);
     }
-  }, [personalExpensesData, monthIndex]);
+    if (!businessCapitalLoading) {
+      const getData = () => {
+        businessCapitalData.forEach((data) => {
+          if (data.month === dayjs().month(monthIndex).format("MMMM YYYY"))
+            return (mCapital += data.amount);
+        });
+      };
+
+      getData();
+      setMonthlyCapital(mCapital);
+    }
+  }, [businessExpensesData, businessCapitalData, monthIndex]);
 
   return (
     <>
@@ -69,12 +92,12 @@ const BusinessMonth = ({ month }) => {
               <div>
                 <FontAwesomeIcon
                   icon={faCaretLeft}
-                  className="text-greens text-3xl hover:text-lgreens cursor-pointer"
+                  className="text-oranges text-3xl hover:text-loranges cursor-pointer"
                   onClick={handlePrevMonth}
                 />
               </div>
               <div className="">
-                <h1 className="font-extrabold text-center text-4xl text-greens">
+                <h1 className="font-extrabold text-center text-4xl text-oranges">
                   {
                     /* display current month and year */
                     dayjs(new Date(dayjs().year(), monthIndex)).format(
@@ -86,15 +109,42 @@ const BusinessMonth = ({ month }) => {
               <div>
                 <FontAwesomeIcon
                   icon={faCaretRight}
-                  className="text-greens text-3xl hover:text-lgreens cursor-pointer"
+                  className="text-oranges text-3xl hover:text-loranges cursor-pointer"
                   onClick={handleNextMonth}
                 />
               </div>
             </div>
-            <div className="grid col-span-3 justify-end items-center mr-8">
+            <div className="grid grid-flow-col gap-1 col-span-3 justify-end items-center mr-8">
+              {/* Monthly Capital */}
               <div className="bg-white py-1 px-3 rounded-md">
-                <p className="text-xs font-semibold text-loranges">
-                  Monthly Capital, Bills etc...
+                <p className="text-sm font-bold text-lgreens">
+                  Monthly Capital
+                </p>
+                <div className="flex items-center justify-center space-x-3">
+                  <div className="flex items-center">
+                    <img src={expenses} className="h-5 w-8" />
+                    <p className="ml-1 text-[#D0D0D0] text-xs">:</p>
+                  </div>
+                  <div>
+                    <p className="text-md font-semibold text-[red]">
+                      {monthlyCapital}
+                    </p>
+                  </div>
+                  <div className="flex items-center">
+                    <button onClick={() => setShowBusinessCapitalForm(true)}>
+                      <FontAwesomeIcon
+                        icon={faPen}
+                        className="text-oranges hover:text-loranges cursor-pointer text-lg"
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Monthly Expenses */}
+              <div className="bg-white py-1 px-3 rounded-md">
+                <p className="text-sm font-bold text-lgreens">
+                  Monthly Bills, Rent etc...
                 </p>
                 <div className="flex items-center justify-center space-x-3">
                   <div className="flex items-center">
@@ -107,10 +157,10 @@ const BusinessMonth = ({ month }) => {
                     </p>
                   </div>
                   <div className="flex items-center">
-                    <button onClick={() => setShowPersonalExpensesForm(true)}>
+                    <button onClick={() => setShowBusinessExpensesForm(true)}>
                       <FontAwesomeIcon
                         icon={faPen}
-                        className="text-greens hover:text-lgreens cursor-pointer text-lg"
+                        className="text-oranges hover:text-loranges cursor-pointer text-lg"
                       />
                     </button>
                   </div>
@@ -119,7 +169,7 @@ const BusinessMonth = ({ month }) => {
             </div>
           </div>
 
-          <div className="bg-white grid grid-flow-col text-center text-sm font-bold rounded-md mt-3">
+          <div className="bg-white grid grid-flow-col text-center text-sm font-semibold rounded-md mt-3">
             <div className="text-loranges">SUN</div>
             <div className="text-lgreens">MON</div>
             <div className="text-lgreens">TUE</div>
@@ -142,10 +192,13 @@ const BusinessMonth = ({ month }) => {
 
       <Footer />
 
-      {showPersonalExpenseForm && (
-        <PMonthlyExpensesForm monthlyExpenses={monthlyExpenses} />
+      {showBusinessExpenseForm && (
+        <BMonthlyExpensesForm monthlyExpenses={monthlyExpenses} />
       )}
-      {showPersonalForm && <PersonalForm />}
+      {showBusinessCapitalForm && (
+        <BMonthlyCapitalForm monthlyCapital={monthlyCapital} />
+      )}
+      {showBusinessForm && <BusinessForm />}
     </>
   );
 };

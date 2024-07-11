@@ -1,25 +1,25 @@
 import { getMonth } from "../utilities/getMonth";
 import { useContext, useEffect, useState } from "react";
 import { CalendarContext } from "../context/CalendarContext";
-import { useLocation, useNavigate } from "react-router-dom";
-import BusinessMonth from "../components/Business/BusinessMonth";
+// import { useLocation, useNavigate } from "react-router-dom";
+import BusinessMonth from "../components/business/BusinessMonth";
 
-const Personal = () => {
+const Business = () => {
   const [currentMonth, setCurrentMonth] = useState(getMonth()); // to set current month in calendar
   const { monthIndex } = useContext(CalendarContext);
 
-  let { state } = useLocation();
-  const navigate = useNavigate();
+  // let { state } = useLocation();
+  // const navigate = useNavigate();
 
   useEffect(() => {
     setCurrentMonth(getMonth(monthIndex));
   }, [monthIndex]);
 
-  useEffect(() => {
-    if (state?.from !== "/") {
-      navigate("/");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (state?.from !== "/") {
+  //     navigate("/");
+  //   }
+  // }, []);
 
   return (
     <div>
@@ -28,4 +28,4 @@ const Personal = () => {
   );
 };
 
-export default Personal;
+export default Business;

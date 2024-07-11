@@ -5,10 +5,10 @@ const Schema = mongoose.Schema;
 const businessSchema = new Schema(
   {
     capital: Number,
-    gross: Number,
+    sales: Number,
     expenses: Number,
+    profit: Number,
     day: Date,
-    net: Number,
     id: Number,
     user_id: {
       type: String,

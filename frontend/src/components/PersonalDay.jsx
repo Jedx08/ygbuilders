@@ -76,7 +76,7 @@ const PersonalDay = ({ day }) => {
   return (
     <>
       <div
-        className={`border border-light bg-white flex flex-col ${
+        className={`border border-light bg-white flex flex-col font-pops ${
           notThisMonth
             ? "cursor-default"
             : "hover:border-loranges cursor-pointer"
@@ -105,7 +105,7 @@ const PersonalDay = ({ day }) => {
           /* displaying data on their respective date */
           dayData.map((d, i) => (
             <div
-              className={`flex space-x-6 text-xs font-semibold mt-3 justify-center ${
+              className={`flex font-medium space-x-2 text-xs mt-3 justify-center ${
                 notThisMonth ? "hidden" : ""
               }`}
               key={i}
@@ -135,16 +135,31 @@ const PersonalDay = ({ day }) => {
               <div className="text-xs">
                 <ul>
                   <li>
-                    <p className="text-lgreens">{d.gross}</p>
+                    <p className="text-lgreens">
+                      <span className="text-[#2C2C2C] font-normal">
+                        &#x20B1;{" "}
+                      </span>
+                      {d.gross.toLocaleString()}
+                    </p>
                   </li>
                   <li>
-                    <p className="text-loranges">{d.expenses}</p>
+                    <p className="text-[red]">
+                      <span className="text-[#2C2C2C] font-normal">
+                        &#x20B1;{" "}
+                      </span>
+                      {d.expenses.toLocaleString()}
+                    </p>
                   </li>
                   <li>
                     <p
-                      className={`${d.net < 0 ? "text-[red]" : "text-lgreens"}`}
+                      className={`font-bold ${
+                        d.net < 0 ? "text-[red]" : "text-lgreens"
+                      }`}
                     >
-                      {d.net}
+                      <span className="text-[#2C2C2C] font-normal">
+                        &#x20B1;{" "}
+                      </span>
+                      {d.net.toLocaleString()}
                     </p>
                   </li>
                 </ul>

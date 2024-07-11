@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const personalMonthlySchema = new Schema(
+const personalMonthlyExpensesSchema = new Schema(
   {
     title: {
       type: String,
@@ -24,4 +24,7 @@ const personalMonthlySchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("PersonalMonth", personalMonthlySchema);
+module.exports = mongoose.model(
+  "PersonalMonthlyExpenses",
+  personalMonthlyExpensesSchema
+);

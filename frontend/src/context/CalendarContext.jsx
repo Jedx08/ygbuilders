@@ -33,17 +33,75 @@ function personalExpensesDataReducer(state, { type, payload }) {
   }
 }
 
+function businessIncomeDataReducer(state, { type, payload }) {
+  switch (type) {
+    case "set":
+      return [...payload];
+    case "create":
+      return [...state, payload];
+    case "update":
+      return state.map((evnt) => (evnt.id === payload.id ? payload : evnt));
+    case "delete":
+      return state.filter((evnt) => evnt._id !== payload._id);
+    default:
+      throw new Error();
+  }
+}
+
+function businessExpensesDataReducer(state, { type, payload }) {
+  switch (type) {
+    case "set":
+      return [...payload];
+    case "create":
+      return [...state, payload];
+    case "update":
+      return state.map((evnt) => (evnt.id === payload.id ? payload : evnt));
+    case "delete":
+      return state.filter((evnt) => evnt._id !== payload._id);
+    default:
+      throw new Error();
+  }
+}
+
+function businessCapitalDataReducer(state, { type, payload }) {
+  switch (type) {
+    case "set":
+      return [...payload];
+    case "create":
+      return [...state, payload];
+    case "update":
+      return state.map((evnt) => (evnt.id === payload.id ? payload : evnt));
+    case "delete":
+      return state.filter((evnt) => evnt._id !== payload._id);
+    default:
+      throw new Error();
+  }
+}
+
 export const CalendarContextProvider = (props) => {
-  const [loadPage, setLoadPage] = useState(false);
+  const [loadPage, setLoadPage] = useState(false); // load current page
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
-  const [showPersonalForm, setShowPersonalForm] = useState(false);
+  const [showPersonalForm, setShowPersonalForm] = useState(false); // show personal form
+  const [showBusinessForm, setShowBusinessForm] = useState(false); // show business form
   const [formSelectedDate, setFormSelectedDate] = useState(null);
+  const [businessFormSelectedDate, setBusinessFormSelectedDate] =
+    useState(null);
   const [exactDaySelected, setExactDaySelected] = useState(dayjs());
   const [personalIncomeLoading, setPersonalIncomeLoading] = useState(true);
   const [personalExpensesLoading, setPersonalExpensesLoading] = useState(false);
   const [showPersonalExpenseForm, setShowPersonalExpensesForm] =
     useState(false);
+  const [businessIncomeLoading, setBusinessIncomeLoading] = useState(true);
+  const [businessExpensesLoading, setBusinessExpensesLoading] = useState(false);
+  const [showBusinessExpenseForm, setShowBusinessExpensesForm] =
+    useState(false);
+  const [showBusinessCapitalForm, setShowBusinessCapitalForm] = useState(false);
+  const [businessCapitalLoading, setBusinessCapitalLoading] = useState(true);
+  const [showBusinessCapitalInput, setShowBusinessCapitalInput] =
+    useState(false);
   const [showPersonalExpenseInput, setShowPersonalExpensesInput] =
+    useState(false);
+  const [showBusinessExpenseInput, setShowBusinessExpensesInput] =
     useState(false);
   const [personalIncomeData, dispatchPersonalIncomeData] = useReducer(
     personalIncomeDataReducer,
@@ -53,12 +111,30 @@ export const CalendarContextProvider = (props) => {
     personalExpensesDataReducer,
     []
   );
+  const [businessIncomeData, dispatchBusinessIncomeData] = useReducer(
+    businessIncomeDataReducer,
+    []
+  );
+  const [businessExpensesData, dispatchBusinessExpensesData] = useReducer(
+    businessExpensesDataReducer,
+    []
+  );
+  const [businessCapitalData, dispatchBusinessCapitalData] = useReducer(
+    businessCapitalDataReducer,
+    []
+  );
 
   useEffect(() => {
     if (!showPersonalForm) {
       setFormSelectedDate(null);
     }
   }, [showPersonalForm]);
+
+  useEffect(() => {
+    if (!showBusinessForm) {
+      setFormSelectedDate(null);
+    }
+  }, [showBusinessForm]);
 
   return (
     <CalendarContext.Provider
@@ -85,6 +161,30 @@ export const CalendarContextProvider = (props) => {
         setPersonalExpensesLoading,
         loadPage,
         setLoadPage,
+        businessIncomeData,
+        dispatchBusinessIncomeData,
+        showBusinessForm,
+        setShowBusinessForm,
+        businessFormSelectedDate,
+        setBusinessFormSelectedDate,
+        businessIncomeLoading,
+        setBusinessIncomeLoading,
+        showBusinessExpenseForm,
+        setShowBusinessExpensesForm,
+        businessExpensesLoading,
+        setBusinessExpensesLoading,
+        businessExpensesData,
+        dispatchBusinessExpensesData,
+        showBusinessExpenseInput,
+        setShowBusinessExpensesInput,
+        showBusinessCapitalForm,
+        setShowBusinessCapitalForm,
+        businessCapitalLoading,
+        setBusinessCapitalLoading,
+        showBusinessCapitalInput,
+        setShowBusinessCapitalInput,
+        businessCapitalData,
+        dispatchBusinessCapitalData,
       }}
     >
       {props.children}
