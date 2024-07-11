@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import PersonalSummary from "../components/PersonalSummary";
-import BusinessSummary from "../components/Business/BusinessSummary";
+import PersonalSummary from "../components/personal/PersonalSummary";
+import BusinessSummary from "../components/business/BusinessSummary";
 
 const Summary = () => {
   const [personalSummary, setPersonalSummary] = useState(true);

@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
-import { CalendarContext } from "../context/CalendarContext";
+import { CalendarContext } from "../../context/CalendarContext";
 import dayjs from "dayjs";
 import PMonthlyExpensesAdd from "./PMonthlyExpensesAdd";
 import PMonthlyExpensesData from "./PMonthlyExpensesData";
-import usePersonalExpenses from "../hooks/usePersonalExpenses";
+import usePersonalExpenses from "../../hooks/usePersonalExpenses";
 import Skeleton from "react-loading-skeleton";
 
 const PMonthlyExpensesForm = ({ monthlyExpenses }) => {

@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { CalendarContext } from "../context/CalendarContext";
+import { CalendarContext } from "../../context/CalendarContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleCheck,
@@ -7,7 +7,7 @@ import {
   faTrash,
   faPen,
 } from "@fortawesome/free-solid-svg-icons";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { ThreeDot } from "react-loading-indicators";
 
 const PMonthlyExpensesData = ({ expensesData }) => {

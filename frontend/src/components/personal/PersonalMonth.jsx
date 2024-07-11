@@ -2,19 +2,19 @@ import React, { useEffect, useState } from "react";
 import PersonalDay from "./PersonalDay";
 import dayjs from "dayjs";
 import { useContext } from "react";
-import { CalendarContext } from "../context/CalendarContext";
+import { CalendarContext } from "../../context/CalendarContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCaretRight,
   faCaretLeft,
   faPen,
 } from "@fortawesome/free-solid-svg-icons";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import Navbar from "../Navbar";
+import Footer from "../Footer";
 import PersonalForm from "./PersonalForm";
 import PMonthlyExpensesForm from "./PMonthlyExpensesForm";
-import expenses from "../media/expenses.png";
-import usePersonalExpenses from "../hooks/usePersonalExpenses";
+import expenses from "../../media/expenses.png";
+import usePersonalExpenses from "../../hooks/usePersonalExpenses";
 
 const PersonalMonth = ({ month }) => {
   const {

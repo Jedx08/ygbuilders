@@ -2,9 +2,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
-import useGetData from "../hooks/useGetPersonalData";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import useAuth from "../hooks/useAuth";
+import useGetData from "../../hooks/useGetPersonalData";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useAuth from "../../hooks/useAuth";
 import { ThreeDot } from "react-loading-indicators";
 import Skeleton from "react-loading-skeleton";
 

@@ -1,5 +1,5 @@
 import Navbar from "../components/Navbar";
-import PersonalHomeCard from "../components/PersonalHomeCard";
+import PersonalHomeCard from "../components/personal/PersonalHomeCard";
 
 const Home = () => {
   return (

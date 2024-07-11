@@ -9,8 +9,8 @@ import {
   faCaretLeft,
   faPen,
 } from "@fortawesome/free-solid-svg-icons";
-import Navbar from "./../Navbar";
-import Footer from "./../Footer";
+import Navbar from "../Navbar";
+import Footer from "../Footer";
 import BusinessForm from "./BusinessForm";
 import expenses from "../../media/expenses.png";
 import BMonthlyExpensesForm from "./BMonthlyExpensesForm";

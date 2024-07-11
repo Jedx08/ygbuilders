@@ -1,6 +1,6 @@
 import { useEffect, useRef, useContext, useState } from "react";
-import { CalendarContext } from "../context/CalendarContext";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { CalendarContext } from "../../context/CalendarContext";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleCheck,

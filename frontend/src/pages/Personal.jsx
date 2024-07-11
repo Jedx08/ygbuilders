@@ -1,5 +1,5 @@
 import { getMonth } from "../utilities/getMonth";
-import PersonalMonth from "../components/PersonalMonth";
+import PersonalMonth from "../components/personal/PersonalMonth";
 import { useContext, useEffect, useState } from "react";
 import { CalendarContext } from "../context/CalendarContext";
 import { useLocation, useNavigate } from "react-router-dom";

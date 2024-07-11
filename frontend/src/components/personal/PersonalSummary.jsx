@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import usePersonalExpenses from "../hooks/usePersonalExpenses";
-import useGetPersonalData from "../hooks/useGetPersonalData";
+import usePersonalExpenses from "../../hooks/usePersonalExpenses";
+import useGetPersonalData from "../../hooks/useGetPersonalData";
 import dayjs from "dayjs";
 import { Chart } from "chart.js/auto"; // core data for chart, do not remove
 import { Bar, Line } from "react-chartjs-2";
-import { CalendarContext } from "../context/CalendarContext";
+import { CalendarContext } from "../../context/CalendarContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight, faCaretLeft } from "@fortawesome/free-solid-svg-icons";
 import Skeleton from "react-loading-skeleton";

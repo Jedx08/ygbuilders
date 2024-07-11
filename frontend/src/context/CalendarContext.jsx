@@ -80,13 +80,13 @@ function businessCapitalDataReducer(state, { type, payload }) {
 
 export const CalendarContextProvider = (props) => {
   const [loadPage, setLoadPage] = useState(false); // load current page
-  const [monthIndex, setMonthIndex] = useState(dayjs().month());
+  const [monthIndex, setMonthIndex] = useState(dayjs().month()); // to change month by index
   const [showPersonalForm, setShowPersonalForm] = useState(false); // show personal form
   const [showBusinessForm, setShowBusinessForm] = useState(false); // show business form
-  const [formSelectedDate, setFormSelectedDate] = useState(null);
-  const [businessFormSelectedDate, setBusinessFormSelectedDate] =
+  const [formSelectedDate, setFormSelectedDate] = useState(null); // selected date for personal form with data
+  const [businessFormSelectedDate, setBusinessFormSelectedDate] = // selected date for business form with data
     useState(null);
-  const [exactDaySelected, setExactDaySelected] = useState(dayjs());
+  const [exactDaySelected, setExactDaySelected] = useState(dayjs()); // selected date
   const [personalIncomeLoading, setPersonalIncomeLoading] = useState(true);
   const [personalExpensesLoading, setPersonalExpensesLoading] = useState(false);
   const [showPersonalExpenseForm, setShowPersonalExpensesForm] =
