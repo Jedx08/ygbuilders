@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { CalendarContext } from "../context/CalendarContext";
 import useAxiosPrivate from "./useAxiosPrivate";
 
-const useGetData = () => {
+const useGetPersonalData = () => {
   const axiosPrivate = useAxiosPrivate();
   const { dispatchPersonalIncomeData } = useContext(CalendarContext);
 
@@ -22,4 +22,4 @@ const useGetData = () => {
   return getPersonalData;
 };
 
-export default useGetData;
+export default useGetPersonalData;

@@ -6,7 +6,7 @@ import expenses from "../media/expenses.png";
 import networth from "../media/networth.png";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import useGetData from "../hooks/useGetData";
+import useGetData from "../hooks/useGetPersonalData";
 
 const PersonalDay = ({ day }) => {
   const {
