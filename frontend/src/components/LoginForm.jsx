@@ -34,7 +34,8 @@ const LoginForm = ({ next }) => {
         }
       );
       const accessToken = response?.data?.accessToken;
-      setAuth({ username, accessToken });
+      const _id = response?.data?._id;
+      setAuth({ _id, accessToken });
       setUsername("");
       setPassword("");
       setSuccess("Success");
