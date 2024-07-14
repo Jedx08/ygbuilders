@@ -5,7 +5,7 @@ import PersonalSummary from "../components/personal/PersonalSummary";
 import BusinessSummary from "../components/business/BusinessSummary";
 
 const Summary = () => {
-  const [personalSummary, setPersonalSummary] = useState(true);
+  const [personalSummary, setPersonalSummary] = useState(false);
 
   return (
     <>

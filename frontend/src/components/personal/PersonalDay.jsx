@@ -105,28 +105,28 @@ const PersonalDay = ({ day }) => {
           /* displaying data on their respective date */
           dayData.map((d, i) => (
             <div
-              className={`flex font-medium space-x-2 text-xs mt-3 justify-center ${
+              className={`flex font-medium space-x-2 text-xs mt-3 items-center justify-center ${
                 notThisMonth ? "hidden" : ""
               }`}
               key={i}
             >
-              <div>
+              <div className="flex items-center">
                 <ul>
                   <li>
                     <div className="flex">
-                      <img src={pouch} alt="Gross" className="h-4 w-4" />
+                      <img src={pouch} alt="Gross" className="h-4 w-6" />
                       <p className="ml-1 text-[#D0D0D0]">:</p>
                     </div>
                   </li>
                   <li>
                     <div className="flex">
-                      <img src={expenses} className="h-4 w-4" />
+                      <img src={expenses} className="h-4 w-6" />
                       <p className="ml-1 text-[#D0D0D0]">:</p>
                     </div>
                   </li>
                   <li>
                     <div className="flex">
-                      <img src={networth} className="h-4 w-4" />
+                      <img src={networth} className="h-4 w-6" />
                       <p className="ml-1 text-[#D0D0D0]">:</p>
                     </div>
                   </li>

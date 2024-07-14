@@ -1,66 +1,77 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
-import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
-import useGetData from "../../hooks/useGetPersonalData";
+import useGetBusinessData from "../../hooks/useGetBusinessData";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
-import { ThreeDot } from "react-loading-indicators";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
 import Skeleton from "react-loading-skeleton";
-import usePersonalExpenses from "../../hooks/usePersonalExpenses";
-import pouch from "../../media/pouch.png";
-import expensesIcon from "../../media/expenses.png";
-import networth from "../../media/networth.png";
+import { Link, useLocation } from "react-router-dom";
+import { ThreeDot } from "react-loading-indicators";
+import useBusinessCapital from "../../hooks/useBusinessCapital";
+import useBusinessExpenses from "../../hooks/useBusinessExpenses";
 
-const PersonalHomeCard = () => {
+const BusinessHomeCard = () => {
+  const getBusinessData = useGetBusinessData();
+  const getMonthlyCapital = useBusinessCapital();
+  const getMonthlyExpenses = useBusinessExpenses();
   const location = useLocation();
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
-  const getPersonalData = useGetData();
-  const getMonthlyExpenses = usePersonalExpenses();
+  const titleRef = useRef();
 
-  const [gross, setGross] = useState(0);
+  const [capital, setCapital] = useState(0);
+  const [sales, setSales] = useState(0);
   const [expenses, setExpenses] = useState(0);
-  const [net, setNet] = useState(0);
+
+  const [overallMonthlyExpenses, setOVerallMonthlyExpenses] = useState(0);
 
   const [title, setTitle] = useState("");
   const [hasTitle, setHasTitle] = useState(false);
   const [updatedTitle, setUpdatedTitle] = useState(title);
 
-  const [personalAddButton, setPersonalAddbutton] = useState(true);
-  const [personalProceedButton, setPersonalProceedButton] = useState(false);
-  const [personalEditButton, setPersonalEditButton] = useState(false);
-
-  const [overallMonthlyExpenses, setOVerallMonthlyExpenses] = useState(0);
+  const [businessAddButton, setBusinessAddbutton] = useState(true);
+  const [businessProceedButton, setBusinessProceedButton] = useState(false);
+  const [businessEditButton, setBusinessEditButton] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
-  const titleRef = useRef();
+  useEffect(() => {
+    if ((businessEditButton, businessProceedButton)) {
+      titleRef.current.focus();
+    }
+  }, [businessEditButton, businessProceedButton]);
 
   useEffect(() => {
-    let g = 0;
+    let c = 0;
+    let s = 0;
     let e = 0;
-    let n = 0;
     let m_e = 0;
+    let m_c = 0;
 
     setIsLoading(true);
+
     const overallData = async () => {
-      const overallData = await getPersonalData();
-      const monthData = await getMonthlyExpenses();
+      const overallData = await getBusinessData();
+      const monthCapital = await getMonthlyCapital();
+      const overallMonthlyExpenses = await getMonthlyExpenses();
 
       overallData.forEach((data) => {
-        return (g += data.gross), (e += data.expenses), (n += data.net);
+        return (c += data.capital), (s += data.sales), (e += data.expenses);
       });
 
-      monthData.forEach((data) => {
+      overallMonthlyExpenses.forEach((data) => {
         m_e += data.amount;
       });
 
-      setGross(g);
+      monthCapital.forEach((data) => {
+        m_c += data.amount;
+      });
+
+      setCapital(c + m_c);
+      setSales(s);
       setExpenses(e);
       setOVerallMonthlyExpenses(m_e);
-      setNet(n);
       setIsLoading(false);
     };
 
@@ -74,7 +85,7 @@ const PersonalHomeCard = () => {
       try {
         if (_id) {
           const response = await axiosPrivate.get("/user/" + _id);
-          const jsonTitle = await response.data.personal_title;
+          const jsonTitle = await response.data.business_title;
 
           if (jsonTitle && response.status === 200) {
             setUpdatedTitle(jsonTitle);
@@ -90,12 +101,6 @@ const PersonalHomeCard = () => {
     getTitle();
   }, [hasTitle]);
 
-  useEffect(() => {
-    if ((personalEditButton, personalProceedButton)) {
-      titleRef.current.focus();
-    }
-  }, [personalEditButton, personalProceedButton]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -105,11 +110,11 @@ const PersonalHomeCard = () => {
       }
       const response = await axiosPrivate.patch(
         "/user",
-        JSON.stringify({ personal_title: title })
+        JSON.stringify({ business_title: title })
       );
       if (response.status === 200) {
-        setTitle(response.data.personal_title);
-        setPersonalProceedButton(false);
+        setTitle(response.data.business_title);
+        setBusinessProceedButton(false);
         setHasTitle(true);
       }
     } catch (err) {
@@ -126,12 +131,12 @@ const PersonalHomeCard = () => {
       }
       const response = await axiosPrivate.patch(
         "/user",
-        JSON.stringify({ personal_title: updatedTitle })
+        JSON.stringify({ business_title: updatedTitle })
       );
 
       if (response.status === 200) {
-        setTitle(response.data.personal_title);
-        setPersonalEditButton(false);
+        setTitle(response.data.business_title);
+        setBusinessEditButton(false);
         setHasTitle(true);
       }
     } catch (err) {
@@ -142,55 +147,66 @@ const PersonalHomeCard = () => {
   };
 
   return (
-    <div className="w-[90%] h-[60%] rounded-xl bg-white shadow-lg ">
+    <div className="w-[90%] h-[60%] rounded-xl bg-white shadow-lg overflow-hidden">
       <div className=" h-hfull content-center justify-items-center">
-        <div className=" w-11/12 mx-auto h-hfull grid grid-rows-5 text-center rounded-lg p-2 ">
-          <div className="w-full text-center mx-auto place-content-center">
-            <div className="w-full text-lgreens text-5xl font-bold">
-              PERSONAL
+        <div className=" w-11/12 h-hfull mx-auto grid grid-rows-5 text-center bg-white rounded-lg p-2">
+          <div className=" w-full text-center mx-auto place-content-center">
+            <div className=" w-full text-5xl text-loranges font-bold">
+              BUSINESS
             </div>
           </div>
 
           {/* Show Title and Data if there is any */}
-          {hasTitle && !personalEditButton && (
+          {hasTitle && !businessEditButton && (
             <div className="">
               <div className="flex space-x-2 justify-end text-sm text-end h-[fit-content] cursor-pointer mb-2">
                 <FontAwesomeIcon
-                  className="text-loranges"
+                  className="text-lgreens"
                   onClick={() => {
-                    setPersonalEditButton(true);
+                    setBusinessEditButton(true);
                   }}
                   icon={faPen}
                 />
               </div>
-              <div className="text-oranges w-full mx-auto text-6xl font-bold content-end cursor-default">
-                {title}
+              <div className="text-greens w-full mx-auto text-6xl font-bold content-end cursor-default">
+                {title || updatedTitle}
               </div>
             </div>
           )}
-          {hasTitle && !personalEditButton && (
+          {hasTitle && !businessEditButton && (
             <div className=" w-full mx-auto row-span-1 justify-between place-content-center">
-              <div className=" mb-2 text-greens text-sm">Overall Summary</div>
+              <div className=" mb-2 text-oranges text-sm">Overall Summary</div>
               {isLoading ? (
                 <Skeleton className="w-full" height={20} />
               ) : (
                 <div className="flex place-content-center">
-                  <div className="mr-5 flex gap-2">
-                    <img src={pouch} alt="puch" className="h-2 w-7" />{" "}
-                    <span className="font-bold text-greens text-lg">
-                      {gross.toLocaleString()}
+                  <div className="mr-5">
+                    C:{" "}
+                    <span className="font-bold text-oranges text-lg">
+                      {capital.toLocaleString()}
                     </span>
                   </div>
-                  <div className="mr-5 flex gap-2">
-                    <img src={expensesIcon} alt="puch" className="h-2 w-9" />{" "}
-                    <span className="font-bold text-greens text-lg">
+                  <div className="mr-5">
+                    S:{" "}
+                    <span className="font-bold text-oranges text-lg">
+                      {sales.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="mr-5">
+                    E:{" "}
+                    <span className="font-bold text-oranges text-lg">
                       {(expenses + overallMonthlyExpenses).toLocaleString()}
                     </span>
                   </div>
-                  <div className="flex gap-2">
-                    <img src={networth} alt="puch" className="h-2 w-10" />{" "}
-                    <span className="font-bold text-greens text-lg">
-                      {net.toLocaleString()}
+                  <div>
+                    P:{" "}
+                    <span className="font-bold text-oranges text-lg">
+                      {(
+                        sales -
+                        expenses -
+                        overallMonthlyExpenses -
+                        capital
+                      ).toLocaleString()}
                     </span>
                   </div>
                 </div>
@@ -198,10 +214,10 @@ const PersonalHomeCard = () => {
             </div>
           )}
 
-          {hasTitle && !personalEditButton && (
+          {hasTitle && !businessEditButton && (
             <div className=" w-full h-hfull mx-auto row-span-1 text-xs mt-2 place-content-center">
-              <div className="mx-auto bg-lgreens h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer">
-                <Link to="/personal" state={{ from: location.pathname }}>
+              <div className="mx-auto bg-loranges h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer">
+                <Link to="/business" state={{ from: location.pathname }}>
                   <div className="h-hfull text-xl font-bold text-white place-content-center">
                     To Calendar
                   </div>
@@ -210,41 +226,40 @@ const PersonalHomeCard = () => {
             </div>
           )}
 
-          {/* Adding Personal Income */}
-          {!hasTitle && personalAddButton && (
-            <div className="w-full mx-auto row-span-3 text-md font-bold place-content-center">
-              <div className="w-[80%] mx-auto text-lgreens">
-                Track your Personal <span className="text-oranges">INCOME</span>
-                , <span className="text-oranges">EXPENSES</span>, and{" "}
-                <span className="text-oranges">NETWORTH</span> with a calendar
-                like interface
+          {!hasTitle && businessAddButton && (
+            <div className="w-full mx-auto row-span-2 text-md font-bold place-content-center">
+              <div className="w-[80%] mx-auto text-loranges">
+                Track your Business <span className="text-greens">INCOME</span>,{" "}
+                <span className="text-greens">EXPENSES</span>, and{" "}
+                <span className="text-greens">NETWORTH</span> with a calendar
+                like interface plus added features for an easier Financial
+                Management
               </div>
             </div>
           )}
 
-          {!hasTitle && personalAddButton && (
+          {!hasTitle && businessAddButton && (
             <div className="w-full mx-auto row-span-1 text-xs mt-2 ">
               <div
                 onClick={() => {
-                  setPersonalAddbutton(false);
-                  setPersonalProceedButton(true);
+                  setBusinessAddbutton(false);
+                  setBusinessProceedButton(true);
                 }}
-                className="mx-auto bg-lgreens h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer"
+                className="mx-auto bg-loranges h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer"
               >
-                <div className="text-xl font-bold text-white">ADD PERSONAL</div>
+                <div className="text-xl font-bold text-white">ADD BUSINESS</div>
               </div>
             </div>
           )}
 
-          {/* Submitting Personal Income Title */}
-          {personalProceedButton && (
+          {businessProceedButton && (
             <div>
-              <div className="text-xl font-bold text-lgreens">Add a Title</div>
+              <div className="text-xl font-bold text-loranges">Add a Title</div>
               <input
                 ref={titleRef}
                 required
                 type="text"
-                className="text-center w-full h-[50%] mx-auto rounded-xl border border-lgreens font-bold outline-none"
+                className="text-center w-full h-[50%] mx-auto rounded-xl border border-loranges font-bold outline-none"
                 onChange={(e) => {
                   setTitle(e.target.value);
                 }}
@@ -256,7 +271,7 @@ const PersonalHomeCard = () => {
             </div>
           )}
 
-          {personalProceedButton && (
+          {businessProceedButton && (
             <div className="boder w-full mx-auto row-span-1 text-xs mt-2 ">
               {isLoading ? (
                 <div className="mx-auto bg-lgreens h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer">
@@ -267,7 +282,7 @@ const PersonalHomeCard = () => {
                   onClick={(e) => {
                     handleSubmit(e);
                   }}
-                  className="mx-auto bg-lgreens h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer"
+                  className="mx-auto bg-loranges h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer"
                 >
                   <div className="text-xl font-bold text-white">PROCEED</div>
                 </div>
@@ -275,11 +290,10 @@ const PersonalHomeCard = () => {
             </div>
           )}
 
-          {/* Updating Personal Income Title */}
-          {personalEditButton && (
+          {businessEditButton && (
             <div className="space-y-2">
               <div>
-                <div className="text-xl font-bold text-lgreens">
+                <div className="text-xl font-bold text-loranges">
                   Update Title
                 </div>
               </div>
@@ -287,9 +301,8 @@ const PersonalHomeCard = () => {
                 ref={titleRef}
                 required
                 type="text"
-                className="text-center w-full h-[50%] mx-auto rounded-xl border border-lgreens font-bold outline-none"
+                className="text-center w-full h-[50%] mx-auto rounded-xl border border-loranges font-bold outline-none"
                 onChange={(e) => {
-                  setErrMsg("");
                   setUpdatedTitle(e.target.value);
                 }}
                 value={updatedTitle}
@@ -297,11 +310,11 @@ const PersonalHomeCard = () => {
             </div>
           )}
 
-          {personalEditButton && (
+          {businessEditButton && (
             <div>
               <div className="flex justify-center space-x-3">
                 <div
-                  className="bg-greens p-2 text-white rounded-lg cursor-pointer"
+                  className="bg-oranges p-2 text-white rounded-lg cursor-pointer"
                   onClick={(e) => {
                     handleUpdate(e);
                   }}
@@ -311,7 +324,7 @@ const PersonalHomeCard = () => {
                 <div
                   className="p-2 bg-[#ff4242] text-white rounded-lg cursor-pointer"
                   onClick={() => {
-                    setPersonalEditButton(false);
+                    setBusinessEditButton(false);
                   }}
                 >
                   Discard
@@ -337,4 +350,4 @@ const PersonalHomeCard = () => {
   );
 };
 
-export default PersonalHomeCard;
+export default BusinessHomeCard;
