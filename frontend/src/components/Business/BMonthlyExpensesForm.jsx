@@ -1,12 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import { IoClose } from "react-icons/io5";
+import { MdOutlinePostAdd } from "react-icons/md";
 import { CalendarContext } from "../../context/CalendarContext";
 import dayjs from "dayjs";
 import Skeleton from "react-loading-skeleton";
 import useBusinessExpenses from "../../hooks/useBusinessExpenses";
 import BMonthlyExpensesAdd from "./BMonthlyExpensesAdd";
 import BMonthlyExpensesData from "./BMonthlyExpensesData";
+import expensesIcon from "../../media/busmon_expenses.png";
 
 const BMonthlyExpensesForm = ({ monthlyExpenses }) => {
   const {
@@ -54,7 +55,7 @@ const BMonthlyExpensesForm = ({ monthlyExpenses }) => {
         <form className="rounded-md bg-white overflow-hidden px-5 shadow-lg">
           <div className="flex items-center justify-center relative w-full">
             <div className="text-center mt-6">
-              <h1 className="font-bold text-2xl text-greens mb-2">
+              <h1 className="font-bold text-2xl text-loranges mb-2">
                 Monthly Expenses
               </h1>
               <p className="text-md font-bold mb-2">
@@ -75,14 +76,11 @@ const BMonthlyExpensesForm = ({ monthlyExpenses }) => {
               }}
               className="absolute right-0 pr-2 mb-5 cursor-pointer"
             >
-              <FontAwesomeIcon
-                icon={faXmark}
-                className="text-xl text-loranges hover:text-oranges"
-              />
+              <IoClose className="text-xl text-loranges hover:text-oranges" />
             </div>
           </div>
 
-          <div className="text-sm font-bold mb-3">
+          <div className="text-sm font-bold mb-3 text-center">
             Expenses:{" "}
             <span className="text-xs text-[#A6ACAF] font-normal">
               (Bills, Loan, Insurance, Rent and etc...)
@@ -108,10 +106,7 @@ const BMonthlyExpensesForm = ({ monthlyExpenses }) => {
                 showBusinessExpenseInput ? "hidden" : ""
               }`}
             >
-              <FontAwesomeIcon
-                icon={faCirclePlus}
-                className="text-oranges text-4xl hover:text-loranges cursor-pointer"
-              />
+              <MdOutlinePostAdd className="text-oranges text-4xl hover:text-loranges cursor-pointer" />
             </div>
           </div>
 
@@ -121,15 +116,17 @@ const BMonthlyExpensesForm = ({ monthlyExpenses }) => {
           {/* Total Expenses */}
           <div className="px-5 mb-5 flex items-center space-x-2 justify-center mt-2">
             <div>
-              <p className="text-sm font-bold">Total Expenses:</p>
+              <p className="text-sm font-bold">Total:</p>
             </div>
             <div className="border border-inputLight rounded-md py-1 text-center w-fit">
-              <div className="grid grid-cols-3">
+              <div className="grid grid-cols-3 items-center">
                 <div className="pl-2">
-                  <img className="w-7 mr-3" />
+                  <img src={expensesIcon} className="w-10 mr-2" />
                 </div>
                 <div className="mt-[0.15rem]">
-                  <p className="text-[red] font-bold">{monthlyExpenses}</p>
+                  <p className="text-[red] font-bold">
+                    {monthlyExpenses.toLocaleString()}
+                  </p>
                 </div>
               </div>
             </div>

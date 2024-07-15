@@ -1,14 +1,11 @@
 import { useState, useContext } from "react";
 import { CalendarContext } from "../../context/CalendarContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleCheck,
-  faCircleXmark,
-  faTrash,
-  faPen,
-} from "@fortawesome/free-solid-svg-icons";
+import { FaRegPenToSquare, FaRegTrashCan } from "react-icons/fa6";
+import { GoChecklist } from "react-icons/go";
+import { BsBackspace } from "react-icons/bs";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { ThreeDot } from "react-loading-indicators";
+import expensesIcon from "../../media/bus_expenses.png";
 
 const BMonthlyExpensesData = ({ expensesData }) => {
   const {
@@ -101,55 +98,71 @@ const BMonthlyExpensesData = ({ expensesData }) => {
   return (
     <div
       className={`px-5 mb-2 font-pops ${
-        deleteStyle ? "border border-[red] py-3" : ""
-      }`}
+        deleteStyle ? "border border-[#ffa1a1] py-3 rounded-md" : ""
+      } ${editButton ? "border border-loranges pt-2 rounded-md" : ""}`}
     >
-      <div className=" flex space-x-2 justify-center">
+      <div
+        className={` ${
+          editButton
+            ? "space-x-2 justify-center items-center"
+            : "grid grid-cols-2 gap-2 grid-flow-col"
+        }`}
+      >
         {/* Update Data */}
         {!editButton ? (
           <>
-            <div className="rounded-md overflow-hidden py-1 items-center w-36 bg-light flex pl-2">
+            {/* show current data */}
+            <div className="rounded-md overflow-hidden py-1 items-center bg-light flex px-2 col-span-1">
+              <img src={expensesIcon} className="w-7 mr-2" />
               {title}
             </div>
-            <div className="text-[red] rounded-md overflow-hidden py-1 items-center w-36 bg-light flex pl-2">
-              {amount}
+            <div className="text-[red] font-semibold rounded-md overflow-hidden py-1 items-center justify-center bg-light flex px-2 col-span-1">
+              {amount.toLocaleString()}
             </div>
           </>
         ) : (
           <>
-            <div
-              className={`border rounded-md overflow-hidden items-center ${
-                errorStyle ? "border-[red]" : "border-inputLight"
-              }`}
-            >
-              <input
-                type="text"
-                placeholder="Add Title"
-                onChange={(e) => {
-                  setUpdateTitle(e.target.value),
-                    setError(""),
-                    setErrorStyle(false);
-                }}
-                value={updateTitle}
-                className="w-36 focus:outline-none focus:border-oranges pl-2 py-1 caret-inputLight  placeholder:text-xs"
-              />
-            </div>
-            <div
-              className={`border rounded-md overflow-hidden items-center ${
-                errorStyle ? "border-[red]" : "border-inputLight"
-              }`}
-            >
-              <input
-                type="number"
-                placeholder="Add Amount"
-                onChange={(e) => {
-                  setUpdateAmount(e.target.value),
-                    setError(""),
-                    setErrorStyle(false);
-                }}
-                value={updateAmount}
-                className="w-36 focus:outline-none focus:border-oranges pl-2 py-1 caret-inputLight placeholder:text-xs"
-              />
+            {/* Show input for update data */}
+            <div className="flex justify-center gap-2">
+              <div
+                className={`col-span-1 flex border rounded-md overflow-hidden items-center pl-2 ${
+                  errorStyle ? "border-[red]" : "border-inputLight"
+                }`}
+              >
+                <img src={expensesIcon} className="w-7 mr-2" />
+                <input
+                  type="text"
+                  placeholder="Add Title"
+                  onChange={(e) => {
+                    setUpdateTitle(e.target.value),
+                      setError(""),
+                      setErrorStyle(false);
+                  }}
+                  value={updateTitle}
+                  className={`focus:outline-none focus:border-oranges pl-2 py-1 caret-inputLight placeholder:text-xs ${
+                    editButton ? "w-32" : ""
+                  }`}
+                />
+              </div>
+              <div
+                className={`col-span-1 border rounded-md overflow-hidden items-center ${
+                  errorStyle ? "border-[red]" : "border-inputLight"
+                }`}
+              >
+                <input
+                  type="number"
+                  placeholder="Add Amount"
+                  onChange={(e) => {
+                    setUpdateAmount(e.target.value),
+                      setError(""),
+                      setErrorStyle(false);
+                  }}
+                  value={updateAmount}
+                  className={`focus:outline-none focus:border-oranges pl-2 py-1 caret-inputLight placeholder:text-xs text-center ${
+                    editButton ? "w-32" : ""
+                  }`}
+                />
+              </div>
             </div>
           </>
         )}
@@ -160,10 +173,7 @@ const BMonthlyExpensesData = ({ expensesData }) => {
             {!confirmDelete && (
               <div className="flex space-x-4 items-center px-2 h-2 w-fit rounded-md overflow-hidden">
                 <div onClick={() => setEditButton(true)}>
-                  <FontAwesomeIcon
-                    icon={faPen}
-                    className="text-oranges hover:text-loranges cursor-pointer text-xl"
-                  />
+                  <FaRegPenToSquare className="text-oranges hover:text-loranges cursor-pointer text-xl" />
                 </div>
 
                 <div
@@ -173,10 +183,7 @@ const BMonthlyExpensesData = ({ expensesData }) => {
                       setErrorStyle(false);
                   }}
                 >
-                  <FontAwesomeIcon
-                    icon={faTrash}
-                    className="text-[#FF4242] hover:text-[red] cursor-pointer text-xl"
-                  />
+                  <FaRegTrashCan className="text-[#FF4242] hover:text-[red] cursor-pointer text-xl" />
                 </div>
               </div>
             )}
@@ -184,7 +191,7 @@ const BMonthlyExpensesData = ({ expensesData }) => {
         ) : (
           <>
             {updateLoading ? (
-              <div className="flex items-center space-x-2 px-2 h-2 w-fit rounded-md overflow-hidden">
+              <div className="pt-2 w-full flex justify-center items-center space-x-2 px-2 h-2 rounded-md overflow-hidden">
                 <ThreeDot
                   style={{ fontSize: "7px" }}
                   variant="pulsate"
@@ -194,22 +201,28 @@ const BMonthlyExpensesData = ({ expensesData }) => {
                 />
               </div>
             ) : (
-              <div className="flex items-center space-x-2 px-2 h-2 w-fit rounded-md overflow-hidden">
-                <button onClick={handleUpdate}>
-                  <FontAwesomeIcon
-                    icon={faCircleCheck}
-                    className="text-oranges cursor-pointer hover:text-loranges text-2xl"
-                  />
-                </button>
-                <div
-                  onClick={() => {
-                    setEditButton(false), setError(""), setErrorStyle(false);
-                  }}
-                >
-                  <FontAwesomeIcon
-                    icon={faCircleXmark}
-                    className="text-[#FF4242] hover:text-[red]  cursor-pointer text-2xl"
-                  />
+              <div className="flex justify-center items-center py-2">
+                <div className="flex items-center space-x-2 px-2 h-2 w-fit rounded-md overflow-hidden">
+                  <div
+                    className="flex gap-2 rounded-md border border-oranges bg-oranges hover:bg-loranges px-2 py-1 cursor-pointer text-white font-semibold"
+                    onClick={handleUpdate}
+                  >
+                    <button>
+                      <GoChecklist className=" text-2xl" />
+                    </button>
+                    <span>Save</span>
+                  </div>
+                  <div
+                    className="flex gap-2 rounded-md border border-[#FF4242] hover:border-[red] text-[#FF4242] hover:text-[red] px-2 py-1 cursor-pointer"
+                    onClick={() => {
+                      setEditButton(false), setError(""), setErrorStyle(false);
+                    }}
+                  >
+                    <div>
+                      <BsBackspace className="text-2xl" />
+                    </div>
+                    <span>Back</span>
+                  </div>
                 </div>
               </div>
             )}
@@ -241,21 +254,27 @@ const BMonthlyExpensesData = ({ expensesData }) => {
               </div>
             ) : (
               <>
-                <div onClick={handleDelete}>
-                  <FontAwesomeIcon
-                    icon={faCircleCheck}
-                    className="text-loranges cursor-pointer hover:text-oranges text-xl"
-                  />
-                </div>
-                <div
-                  onClick={() => {
-                    setConfirmDelete(false), setDeleteStyle(false);
-                  }}
-                >
-                  <FontAwesomeIcon
-                    icon={faCircleXmark}
-                    className="text-[#FF4242] hover:text-[red]  cursor-pointer text-xl"
-                  />
+                <div className="flex gap-4">
+                  <div
+                    className="flex gap-2 border border-[#FF4242] hover:border-[red] text-[#FF4242] hover:text-[red] rounded-md px-2 py-1 items-center cursor-pointer font-semibold"
+                    onClick={handleDelete}
+                  >
+                    <div>
+                      <FaRegTrashCan className="text-lg" />
+                    </div>
+                    <span className="text-sm">Delete</span>
+                  </div>
+                  <div
+                    className="flex gap-2 rounded-lg border border-oranges bg-oranges hover:bg-loranges font-semibold px-2 py-1 items-center cursor-pointer"
+                    onClick={() => {
+                      setConfirmDelete(false), setDeleteStyle(false);
+                    }}
+                  >
+                    <div>
+                      <BsBackspace className="text-white text-lg" />
+                    </div>
+                    <span className="text-white text-sm">Cancel</span>
+                  </div>
                 </div>
               </>
             )}

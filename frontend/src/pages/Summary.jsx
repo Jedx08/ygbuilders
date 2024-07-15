@@ -5,11 +5,11 @@ import PersonalSummary from "../components/personal/PersonalSummary";
 import BusinessSummary from "../components/business/BusinessSummary";
 
 const Summary = () => {
-  const [personalSummary, setPersonalSummary] = useState(false);
+  const [personalSummary, setPersonalSummary] = useState(true);
 
   return (
     <>
-      <Navbar className="" />
+      <Navbar />
       <div className=" bg-light font-pops">
         <div className="py-5 grid grid-flow-col justify-center place-items-center gap-5">
           <div

@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { CalendarContext } from "../../context/CalendarContext";
 import dayjs from "dayjs";
-import pouch from "../../media/pouch.png";
-import expenses from "../../media/expenses.png";
-import networth from "../../media/networth.png";
+import capitalIcon from "../../media/bus_pouch.png";
+import expensesIcon from "../../media/bus_expenses.png";
+import salesIcon from "../../media/sales.png";
+import profitsIcon from "../../media/bus_profit.png";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import useGetBusinessData from "../../hooks/useGetBusinessData";
@@ -76,7 +77,7 @@ const BusinessDay = ({ day }) => {
   return (
     <>
       <div
-        className={`border border-light bg-white flex flex-col ${
+        className={`border border-light bg-white flex flex-col h-[100%] ${
           notThisMonth
             ? "cursor-default"
             : "hover:border-loranges cursor-pointer"
@@ -85,7 +86,7 @@ const BusinessDay = ({ day }) => {
       >
         <header className="flex flex-col items-center">
           <p
-            className={`text-lg font-bold pt-1 mt-1 text-center ${
+            className={`text-lg font-bold pt-1 text-center ${
               notThisMonth ? "text-[#EEEEEE]" : ""
             } ${currentDay()}`}
           >
@@ -105,82 +106,49 @@ const BusinessDay = ({ day }) => {
           /* displaying data on their respective date */
           dayData.map((d, i) => (
             <div
-              className={`flex font-medium space-x-2 text-xs mt-3 justify-center ${
+              className={`flex font-medium text-xs mt-3 justify-center ${
                 notThisMonth ? "hidden" : ""
               }`}
               key={i}
             >
-              <div>
-                <ul>
-                  <li>
-                    <div className="flex">
-                      <img src={pouch} alt="Gross" className="h-4 w-4" />
-                      <p className="ml-1 text-[#D0D0D0]">:</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex">
-                      <img src={expenses} className="h-4 w-4" />
-                      <p className="ml-1 text-[#D0D0D0]">:</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex">
-                      <img src={networth} className="h-4 w-4" />
-                      <p className="ml-1 text-[#D0D0D0]">:</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex">
-                      <img src={networth} className="h-4 w-4" />
-                      <p className="ml-1 text-[#D0D0D0]">:</p>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div className="text-xs">
-                <ul>
-                  <li>
-                    <p className="text-lgreens">
-                      <span className="text-[#2C2C2C] font-normal">
-                        &#x20B1;{" "}
-                      </span>
-                      {d.capital.toLocaleString()}
-                    </p>
-                  </li>
-                  <li>
-                    <p
-                      className={`${
-                        d.sales >= d.capital ? "text-greens" : "text-[red]"
-                      }`}
-                    >
-                      <span className="text-[#2C2C2C] font-normal">
-                        &#x20B1;{" "}
-                      </span>
-                      {d.sales.toLocaleString()}
-                    </p>
-                  </li>
-                  <li>
-                    <p className="text-[red]">
-                      <span className="text-[#2C2C2C] font-normal">
-                        &#x20B1;{" "}
-                      </span>
-                      {d.expenses.toLocaleString()}
-                    </p>
-                  </li>
-                  <li>
-                    <p
-                      className={`font-bold ${
-                        d.profit < 0 ? "text-[red]" : "text-lgreens"
-                      }`}
-                    >
-                      <span className="text-[#2C2C2C] font-normal">
-                        &#x20B1;{" "}
-                      </span>
-                      {d.profit.toLocaleString()}
-                    </p>
-                  </li>
-                </ul>
+              <div className="space-y-1">
+                {/* Capital */}
+                <div className="flex space-x-1">
+                  <img src={capitalIcon} alt="capital" className="h-4 w-5" />
+                  <p className="ml-1 text-[#D0D0D0]">:</p>
+                  <p className="text-greens">{d.capital.toLocaleString()}</p>
+                </div>
+                {/* Sales */}
+                <div className="flex space-x-1">
+                  <img src={salesIcon} alt="sales" className="h-4 w-5" />
+                  <p className="ml-1 text-[#D0D0D0]">:</p>
+                  <p
+                    className={`${
+                      d.sales >= d.capital ? "text-greens" : "text-[red]"
+                    }`}
+                  >
+                    {d.sales.toLocaleString()}
+                  </p>
+                </div>
+                {/* Expenses */}
+                <div className="flex space-x-1">
+                  <img src={expensesIcon} alt="expenses" className="h-4 w-5" />
+                  <p className="ml-1 text-[#D0D0D0]">:</p>
+                  <p className="text-[red]">{d.expenses.toLocaleString()}</p>
+                </div>
+                <hr className="text-[#D0D0D0]" />
+                {/* Profits */}
+                <div className="flex space-x-1">
+                  <img src={profitsIcon} alt="profits" className="h-4 w-5" />
+                  <p className="ml-1 text-[#D0D0D0]">:</p>
+                  <p
+                    className={`font-bold ${
+                      d.profit < 0 ? "text-[red]" : "text-lgreens"
+                    }`}
+                  >
+                    {d.profit.toLocaleString()}
+                  </p>
+                </div>
               </div>
             </div>
           ))

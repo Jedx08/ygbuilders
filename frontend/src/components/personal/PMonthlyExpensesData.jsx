@@ -102,12 +102,12 @@ const PMonthlyExpensesData = ({ expensesData }) => {
         deleteStyle ? "border border-[red] py-3" : ""
       }`}
     >
-      <div className=" flex space-x-2 justify-center">
+      <div className="flex space-x-2 justify-center">
         {/* Update Data */}
         {!editButton ? (
           <>
-            <div className="rounded-md overflow-hidden py-1 items-center w-36 bg-light flex pl-2">
-              {title}
+            <div className="rounded-md relative overflow-hidden py-1 items-center w-36 bg-light flex pl-2">
+              <p className="w-full">{title}</p>
             </div>
             <div className="text-[red] rounded-md overflow-hidden py-1 items-center w-36 bg-light flex pl-2">
               {amount}

@@ -1,16 +1,16 @@
 import { useContext, useState, useEffect } from "react";
-import pouchIcon from "../../media/pouch.png";
-import expensesIcon from "../../media/expenses.png";
-import networthIcon from "../../media/networth.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faXmark,
-  faCircleCheck,
-  faCircleXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import capitalIcon from "../../media/bus_pouch.png";
+import salesIcon from "../../media/sales.png";
+import expensesIcon from "../../media/bus_expenses.png";
+import profitIcon from "../../media/bus_profit.png";
 import { CalendarContext } from "../../context/CalendarContext";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { ThreeDot } from "react-loading-indicators";
+import { FaRegPenToSquare, FaRegTrashCan } from "react-icons/fa6";
+import { MdOutlinePostAdd } from "react-icons/md";
+import { GoChecklist } from "react-icons/go";
+import { BsBackspace } from "react-icons/bs";
+import { IoClose } from "react-icons/io5";
 
 const BusinessForm = () => {
   const axiosPrivate = useAxiosPrivate();
@@ -211,11 +211,11 @@ const BusinessForm = () => {
 
   return (
     <div className="font-pops h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-70">
-      <form className="rounded-md bg-white overflow-hidden w-80 px-5 shadow-lg">
+      <form className="rounded-md bg-white overflow-hidden w-80 px-2 shadow-lg">
         <div className="flex items-center justify-center relative w-full">
           <div className="text-center mt-6">
             <h1 className="font-bold text-2xl text-oranges">Business Income</h1>
-            <p className="text-xs font-semibold">
+            <p className="text-sm font-semibold">
               {exactDaySelected.format("MMMM D, YYYY")}
             </p>
           </div>
@@ -238,10 +238,7 @@ const BusinessForm = () => {
             }}
             className="absolute right-0 pr-2 mb-5 cursor-pointer"
           >
-            <FontAwesomeIcon
-              icon={faXmark}
-              className="text-xl text-loranges hover:text-oranges"
-            />
+            <IoClose className="text-2xl text-loranges hover:text-oranges" />
           </div>
         </div>
 
@@ -256,12 +253,12 @@ const BusinessForm = () => {
               {/* show input for update data */}
               {editData && (
                 <div
-                  className={`flex border col-span-2 rounded-md overflow-hidden ${
+                  className={`flex items-center justify-between border col-span-2 rounded-md overflow-hidden ${
                     errorStyle ? "border-[red]" : "border-inputLight"
                   }`}
                 >
                   <div className="pl-2">
-                    <img src={pouchIcon} className="w-8 mt-1" />
+                    <img src={capitalIcon} className="w-10" />
                   </div>
                   <div>
                     <input
@@ -279,18 +276,15 @@ const BusinessForm = () => {
               )}
               {/* show current data */}
               {!editData && (
-                <div className="flex py-1 bg-light rounded-md overflow-hidden">
+                <div className="flex justify-between py-1 bg-light rounded-md overflow-hidden">
                   <div className="pl-2">
-                    <img src={pouchIcon} className="w-6" />
+                    <img src={capitalIcon} className="w-7" />
                   </div>
-                  <div className="ml-3">
-                    <p>
-                      <span className="text-[#2C2C2C] font-normal">
-                        &#x20B1;{" "}
-                      </span>
-                      {capital.toLocaleString()}
-                    </p>
+                  <div className="text-greens font-semibold">
+                    <p>{capital.toLocaleString()}</p>
                   </div>
+                  <div></div>
+                  <div></div>
                 </div>
               )}
             </>
@@ -298,12 +292,12 @@ const BusinessForm = () => {
           {/* show input for add data */}
           {!isData && (
             <div
-              className={`flex border col-span-2 rounded-md overflow-hidden ${
+              className={`flex border items-center col-span-2 rounded-md overflow-hidden ${
                 errorStyle ? "border-[red]" : "border-inputLight"
               }`}
             >
               <div className="pl-2">
-                <img src={pouchIcon} className="w-8 mt-1" />
+                <img src={capitalIcon} className="w-10" />
               </div>
               <div>
                 <input
@@ -322,7 +316,7 @@ const BusinessForm = () => {
         </div>
 
         {/* Sales */}
-        <div className="w-48 mx-auto mb-5">
+        <div className="w-48 mx-auto mb-2">
           <div className="flex items-center justify-center">
             <label className="text-sm font-bold">Sales:</label>
           </div>
@@ -332,12 +326,12 @@ const BusinessForm = () => {
               {/* show input for update data */}
               {editData && (
                 <div
-                  className={`flex border col-span-2 rounded-md overflow-hidden ${
+                  className={`flex items-center border col-span-2 rounded-md overflow-hidden ${
                     errorStyle ? "border-[red]" : "border-inputLight"
                   }`}
                 >
                   <div className="pl-2">
-                    <img src={pouchIcon} className="w-8 mt-1" />
+                    <img src={salesIcon} className="w-10" />
                   </div>
                   <div>
                     <input
@@ -355,18 +349,15 @@ const BusinessForm = () => {
               )}
               {/* show current data */}
               {!editData && (
-                <div className="flex py-1 bg-light rounded-md overflow-hidden">
+                <div className="flex py-1 justify-between bg-light rounded-md overflow-hidden">
                   <div className="pl-2">
-                    <img src={pouchIcon} className="w-6" />
+                    <img src={salesIcon} className="w-7" />
                   </div>
-                  <div className="ml-3">
-                    <p>
-                      <span className="text-[#2C2C2C] font-normal">
-                        &#x20B1;{" "}
-                      </span>
-                      {sales.toLocaleString()}
-                    </p>
+                  <div className="text-greens font-semibold">
+                    <p>{sales.toLocaleString()}</p>
                   </div>
+                  <div></div>
+                  <div></div>
                 </div>
               )}
             </>
@@ -374,12 +365,12 @@ const BusinessForm = () => {
           {/* show input for add data */}
           {!isData && (
             <div
-              className={`flex border col-span-2 rounded-md overflow-hidden ${
+              className={`flex items-center border col-span-2 rounded-md overflow-hidden ${
                 errorStyle ? "border-[red]" : "border-inputLight"
               }`}
             >
               <div className="pl-2">
-                <img src={pouchIcon} className="w-8 mt-1" />
+                <img src={salesIcon} className="w-10" />
               </div>
               <div>
                 <input
@@ -408,12 +399,12 @@ const BusinessForm = () => {
               {/* show input for update data */}
               {editData && (
                 <div
-                  className={`flex border col-span-2 rounded-md overflow-hidden ${
+                  className={`flex items-center border col-span-2 rounded-md overflow-hidden ${
                     errorStyle ? "border-[red]" : "border-inputLight"
                   }`}
                 >
                   <div className="pl-2">
-                    <img src={expensesIcon} className="w-8 mt-1" />
+                    <img src={expensesIcon} className="w-10" />
                   </div>
                   <div>
                     <input
@@ -431,18 +422,15 @@ const BusinessForm = () => {
               )}
               {/* show current data */}
               {!editData && (
-                <div className="flex py-1 bg-light rounded-md overflow-hidden">
+                <div className="flex py-1 justify-between bg-light rounded-md overflow-hidden">
                   <div className="pl-2">
-                    <img src={expensesIcon} className="w-6" />
+                    <img src={expensesIcon} className="w-7" />
                   </div>
-                  <div className="ml-3">
-                    <p>
-                      <span className="text-[#2C2C2C] font-normal">
-                        &#x20B1;{" "}
-                      </span>
-                      {expenses.toLocaleString()}
-                    </p>
+                  <div className="text-[red] font-semibold">
+                    <p>{expenses.toLocaleString()}</p>
                   </div>
+                  <div></div>
+                  <div></div>
                 </div>
               )}
             </>
@@ -450,12 +438,12 @@ const BusinessForm = () => {
           {/* show input for add data */}
           {!isData && (
             <div
-              className={`flex border col-span-2 rounded-md overflow-hidden ${
+              className={`flex items-center border col-span-2 rounded-md overflow-hidden ${
                 errorStyle ? "border-[red]" : "border-inputLight"
               }`}
             >
               <div className="pl-2">
-                <img src={pouchIcon} className="w-8 mt-1" />
+                <img src={capitalIcon} className="w-10" />
               </div>
               <div>
                 <input
@@ -481,9 +469,9 @@ const BusinessForm = () => {
               <div className="col-span-1 flex items-center justify-center">
                 <p className="text-sm font-bold">Profit:</p>
               </div>
-              <div className="flex bg-light rounded-md overflow-hidden">
+              <div className="flex bg-light rounded-md overflow-hidden pt-2 pb-1">
                 <div className="pl-2">
-                  <img src={networthIcon} className="w-8" />
+                  <img src={profitIcon} className="w-8" />
                 </div>
                 <div className="flex items-center ml-4">
                   <p
@@ -493,9 +481,6 @@ const BusinessForm = () => {
                         : "text-greens"
                     }`}
                   >
-                    <span className="text-[#2C2C2C] font-normal">
-                      &#x20B1;{" "}
-                    </span>
                     {newSales || newExpenses
                       ? (newSales - newExpenses - newCapital).toLocaleString()
                       : ""}
@@ -511,9 +496,9 @@ const BusinessForm = () => {
               <div className="col-span-1 flex items-center justify-center">
                 <p className="text-sm font-bold">Profit:</p>
               </div>
-              <div className="flex bg-light rounded-md overflow-hidden">
+              <div className="flex bg-light rounded-md overflow-hidden pt-2 pb-1">
                 <div className="pl-2">
-                  <img src={networthIcon} className="w-8" />
+                  <img src={profitIcon} className="w-8" />
                 </div>
                 <div className="flex items-center ml-4">
                   <p
@@ -523,9 +508,6 @@ const BusinessForm = () => {
                         : "text-greens"
                     }`}
                   >
-                    <span className="text-[#2C2C2C] font-normal">
-                      &#x20B1;{" "}
-                    </span>
                     {sales || expenses
                       ? (sales - expenses - capital).toLocaleString()
                       : ""}
@@ -543,13 +525,13 @@ const BusinessForm = () => {
         {confirmDelete && (
           <div className=" rounded-md mt-1 p-2 bg-light mb-3">
             <p className="text-xs text-center">
-              Are you sure you want to remove{" "}
+              Confirm deletion for{" "}
               <span className="text-xs text-[red] font-semibold">
                 {exactDaySelected.format("MMMM D, YYYY")}
               </span>{" "}
               income ?
             </p>
-            <div className="flex justify-center space-x-16 mt-2 mb-1">
+            <div className="flex justify-center gap-6 mt-2 mb-1">
               {deleteLoading ? (
                 <div>
                   <ThreeDot
@@ -562,11 +544,14 @@ const BusinessForm = () => {
                 </div>
               ) : (
                 <>
-                  <div onClick={handleDelete}>
-                    <FontAwesomeIcon
-                      icon={faCircleCheck}
-                      className="text-loranges cursor-pointer hover:text-oranges text-xl"
-                    />
+                  <div
+                    onClick={handleDelete}
+                    className="text-[#FF4242] cursor-pointer hover:text-[red] text-sm font-bold flex items-center gap-1"
+                  >
+                    <span className="text-xl">
+                      <FaRegTrashCan />
+                    </span>
+                    Delete
                   </div>
                   <div
                     onClick={() => {
@@ -574,11 +559,12 @@ const BusinessForm = () => {
                         setShowDeleteMsg(false),
                         setEditData(false);
                     }}
+                    className="text-oranges hover:text-loranges font-bold cursor-pointer text-sm flex items-center gap-1"
                   >
-                    <FontAwesomeIcon
-                      icon={faCircleXmark}
-                      className="text-[#FF4242] hover:text-[red]  cursor-pointer text-xl"
-                    />
+                    <span className="text-xl">
+                      <BsBackspace />
+                    </span>{" "}
+                    Cancel
                   </div>
                 </>
               )}
@@ -623,7 +609,12 @@ const BusinessForm = () => {
                           onClick={handleSubmit}
                           className="bg-loranges hover:bg-oranges cursor-pointer rounded-md px-4 py-1"
                         >
-                          <p className="text-white font-bold">Save changes</p>
+                          <p className="text-white font-bold flex items-center gap-2">
+                            <span className="text-3xl">
+                              <GoChecklist />
+                            </span>
+                            Save
+                          </p>
                         </button>
 
                         <div
@@ -632,9 +623,14 @@ const BusinessForm = () => {
                               setError(""),
                               setErrorStyle(false);
                           }}
-                          className="bg-[#FF4242] hover:bg-[red] cursor-pointer rounded-md px-4 py-1"
+                          className="border border-[#FF4242] hover:border-[red] cursor-pointer rounded-md text-[#FF4242] hover:text-[red] px-4 py-2"
                         >
-                          <p className="text-white font-bold">Back</p>
+                          <p className="font-bold flex items-center gap-2">
+                            <span className="text-xl">
+                              <BsBackspace />
+                            </span>
+                            Back
+                          </p>
                         </div>
                       </>
                     )}
@@ -647,17 +643,27 @@ const BusinessForm = () => {
                       onClick={() => {
                         setEditData(true);
                       }}
-                      className="bg-loranges hover:bg-oranges cursor-pointer rounded-md px-4 py-1"
+                      className="bg-loranges hover:bg-oranges cursor-pointer rounded-md px-4 py-2 border border-loranges"
                     >
-                      <p className="text-white font-bold">Edit</p>
+                      <p className="text-white font-bold flex items-center gap-">
+                        <span className="text-xl">
+                          <FaRegPenToSquare />
+                        </span>
+                        Edit
+                      </p>
                     </div>
                     <div
                       onClick={() => {
                         setShowDeleteMsg(true), setConfirmDelete(true);
                       }}
-                      className="bg-[#FF4242] hover:bg-[red] cursor-pointer rounded-md px-4 py-1"
+                      className="border border-[#FF4242] hover:border-[red] cursor-pointer rounded-md px-4 py-2 text-[#FF4242] hover:text-[red]"
                     >
-                      <p className="text-white font-bold">Delete</p>
+                      <p className="font-bold flex gap-2 items-center">
+                        <span className="text-xl">
+                          <FaRegTrashCan />
+                        </span>
+                        Delete
+                      </p>
                     </div>
                   </>
                 )}
@@ -688,8 +694,11 @@ const BusinessForm = () => {
                       <div className="mb-2">
                         <button
                           onClick={handleSubmit}
-                          className="mx-auto py-1 rounded-md px-6 bg-oranges font-bold text-white hover:bg-loranges"
+                          className="mx-auto py-1 rounded-md px-6 bg-oranges font-bold text-white hover:bg-loranges flex gap-2 items-center"
                         >
+                          <span className="text-3xl">
+                            <MdOutlinePostAdd />
+                          </span>
                           Add
                         </button>
                       </div>

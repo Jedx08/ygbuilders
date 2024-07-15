@@ -360,7 +360,7 @@ const BusinessSummary = () => {
                   ],
                 }}
               />
-              <div className="w-[100%]  h-[fit-content] ">
+              <div className="w-[100%] h-[fit-content] ">
                 <div className="text-center">
                   <div className="text-lg py-5">
                     Monthly Summary ({thisMonth})
@@ -389,8 +389,12 @@ const BusinessSummary = () => {
                         Profit - (Monthly Expenses)
                       </div>
                       <div className="text-xl font-bold">
-                        {monthlySales - monthExpenses - monthlyCapital} - (
-                        {monthExpenses})
+                        {(
+                          monthlySales -
+                          monthExpenses -
+                          monthlyCapital
+                        ).toLocaleString()}{" "}
+                        - ({monthExpenses})
                       </div>
                     </div>
                     <div>

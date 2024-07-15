@@ -11,6 +11,7 @@ import usePersonalExpenses from "../../hooks/usePersonalExpenses";
 import pouch from "../../media/pouch.png";
 import expensesIcon from "../../media/expenses.png";
 import networth from "../../media/networth.png";
+import { FcCalendar } from "react-icons/fc";
 
 const PersonalHomeCard = () => {
   const location = useLocation();
@@ -20,8 +21,6 @@ const PersonalHomeCard = () => {
   const getMonthlyExpenses = usePersonalExpenses();
 
   const [gross, setGross] = useState(0);
-  const [expenses, setExpenses] = useState(0);
-  const [net, setNet] = useState(0);
 
   const [title, setTitle] = useState("");
   const [hasTitle, setHasTitle] = useState(false);
@@ -58,9 +57,7 @@ const PersonalHomeCard = () => {
       });
 
       setGross(g);
-      setExpenses(e);
-      setOVerallMonthlyExpenses(m_e);
-      setNet(n);
+      setOVerallMonthlyExpenses(m_e + e);
       setIsLoading(false);
     };
 
@@ -153,44 +150,71 @@ const PersonalHomeCard = () => {
 
           {/* Show Title and Data if there is any */}
           {hasTitle && !personalEditButton && (
-            <div className="">
-              <div className="flex space-x-2 justify-end text-sm text-end h-[fit-content] cursor-pointer mb-2">
-                <FontAwesomeIcon
-                  className="text-loranges"
+            <div className="bg-light rounded-lg">
+              <div className="flex text-xs items-end justify-end font-semibold">
+                <div
                   onClick={() => {
                     setPersonalEditButton(true);
                   }}
-                  icon={faPen}
-                />
+                  className="bg-lgreens hover:bg-greens flex rounded-md p-1 px-2 space-x-2 cursor-pointer"
+                >
+                  <div>
+                    <FontAwesomeIcon className="text-light" icon={faPen} />
+                  </div>
+                  <p className="text-light">Edit</p>
+                </div>
               </div>
-              <div className="text-oranges w-full mx-auto text-6xl font-bold content-end cursor-default">
+              <div className="text-lgreens w-full mx-auto text-5xl font-semibold content-end cursor-default">
                 {title}
               </div>
             </div>
           )}
           {hasTitle && !personalEditButton && (
             <div className=" w-full mx-auto row-span-1 justify-between place-content-center">
-              <div className=" mb-2 text-greens text-sm">Overall Summary</div>
+              <div className=" mb-2 text-greens text-sm font-semibold">
+                Overall Summary
+              </div>
               {isLoading ? (
                 <Skeleton className="w-full" height={20} />
               ) : (
                 <div className="flex place-content-center">
                   <div className="mr-5 flex gap-2">
-                    <img src={pouch} alt="puch" className="h-2 w-7" />{" "}
+                    <img
+                      src={pouch}
+                      alt="pouch"
+                      title="gross"
+                      className="h-2 w-7"
+                    />{" "}
                     <span className="font-bold text-greens text-lg">
                       {gross.toLocaleString()}
                     </span>
                   </div>
                   <div className="mr-5 flex gap-2">
-                    <img src={expensesIcon} alt="puch" className="h-2 w-9" />{" "}
-                    <span className="font-bold text-greens text-lg">
-                      {(expenses + overallMonthlyExpenses).toLocaleString()}
+                    <img
+                      src={expensesIcon}
+                      alt="expenses"
+                      title="expenses"
+                      className="h-2 w-9"
+                    />{" "}
+                    <span className="font-bold text-lg text-[red]">
+                      {overallMonthlyExpenses.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex gap-2">
-                    <img src={networth} alt="puch" className="h-2 w-10" />{" "}
-                    <span className="font-bold text-greens text-lg">
-                      {net.toLocaleString()}
+                    <img
+                      src={networth}
+                      alt="net"
+                      title="net"
+                      className="h-2 w-10"
+                    />{" "}
+                    <span
+                      className={`font-bold text-lg ${
+                        gross - overallMonthlyExpenses > 0
+                          ? "text-greens"
+                          : "text-[red]"
+                      }`}
+                    >
+                      {(gross - overallMonthlyExpenses).toLocaleString()}
                     </span>
                   </div>
                 </div>
@@ -200,9 +224,12 @@ const PersonalHomeCard = () => {
 
           {hasTitle && !personalEditButton && (
             <div className=" w-full h-hfull mx-auto row-span-1 text-xs mt-2 place-content-center">
-              <div className="mx-auto bg-lgreens h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer">
+              <div className="mx-auto bg-lgreens hover:bg-greens h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer">
                 <Link to="/personal" state={{ from: location.pathname }}>
-                  <div className="h-hfull text-xl font-bold text-white place-content-center">
+                  <div className="h-hfull flex gap-3 items-center text-xl font-bold text-white place-content-center">
+                    <span className="text-3xl">
+                      <FcCalendar />
+                    </span>{" "}
                     To Calendar
                   </div>
                 </Link>
@@ -212,11 +239,14 @@ const PersonalHomeCard = () => {
 
           {/* Adding Personal Income */}
           {!hasTitle && personalAddButton && (
-            <div className="w-full mx-auto row-span-3 text-md font-bold place-content-center">
-              <div className="w-[80%] mx-auto text-lgreens">
+            <div className="w-full mx-auto row-span-2 text-md font-bold place-content-center">
+              <div className="w-[80%] mx-auto text-lgreens bg-light p-10 rounded-lg">
                 Track your Personal <span className="text-oranges">INCOME</span>
-                , <span className="text-oranges">EXPENSES</span>, and{" "}
-                <span className="text-oranges">NETWORTH</span> with a calendar
+                ,{" "}
+                <span className="text-oranges">
+                  GROSS<span className="text-lgreens">,</span> EXPENSES
+                </span>
+                , and <span className="text-oranges">NET</span> with a calendar
                 like interface
               </div>
             </div>
@@ -229,7 +259,7 @@ const PersonalHomeCard = () => {
                   setPersonalAddbutton(false);
                   setPersonalProceedButton(true);
                 }}
-                className="mx-auto bg-lgreens h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer"
+                className="mx-auto bg-lgreens hover:bg-greens h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer"
               >
                 <div className="text-xl font-bold text-white">ADD PERSONAL</div>
               </div>
@@ -244,7 +274,7 @@ const PersonalHomeCard = () => {
                 ref={titleRef}
                 required
                 type="text"
-                className="text-center w-full h-[50%] mx-auto rounded-xl border border-lgreens font-bold outline-none"
+                className="text-center w-full h-[50%] text-2xl mx-auto rounded-xl border border-lgreens font-bold outline-none"
                 onChange={(e) => {
                   setTitle(e.target.value);
                 }}
@@ -259,7 +289,7 @@ const PersonalHomeCard = () => {
           {personalProceedButton && (
             <div className="boder w-full mx-auto row-span-1 text-xs mt-2 ">
               {isLoading ? (
-                <div className="mx-auto bg-lgreens h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer">
+                <div className="mx-auto bg-greens h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer">
                   <ThreeDot color="#ffff" size="medium" text="" textColor="" />
                 </div>
               ) : (
@@ -267,9 +297,9 @@ const PersonalHomeCard = () => {
                   onClick={(e) => {
                     handleSubmit(e);
                   }}
-                  className="mx-auto bg-lgreens h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer"
+                  className="mx-auto bg-lgreens hover:bg-greens h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer"
                 >
-                  <div className="text-xl font-bold text-white">PROCEED</div>
+                  <div className="text-xl font-bold text-white">ADD</div>
                 </div>
               )}
             </div>
@@ -287,7 +317,7 @@ const PersonalHomeCard = () => {
                 ref={titleRef}
                 required
                 type="text"
-                className="text-center w-full h-[50%] mx-auto rounded-xl border border-lgreens font-bold outline-none"
+                className="text-center w-full text-2xl h-[50%] mx-auto rounded-xl border border-lgreens font-bold outline-none"
                 onChange={(e) => {
                   setErrMsg("");
                   setUpdatedTitle(e.target.value);
@@ -301,7 +331,7 @@ const PersonalHomeCard = () => {
             <div>
               <div className="flex justify-center space-x-3">
                 <div
-                  className="bg-greens p-2 text-white rounded-lg cursor-pointer"
+                  className="bg-lgreens hover:bg-greens p-2 text-white font-bold rounded-lg cursor-pointer"
                   onClick={(e) => {
                     handleUpdate(e);
                   }}
@@ -309,12 +339,12 @@ const PersonalHomeCard = () => {
                   Save Changes
                 </div>
                 <div
-                  className="p-2 bg-[#ff4242] text-white rounded-lg cursor-pointer"
+                  className="p-2 bg-[#ff4242] hover:bg-[red] font-bold text-white rounded-lg cursor-pointer"
                   onClick={() => {
                     setPersonalEditButton(false);
                   }}
                 >
-                  Discard
+                  Back
                 </div>
               </div>
               {errMsg && (

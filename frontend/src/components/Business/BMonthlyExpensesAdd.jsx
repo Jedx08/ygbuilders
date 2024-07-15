@@ -1,13 +1,11 @@
 import { useEffect, useRef, useContext, useState } from "react";
 import { CalendarContext } from "../../context/CalendarContext";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleCheck,
-  faCircleXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { GoChecklist } from "react-icons/go";
+import { BsBackspace } from "react-icons/bs";
 import dayjs from "dayjs";
 import { ThreeDot } from "react-loading-indicators";
+import expensesIcon from "../../media/bus_expenses.png";
 
 const BMonthlyExpensesAdd = () => {
   const {
@@ -80,10 +78,11 @@ const BMonthlyExpensesAdd = () => {
       <div className="px-5 font-pops">
         <div className="mb-2 flex space-x-2 justify-center">
           <div
-            className={`border rounded-md overflow-hidden items-center ${
+            className={`flex border rounded-md overflow-hidden items-center pl-2 ${
               errorStyle ? "border-[red]" : "border-inputLight"
             }`}
           >
+            <img src={expensesIcon} className="w-7 mr-2" />
             <input
               type="text"
               placeholder="Add Title"
@@ -122,16 +121,10 @@ const BMonthlyExpensesAdd = () => {
             ) : (
               <>
                 <button onClick={handleSubmit}>
-                  <FontAwesomeIcon
-                    icon={faCircleCheck}
-                    className=" text-oranges hover:text-loranges text-2xl"
-                  />
+                  <GoChecklist className=" text-oranges hover:text-loranges text-2xl" />
                 </button>
                 <div onClick={() => setShowBusinessExpensesInput(false)}>
-                  <FontAwesomeIcon
-                    icon={faCircleXmark}
-                    className=" text-[#FF4242] hover:text-[red] cursor-pointer text-2xl"
-                  />
+                  <BsBackspace className=" text-[#FF4242] hover:text-[red] cursor-pointer text-2xl" />
                 </div>
               </>
             )}
