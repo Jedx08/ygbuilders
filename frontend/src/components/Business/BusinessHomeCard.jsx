@@ -14,6 +14,7 @@ import salesIcon from "../../media/sales.png";
 import expensesIcon from "../../media/bus_expenses.png";
 import profitIcon from "../../media/bus_profit.png";
 import { FcCalendar } from "react-icons/fc";
+import { FaRegPenToSquare } from "react-icons/fa6";
 
 const BusinessHomeCard = () => {
   const getBusinessData = useGetBusinessData();
@@ -169,12 +170,12 @@ const BusinessHomeCard = () => {
                   onClick={() => {
                     setBusinessEditButton(true);
                   }}
-                  className="bg-loranges hover:bg-oranges flex rounded-md p-1 px-2 space-x-2 cursor-pointer"
+                  className="bg-loranges hover:bg-oranges flex rounded-md p-1 px-2 space-x-2 cursor-pointer items-center"
                 >
                   <div>
-                    <FontAwesomeIcon className="text-light" icon={faPen} />
+                    <FaRegPenToSquare className="text-white text-lg" />
                   </div>
-                  <p className="text-light">Edit</p>
+                  <p className="text-white">Edit</p>
                 </div>
               </div>
               <div className="text-loranges w-full mx-auto text-5xl font-semibold content-end cursor-default">

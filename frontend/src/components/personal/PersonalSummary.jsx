@@ -5,8 +5,7 @@ import dayjs from "dayjs";
 import { Chart } from "chart.js/auto"; // core data for chart, do not remove
 import { Bar, Line } from "react-chartjs-2";
 import { CalendarContext } from "../../context/CalendarContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretRight, faCaretLeft } from "@fortawesome/free-solid-svg-icons";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
 import pouch from "../../media/pouch.png";
 import expensesIcon from "../../media/expenses.png";
@@ -20,7 +19,6 @@ const PersonalSummary = () => {
 
   const [gross, setGross] = useState(0);
   const [expenses, setExpenses] = useState(0);
-  const [net, setNet] = useState(0);
 
   const [grossCount, setGrossCount] = useState([]);
   const [expensesCount, setExpensesCount] = useState([]);
@@ -28,11 +26,9 @@ const PersonalSummary = () => {
 
   const [monthlyGross, setMonthlyGross] = useState(0);
   const [monthlyExpenses, setMonthlyExpenses] = useState(0);
-  const [monthlyNet, setMonthlyNet] = useState(0);
 
   const [yearlyGross, setyearlyGross] = useState(0);
   const [yearlyExpenses, setyearlyExpenses] = useState(0);
-  const [yearlyNet, setyearlyNet] = useState(0);
 
   const [monthExpenses, setMonthExpenses] = useState(0);
 
@@ -44,19 +40,22 @@ const PersonalSummary = () => {
   useEffect(() => {
     let g = 0;
     let e = 0;
-    let n = 0;
 
     setIsLoading(true);
     const overallData = async () => {
+      const overallMonthExpenses = await getMonthlyExpenses();
       const overallData = await getPersonalData();
 
       overallData.forEach((data) => {
-        return (g += data.gross), (e += data.expenses), (n += data.net);
+        return (g += data.gross), (e += data.expenses);
+      });
+
+      overallMonthExpenses.forEach((data) => {
+        return (e += data.amount);
       });
 
       setGross(g);
       setExpenses(e);
-      setNet(n);
       setIsLoading(false);
     };
 
@@ -66,10 +65,10 @@ const PersonalSummary = () => {
   useEffect(() => {
     let g = 0;
     let e = 0;
-    let n = 0;
 
     const YearlyIncomeData = async () => {
       const yearData = await getPersonalData();
+      const overallMonthExpenses = await getMonthlyExpenses();
 
       yearData
         .filter(
@@ -80,22 +79,29 @@ const PersonalSummary = () => {
         .forEach((data) => {
           g += data.gross;
           e += data.expenses;
-          n += data.net;
+        });
+
+      overallMonthExpenses
+        .filter(
+          (data) =>
+            dayjs(data.day).format("YY") ===
+            dayjs().month(monthIndex).format("YY")
+        )
+        .forEach((data) => {
+          e += data.amount;
         });
 
       setyearlyGross(g);
       setyearlyExpenses(e);
-      setyearlyNet(n);
     };
 
     YearlyIncomeData();
-  }, []);
+  }, [monthIndex]);
 
   useEffect(() => {
     let g = 0;
     let e = 0;
     let m_e = 0;
-    let n = 0;
 
     const monthlyIncomeData = async () => {
       const monthData = await getPersonalData();
@@ -109,12 +115,10 @@ const PersonalSummary = () => {
         .forEach((data) => {
           g += data.gross;
           e += data.expenses;
-          n += data.net;
         });
 
       setMonthlyGross(g);
       setMonthlyExpenses(e);
-      setMonthlyNet(n);
       setIsLoading(false);
     };
 
@@ -195,6 +199,10 @@ const PersonalSummary = () => {
     dayCount.push(i + 1);
   }
 
+  const overallNet = gross - expenses;
+  const yearlyNet = yearlyGross - yearlyExpenses;
+  const monthlyNet = monthlyGross - monthlyExpenses;
+
   return (
     <>
       <div className="w-full py-5">
@@ -204,41 +212,46 @@ const PersonalSummary = () => {
           </h1>
         </div>
         <div className="w-[60%] mx-auto flex justify-between text-center">
-          <div className="bg-white rounded-lg w-[30%]">
+          <div className="bg-white rounded-lg w-[30%] shadow-lg">
             <div className="flex justify-center gap-2 pt-5">
               <img src={pouch} alt="puch" className="h-4 w-7" />
               <p>Gross</p>
             </div>
-            <div className="text-4xl font-bold px-5 py-4">
+            <div className="text-4xl text-oranges font-bold px-5 py-4">
               {gross.toLocaleString()}
             </div>
           </div>
-          <div className="bg-white rounded-lg w-[30%]">
+          <div className="bg-white rounded-lg w-[30%] shadow-lg">
             <div className="flex justify-center gap-2 pt-5">
               <img src={expensesIcon} alt="puch" className="h-4 w-9" />
               <p>Expenses</p>
             </div>
-            <div className="text-4xl font-bold px-5 py-4">
-              {(expenses + monthExpenses).toLocaleString()}
+            <div className="text-4xl text-[red] font-bold px-5 py-4">
+              {expenses.toLocaleString()}
             </div>
           </div>
-          <div className="bg-white rounded-lg w-[30%]">
+          <div className="bg-white rounded-lg w-[30%] shadow-lg">
             <div className="flex justify-center gap-2 pt-5">
               <img src={networth} alt="puch" className="h-3 w-9" />
               <p>Net</p>
             </div>
-            <div className="text-4xl font-bold px-5 py-4">
-              {net.toLocaleString()}
+            <div
+              className={
+                overallNet < 0
+                  ? "text-4xl text-[red] font-bold px-5 py-4"
+                  : "text-4xl text-greens font-bold px-5 py-4"
+              }
+            >
+              {overallNet.toLocaleString()}
             </div>
           </div>
         </div>
       </div>
 
       <div>
-        <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5 mb-5">
+        <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5 mb-2">
           <div>
-            <FontAwesomeIcon
-              icon={faCaretLeft}
+            <FaAngleLeft
               className="text-greens text-3xl hover:text-lgreens cursor-pointer"
               onClick={handlePrevMonth}
             />
@@ -252,8 +265,7 @@ const PersonalSummary = () => {
             </h1>
           </div>
           <div>
-            <FontAwesomeIcon
-              icon={faCaretRight}
+            <FaAngleRight
               className="text-greens text-3xl hover:text-lgreens cursor-pointer"
               onClick={handleNextMonth}
             />
@@ -283,8 +295,8 @@ const PersonalSummary = () => {
                     {
                       label: "Gross",
                       data: grossCount,
-                      borderColor: "#2ec4b6",
-                      backgroundColor: "#3cd5c5",
+                      borderColor: "#ff9f1c",
+                      backgroundColor: "#fdac3a",
                     },
                     {
                       label: "Expenses",
@@ -295,8 +307,8 @@ const PersonalSummary = () => {
                     {
                       label: "Net",
                       data: netCount,
-                      borderColor: "#ff9f1c",
-                      backgroundColor: "#fdac3a",
+                      borderColor: "#2ec4b6",
+                      backgroundColor: "#3cd5c5",
                     },
                   ],
                 }}
@@ -312,7 +324,7 @@ const PersonalSummary = () => {
                         <img src={pouch} alt="puch" className="h-4 w-5" />
                         <p>Gross</p>
                       </div>
-                      <div className="text-xl font-bold">
+                      <div className="text-xl text-oranges font-bold">
                         {monthlyGross.toLocaleString()}
                       </div>
                     </div>
@@ -325,7 +337,7 @@ const PersonalSummary = () => {
                         />
                         <p>Expenses</p>
                       </div>
-                      <div className="text-xl font-bold">
+                      <div className="text-xl text-[red] font-bold">
                         {monthlyExpenses.toLocaleString()}
                       </div>
                     </div>
@@ -334,8 +346,16 @@ const PersonalSummary = () => {
                         Net - (Monthly Expenses)
                       </div>
                       <div className="text-xl font-bold">
-                        {monthlyNet.toLocaleString()} - (
-                        {monthExpenses.toLocaleString()})
+                        <span
+                          className={
+                            monthlyNet < 0 ? "text-[red]" : "text-greens"
+                          }
+                        >
+                          {monthlyNet.toLocaleString()}
+                        </span>{" "}
+                        <span className="text-[red]">
+                          - ({monthExpenses.toLocaleString()})
+                        </span>
                       </div>
                     </div>
                     <div>
@@ -343,7 +363,13 @@ const PersonalSummary = () => {
                         <img src={networth} alt="puch" className="h-4 w-8" />
                         <p>Total Net</p>
                       </div>
-                      <div className="text-xl font-bold">
+                      <div
+                        className={
+                          monthlyNet < 0
+                            ? "text-[red] text-xl font-bold"
+                            : "text-greens text-xl font-bold"
+                        }
+                      >
                         {(monthlyNet - monthExpenses).toLocaleString()}
                       </div>
                     </div>
@@ -356,10 +382,9 @@ const PersonalSummary = () => {
 
         <div className="w-[60%] mx-auto m-5  mt-5 gap-3 content-center">
           <div>
-            <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5 mb-5">
+            <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5 mb-2">
               <div>
-                <FontAwesomeIcon
-                  icon={faCaretLeft}
+                <FaAngleLeft
                   className="text-greens text-3xl hover:text-lgreens cursor-pointer"
                   onClick={prevYear}
                 />
@@ -373,8 +398,7 @@ const PersonalSummary = () => {
                 </h1>
               </div>
               <div>
-                <FontAwesomeIcon
-                  icon={faCaretRight}
+                <FaAngleRight
                   className="text-greens text-3xl hover:text-lgreens cursor-pointer"
                   onClick={nextYear}
                 />
@@ -401,7 +425,7 @@ const PersonalSummary = () => {
                         {
                           label: `Yearly Summary (${year})`,
                           data: [yearlyGross, yearlyExpenses, yearlyNet],
-                          backgroundColor: ["#2ec4b6", "#ff6384", "#ff9f1c"],
+                          backgroundColor: ["#ff9f1c", "#ff6384", "#2ec4b6"],
                           borderRadius: 5,
                         },
                       ],
@@ -425,11 +449,17 @@ const PersonalSummary = () => {
                     </div>
                   </div>
                   <div className="w-[60%] grid grid-cols-3 mx-auto mt-1 font-bold text-3xl">
-                    <div>{yearlyGross.toLocaleString()}</div>
-                    <div>
-                      {(yearlyExpenses + monthExpenses).toLocaleString()}
+                    <div className="text-oranges">
+                      {yearlyGross.toLocaleString()}
                     </div>
-                    <div>{yearlyNet.toLocaleString()}</div>
+                    <div className="text-[red]">
+                      {yearlyExpenses.toLocaleString()}
+                    </div>
+                    <div
+                      className={yearlyNet < 0 ? "text-[red]" : "text-greens"}
+                    >
+                      {yearlyNet.toLocaleString()}
+                    </div>
                   </div>
                 </div>
               </div>
