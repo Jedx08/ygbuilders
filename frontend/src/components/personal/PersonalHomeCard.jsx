@@ -1,5 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import useGetData from "../../hooks/useGetPersonalData";
@@ -12,6 +10,7 @@ import pouch from "../../media/pouch.png";
 import expensesIcon from "../../media/expenses.png";
 import networth from "../../media/networth.png";
 import { FcCalendar } from "react-icons/fc";
+import { FaRegPenToSquare } from "react-icons/fa6";
 
 const PersonalHomeCard = () => {
   const location = useLocation();
@@ -156,12 +155,12 @@ const PersonalHomeCard = () => {
                   onClick={() => {
                     setPersonalEditButton(true);
                   }}
-                  className="bg-lgreens hover:bg-greens flex rounded-md p-1 px-2 space-x-2 cursor-pointer"
+                  className="bg-lgreens hover:bg-greens flex rounded-md p-1 px-2 space-x-2 cursor-pointer items-center"
                 >
                   <div>
-                    <FontAwesomeIcon className="text-light" icon={faPen} />
+                    <FaRegPenToSquare className="text-white text-lg" />
                   </div>
-                  <p className="text-light">Edit</p>
+                  <p className="text-white">Edit</p>
                 </div>
               </div>
               <div className="text-lgreens w-full mx-auto text-5xl font-semibold content-end cursor-default">

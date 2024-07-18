@@ -1,5 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretRight, faCaretLeft } from "@fortawesome/free-solid-svg-icons";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { CalendarContext } from "../../context/CalendarContext";
 import { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
@@ -9,6 +8,18 @@ import { Chart } from "chart.js/auto"; // core data for chart, do not remove
 import { Bar, Line } from "react-chartjs-2";
 import Skeleton from "react-loading-skeleton";
 import useBusinessCapital from "../../hooks/useBusinessCapital";
+import capitalIcon from "../../media/bus_pouch.png";
+import salesIcon from "../../media/bus_sales.png";
+import expensesIcon from "../../media/bus_expenses.png";
+import profitIcon from "../../media/bus_profit.png";
+import monthlyCapitalIcon from "../../media/busmon_pouch.png";
+import monthlySalesIcon from "../../media/busmon_sales.png";
+import monthlyExpensesIcon from "../../media/busmon_expenses.png";
+import monthlyProfitIcon from "../../media/busmon_net.png";
+import yearlyCapitalIcon from "../../media/busyear_pouch.png";
+import yearlySalesIcon from "../../media/busyear_sales.png";
+import yearlyExpensesIcon from "../../media/busyear_expenses.png";
+import yearlyProfitIcon from "../../media/busyear_net.png";
 
 const BusinessSummary = () => {
   const { monthIndex, setMonthIndex } = useContext(CalendarContext);
@@ -23,7 +34,6 @@ const BusinessSummary = () => {
   const [capitalCount, setCapitalCount] = useState([]);
   const [salesCount, setSalesCount] = useState([]);
   const [expensesCount, setExpensesCount] = useState([]);
-  const [profitCount, setProfitCount] = useState([]);
 
   const [monthlyCapital, setMonthlyCapital] = useState(0);
   const [monthlySales, setMonthlySales] = useState(0);
@@ -32,7 +42,6 @@ const BusinessSummary = () => {
   const [yearlyCapital, setYearlyCapital] = useState(0);
   const [yearlySales, setYearlySales] = useState(0);
   const [yearlyExpenses, setYearlyExpenses] = useState(0);
-  const [yearlyProfit, setYearlyProfit] = useState(0);
 
   const [overallMonthlyExpenses, setOverallMonthlyExpenses] = useState(0);
   const [thisYearMonthlyExpenses, setThisYearMonthlyExpenses] = useState(0);
@@ -62,6 +71,7 @@ const BusinessSummary = () => {
       });
 
       monthCapital.forEach((data) => {
+        console.log(dayjs(data.month).format("YYYY"));
         m_c += data.amount;
       });
 
@@ -83,7 +93,6 @@ const BusinessSummary = () => {
     let c = 0;
     let s = 0;
     let e = 0;
-    let p = 0;
     let m_e = 0;
     let m_c = 0;
 
@@ -98,20 +107,22 @@ const BusinessSummary = () => {
             dayjs().month(monthIndex).format("YY")
         )
         .forEach((data) => {
-          (c += data.capital),
-            (s += data.sales),
-            (e += data.expenses),
-            (p += data.profit);
+          (c += data.capital), (s += data.sales), (e += data.expenses);
         });
 
-      monthCapital.forEach((data) => {
-        m_c += data.amount;
-      });
+      monthCapital
+        .filter(
+          (data) =>
+            dayjs(data.moth).format("YYYY") ===
+            dayjs().month(monthIndex).format("YYYY")
+        )
+        .forEach((data) => {
+          m_c += data.amount;
+        });
 
       setYearlyCapital(c + m_c);
       setYearlySales(s);
       setYearlyExpenses(e);
-      setYearlyProfit(p);
     };
 
     const thisYearMonthlyExpenses = async () => {
@@ -132,7 +143,7 @@ const BusinessSummary = () => {
 
     thisYearMonthlyExpenses();
     YearlyIncomeData();
-  }, []);
+  }, [monthIndex]);
 
   useEffect(() => {
     let c = 0;
@@ -155,9 +166,15 @@ const BusinessSummary = () => {
           (c += data.capital), (s += data.sales), (e += data.expenses);
         });
 
-      monthCapital.forEach((data) => {
-        m_c += data.amount;
-      });
+      monthCapital
+        .filter(
+          (data) =>
+            dayjs(data.month).format("MMMM YYYY") ===
+            dayjs().month(monthIndex).format("MMMM YYYY")
+        )
+        .forEach((data) => {
+          m_c += data.amount;
+        });
 
       setMonthlyCapital(c + m_c);
       setMonthlySales(s);
@@ -210,16 +227,9 @@ const BusinessSummary = () => {
         return dateData;
       });
 
-      const profitPerDate = filteredData.map((data) => {
-        const dateData = data.profit;
-
-        return dateData;
-      });
-
       setCapitalCount(capitalPerDate);
       setSalesCount(salesPerDate);
       setExpensesCount(expensesPerDate);
-      setProfitCount(profitPerDate);
     };
     monthlyIncomeData();
   }, [monthIndex]);
@@ -246,6 +256,13 @@ const BusinessSummary = () => {
   for (let i = 0; i <= monthCount - 1; i++) {
     dayCount.push(i + 1);
   }
+
+  const overallProfit = sales - expenses - overallMonthlyExpenses - capital;
+  const monthlyProfit =
+    monthlySales - monthExpenses - monthlyCapital - monthExpenses;
+  const yearlyProfit =
+    yearlySales - yearlyExpenses - thisYearMonthlyExpenses - yearlyCapital;
+
   return (
     <>
       <div className=" w-full py-5">
@@ -254,44 +271,56 @@ const BusinessSummary = () => {
             Overall Summary
           </h1>
         </div>
-        <div className=" w-[80%] mx-auto justify-between flex text-center">
-          <div className=" bg-white rounded-lg w-[20%]">
-            <div className="pt-3">Capital</div>
-            <div className="text-4xl font-bold px-5 py-4">
+        <div className=" w-[80%] mx-auto justify-center  flex text-center gap-[4%]">
+          <div className=" bg-white rounded-lg w-[20%] shadow-lg">
+            <div className="flex items-center justify-center pt-3 gap-2">
+              <img src={capitalIcon} alt="capital icon" className="h-4 w-7" />
+              <div>Capital</div>
+            </div>
+            <div className="text-4xl text-oranges font-bold px-5 py-4">
               {capital.toLocaleString()}
             </div>
           </div>
-          <div className="bg-white rounded-lg w-[20%]">
-            <div className="pt-3">Sales</div>
-            <div className="text-4xl font-bold px-5 py-4">
+          <div className="bg-white rounded-lg w-[20%] shadow-lg">
+            <div className="flex items-center justify-center pt-3 gap-2">
+              <img src={salesIcon} alt="sales icon" className="h-4 w-7" />
+              <div>Sales</div>
+            </div>
+            <div className="text-4xl text-[#399CB4] font-bold px-5 py-4">
               {sales.toLocaleString()}
             </div>
           </div>
-          <div className="bg-white rounded-lg w-[20%]">
-            <div className="pt-3">Expenses</div>
-            <div className="text-4xl font-bold px-5 py-4">
+          <div className="bg-white rounded-lg w-[20%] shadow-lg">
+            <div className="flex items-center justify-center pt-3 gap-2">
+              <img src={expensesIcon} alt="expenses icon" className="h-4 w-7" />
+              <div>Expenses</div>
+            </div>
+            <div className="text-4xl text-[red] font-bold px-5 py-4">
               {(expenses + overallMonthlyExpenses).toLocaleString()}
             </div>
           </div>
-          <div className="bg-white rounded-lg w-[20%]">
-            <div className="pt-3">Profit</div>
-            <div className="text-4xl font-bold px-5 py-4">
-              {(
-                sales -
-                expenses -
-                overallMonthlyExpenses -
-                capital
-              ).toLocaleString()}
+          <div className="bg-white rounded-lg w-[20%] shadow-lg">
+            <div className="flex items-center justify-center pt-3 gap-2">
+              <img src={profitIcon} alt="profit icon" className="h-4 w-7" />
+              <div>Profit</div>
+            </div>
+            <div
+              className={
+                overallProfit < 0
+                  ? "text-4xl font-bold text-[red] px-5 py-4"
+                  : "text-4xl font-bold text-greens px-5 py-4"
+              }
+            >
+              {overallProfit.toLocaleString()}
             </div>
           </div>
         </div>
       </div>
 
       <div>
-        <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5 mb-5">
+        <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5 mb-2">
           <div>
-            <FontAwesomeIcon
-              icon={faCaretLeft}
+            <FaAngleLeft
               className="text-oranges text-3xl hover:text-loranges cursor-pointer"
               onClick={handlePrevMonth}
             />
@@ -305,8 +334,7 @@ const BusinessSummary = () => {
             </h1>
           </div>
           <div>
-            <FontAwesomeIcon
-              icon={faCaretRight}
+            <FaAngleRight
               className="text-oranges text-3xl hover:text-loranges cursor-pointer"
               onClick={handleNextMonth}
             />
@@ -336,8 +364,8 @@ const BusinessSummary = () => {
                     {
                       label: "Capital",
                       data: capitalCount,
-                      borderColor: "#2ec4b6",
-                      backgroundColor: "#3cd5c5",
+                      borderColor: "#ff9f1c",
+                      backgroundColor: "#fdac3a",
                     },
                     {
                       label: "Sales",
@@ -353,34 +381,55 @@ const BusinessSummary = () => {
                     },
                     {
                       label: "Profit",
-                      data: profitCount,
-                      borderColor: "#ff9f1c",
-                      backgroundColor: "#fdac3a",
+                      data: [monthlyProfit],
+                      borderColor: "#2ec4b6",
+                      backgroundColor: "#3cd5c5",
                     },
                   ],
                 }}
               />
-              <div className="w-[100%] h-[fit-content] ">
+              <div className="w-[100%] h-[fit-content]">
                 <div className="text-center">
                   <div className="text-lg py-5">
                     Monthly Summary ({thisMonth})
                   </div>
                   <div className="w-[100%] grid grid-cols-5 gap-2 mx-auto">
                     <div>
-                      <div className="text-sm mb-2">Capital</div>
-                      <div className="text-xl font-bold">
+                      <div className="flex items-center justify-center pb-3 gap-2">
+                        <img
+                          src={monthlyCapitalIcon}
+                          alt="monthly capital"
+                          className="h-4 w-7"
+                        />
+                        <div className="text-sm mb-2">Capital</div>
+                      </div>
+                      <div className="text-xl font-bold text-oranges">
                         {monthlyCapital.toLocaleString()}
                       </div>
                     </div>
                     <div>
-                      <div className="text-sm mb-2">Sales</div>
-                      <div className="text-xl font-bold">
+                      <div className="flex items-center justify-center pb-3 gap-2">
+                        <img
+                          src={monthlySalesIcon}
+                          alt="monthly sales"
+                          className="h-4 w-7"
+                        />
+                        <div className="text-sm mb-2">Sales</div>
+                      </div>
+                      <div className="text-xl font-bold text-[#399CB4]">
                         {monthlySales.toLocaleString()}
                       </div>
                     </div>
                     <div>
-                      <div className="text-sm mb-2">Expenses</div>
-                      <div className="text-xl font-bold">
+                      <div className="flex items-center justify-center pb-3 gap-2">
+                        <img
+                          src={monthlyExpensesIcon}
+                          alt="monthly expenses"
+                          className="h-4 w-7"
+                        />
+                        <div className="text-sm mb-2">Expenses</div>
+                      </div>
+                      <div className="text-xl font-bold text-[red]">
                         {monthlyExpenses.toLocaleString()}
                       </div>
                     </div>
@@ -389,23 +438,35 @@ const BusinessSummary = () => {
                         Profit - (Monthly Expenses)
                       </div>
                       <div className="text-xl font-bold">
-                        {(
-                          monthlySales -
-                          monthExpenses -
-                          monthlyCapital
-                        ).toLocaleString()}{" "}
-                        - ({monthExpenses})
+                        <span className="text-[#ff9f1c]">
+                          (
+                          {(
+                            monthlySales -
+                            monthExpenses -
+                            monthlyCapital
+                          ).toLocaleString()}
+                          )
+                        </span>{" "}
+                        <span className="text-[red]">- ({monthExpenses})</span>
                       </div>
                     </div>
                     <div>
-                      <div className="text-sm mb-2">Total Profit</div>
-                      <div className="text-xl font-bold">
-                        {(
-                          monthlySales -
-                          monthExpenses -
-                          monthlyCapital -
-                          monthExpenses
-                        ).toLocaleString()}
+                      <div className="flex items-center justify-center pb-3 gap-2">
+                        <img
+                          src={monthlyProfitIcon}
+                          alt="monthly profit"
+                          className="h-4 w-7"
+                        />
+                        <div className="text-sm mb-2">Total Profit</div>
+                      </div>
+                      <div
+                        className={
+                          monthlyProfit < 0
+                            ? "text-[red] text-xl font-bold"
+                            : "text-greens text-xl font-bold"
+                        }
+                      >
+                        {monthlyProfit.toLocaleString()}
                       </div>
                     </div>
                   </div>
@@ -417,10 +478,9 @@ const BusinessSummary = () => {
 
         <div className="w-[60%] mx-auto m-5  mt-5 gap-3 content-center">
           <div>
-            <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5 mb-5">
+            <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5 mb-2">
               <div>
-                <FontAwesomeIcon
-                  icon={faCaretLeft}
+                <FaAngleLeft
                   className="text-oranges text-3xl hover:text-loranges cursor-pointer"
                   onClick={prevYear}
                 />
@@ -434,8 +494,7 @@ const BusinessSummary = () => {
                 </h1>
               </div>
               <div>
-                <FontAwesomeIcon
-                  icon={faCaretRight}
+                <FaAngleRight
                   className="text-oranges text-3xl hover:text-loranges cursor-pointer"
                   onClick={nextYear}
                 />
@@ -468,10 +527,10 @@ const BusinessSummary = () => {
                             yearlyProfit,
                           ],
                           backgroundColor: [
-                            "#2ec4b6",
+                            "#ff9f1c",
                             "#41B8D5",
                             "#ff6384",
-                            "#ff9f1c",
+                            "#2ec4b6",
                           ],
                           borderRadius: 5,
                         },
@@ -483,34 +542,63 @@ const BusinessSummary = () => {
                   <div className="text-lg py-5">Yearly Summary ({year})</div>
                   <div className="w-[80%] flex justify-between mx-auto">
                     <div>
-                      Capital:
-                      <div className="text-2xl font-bold">
+                      <div className="flex items-center justify-center pb-2 gap-2">
+                        <img
+                          src={yearlyCapitalIcon}
+                          alt="yearly capital"
+                          className="h-4 w-7"
+                        />
+                        <div className="text-md">Capital</div>
+                      </div>
+                      <div className="text-2xl text-oranges font-bold">
                         {yearlyCapital.toLocaleString()}
                       </div>
                     </div>
                     <div>
-                      Sales:
-                      <div className="text-2xl font-bold">
+                      <div className="flex items-center justify-center pb-2 gap-2">
+                        <img
+                          src={yearlySalesIcon}
+                          alt="yearly sales"
+                          className="h-4 w-7"
+                        />
+                        <div className="text-md">Sales</div>
+                      </div>
+                      <div className="text-2xl text-[#399CB4] font-bold">
                         {yearlySales.toLocaleString()}
                       </div>
                     </div>
                     <div>
-                      Expenses:
-                      <div className="text-2xl font-bold">
+                      <div className="flex items-center justify-center pb-2 gap-2">
+                        <img
+                          src={yearlyExpensesIcon}
+                          alt="yearly expenses"
+                          className="h-4 w-7"
+                        />
+                        <div className="text-md">Expenses</div>
+                      </div>
+                      <div className="text-2xl text-[red] font-bold">
                         {(
                           yearlyExpenses + thisYearMonthlyExpenses
                         ).toLocaleString()}
                       </div>
                     </div>
                     <div>
-                      Profit:
-                      <div className="text-2xl font-bold">
-                        {(
-                          yearlySales -
-                          yearlyExpenses -
-                          thisYearMonthlyExpenses -
-                          yearlyCapital
-                        ).toLocaleString()}
+                      <div className="flex items-center justify-center pb-2 gap-2">
+                        <img
+                          src={yearlyProfitIcon}
+                          alt="yearly profit"
+                          className="h-4 w-7"
+                        />
+                        <div className="text-md">Profit</div>
+                      </div>
+                      <div
+                        className={
+                          yearlyProfit < 0
+                            ? "text-2xl font-bold text-[red]"
+                            : "text-2xl font-bold text-greens"
+                        }
+                      >
+                        {yearlyProfit.toLocaleString()}
                       </div>
                     </div>
                   </div>
