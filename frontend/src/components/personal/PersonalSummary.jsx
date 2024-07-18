@@ -365,7 +365,7 @@ const PersonalSummary = () => {
                       </div>
                       <div
                         className={
-                          monthlyNet < 0
+                          monthlyNet - monthExpenses < 0
                             ? "text-[red] text-xl font-bold"
                             : "text-greens text-xl font-bold"
                         }

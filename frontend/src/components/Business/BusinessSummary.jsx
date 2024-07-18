@@ -259,7 +259,7 @@ const BusinessSummary = () => {
 
   const overallProfit = sales - expenses - overallMonthlyExpenses - capital;
   const monthlyProfit =
-    monthlySales - monthExpenses - monthlyCapital - monthExpenses;
+    monthlySales - monthlyExpenses - monthlyCapital - monthExpenses;
   const yearlyProfit =
     yearlySales - yearlyExpenses - thisYearMonthlyExpenses - yearlyCapital;
 
@@ -438,16 +438,24 @@ const BusinessSummary = () => {
                         Profit - (Monthly Expenses)
                       </div>
                       <div className="text-xl font-bold">
-                        <span className="text-[#ff9f1c]">
+                        <span
+                          className={`${
+                            monthlySales - monthlyExpenses - monthlyCapital < 0
+                              ? "text-[red]"
+                              : "text-greens"
+                          }`}
+                        >
                           (
                           {(
                             monthlySales -
-                            monthExpenses -
+                            monthlyExpenses -
                             monthlyCapital
                           ).toLocaleString()}
                           )
                         </span>{" "}
-                        <span className="text-[red]">- ({monthExpenses})</span>
+                        <span className="text-[red]">
+                          - ({monthExpenses.toLocaleString()})
+                        </span>
                       </div>
                     </div>
                     <div>
