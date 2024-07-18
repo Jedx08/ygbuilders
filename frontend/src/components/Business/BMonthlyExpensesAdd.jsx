@@ -1,8 +1,8 @@
 import { useEffect, useRef, useContext, useState } from "react";
 import { CalendarContext } from "../../context/CalendarContext";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { GoChecklist } from "react-icons/go";
 import { BsBackspace } from "react-icons/bs";
+import { MdOutlinePostAdd } from "react-icons/md";
 import dayjs from "dayjs";
 import { ThreeDot } from "react-loading-indicators";
 import expensesIcon from "../../media/bus_expenses.png";
@@ -75,14 +75,14 @@ const BMonthlyExpensesAdd = () => {
 
   return (
     <>
-      <div className="px-5 font-pops">
+      <div className="px-5 font-pops border border-loranges py-2 rounded-md">
         <div className="mb-2 flex space-x-2 justify-center">
           <div
             className={`flex border rounded-md overflow-hidden items-center pl-2 ${
               errorStyle ? "border-[red]" : "border-inputLight"
             }`}
           >
-            <img src={expensesIcon} className="w-7 mr-2" />
+            <img src={expensesIcon} className="w-8 mr-2" />
             <input
               type="text"
               placeholder="Add Title"
@@ -91,7 +91,7 @@ const BMonthlyExpensesAdd = () => {
                 setTitle(e.target.value), setError(""), setErrorStyle(false);
               }}
               value={title}
-              className="w-36 focus:outline-none focus:border-oranges pl-2 py-1 caret-inputLight placeholder:text-xs"
+              className="w-36 focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs"
             />
           </div>
           <div
@@ -106,31 +106,44 @@ const BMonthlyExpensesAdd = () => {
                 setAmount(e.target.value), setError(""), setErrorStyle(false);
               }}
               value={amount}
-              className="w-36 focus:outline-none focus:border-oranges pl-2 py-1 caret-inputLight placeholder:text-xs"
+              className="w-36 focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs"
             />
           </div>
-          <div className="flex items-center space-x-2 px-2 h-2 w-fit rounded-md overflow-hidden">
-            {addLoading ? (
-              <ThreeDot
-                style={{ fontSize: "7px" }}
-                variant="pulsate"
-                color="#ff9f1c"
-                text=""
-                textColor=""
-              />
-            ) : (
-              <>
-                <button onClick={handleSubmit}>
-                  <GoChecklist className=" text-oranges hover:text-loranges text-2xl" />
-                </button>
-                <div onClick={() => setShowBusinessExpensesInput(false)}>
-                  <BsBackspace className=" text-[#FF4242] hover:text-[red] cursor-pointer text-2xl" />
-                </div>
-              </>
-            )}
-          </div>
         </div>
-        <div className="mb-2 text-xs text-center text-[red]">{error}</div>
+
+        <div className="flex items-center mx-auto gap-3 px-2 h-2 w-fit rounded-md overflow-hidden">
+          {addLoading ? (
+            <ThreeDot
+              style={{ fontSize: "7px" }}
+              variant="pulsate"
+              color="#ff9f1c"
+              text=""
+              textColor=""
+            />
+          ) : (
+            <>
+              <div
+                onClick={handleSubmit}
+                className="text-sm text-white flex items-center gap-2 rounded-md px-2 py-1 cursor-pointer bg-loranges hover:bg-oranges font-semibold"
+              >
+                <button>
+                  <MdOutlinePostAdd className="text-2xl" />
+                </button>
+                Add
+              </div>
+              <div
+                onClick={() => setShowBusinessExpensesInput(false)}
+                className="text-sm text-[#FF4242] hover:text-[red] flex items-center gap-2 border border-[#FF4242] hover:border-[red] rounded-md px-2 py-1 cursor-pointer font-semibold"
+              >
+                <div>
+                  <BsBackspace className="text-[#FF4242] hover:text-[red] text-lg" />
+                </div>
+                Back
+              </div>
+            </>
+          )}
+        </div>
+        <div className="mt-2 text-xs text-center text-[red]">{error}</div>
       </div>
     </>
   );

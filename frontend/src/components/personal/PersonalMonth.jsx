@@ -3,17 +3,13 @@ import PersonalDay from "./PersonalDay";
 import dayjs from "dayjs";
 import { useContext } from "react";
 import { CalendarContext } from "../../context/CalendarContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCaretRight,
-  faCaretLeft,
-  faPen,
-} from "@fortawesome/free-solid-svg-icons";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { FaPenToSquare } from "react-icons/fa6";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import PersonalForm from "./PersonalForm";
 import PMonthlyExpensesForm from "./PMonthlyExpensesForm";
-import expenses from "../../media/expenses.png";
+import expensesIcon from "../../media/monexpenses.png";
 import usePersonalExpenses from "../../hooks/usePersonalExpenses";
 
 const PersonalMonth = ({ month }) => {
@@ -67,8 +63,7 @@ const PersonalMonth = ({ month }) => {
           <div className="grid grid-flow-col grid-cols-7 mt-5 mx-5">
             <div className="grid grid-flow-col justify-end col-span-4 items-center gap-5">
               <div>
-                <FontAwesomeIcon
-                  icon={faCaretLeft}
+                <FaAngleLeft
                   className="text-greens text-3xl hover:text-lgreens cursor-pointer"
                   onClick={handlePrevMonth}
                 />
@@ -84,38 +79,33 @@ const PersonalMonth = ({ month }) => {
                 </h1>
               </div>
               <div>
-                <FontAwesomeIcon
-                  icon={faCaretRight}
+                <FaAngleRight
                   className="text-greens text-3xl hover:text-lgreens cursor-pointer"
                   onClick={handleNextMonth}
                 />
               </div>
             </div>
             <div className="grid col-span-3 justify-end items-center mr-8">
-              <div className="bg-white py-1 px-3 rounded-md">
-                <p className="text-sm font-bold text-loranges">
-                  Monthly Bills, Loan etc...
+              {/* Monthly Expenses */}
+              <div
+                onClick={() => setShowPersonalExpensesForm(true)}
+                className="bg-white py-1 px-3 rounded-md text-center cursor-pointer shadow-lg"
+              >
+                <p className="text-md text-center font-bold text-greens">
+                  Monthly Expenses
                 </p>
                 <div className="flex items-center justify-center space-x-3">
                   <div className="flex items-center">
-                    <img src={expenses} className="h-5 w-8" />
+                    <img src={expensesIcon} className="h-5 w-10" />
                     <p className="ml-1 text-[#D0D0D0] text-xs">:</p>
                   </div>
                   <div>
-                    <p className="text-md font-semibold text-[red]">
-                      <span className="text-[#2C2C2C] font-normal">
-                        &#x20B1;{" "}
-                      </span>
+                    <p className="text-md font-bold text-[red]">
                       {monthlyExpenses.toLocaleString()}
                     </p>
                   </div>
                   <div className="flex items-center">
-                    <button onClick={() => setShowPersonalExpensesForm(true)}>
-                      <FontAwesomeIcon
-                        icon={faPen}
-                        className="text-greens hover:text-lgreens cursor-pointer text-lg"
-                      />
-                    </button>
+                    <FaPenToSquare className="text-lgreens hover:text-greens text-2xl font-bold" />
                   </div>
                 </div>
               </div>
@@ -131,7 +121,7 @@ const PersonalMonth = ({ month }) => {
             <div className="text-lgreens">FRI</div>
             <div className="text-loranges">SAT</div>
           </div>
-          <div className="h-s80 flex-1 grid grid-cols-7 grid-rows-6 mt-1 overflow-auto rounded-lg shadow-lg">
+          <div className="h-s90 flex-1 grid grid-cols-7 grid-rows-6 mt-1 overflow-auto rounded-lg shadow-lg">
             {month.map((row, i) => (
               <React.Fragment key={i}>
                 {row.map((day, idx) => (

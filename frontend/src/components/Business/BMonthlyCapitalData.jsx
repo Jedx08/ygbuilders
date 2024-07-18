@@ -99,7 +99,7 @@ const BMonthlyCapitalData = ({ capitalData }) => {
     <div
       className={`px-5 mb-2 font-pops ${
         deleteStyle ? "border border-[#ffa1a1] py-3 rounded-md" : ""
-      }`}
+      } ${editButton ? "border border-loranges pt-2 rounded-md" : ""}`}
     >
       <div
         className={` ${
@@ -112,57 +112,59 @@ const BMonthlyCapitalData = ({ capitalData }) => {
         {!editButton ? (
           <>
             {/* show current data */}
-            <div className="rounded-md overflow-hidden py-1 items-center bg-light flex px-2 col-span-1">
-              <img src={profitIcon} className="w-7 mr-2" />
-              {title}
+            <div className="rounded-md overflow-hidden py-1 items-center bg-light flex px-2 col-span-1 font-medium">
+              <img src={profitIcon} className="w-8 mr-2" />
+              {title.toUpperCase()}
             </div>
             <div className="text-[red] font-semibold rounded-md overflow-hidden py-1 items-center justify-center bg-light flex px-2 col-span-1">
               {amount.toLocaleString()}
             </div>
           </>
         ) : (
-          <div className="flex gap-2">
+          <>
             {/* Show input for update data */}
-            <div
-              className={`flex border rounded-md overflow-hidden items-center pl-2 ${
-                errorStyle ? "border-[red]" : "border-inputLight"
-              }`}
-            >
-              <img src={profitIcon} className="w-7 mr-2" />
-              <input
-                type="text"
-                placeholder="Add Title"
-                onChange={(e) => {
-                  setUpdateTitle(e.target.value),
-                    setError(""),
-                    setErrorStyle(false);
-                }}
-                value={updateTitle}
-                className={`focus:outline-none focus:border-oranges pl-2 py-1 caret-inputLight placeholder:text-xs ${
-                  editButton ? "w-32" : ""
+            <div className="flex justify-center gap-2">
+              <div
+                className={`col-span-1 flex border rounded-md overflow-hidden items-center pl-2 ${
+                  errorStyle ? "border-[red]" : "border-inputLight"
                 }`}
-              />
-            </div>
-            <div
-              className={`border rounded-md overflow-hidden items-center ${
-                errorStyle ? "border-[red]" : "border-inputLight"
-              }`}
-            >
-              <input
-                type="number"
-                placeholder="Add Amount"
-                onChange={(e) => {
-                  setUpdateAmount(e.target.value),
-                    setError(""),
-                    setErrorStyle(false);
-                }}
-                value={updateAmount}
-                className={`focus:outline-none focus:border-oranges pl-2 py-1 caret-inputLight placeholder:text-xs text-center ${
-                  editButton ? "w-32" : ""
+              >
+                <img src={profitIcon} className="w-8 mr-2" />
+                <input
+                  type="text"
+                  placeholder="Add Title"
+                  onChange={(e) => {
+                    setUpdateTitle(e.target.value),
+                      setError(""),
+                      setErrorStyle(false);
+                  }}
+                  value={updateTitle}
+                  className={`focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs ${
+                    editButton ? "w-32" : ""
+                  }`}
+                />
+              </div>
+              <div
+                className={`col-span-1 border rounded-md overflow-hidden items-center ${
+                  errorStyle ? "border-[red]" : "border-inputLight"
                 }`}
-              />
+              >
+                <input
+                  type="number"
+                  placeholder="Add Amount"
+                  onChange={(e) => {
+                    setUpdateAmount(e.target.value),
+                      setError(""),
+                      setErrorStyle(false);
+                  }}
+                  value={updateAmount}
+                  className={`focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs text-center ${
+                    editButton ? "w-32" : ""
+                  }`}
+                />
+              </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* Update Button On and Off */}
@@ -171,7 +173,7 @@ const BMonthlyCapitalData = ({ capitalData }) => {
             {!confirmDelete && (
               <div className="flex space-x-2 items-center px-2 h-2 w-fit rounded-md overflow-hidden">
                 <div onClick={() => setEditButton(true)}>
-                  <FaRegPenToSquare className="text-oranges hover:text-loranges cursor-pointer text-2xl" />
+                  <FaRegPenToSquare className="text-oranges hover:text-loranges cursor-pointer text-xl" />
                 </div>
 
                 <div
@@ -181,7 +183,7 @@ const BMonthlyCapitalData = ({ capitalData }) => {
                       setErrorStyle(false);
                   }}
                 >
-                  <FaRegTrashCan className="text-[#ff4242] hover:text-[red] cursor-pointer text-2xl" />
+                  <FaRegTrashCan className="text-[#ff4242] hover:text-[red] cursor-pointer text-xl" />
                 </div>
               </div>
             )}
@@ -199,27 +201,27 @@ const BMonthlyCapitalData = ({ capitalData }) => {
                 />
               </div>
             ) : (
-              <div className="flex justify-center">
-                <div className="flex items-center space-x-2 p-2 h-2 w-fit rounded-md overflow-hidden ">
+              <div className="flex justify-center items-center py-2">
+                <div className="flex items-center space-x-2 px-2 h-2 w-fit rounded-md overflow-hidden">
                   <div
-                    className=" bg-loranges rounded-lg flex p-1 gap-2 px-2  cursor-pointer"
+                    className="flex gap-2 rounded-md border border-loranges bg-loranges hover:bg-oranges px-2 py-1 cursor-pointer text-white font-semibold text-sm"
                     onClick={handleUpdate}
                   >
                     <button>
-                      <GoChecklist className="text-white text-2xl" />{" "}
+                      <GoChecklist className="text-lg" />
                     </button>
-                    <span className="text-white">Save</span>
+                    <span>Save</span>
                   </div>
                   <div
-                    className="border border-[#FF4242] rounded-lg flex p-1 gap-2 px-2 cursor-pointer"
+                    className="flex gap-2 rounded-md border border-[#FF4242] hover:border-[red] text-[#FF4242] hover:text-[red] px-2 py-1 cursor-pointer text-sm font-semibold"
                     onClick={() => {
                       setEditButton(false), setError(""), setErrorStyle(false);
                     }}
                   >
                     <div>
-                      <BsBackspace className="text-[#FF4242]  text-2xl" />
+                      <BsBackspace className="text-lg" />
                     </div>
-                    <span className="text-[#FF4242]">Back</span>
+                    <span>Back</span>
                   </div>
                 </div>
               </div>
@@ -229,13 +231,13 @@ const BMonthlyCapitalData = ({ capitalData }) => {
       </div>
 
       {/* Error Message */}
-      <div className="mt-2 text-xs text-center text-[red]">{error}</div>
+      <div className="mb-2 text-xs text-center text-[red]">{error}</div>
 
       {/* Delete Data */}
       {confirmDelete && (
-        <div className="p-2 rounded-md mt-1 pt-1 bg-light">
+        <div className="rounded-md mt-1 pt-1 bg-light">
           <p className="text-xs text-center">
-            Are you sure you want to remove{" "}
+            Confirm deletion for{" "}
             <span className="text-xs text-[red] font-semibold">{title}</span>{" "}
             capital ?
           </p>
@@ -252,25 +254,27 @@ const BMonthlyCapitalData = ({ capitalData }) => {
               </div>
             ) : (
               <>
-                <div
-                  className="border border-[#FF4242] rounded-lg px-2 py-1 flex gap-2 cursor-pointer items-center"
-                  onClick={handleDelete}
-                >
-                  <div>
-                    <FaRegTrashCan className="text-[#FF4242] text-xl" />
+                <div className="flex gap-4">
+                  <div
+                    className="flex gap-2 border border-[#FF4242] hover:border-[red] text-[#FF4242] hover:text-[red] rounded-md px-2 py-1 items-center cursor-pointer font-semibold"
+                    onClick={handleDelete}
+                  >
+                    <div>
+                      <FaRegTrashCan className="text-lg" />
+                    </div>
+                    <span className="text-sm">Delete</span>
                   </div>
-                  <span className="text-[#FF4242]">Delete</span>
-                </div>
-                <div
-                  className="bg-loranges rounded-lg px-2 py-1 items-center flex gap-2  cursor-pointer"
-                  onClick={() => {
-                    setConfirmDelete(false), setDeleteStyle(false);
-                  }}
-                >
-                  <div>
-                    <BsBackspace className="text-white   text-xl" />
+                  <div
+                    className="flex gap-2 rounded-lg border border-loranges bg-loranges hover:bg-oranges font-semibold px-2 py-1 items-center cursor-pointer"
+                    onClick={() => {
+                      setConfirmDelete(false), setDeleteStyle(false);
+                    }}
+                  >
+                    <div>
+                      <BsBackspace className="text-white text-lg" />
+                    </div>
+                    <span className="text-white text-sm">Cancel</span>
                   </div>
-                  <span className="text-white">Cancel</span>
                 </div>
               </>
             )}

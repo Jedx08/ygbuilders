@@ -6,6 +6,9 @@ import {
   faCircleCheck,
   faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
+import { BsBackspace } from "react-icons/bs";
+import { MdOutlinePostAdd } from "react-icons/md";
+import expensesIcon from "../../media/expenses.png";
 import dayjs from "dayjs";
 import { ThreeDot } from "react-loading-indicators";
 
@@ -77,13 +80,14 @@ const PMonthlyExpensesAdd = () => {
 
   return (
     <>
-      <div className="px-5 font-pops">
+      <div className="px-5 font-pops border border-greens py-2 rounded-md">
         <div className="mb-2 flex space-x-2 justify-center">
           <div
-            className={`border rounded-md overflow-hidden items-center ${
+            className={`flex border rounded-md overflow-hidden items-center pl-2 ${
               errorStyle ? "border-[red]" : "border-inputLight"
             }`}
           >
+            <img src={expensesIcon} className="w-8 mr-2" />
             <input
               type="text"
               placeholder="Add Title"
@@ -92,7 +96,7 @@ const PMonthlyExpensesAdd = () => {
                 setTitle(e.target.value), setError(""), setErrorStyle(false);
               }}
               value={title}
-              className="w-36 focus:outline-none focus:border-oranges pl-2 py-1 caret-inputLight placeholder:text-xs"
+              className="w-36 focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs"
             />
           </div>
           <div
@@ -107,36 +111,44 @@ const PMonthlyExpensesAdd = () => {
                 setAmount(e.target.value), setError(""), setErrorStyle(false);
               }}
               value={amount}
-              className="w-36 focus:outline-none focus:border-oranges pl-2 py-1 caret-inputLight placeholder:text-xs"
+              className="w-36 focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs"
             />
           </div>
-          <div className="flex items-center space-x-2 px-2 h-2 w-fit rounded-md overflow-hidden">
-            {addLoading ? (
-              <ThreeDot
-                style={{ fontSize: "7px" }}
-                variant="pulsate"
-                color="#2ec4b6"
-                text=""
-                textColor=""
-              />
-            ) : (
-              <>
-                <button onClick={handleSubmit}>
-                  <FontAwesomeIcon
-                    icon={faCircleCheck}
-                    className=" text-greens hover:text-lgreens text-2xl"
-                  />
-                </button>
-                <div onClick={() => setShowPersonalExpensesInput(false)}>
-                  <FontAwesomeIcon
-                    icon={faCircleXmark}
-                    className=" text-[#FF4242] hover:text-[red] cursor-pointer text-2xl"
-                  />
-                </div>
-              </>
-            )}
-          </div>
         </div>
+
+        <div className="flex items-center mx-auto gap-3 px-2 h-2 w-fit rounded-md overflow-hidden">
+          {addLoading ? (
+            <ThreeDot
+              style={{ fontSize: "7px" }}
+              variant="pulsate"
+              color="#2ec4b6"
+              text=""
+              textColor=""
+            />
+          ) : (
+            <>
+              <div
+                onClick={handleSubmit}
+                className="text-sm text-white flex items-center gap-2 rounded-md px-2 py-1 cursor-pointer bg-greens hover:bg-lgreens font-semibold"
+              >
+                <button>
+                  <MdOutlinePostAdd className="text-2xl" />
+                </button>
+                Add
+              </div>
+              <div
+                onClick={() => setShowPersonalExpensesInput(false)}
+                className="text-sm text-[#FF4242] hover:text-[red] flex items-center gap-2 border border-[#FF4242] hover:border-[red] rounded-md px-2 py-1 cursor-pointer font-semibold"
+              >
+                <div>
+                  <BsBackspace className="text-[#FF4242] hover:text-[red] text-lg" />
+                </div>
+                Back
+              </div>
+            </>
+          )}
+        </div>
+
         <div className="mb-2 text-xs text-center text-[red]">{error}</div>
       </div>
     </>

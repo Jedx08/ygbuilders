@@ -11,6 +11,11 @@ import {
 import { CalendarContext } from "../../context/CalendarContext";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { ThreeDot } from "react-loading-indicators";
+import { FaRegPenToSquare, FaRegTrashCan } from "react-icons/fa6";
+import { MdOutlinePostAdd } from "react-icons/md";
+import { GoChecklist } from "react-icons/go";
+import { BsBackspace } from "react-icons/bs";
+import { IoClose } from "react-icons/io5";
 
 const PersonalForm = () => {
   const axiosPrivate = useAxiosPrivate();
@@ -186,11 +191,11 @@ const PersonalForm = () => {
 
   return (
     <div className="font-pops h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-70">
-      <form className="rounded-md bg-white overflow-hidden w-80 px-5 shadow-lg">
+      <form className="rounded-md bg-white overflow-hidden w-80 px-2 shadow-lg">
         <div className="flex items-center justify-center relative w-full">
           <div className="text-center mt-6">
             <h1 className="font-bold text-2xl text-greens">Personal Income</h1>
-            <p className="text-xs font-semibold">
+            <p className="text-sm font-semibold">
               {exactDaySelected.format("MMMM D, YYYY")}
             </p>
           </div>
@@ -212,10 +217,7 @@ const PersonalForm = () => {
             }}
             className="absolute right-0 pr-2 mb-5 cursor-pointer"
           >
-            <FontAwesomeIcon
-              icon={faXmark}
-              className="text-xl text-loranges hover:text-oranges"
-            />
+            <IoClose className="text-2xl text-lgreens hover:text-greens" />
           </div>
         </div>
 
@@ -225,28 +227,27 @@ const PersonalForm = () => {
             <label className="text-sm font-bold">Gross:</label>
           </div>
           {editData || confirmDelete ? (
-            <div className="flex py-1 bg-light rounded-md overflow-hidden">
+            <div className="flex py-1 justify-between items-center bg-light rounded-md overflow-hidden">
               <div className="pl-2">
-                <img src={pouchIcon} className="w-6" />
+                <img src={pouchIcon} className="w-7" />
               </div>
-              <div className="ml-3">
-                <p>
-                  <span className="text-[#2C2C2C] font-normal">&#x20B1; </span>
-                  {gross.toLocaleString()}
-                </p>
+              <div className="text-oranges font-medium">
+                <p>{gross.toLocaleString()}</p>
               </div>
+              <div></div>
+              <div></div>
             </div>
           ) : (
             <></>
           )}
           {updateData ? (
             <div
-              className={`flex border col-span-2 rounded-md overflow-hidden ${
+              className={`flex items-center border col-span-2 rounded-md overflow-hidden ${
                 errorStyle ? "border-[red]" : "border-inputLight"
               }`}
             >
               <div className="pl-2">
-                <img src={pouchIcon} className="w-8 mt-1" />
+                <img src={pouchIcon} className="w-10" />
               </div>
               <div>
                 <input
@@ -268,12 +269,12 @@ const PersonalForm = () => {
             <></>
           ) : (
             <div
-              className={`flex border col-span-2 rounded-md overflow-hidden ${
+              className={`flex items-center border col-span-2 rounded-md overflow-hidden ${
                 errorStyle ? "border-[red]" : "border-inputLight"
               }`}
             >
               <div className="pl-2">
-                <img src={pouchIcon} className="w-8 mt-1" />
+                <img src={pouchIcon} className="w-10" />
               </div>
               <div>
                 <input
@@ -297,23 +298,22 @@ const PersonalForm = () => {
             <label className="text-sm font-bold">Expenses:</label>
           </div>
           {editData || confirmDelete ? (
-            <div className="flex py-1 col-span-2 bg-light rounded-md overflow-hidden">
+            <div className="flex justify-between items-center py-1 col-span-2 bg-light rounded-md overflow-hidden">
               <div className="pl-2">
-                <img src={expensesIcon} className="w-6" />
+                <img src={expensesIcon} className="w-9" />
               </div>
-              <div className="ml-3">
-                <p>
-                  <span className="text-[#2C2C2C] font-normal">&#x20B1; </span>
-                  {expenses.toLocaleString()}
-                </p>
+              <div className="text-[red] font-medium">
+                <p>{expenses.toLocaleString()}</p>
               </div>
+              <div></div>
+              <div></div>
             </div>
           ) : (
             <></>
           )}
           {updateData ? (
             <div
-              className={`flex border col-span-2 rounded-md overflow-hidden ${
+              className={`flex items-center border col-span-2 rounded-md overflow-hidden ${
                 errorStyle ? "border-[red]" : "border-inputLight"
               }`}
             >
@@ -340,7 +340,7 @@ const PersonalForm = () => {
             <></>
           ) : (
             <div
-              className={`flex border col-span-2 rounded-md overflow-hidden ${
+              className={`flex items-center border col-span-2 rounded-md overflow-hidden ${
                 errorStyle ? "border-[red]" : "border-inputLight"
               }`}
             >
@@ -368,9 +368,9 @@ const PersonalForm = () => {
           <div className="col-span-1 flex items-center justify-center">
             <p className="text-sm font-bold">Net:</p>
           </div>
-          <div className="flex bg-light rounded-md overflow-hidden">
+          <div className="flex items-center py-1 bg-light rounded-md overflow-hidden">
             <div className="pl-2">
-              <img src={networthIcon} className="w-8" />
+              <img src={networthIcon} className="w-9" />
             </div>
             <div className="flex items-center ml-4">
               {editData || confirmDelete ? (
@@ -379,7 +379,6 @@ const PersonalForm = () => {
                     gross - expenses < 0 ? "text-[red]" : "text-greens"
                   }`}
                 >
-                  <span className="text-[#2C2C2C] font-normal">&#x20B1; </span>
                   {(gross - expenses).toLocaleString()}
                 </p>
               ) : (
@@ -392,7 +391,7 @@ const PersonalForm = () => {
                     newGross - newExpenses < 0 ? "text-[red]" : "text-greens"
                   }`}
                 >
-                  {newGross - newExpenses}
+                  {(newGross - newExpenses).toLocaleString()}
                 </p>
               ) : (
                 <></>
@@ -406,7 +405,6 @@ const PersonalForm = () => {
                     gross - expenses < 0 ? "text-[red]" : "text-greens"
                   }`}
                 >
-                  <span className="text-[#2C2C2C] font-normal">&#x20B1; </span>
                   {(gross - expenses).toLocaleString()}
                 </p>
               )}
@@ -420,13 +418,13 @@ const PersonalForm = () => {
         {confirmDelete ? (
           <div className=" rounded-md mt-1 p-2 bg-light mb-3">
             <p className="text-xs text-center">
-              Are you sure you want to remove{" "}
+              Confirm deletion for{" "}
               <span className="text-xs text-[red] font-semibold">
                 {exactDaySelected.format("MMMM D, YYYY")}
               </span>{" "}
               income ?
             </p>
-            <div className="flex justify-center space-x-16 mt-2 mb-1">
+            <div className="flex justify-center gap-6 mt-2 mb-1">
               {deleteLoading ? (
                 <div>
                   <ThreeDot
@@ -439,21 +437,25 @@ const PersonalForm = () => {
                 </div>
               ) : (
                 <>
-                  <div onClick={handleDelete}>
-                    <FontAwesomeIcon
-                      icon={faCircleCheck}
-                      className="text-lgreens cursor-pointer hover:text-greens text-xl"
-                    />
+                  <div
+                    onClick={handleDelete}
+                    className="text-[#FF4242] cursor-pointer hover:text-[red] text-sm font-bold flex items-center gap-1"
+                  >
+                    <span className="text-xl">
+                      <FaRegTrashCan />
+                    </span>
+                    Delete
                   </div>
                   <div
                     onClick={() => {
                       setConfirmDelete(false), setEditData(true);
                     }}
+                    className="text-greens hover:text-lgreens font-bold cursor-pointer text-sm flex items-center gap-1"
                   >
-                    <FontAwesomeIcon
-                      icon={faCircleXmark}
-                      className="text-[#FF4242] hover:text-[red]  cursor-pointer text-xl"
-                    />
+                    <span className="text-xl">
+                      <BsBackspace />
+                    </span>{" "}
+                    Cancel
                   </div>
                 </>
               )}
@@ -471,8 +473,11 @@ const PersonalForm = () => {
             <div className="mb-2">
               <button
                 onClick={handleSubmit}
-                className="mx-auto py-1 rounded-md px-6 bg-greens font-bold text-white hover:bg-lgreens"
+                className="mx-auto py-1 rounded-md px-6 bg-greens font-bold text-white hover:bg-lgreens flex gap-2 items-center"
               >
+                <span className="text-3xl">
+                  <MdOutlinePostAdd />
+                </span>
                 Add
               </button>
             </div>
@@ -506,15 +511,25 @@ const PersonalForm = () => {
               }}
               className="bg-lgreens hover:bg-greens cursor-pointer rounded-md px-4 py-1"
             >
-              <p className="text-white font-bold">Edit</p>
+              <p className="text-white gap-2 font-bold flex items-center">
+                <span className="text-xl">
+                  <FaRegPenToSquare />
+                </span>
+                Edit
+              </p>
             </div>
             <div
               onClick={() => {
                 setEditData(false), setConfirmDelete(true);
               }}
-              className="bg-[#FF4242] hover:bg-[red] cursor-pointer rounded-md px-4 py-1"
+              className="border border-[#FF4242] hover:border-[red] cursor-pointer rounded-md px-4 py-1 text-[#FF4242] hover:text-[red]"
             >
-              <p className="text-white font-bold">Delete</p>
+              <p className="font-bold flex gap-2 items-center">
+                <span className="text-xl">
+                  <FaRegTrashCan />
+                </span>
+                Delete
+              </p>
             </div>
           </div>
         ) : (
@@ -553,7 +568,12 @@ const PersonalForm = () => {
                   onClick={handleSubmit}
                   className="bg-lgreens hover:bg-greens cursor-pointer rounded-md px-4 py-1"
                 >
-                  <p className="text-white font-bold">Save changes</p>
+                  <p className="text-white font-bold flex items-center gap-2">
+                    <span className="text-2xl">
+                      <GoChecklist />
+                    </span>
+                    Save
+                  </p>
                 </button>
 
                 <div
@@ -563,9 +583,14 @@ const PersonalForm = () => {
                       setError(""),
                       setErrorStyle(false);
                   }}
-                  className="bg-[#FF4242] hover:bg-[red] cursor-pointer rounded-md px-4 py-1"
+                  className="border border-[#FF4242] hover:border-[red] cursor-pointer rounded-md text-[#FF4242] hover:text-[red] px-4 py-1"
                 >
-                  <p className="text-white font-bold">Back</p>
+                  <p className="font-bold flex items-center gap-2">
+                    <span className="text-xl">
+                      <BsBackspace />
+                    </span>
+                    Back
+                  </p>
                 </div>
               </>
             )}

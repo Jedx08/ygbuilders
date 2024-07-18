@@ -113,7 +113,7 @@ const BusinessMonth = ({ month }) => {
               {/* Monthly Capital */}
               <div
                 onClick={() => setShowBusinessCapitalForm(true)}
-                className="bg-white py-1 px-3 rounded-md text-center cursor-pointer"
+                className="bg-white py-1 px-3 rounded-md text-center cursor-pointer shadow-lg"
               >
                 <p className="text-md font-bold text-loranges">
                   Monthly Capital
@@ -142,7 +142,7 @@ const BusinessMonth = ({ month }) => {
               {/* Monthly Expenses */}
               <div
                 onClick={() => setShowBusinessExpensesForm(true)}
-                className="bg-white py-1 px-3 rounded-md cursor-pointer"
+                className="bg-white py-1 px-3 rounded-md cursor-pointer shadow-lg"
               >
                 <p className="text-md font-bold text-loranges text-center">
                   Monthly Expenses
@@ -179,7 +179,7 @@ const BusinessMonth = ({ month }) => {
             <div className="text-lgreens">FRI</div>
             <div className="text-loranges">SAT</div>
           </div>
-          <div className="h-s90 flex-1 grid grid-cols-7 grid-rows-6 mt-1 rounded-lg shadow-lg">
+          <div className="h-s100 flex-1 grid grid-cols-7 grid-rows-6 mt-1 rounded-lg shadow-lg">
             {month.map((row, i) => (
               <React.Fragment key={i}>
                 {row.map((day, idx) => (

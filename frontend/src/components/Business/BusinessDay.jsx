@@ -113,13 +113,13 @@ const BusinessDay = ({ day }) => {
             >
               <div className="space-y-1">
                 {/* Capital */}
-                <div className="flex space-x-1">
+                <div className="flex space-x-2 items-center font-semibold">
                   <img src={capitalIcon} alt="capital" className="h-4 w-5" />
                   <p className="ml-1 text-[#D0D0D0]">:</p>
-                  <p className="text-greens">{d.capital.toLocaleString()}</p>
+                  <p className="text-oranges">{d.capital.toLocaleString()}</p>
                 </div>
                 {/* Sales */}
-                <div className="flex space-x-1">
+                <div className="flex space-x-2 items-center font-semibold">
                   <img src={salesIcon} alt="sales" className="h-4 w-5" />
                   <p className="ml-1 text-[#D0D0D0]">:</p>
                   <p
@@ -131,18 +131,18 @@ const BusinessDay = ({ day }) => {
                   </p>
                 </div>
                 {/* Expenses */}
-                <div className="flex space-x-1">
+                <div className="flex space-x-2 items-center font-semibold">
                   <img src={expensesIcon} alt="expenses" className="h-4 w-5" />
                   <p className="ml-1 text-[#D0D0D0]">:</p>
                   <p className="text-[red]">{d.expenses.toLocaleString()}</p>
                 </div>
                 <hr className="text-[#D0D0D0]" />
                 {/* Profits */}
-                <div className="flex space-x-1">
+                <div className="flex space-x-2 items-center font-extrabold">
                   <img src={profitsIcon} alt="profits" className="h-4 w-5" />
                   <p className="ml-1 text-[#D0D0D0]">:</p>
                   <p
-                    className={`font-bold ${
+                    className={`${
                       d.profit < 0 ? "text-[red]" : "text-lgreens"
                     }`}
                   >

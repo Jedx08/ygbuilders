@@ -102,11 +102,11 @@ const BMonthlyExpensesForm = ({ monthlyExpenses }) => {
           <div className="flex justify-center">
             <div
               onClick={addExpenses}
-              className={`cursor-pointer w-fit px-2 h-2 rounded-md overflow-hidden py-1  ${
+              className={`cursor-pointer w-fit px-2 h-2 rounded-md overflow-hidden py-1 text-white flex items-center gap-1 border border-loranges bg-loranges hover:bg-oranges font-semibold my-2 ${
                 showBusinessExpenseInput ? "hidden" : ""
               }`}
             >
-              <MdOutlinePostAdd className="text-oranges text-4xl hover:text-loranges cursor-pointer" />
+              <MdOutlinePostAdd className="text-3xl" /> Add
             </div>
           </div>
 
@@ -121,7 +121,7 @@ const BMonthlyExpensesForm = ({ monthlyExpenses }) => {
             <div className="border border-inputLight rounded-md py-1 text-center w-fit">
               <div className="grid grid-cols-3 items-center">
                 <div className="pl-2">
-                  <img src={expensesIcon} className="w-10 mr-2" />
+                  <img src={expensesIcon} className="w-11 mr-2" />
                 </div>
                 <div className="mt-[0.15rem]">
                   <p className="text-[red] font-bold">

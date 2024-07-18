@@ -112,9 +112,9 @@ const BMonthlyExpensesData = ({ expensesData }) => {
         {!editButton ? (
           <>
             {/* show current data */}
-            <div className="rounded-md overflow-hidden py-1 items-center bg-light flex px-2 col-span-1">
-              <img src={expensesIcon} className="w-7 mr-2" />
-              {title}
+            <div className="rounded-md overflow-hidden py-1 items-center bg-light flex px-2 col-span-1 font-medium">
+              <img src={expensesIcon} className="w-8 mr-2" />
+              {title.toUpperCase()}
             </div>
             <div className="text-[red] font-semibold rounded-md overflow-hidden py-1 items-center justify-center bg-light flex px-2 col-span-1">
               {amount.toLocaleString()}
@@ -129,7 +129,7 @@ const BMonthlyExpensesData = ({ expensesData }) => {
                   errorStyle ? "border-[red]" : "border-inputLight"
                 }`}
               >
-                <img src={expensesIcon} className="w-7 mr-2" />
+                <img src={expensesIcon} className="w-8 mr-2" />
                 <input
                   type="text"
                   placeholder="Add Title"
@@ -139,7 +139,7 @@ const BMonthlyExpensesData = ({ expensesData }) => {
                       setErrorStyle(false);
                   }}
                   value={updateTitle}
-                  className={`focus:outline-none focus:border-oranges pl-2 py-1 caret-inputLight placeholder:text-xs ${
+                  className={`focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs ${
                     editButton ? "w-32" : ""
                   }`}
                 />
@@ -158,7 +158,7 @@ const BMonthlyExpensesData = ({ expensesData }) => {
                       setErrorStyle(false);
                   }}
                   value={updateAmount}
-                  className={`focus:outline-none focus:border-oranges pl-2 py-1 caret-inputLight placeholder:text-xs text-center ${
+                  className={`focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs text-center ${
                     editButton ? "w-32" : ""
                   }`}
                 />
@@ -171,7 +171,7 @@ const BMonthlyExpensesData = ({ expensesData }) => {
         {!editButton ? (
           <>
             {!confirmDelete && (
-              <div className="flex space-x-4 items-center px-2 h-2 w-fit rounded-md overflow-hidden">
+              <div className="flex space-x-2 items-center px-2 h-2 w-fit rounded-md overflow-hidden">
                 <div onClick={() => setEditButton(true)}>
                   <FaRegPenToSquare className="text-oranges hover:text-loranges cursor-pointer text-xl" />
                 </div>
@@ -204,22 +204,22 @@ const BMonthlyExpensesData = ({ expensesData }) => {
               <div className="flex justify-center items-center py-2">
                 <div className="flex items-center space-x-2 px-2 h-2 w-fit rounded-md overflow-hidden">
                   <div
-                    className="flex gap-2 rounded-md border border-oranges bg-oranges hover:bg-loranges px-2 py-1 cursor-pointer text-white font-semibold"
+                    className="flex gap-2 rounded-md border border-loranges bg-loranges hover:bg-oranges px-2 py-1 cursor-pointer text-white font-semibold text-sm"
                     onClick={handleUpdate}
                   >
                     <button>
-                      <GoChecklist className=" text-2xl" />
+                      <GoChecklist className="text-lg" />
                     </button>
                     <span>Save</span>
                   </div>
                   <div
-                    className="flex gap-2 rounded-md border border-[#FF4242] hover:border-[red] text-[#FF4242] hover:text-[red] px-2 py-1 cursor-pointer"
+                    className="flex gap-2 rounded-md border border-[#FF4242] hover:border-[red] text-[#FF4242] hover:text-[red] px-2 py-1 cursor-pointer text-sm font-semibold"
                     onClick={() => {
                       setEditButton(false), setError(""), setErrorStyle(false);
                     }}
                   >
                     <div>
-                      <BsBackspace className="text-2xl" />
+                      <BsBackspace className="text-lg" />
                     </div>
                     <span>Back</span>
                   </div>
@@ -231,13 +231,13 @@ const BMonthlyExpensesData = ({ expensesData }) => {
       </div>
 
       {/* Error Message */}
-      <div className="mt-2 text-xs text-center text-[red]">{error}</div>
+      <div className="mb-2 text-xs text-center text-[red]">{error}</div>
 
       {/* Delete Data */}
       {confirmDelete && (
-        <div className=" rounded-md mt-1 pt-1 bg-light">
+        <div className="rounded-md mt-1 pt-1 bg-light">
           <p className="text-xs text-center">
-            Are you sure you want to remove{" "}
+            Confirm deletion for{" "}
             <span className="text-xs text-[red] font-semibold">{title}</span>{" "}
             expenses ?
           </p>
@@ -265,7 +265,7 @@ const BMonthlyExpensesData = ({ expensesData }) => {
                     <span className="text-sm">Delete</span>
                   </div>
                   <div
-                    className="flex gap-2 rounded-lg border border-oranges bg-oranges hover:bg-loranges font-semibold px-2 py-1 items-center cursor-pointer"
+                    className="flex gap-2 rounded-lg border border-loranges bg-loranges hover:bg-oranges font-semibold px-2 py-1 items-center cursor-pointer"
                     onClick={() => {
                       setConfirmDelete(false), setDeleteStyle(false);
                     }}

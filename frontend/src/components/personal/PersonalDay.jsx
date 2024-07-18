@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { CalendarContext } from "../../context/CalendarContext";
 import dayjs from "dayjs";
-import pouch from "../../media/pouch.png";
-import expenses from "../../media/expenses.png";
-import networth from "../../media/networth.png";
+import grossIcon from "../../media/pouch.png";
+import expensesIcon from "../../media/expenses.png";
+import netIcon from "../../media/networth.png";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import useGetData from "../../hooks/useGetPersonalData";
@@ -76,7 +76,7 @@ const PersonalDay = ({ day }) => {
   return (
     <>
       <div
-        className={`border border-light bg-white flex flex-col font-pops ${
+        className={`border border-light bg-white flex flex-col ${
           notThisMonth
             ? "cursor-default"
             : "hover:border-loranges cursor-pointer"
@@ -85,7 +85,7 @@ const PersonalDay = ({ day }) => {
       >
         <header className="flex flex-col items-center">
           <p
-            className={`text-lg font-bold pt-1 mt-1 text-center ${
+            className={`text-lg font-bold pt-1 text-center ${
               notThisMonth ? "text-[#EEEEEE]" : ""
             } ${currentDay()}`}
           >
@@ -105,53 +105,46 @@ const PersonalDay = ({ day }) => {
           /* displaying data on their respective date */
           dayData.map((d, i) => (
             <div
-              className={`flex font-medium space-x-2 text-xs mt-3 items-center justify-center ${
+              className={`flex font-medium text-xs mt-3 justify-center ${
                 notThisMonth ? "hidden" : ""
               }`}
               key={i}
             >
-              <div className="flex items-center">
-                <ul>
-                  <li>
-                    <div className="flex">
-                      <img src={pouch} alt="Gross" className="h-4 w-6" />
-                      <p className="ml-1 text-[#D0D0D0]">:</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex">
-                      <img src={expenses} className="h-4 w-6" />
-                      <p className="ml-1 text-[#D0D0D0]">:</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex">
-                      <img src={networth} className="h-4 w-6" />
-                      <p className="ml-1 text-[#D0D0D0]">:</p>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div className="text-xs">
-                <ul>
-                  <li>
-                    <p className="text-lgreens">
-                      <span className="text-[#2C2C2C] font-normal">
-                        &#x20B1;{" "}
-                      </span>
-                      {d.gross.toLocaleString()}
-                    </p>
-                  </li>
-                  <li>
-                    <p className="text-[red]">
-                      <span className="text-[#2C2C2C] font-normal">
-                        &#x20B1;{" "}
-                      </span>
-                      {d.expenses.toLocaleString()}
-                    </p>
-                  </li>
-                  <li>
+              <div className="space-y-1">
+                {/* gross */}
+                <div className="flex items-center font-semibold">
+                  <div className="flex space-x-2 items-center">
+                    <img src={grossIcon} alt="capital" className="h-4 w-6" />
+                    <p className="ml-1 text-[#D0D0D0]">:</p>
+                    <p className="text-oranges">{d.gross.toLocaleString()}</p>
+                  </div>
+                </div>
+                {/* expenses */}
+                <div className="flex items-center font-semibold">
+                  <div className="flex space-x-2 items-center">
+                    <img src={expensesIcon} alt="capital" className="h-4 w-6" />
+                    <p className="ml-1 text-[#D0D0D0]">:</p>
+                    <p className="text-[red]">{d.expenses.toLocaleString()}</p>
+                  </div>
+                </div>
+                <hr className="text-[#D0D0D0]" />
+                {/* net */}
+                <div className="flex items-center font-extrabold">
+                  <div className="flex space-x-2 items-center">
+                    <img src={netIcon} alt="capital" className="h-4 w-6" />
+                    <p className="ml-1 text-[#D0D0D0]">:</p>
                     <p
+                      className={`${d.net < 0 ? "text-[red]" : "text-greens"}`}
+                    >
+                      {d.net.toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+        {/* <p
                       className={`font-bold ${
                         d.net < 0 ? "text-[red]" : "text-lgreens"
                       }`}
@@ -160,13 +153,7 @@ const PersonalDay = ({ day }) => {
                         &#x20B1;{" "}
                       </span>
                       {d.net.toLocaleString()}
-                    </p>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          ))
-        )}
+                    </p> */}
       </div>
     </>
   );

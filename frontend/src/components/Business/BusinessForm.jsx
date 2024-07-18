@@ -276,11 +276,11 @@ const BusinessForm = () => {
               )}
               {/* show current data */}
               {!editData && (
-                <div className="flex justify-between py-1 bg-light rounded-md overflow-hidden">
+                <div className="flex items-center justify-between py-1 bg-light rounded-md overflow-hidden">
                   <div className="pl-2">
                     <img src={capitalIcon} className="w-7" />
                   </div>
-                  <div className="text-greens font-semibold">
+                  <div className="text-oranges font-medium">
                     <p>{capital.toLocaleString()}</p>
                   </div>
                   <div></div>
@@ -349,11 +349,11 @@ const BusinessForm = () => {
               )}
               {/* show current data */}
               {!editData && (
-                <div className="flex py-1 justify-between bg-light rounded-md overflow-hidden">
+                <div className="flex py-1 items-center justify-between bg-light rounded-md overflow-hidden">
                   <div className="pl-2">
                     <img src={salesIcon} className="w-7" />
                   </div>
-                  <div className="text-greens font-semibold">
+                  <div className="text-greens font-medium">
                     <p>{sales.toLocaleString()}</p>
                   </div>
                   <div></div>
@@ -422,11 +422,11 @@ const BusinessForm = () => {
               )}
               {/* show current data */}
               {!editData && (
-                <div className="flex py-1 justify-between bg-light rounded-md overflow-hidden">
+                <div className="flex py-1 items-center justify-between bg-light rounded-md overflow-hidden">
                   <div className="pl-2">
                     <img src={expensesIcon} className="w-7" />
                   </div>
-                  <div className="text-[red] font-semibold">
+                  <div className="text-[red] font-medium">
                     <p>{expenses.toLocaleString()}</p>
                   </div>
                   <div></div>
@@ -610,7 +610,7 @@ const BusinessForm = () => {
                           className="bg-loranges hover:bg-oranges cursor-pointer rounded-md px-4 py-1"
                         >
                           <p className="text-white font-bold flex items-center gap-2">
-                            <span className="text-3xl">
+                            <span className="text-2xl">
                               <GoChecklist />
                             </span>
                             Save
@@ -623,7 +623,7 @@ const BusinessForm = () => {
                               setError(""),
                               setErrorStyle(false);
                           }}
-                          className="border border-[#FF4242] hover:border-[red] cursor-pointer rounded-md text-[#FF4242] hover:text-[red] px-4 py-2"
+                          className="border border-[#FF4242] hover:border-[red] cursor-pointer rounded-md text-[#FF4242] hover:text-[red] px-4 py-1"
                         >
                           <p className="font-bold flex items-center gap-2">
                             <span className="text-xl">
@@ -643,9 +643,9 @@ const BusinessForm = () => {
                       onClick={() => {
                         setEditData(true);
                       }}
-                      className="bg-loranges hover:bg-oranges cursor-pointer rounded-md px-4 py-2 border border-loranges"
+                      className="bg-loranges hover:bg-oranges cursor-pointer rounded-md px-4 py-1"
                     >
-                      <p className="text-white font-bold flex items-center gap-">
+                      <p className="text-white gap-2 font-bold flex items-center">
                         <span className="text-xl">
                           <FaRegPenToSquare />
                         </span>
@@ -656,7 +656,7 @@ const BusinessForm = () => {
                       onClick={() => {
                         setShowDeleteMsg(true), setConfirmDelete(true);
                       }}
-                      className="border border-[#FF4242] hover:border-[red] cursor-pointer rounded-md px-4 py-2 text-[#FF4242] hover:text-[red]"
+                      className="border border-[#FF4242] hover:border-[red] cursor-pointer rounded-md px-4 py-1 text-[#FF4242] hover:text-[red]"
                     >
                       <p className="font-bold flex gap-2 items-center">
                         <span className="text-xl">
