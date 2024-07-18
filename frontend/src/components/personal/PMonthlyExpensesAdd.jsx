@@ -1,11 +1,6 @@
 import { useEffect, useRef, useContext, useState } from "react";
 import { CalendarContext } from "../../context/CalendarContext";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleCheck,
-  faCircleXmark,
-} from "@fortawesome/free-solid-svg-icons";
 import { BsBackspace } from "react-icons/bs";
 import { MdOutlinePostAdd } from "react-icons/md";
 import expensesIcon from "../../media/expenses.png";

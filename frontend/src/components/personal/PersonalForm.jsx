@@ -2,12 +2,6 @@ import { useContext, useState, useEffect } from "react";
 import pouchIcon from "../../media/pouch.png";
 import expensesIcon from "../../media/expenses.png";
 import networthIcon from "../../media/networth.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faXmark,
-  faCircleCheck,
-  faCircleXmark,
-} from "@fortawesome/free-solid-svg-icons";
 import { CalendarContext } from "../../context/CalendarContext";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { ThreeDot } from "react-loading-indicators";
