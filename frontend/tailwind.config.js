@@ -6,10 +6,30 @@ export default {
     "./src/components/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
+    screens: {
+      xl: { max: "1279px" },
+      // => @media (max-width: 1279px) { ... }
+
+      lg: { max: "1023px" },
+      // => @media (max-width: 1023px) { ... }
+
+      md: { max: "767px" },
+      // => @media (max-width: 767px) { ... }
+
+      sm: { max: "639px" },
+      // => @media (max-width: 639px) { ... }
+
+      ssm: { max: "560px" },
+      // => @media (max-width: 639px) { ... }
+
+      xs: { max: "480px" },
+      // => @media (max-width: 480px) { ... }
+    },
     height: {
       s60: "60vh",
       s70: "70vh",
       s80: "80vh",
+      s85: "85vh",
       s90: "90vh",
       s100: "100vh",
       hfull: "100%",

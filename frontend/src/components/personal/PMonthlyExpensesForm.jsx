@@ -52,7 +52,7 @@ const PMonthlyExpensesForm = ({ monthlyExpenses }) => {
   return (
     <>
       <div className="font-pops h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-70">
-        <form className="rounded-md bg-white overflow-hidden px-5 shadow-lg">
+        <form className="rounded-md bg-white overflow-hidden px-5 shadow-lg xs:px-1">
           <div className="flex items-center justify-center relative w-full">
             <div className="text-center mt-6">
               <h1 className="font-bold text-2xl text-greens mb-2">
@@ -74,9 +74,9 @@ const PMonthlyExpensesForm = ({ monthlyExpenses }) => {
                   setShowPersonalExpensesForm(false),
                   setShowPersonalExpensesInput(false);
               }}
-              className="absolute right-0 pr-2 mb-5 cursor-pointer"
+              className="absolute right-0 mb-5 cursor-pointer hover:bg-light hover:rounded-full p-1"
             >
-              <IoClose className="text-xl text-lgreens hover:text-greens" />
+              <IoClose className="text-2xl text-lgreens hover:text-greens" />
             </div>
           </div>
 

@@ -209,7 +209,7 @@ const PersonalForm = () => {
                 setShowPersonalForm(false),
                 setFormSelectedDate(null);
             }}
-            className="absolute right-0 pr-2 mb-5 cursor-pointer"
+            className="absolute right-0 mb-5 cursor-pointer hover:bg-light hover:rounded-full p-1"
           >
             <IoClose className="text-2xl text-lgreens hover:text-greens" />
           </div>

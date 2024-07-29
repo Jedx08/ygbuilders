@@ -6,21 +6,16 @@ import expensesIcon from "../../media/expenses.png";
 import netIcon from "../../media/networth.png";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import useGetData from "../../hooks/useGetPersonalData";
 
-const PersonalDay = ({ day }) => {
+const PersonalMobileData = ({ day }) => {
   const {
     monthIndex,
     setShowPersonalForm,
     setExactDaySelected,
     setFormSelectedDate,
     personalIncomeData,
-    dispatchPersonalIncomeData,
     personalIncomeLoading,
-    setPersonalIncomeLoading,
   } = useContext(CalendarContext);
-
-  const getPersonalData = useGetData();
 
   const [dayData, setDayData] = useState([]);
   const [personalDataLoading, setPersonalDataLoading] = useState(true);
@@ -31,7 +26,7 @@ const PersonalDay = ({ day }) => {
 
   function currentDay() {
     return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")
-      ? "bg-greens text-white rounded-[50%] w-9"
+      ? "text-greens"
       : "";
   }
 
@@ -49,12 +44,6 @@ const PersonalDay = ({ day }) => {
       formData(day)
     );
   }
-
-  useEffect(() => {
-    setPersonalDataLoading(true);
-    getPersonalData();
-    setPersonalIncomeLoading(false);
-  }, [dispatchPersonalIncomeData, personalIncomeLoading]);
 
   useEffect(() => {
     if (!personalIncomeLoading) {
@@ -76,64 +65,57 @@ const PersonalDay = ({ day }) => {
   return (
     <>
       <div
-        className={`border border-light bg-white flex flex-col overflow-hidden h-[135px] md:h-[120px] sm:h-[110px] ssm:h-[auto] ${
-          notThisMonth ? "cursor-default" : "hover:border-greens cursor-pointer"
-        }`}
+        className={`border border-light bg-white flex flex-col overflow-hidden rounded-md ${
+          notThisMonth
+            ? "cursor-default hidden"
+            : "hover:border-greens cursor-pointer"
+        } ${dayData.length === 0 ? "hidden" : ""}`}
         onClick={personalDataLoading ? null : toggleForm}
       >
-        <header className="flex flex-col items-center">
+        <div className="flex flex-col items-center">
           <p
-            className={`text-lg font-bold pt-1 text-center ${
+            className={`text-md font-semibold text-center ${
               notThisMonth ? "text-[#EEEEEE]" : ""
             } ${currentDay()}`}
           >
-            {day.format("D")}
+            {day.format("MMMM D")}
           </p>
-        </header>
+        </div>
 
         {personalDataLoading ? (
-          <div
-            className={`flex items-center justify-center xs:hidden ${
-              notThisMonth ? "hidden" : ""
-            }`}
-          >
-            <Skeleton width={100} height={15} count={3} />
+          <div className={`${notThisMonth ? "hidden" : ""}`}>
+            <Skeleton height={15} count={1} />
           </div>
         ) : (
           /* displaying data on their respective date */
           dayData.map((d, i) => (
             <div
-              className={`flex font-medium mt-3 justify-center md:text-sm sm:text-xs ssm:hidden ${
+              className={`flex font-medium justify-center text-sm py-1 ${
                 notThisMonth ? "hidden" : ""
               }`}
               key={i}
             >
-              <div className="space-y-1">
+              <div className="flex gap-5 xs:gap-3">
                 {/* gross */}
                 <div className="flex items-center font-semibold">
-                  <div className="flex space-x-2 items-center justify-center md:space-x-1 sm:space-x-0">
-                    <img src={grossIcon} alt="capital" className="w-6 md:w-4" />
+                  <div className="flex space-x-1 items-center justify-center">
+                    <img src={grossIcon} alt="capital" className="w-5" />
                     <p className="ml-1 text-[#D0D0D0]">:</p>
                     <p className="text-oranges">{d.gross.toLocaleString()}</p>
                   </div>
                 </div>
                 {/* expenses */}
                 <div className="flex items-center font-semibold">
-                  <div className="flex space-x-2 items-center justify-center md:space-x-1 sm:space-x-0">
-                    <img
-                      src={expensesIcon}
-                      alt="capital"
-                      className="w-6 md:w-4"
-                    />
+                  <div className="flex space-x-1 items-center justify-center">
+                    <img src={expensesIcon} alt="capital" className="w-5" />
                     <p className="ml-1 text-[#D0D0D0]">:</p>
                     <p className="text-[red]">{d.expenses.toLocaleString()}</p>
                   </div>
                 </div>
-                <hr className="text-[#D0D0D0]" />
                 {/* net */}
                 <div className="flex items-center font-extrabold">
-                  <div className="flex space-x-2 items-center justify-center md:space-x-1 sm:space-x-0">
-                    <img src={netIcon} alt="capital" className="w-6 md:w-4" />
+                  <div className="flex space-x-1 items-center justify-center">
+                    <img src={netIcon} alt="capital" className="w-5" />
                     <p className="ml-1 font-semibold text-[#D0D0D0]">:</p>
                     <p
                       className={`${d.net < 0 ? "text-[red]" : "text-greens"}`}
@@ -151,4 +133,4 @@ const PersonalDay = ({ day }) => {
   );
 };
 
-export default PersonalDay;
+export default PersonalMobileData;

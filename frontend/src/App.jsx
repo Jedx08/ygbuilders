@@ -8,8 +8,22 @@ import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
 import Business from "./pages/Business";
 import Summary from "./pages/Summary";
+// import { useEffect } from "react";
 
 function App() {
+  // useEffect(() => {
+  //   if (
+  //     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+  //       navigator.userAgent
+  //     )
+  //   ) {
+  //     // true for mobile device
+  //     console.log("mobile device");
+  //   } else {
+  //     // false for not mobile device
+  //     console.log("desktop device");
+  //   }
+  // }, []);
   return (
     <>
       <Routes>

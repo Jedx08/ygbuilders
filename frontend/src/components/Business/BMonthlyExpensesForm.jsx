@@ -74,9 +74,9 @@ const BMonthlyExpensesForm = ({ monthlyExpenses }) => {
                   setShowBusinessExpensesForm(false),
                   setShowBusinessExpensesInput(false);
               }}
-              className="absolute right-0 pr-2 mb-5 cursor-pointer"
+              className="absolute right-0 mb-5 cursor-pointer hover:bg-light hover:rounded-full p-1"
             >
-              <IoClose className="text-xl text-loranges hover:text-oranges" />
+              <IoClose className="text-2xl text-loranges hover:text-oranges" />
             </div>
           </div>
 

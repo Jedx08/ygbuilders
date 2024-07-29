@@ -7,21 +7,16 @@ import salesIcon from "../../media/sales.png";
 import profitsIcon from "../../media/bus_profit.png";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import useGetBusinessData from "../../hooks/useGetBusinessData";
 
-const BusinessDay = ({ day }) => {
+const BusinessMobileData = ({ day }) => {
   const {
     monthIndex,
     setShowBusinessForm,
     setExactDaySelected,
     setBusinessFormSelectedDate,
     businessIncomeData,
-    dispatchBusinessIncomeData,
     businessIncomeLoading,
-    setBusinessIncomeLoading,
   } = useContext(CalendarContext);
-
-  const getBusinessIncome = useGetBusinessData();
 
   const [dayData, setDayData] = useState([]);
   const [businessDataLoading, setBusinessDataLoading] = useState(true);
@@ -52,12 +47,6 @@ const BusinessDay = ({ day }) => {
   }
 
   useEffect(() => {
-    setBusinessDataLoading(true);
-    getBusinessIncome();
-    setBusinessIncomeLoading(false);
-  }, [dispatchBusinessIncomeData, businessIncomeLoading]);
-
-  useEffect(() => {
     if (!businessIncomeLoading) {
       const businessIncomeDB = async () => {
         const data = await businessIncomeData.filter(
@@ -77,20 +66,20 @@ const BusinessDay = ({ day }) => {
   return (
     <>
       <div
-        className={`border border-light bg-white flex flex-col h-[160px] md:h-[130px] sm:h-[110px] ssm:h-[auto] ${
+        className={`border border-light bg-white flex flex-col overflow-hidden rounded-md ${
           notThisMonth
             ? "cursor-default"
             : "hover:border-loranges cursor-pointer"
-        }`}
+        } ${dayData.length === 0 ? "hidden" : ""}`}
         onClick={businessDataLoading ? null : toggleForm}
       >
         <header className="flex flex-col items-center">
           <p
-            className={`text-lg font-bold pt-1 text-center ${
+            className={`text-md font-semibold text-center ${
               notThisMonth ? "text-[#EEEEEE]" : ""
             } ${currentDay()}`}
           >
-            {day.format("D")}
+            {day.format("MMMM D")}
           </p>
         </header>
 
@@ -106,20 +95,20 @@ const BusinessDay = ({ day }) => {
           /* displaying data on their respective date */
           dayData.map((d, i) => (
             <div
-              className={`flex font-medium mt-3 justify-center lg:text-sm md:text-xs sm:mt-1 ssm:hidden ${
+              className={`flex font-medium justify-center text-sm py-1 ${
                 notThisMonth ? "hidden" : ""
               }`}
               key={i}
             >
-              <div className="space-y-1 sm:space-y-0">
+              <div className="flex gap-5 xs:gap-3">
                 {/* Capital */}
-                <div className="flex space-x-2 items-center font-semibold sm:space-x-1">
+                <div className="flex space-x-1  items-center font-semibold">
                   <img src={capitalIcon} alt="capital" className="w-6 md:w-4" />
                   <p className="ml-1 text-[#D0D0D0]">:</p>
                   <p className="text-oranges">{d.capital.toLocaleString()}</p>
                 </div>
                 {/* Sales */}
-                <div className="flex space-x-2 items-center font-semibold sm:space-x-1">
+                <div className="flex space-x-1  items-center font-semibold">
                   <img src={salesIcon} alt="sales" className="w-6 md:w-4" />
                   <p className="ml-1 text-[#D0D0D0]">:</p>
                   <p
@@ -131,7 +120,7 @@ const BusinessDay = ({ day }) => {
                   </p>
                 </div>
                 {/* Expenses */}
-                <div className="flex space-x-2 items-center font-semibold sm:space-x-1">
+                <div className="flex space-x-1  items-center font-semibold">
                   <img
                     src={expensesIcon}
                     alt="expenses"
@@ -140,9 +129,8 @@ const BusinessDay = ({ day }) => {
                   <p className="ml-1 text-[#D0D0D0]">:</p>
                   <p className="text-[red]">{d.expenses.toLocaleString()}</p>
                 </div>
-                <hr className="text-[#D0D0D0]" />
                 {/* Profits */}
-                <div className="flex space-x-2 items-center font-extrabold sm:space-x-1">
+                <div className="flex space-x-1 items-center font-extrabold">
                   <img src={profitsIcon} alt="profits" className="w-6 md:w-4" />
                   <p className="ml-1 text-[#D0D0D0]">:</p>
                   <p
@@ -162,4 +150,4 @@ const BusinessDay = ({ day }) => {
   );
 };
 
-export default BusinessDay;
+export default BusinessMobileData;

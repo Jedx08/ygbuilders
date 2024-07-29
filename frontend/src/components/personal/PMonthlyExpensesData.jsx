@@ -137,7 +137,7 @@ const PMonthlyExpensesData = ({ expensesData }) => {
                       setErrorStyle(false);
                   }}
                   value={updateTitle}
-                  className={`focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs ${
+                  className={`focus:outline-none pl-2 py-1 placeholder:text-xs ${
                     editButton ? "w-32" : ""
                   }`}
                 />
@@ -156,7 +156,7 @@ const PMonthlyExpensesData = ({ expensesData }) => {
                       setErrorStyle(false);
                   }}
                   value={updateAmount}
-                  className={`focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs text-center ${
+                  className={`focus:outline-none pl-2 py-1 placeholder:text-xs text-center xs:text-start ${
                     editButton ? "w-32" : ""
                   }`}
                 />
@@ -263,7 +263,7 @@ const PMonthlyExpensesData = ({ expensesData }) => {
                     <span className="text-sm">Delete</span>
                   </div>
                   <div
-                    className="flex gap-2 rounded-lg border border-greens bg-greens hover:bg-lgreens font-semibold px-2 py-1 items-center cursor-pointer"
+                    className="flex gap-2 rounded-lg border border-greens hover:border-lgreens bg-greens hover:bg-lgreens  font-semibold px-2 py-1 items-center cursor-pointer"
                     onClick={() => {
                       setConfirmDelete(false), setDeleteStyle(false);
                     }}
