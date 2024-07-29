@@ -3,18 +3,18 @@ import usePersonalExpenses from "../../hooks/usePersonalExpenses";
 import useGetPersonalData from "../../hooks/useGetPersonalData";
 import dayjs from "dayjs";
 import { Chart } from "chart.js/auto"; // core data for chart, do not remove
-import { Bar, Line } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import { CalendarContext } from "../../context/CalendarContext";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
 import pouch from "../../media/pouch.png";
 import expensesIcon from "../../media/expenses.png";
 import networth from "../../media/networth.png";
+import PersonalYearlySummary from "./PersonalYearlySummary";
 
 const PersonalSummary = () => {
   const { monthIndex, setMonthIndex } = useContext(CalendarContext);
 
-  const year = dayjs().month(monthIndex).year();
   const thisMonth = dayjs().month(monthIndex).format("MMMM");
 
   const [gross, setGross] = useState(0);
@@ -26,9 +26,6 @@ const PersonalSummary = () => {
 
   const [monthlyGross, setMonthlyGross] = useState(0);
   const [monthlyExpenses, setMonthlyExpenses] = useState(0);
-
-  const [yearlyGross, setyearlyGross] = useState(0);
-  const [yearlyExpenses, setyearlyExpenses] = useState(0);
 
   const [monthExpenses, setMonthExpenses] = useState(0);
 
@@ -62,40 +59,76 @@ const PersonalSummary = () => {
     overallData();
   }, []);
 
+  const monthCount = dayjs().month(monthIndex).daysInMonth();
+
+  let dayCount = [];
+
+  for (let i = 0; i <= monthCount - 1; i++) {
+    dayCount.push(i + 1);
+  }
+
   useEffect(() => {
-    let g = 0;
-    let e = 0;
+    const lineGraphData = async () => {
+      const monthData = await getPersonalData();
 
-    const YearlyIncomeData = async () => {
-      const yearData = await getPersonalData();
-      const overallMonthExpenses = await getMonthlyExpenses();
+      const filteredData = monthData.filter(
+        (data) =>
+          dayjs(data.day).format("MM-YY") ===
+          dayjs().month(monthIndex).format("MM-YY")
+      );
 
-      yearData
-        .filter(
-          (data) =>
-            dayjs(data.day).format("YY") ===
-            dayjs().month(monthIndex).format("YY")
-        )
-        .forEach((data) => {
-          g += data.gross;
-          e += data.expenses;
+      const monthCount = dayjs().month(monthIndex).daysInMonth();
+
+      //get line graph capital
+      let grossPerDate = [];
+
+      for (let i = 1; i <= monthCount; i++) {
+        grossPerDate.push(0);
+      }
+      setGrossCount(grossPerDate);
+
+      filteredData.map((data) => {
+        grossPerDate.map(() => {
+          grossPerDate[dayjs(data.day).format("D") - 1] = data.gross;
         });
 
-      overallMonthExpenses
-        .filter(
-          (data) =>
-            dayjs(data.day).format("YY") ===
-            dayjs().month(monthIndex).format("YY")
-        )
-        .forEach((data) => {
-          e += data.amount;
+        setGrossCount(grossPerDate);
+      });
+
+      //get line graph expenses
+      let expensesPerDate = [];
+
+      for (let i = 1; i <= monthCount; i++) {
+        expensesPerDate.push(0);
+      }
+      setExpensesCount(expensesPerDate);
+
+      filteredData.map((data) => {
+        expensesPerDate.map(() => {
+          expensesPerDate[dayjs(data.day).format("D") - 1] = data.expenses;
         });
 
-      setyearlyGross(g);
-      setyearlyExpenses(e);
+        setExpensesCount(expensesPerDate);
+      });
+
+      //get line graph sales
+      let netPerDate = [];
+
+      for (let i = 1; i <= monthCount; i++) {
+        netPerDate.push(0);
+      }
+      setNetCount(netPerDate);
+
+      filteredData.map((data) => {
+        netPerDate.map(() => {
+          netPerDate[dayjs(data.day).format("D") - 1] = data.net;
+        });
+
+        setNetCount(netPerDate);
+      });
     };
 
-    YearlyIncomeData();
+    lineGraphData();
   }, [monthIndex]);
 
   useEffect(() => {
@@ -140,42 +173,6 @@ const PersonalSummary = () => {
     monthlyExpensesData();
   }, [monthIndex]);
 
-  useEffect(() => {
-    const monthlyIncomeData = async () => {
-      const monthData = await getPersonalData();
-
-      const filteredData = monthData.filter(
-        (data) =>
-          dayjs(data.day).format("MM-YY") ===
-          dayjs().month(monthIndex).format("MM-YY")
-      );
-
-      const grossPerDate = filteredData.map((data) => {
-        const dateData = data.gross;
-
-        return dateData;
-      });
-
-      const exspensesPerDate = filteredData.map((data) => {
-        const dateData = data.expenses;
-
-        return dateData;
-      });
-
-      const netPerDate = filteredData.map((data) => {
-        const dateData = data.net;
-
-        return dateData;
-      });
-
-      setGrossCount(grossPerDate);
-      setExpensesCount(exspensesPerDate);
-      setNetCount(netPerDate);
-    };
-
-    monthlyIncomeData();
-  }, [monthIndex]);
-
   function handlePrevMonth() {
     setMonthIndex(monthIndex - 1);
   }
@@ -183,24 +180,8 @@ const PersonalSummary = () => {
     setMonthIndex(monthIndex + 1);
   }
 
-  const nextYear = () => {
-    setMonthIndex(monthIndex + 12);
-  };
-
-  const prevYear = () => {
-    setMonthIndex(monthIndex - 12);
-  };
-
-  const monthCount = dayjs().month(monthIndex).daysInMonth();
-
-  let dayCount = [];
-
-  for (let i = 0; i <= monthCount - 1; i++) {
-    dayCount.push(i + 1);
-  }
-
   const overallNet = gross - expenses;
-  const yearlyNet = yearlyGross - yearlyExpenses;
+
   const monthlyNet = monthlyGross - monthlyExpenses;
 
   return (
@@ -380,92 +361,7 @@ const PersonalSummary = () => {
           </>
         )}
 
-        <div className="w-[60%] mx-auto m-5  mt-5 gap-3 content-center">
-          <div>
-            <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5 mb-2">
-              <div>
-                <FaAngleLeft
-                  className="text-greens text-3xl hover:text-lgreens cursor-pointer"
-                  onClick={prevYear}
-                />
-              </div>
-              <div>
-                <h1 className="font-extrabold text-center text-4xl text-greens">
-                  {
-                    /* display current month and year */
-                    dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY")
-                  }
-                </h1>
-              </div>
-              <div>
-                <FaAngleRight
-                  className="text-greens text-3xl hover:text-lgreens cursor-pointer"
-                  onClick={nextYear}
-                />
-              </div>
-            </div>
-          </div>
-          <div className=" text-center bg-white rounded-lg  shadow-lg">
-            {isLoading ? (
-              <div>
-                <div className="w-[60%] mx-auto pt-2">
-                  <Skeleton className="my-2" />
-                  <Skeleton />
-                  <Skeleton height={30} />
-                </div>
-                <Skeleton className="w-[80%] my-5" height={200} />
-              </div>
-            ) : (
-              <div className="p-5">
-                <div className="w-[80%] mt-5 mx-auto">
-                  <Bar
-                    data={{
-                      labels: ["Gross", "Expenses", "Net"],
-                      datasets: [
-                        {
-                          label: `Yearly Summary (${year})`,
-                          data: [yearlyGross, yearlyExpenses, yearlyNet],
-                          backgroundColor: ["#ff9f1c", "#ff6384", "#2ec4b6"],
-                          borderRadius: 5,
-                        },
-                      ],
-                    }}
-                  />
-                </div>
-                <div className=" p-5 text-center">
-                  <div className="text-lg py-5">Yearly Summary ({year})</div>
-                  <div className="w-[60%] grid grid-cols-3 mx-auto">
-                    <div className="flex justify-center gap-2 pb-3">
-                      <img src={pouch} alt="puch" className="h-4 w-6" />
-                      <p>Gross</p>
-                    </div>
-                    <div className="flex justify-center gap-2 pb-3">
-                      <img src={expensesIcon} alt="puch" className="h-4 w-8" />
-                      <p>Expenses</p>
-                    </div>
-                    <div className="flex justify-center gap-2 pb-3">
-                      <img src={networth} alt="puch" className="h-3 w-9" />
-                      <p>Net</p>
-                    </div>
-                  </div>
-                  <div className="w-[60%] grid grid-cols-3 mx-auto mt-1 font-bold text-3xl">
-                    <div className="text-oranges">
-                      {yearlyGross.toLocaleString()}
-                    </div>
-                    <div className="text-[red]">
-                      {yearlyExpenses.toLocaleString()}
-                    </div>
-                    <div
-                      className={yearlyNet < 0 ? "text-[red]" : "text-greens"}
-                    >
-                      {yearlyNet.toLocaleString()}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        <PersonalYearlySummary />
       </div>
     </>
   );
