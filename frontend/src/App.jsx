@@ -32,7 +32,7 @@ function App() {
           <Route element={<PersistLogin />}>
             <Route path="login" element={<Auth />} />
             <Route element={<RequireAuth />}>
-              <Route path="/" element={<Home />} />
+              <Route exact path="home" element={<Home />} />
               <Route path="personal" element={<Personal />} />
               <Route path="business" element={<Business />} />
               <Route path="summary" element={<Summary />} />

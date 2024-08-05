@@ -192,13 +192,13 @@ const PersonalSummary = () => {
             Overall Summary
           </h1>
         </div>
-        <div className="w-[60%] mx-auto flex justify-between text-center">
+        <div className="w-[60%] mx-auto flex justify-between text-center md:w-[80%] sm:w-[90%]">
           <div className="bg-white rounded-lg w-[30%] shadow-lg">
             <div className="flex justify-center gap-2 pt-5">
               <img src={pouch} alt="puch" className="h-4 w-7" />
               <p>Gross</p>
             </div>
-            <div className="text-4xl text-oranges font-bold px-5 py-4">
+            <div className="text-4xl text-oranges font-bold px-5 py-4 lg:text-3xl md:text-2xl">
               {gross.toLocaleString()}
             </div>
           </div>
@@ -207,7 +207,7 @@ const PersonalSummary = () => {
               <img src={expensesIcon} alt="puch" className="h-4 w-9" />
               <p>Expenses</p>
             </div>
-            <div className="text-4xl text-[red] font-bold px-5 py-4">
+            <div className="text-4xl text-[red] font-bold px-5 py-4 lg:text-3xl md:text-2xl">
               {expenses.toLocaleString()}
             </div>
           </div>
@@ -219,8 +219,8 @@ const PersonalSummary = () => {
             <div
               className={
                 overallNet < 0
-                  ? "text-4xl text-[red] font-bold px-5 py-4"
-                  : "text-4xl text-greens font-bold px-5 py-4"
+                  ? "text-4xl text-[red] font-bold px-5 py-4 lg:text-3xl md:text-2xl"
+                  : "text-4xl text-greens font-bold px-5 py-4 lg:text-3xl md:text-2xl"
               }
             >
               {overallNet.toLocaleString()}
@@ -266,7 +266,7 @@ const PersonalSummary = () => {
           </div>
         ) : (
           <>
-            <div className=" w-[60%] mx-auto bg-white p-8 rounded-lg shadow-lg">
+            <div className="w-[60%] mx-auto bg-white p-8 rounded-lg shadow-lg lg:w-[80%] md:w-[90%]">
               <Line
                 className="w-full"
                 // options={options}
@@ -296,7 +296,7 @@ const PersonalSummary = () => {
               />
               <div className="w-[100%]  h-[fit-content] ">
                 <div className="text-center">
-                  <div className="text-lg py-5">
+                  <div className="font-bold text-lg py-5">
                     Monthly Summary ({thisMonth})
                   </div>
                   <div className="w-[100%] grid grid-cols-4 gap-2 mx-auto">
@@ -340,10 +340,15 @@ const PersonalSummary = () => {
                       </div>
                     </div>
                     <div>
-                      <div className="text-sm mb-2 flex justify-center gap-2">
-                        <img src={networth} alt="puch" className="h-4 w-8" />
-                        <p>Total Net</p>
+                      <div className="flex gap-2 text-sm mb-2 justify-center">
+                        <div>
+                          <img src={networth} alt="puch" className="h-4 w-8" />
+                        </div>
+                        <div className="">
+                          <p>Total Net</p>
+                        </div>
                       </div>
+
                       <div
                         className={
                           monthlyNet - monthExpenses < 0

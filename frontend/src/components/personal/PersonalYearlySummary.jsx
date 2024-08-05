@@ -190,34 +190,40 @@ const BusinessYearlySummary = () => {
     setMonthIndex(monthIndex - 12);
   };
 
+  const months = dayjs.months();
+
+  const newMonths = months.map((month) => {
+    return month.slice(0, 3);
+  });
+
   return (
     <div>
-      <div className="w-[60%] mx-auto m-5  mt-5 gap-3 content-center">
-        <div>
-          <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5 mb-2">
-            <div>
-              <FaAngleLeft
-                className="text-greens text-3xl hover:text-lgreens cursor-pointer"
-                onClick={prevYear}
-              />
-            </div>
-            <div>
-              <h1 className="font-extrabold text-center text-4xl text-greens">
-                {
-                  /* display current month and year */
-                  dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY")
-                }
-              </h1>
-            </div>
-            <div>
-              <FaAngleRight
-                className="text-greens text-3xl hover:text-lgreens cursor-pointer"
-                onClick={nextYear}
-              />
-            </div>
+      <div>
+        <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5">
+          <div>
+            <FaAngleLeft
+              className="text-greens text-3xl hover:text-lgreens cursor-pointer"
+              onClick={prevYear}
+            />
+          </div>
+          <div>
+            <h1 className="font-extrabold text-center text-4xl text-greens">
+              {
+                /* display current month and year */
+                dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY")
+              }
+            </h1>
+          </div>
+          <div>
+            <FaAngleRight
+              className="text-greens text-3xl hover:text-lgreens cursor-pointer"
+              onClick={nextYear}
+            />
           </div>
         </div>
-        <div className=" text-center bg-white rounded-lg  shadow-lg">
+      </div>
+      <div className="w-[60%] mx-auto gap-3 content-center lg:w-[80%] md:w-[90%]">
+        <div className="text-center bg-white rounded-lg  shadow-lg">
           {isLoading ? (
             <div>
               <div className="w-[60%] mx-auto pt-2">
@@ -228,37 +234,39 @@ const BusinessYearlySummary = () => {
               <Skeleton className="w-[80%] my-5" height={200} />
             </div>
           ) : (
-            <div className="p-5">
-              <div className="w-[80%] mt-5 mx-auto">
-                <Bar
-                  data={{
-                    labels: dayjs.months(),
-                    datasets: [
-                      {
-                        label: "Gross",
-                        data: grossCount,
-                        borderColor: "#ff9f1c",
-                        backgroundColor: "#fdac3a",
-                      },
-                      {
-                        label: "Expenses",
-                        data: expensesCount,
-                        borderColor: "#ff6384",
-                        backgroundColor: "#FA829C",
-                      },
-                      {
-                        label: "Net",
-                        data: netCount,
-                        borderColor: "#2ec4b6",
-                        backgroundColor: "#3cd5c5",
-                      },
-                    ],
-                  }}
-                />
-              </div>
-              <div className=" p-5 text-center">
-                <div className="text-lg py-5">Yearly Summary ({year})</div>
-                <div className="w-[80%] flex justify-between mx-auto">
+            <div className="p-5 w-full mx-auto">
+              <Bar
+                className="w-full"
+                data={{
+                  labels: newMonths,
+                  datasets: [
+                    {
+                      label: "Gross",
+                      data: grossCount,
+                      borderColor: "#ff9f1c",
+                      backgroundColor: "#fdac3a",
+                    },
+                    {
+                      label: "Expenses",
+                      data: expensesCount,
+                      borderColor: "#ff6384",
+                      backgroundColor: "#FA829C",
+                    },
+                    {
+                      label: "Net",
+                      data: netCount,
+                      borderColor: "#2ec4b6",
+                      backgroundColor: "#3cd5c5",
+                    },
+                  ],
+                }}
+              />
+
+              <div className="p-5 text-center">
+                <div className="font-bold text-lg py-5">
+                  Yearly Summary ({year})
+                </div>
+                <div className="w-[80%] flex justify-between mx-auto sm:w-full">
                   <div>
                     <div className="flex items-center justify-center pb-2 gap-2">
                       <img

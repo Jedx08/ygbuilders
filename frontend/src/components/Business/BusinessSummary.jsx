@@ -1,4 +1,4 @@
-import { FaAngleDown, FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { CalendarContext } from "../../context/CalendarContext";
 import { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
@@ -40,8 +40,6 @@ const BusinessSummary = () => {
   const [overallMonthlyExpenses, setOverallMonthlyExpenses] = useState(0);
 
   const [monthExpenses, setMonthExpenses] = useState(0);
-
-  const [showYearlySummary, setShowYearlySummary] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -246,35 +244,35 @@ const BusinessSummary = () => {
             Overall Summary
           </h1>
         </div>
-        <div className=" w-[80%] mx-auto justify-center  flex text-center gap-[4%]">
-          <div className=" bg-white rounded-lg w-[20%] shadow-lg">
+        <div className="w-[80%] mx-auto justify-center  flex text-center gap-[4%] lg:w-full md:grid md:grid-rows-2 md:grid-flow-col">
+          <div className="bg-white rounded-lg w-[20%] shadow-lg md:w-full">
             <div className="flex items-center justify-center pt-3 gap-2">
               <img src={capitalIcon} alt="capital icon" className="h-4 w-7" />
               <div>Capital</div>
             </div>
-            <div className="text-4xl text-oranges font-bold px-5 py-4">
+            <div className="text-4xl text-oranges font-bold px-5 py-4 lg:text-3xl md:text-2xl">
               {capital.toLocaleString()}
             </div>
           </div>
-          <div className="bg-white rounded-lg w-[20%] shadow-lg">
+          <div className="bg-white rounded-lg w-[20%] shadow-lg md:w-full">
             <div className="flex items-center justify-center pt-3 gap-2">
               <img src={salesIcon} alt="sales icon" className="h-4 w-7" />
               <div>Sales</div>
             </div>
-            <div className="text-4xl text-[#399CB4] font-bold px-5 py-4">
+            <div className="text-4xl text-[#399CB4] font-bold px-5 py-4 lg:text-3xl md:text-2xl">
               {sales.toLocaleString()}
             </div>
           </div>
-          <div className="bg-white rounded-lg w-[20%] shadow-lg">
+          <div className="bg-white rounded-lg w-[20%] shadow-lg md:w-full">
             <div className="flex items-center justify-center pt-3 gap-2">
               <img src={expensesIcon} alt="expenses icon" className="h-4 w-7" />
               <div>Expenses</div>
             </div>
-            <div className="text-4xl text-[red] font-bold px-5 py-4">
+            <div className="text-4xl text-[red] font-bold px-5 py-4 lg:text-3xl md:text-2xl">
               {(expenses + overallMonthlyExpenses).toLocaleString()}
             </div>
           </div>
-          <div className="bg-white rounded-lg w-[20%] shadow-lg">
+          <div className="bg-white rounded-lg w-[20%] shadow-lg md:w-full">
             <div className="flex items-center justify-center pt-3 gap-2">
               <img src={profitIcon} alt="profit icon" className="h-4 w-7" />
               <div>Profit</div>
@@ -282,8 +280,8 @@ const BusinessSummary = () => {
             <div
               className={
                 overallProfit < 0
-                  ? "text-4xl font-bold text-[red] px-5 py-4"
-                  : "text-4xl font-bold text-greens px-5 py-4"
+                  ? "text-4xl font-bold text-[red] px-5 py-4 lg:text-3xl md:text-2xl"
+                  : "text-4xl font-bold text-greens px-5 py-4 lg:text-3xl md:text-2xl"
               }
             >
               {overallProfit.toLocaleString()}
@@ -319,7 +317,7 @@ const BusinessSummary = () => {
 
       <div className=" bg-light font-pops pb-7">
         {isLoading ? (
-          <div className="w-[60%] mx-auto bg-white p-8 rounded-lg flex items-center flex-col">
+          <div className="w-[60%] mx-auto bg-white p-5 rounded-lg flex items-center flex-col">
             <div className="w-[35%]">
               <Skeleton />
             </div>
@@ -329,7 +327,7 @@ const BusinessSummary = () => {
           </div>
         ) : (
           <>
-            <div className="w-[60%] mx-auto bg-white p-8 rounded-lg shadow-lg">
+            <div className="w-[60%] mx-auto bg-white p-5 rounded-lg shadow-lg lg:w-[80%] md:w-[90%]">
               <Line
                 className="w-full"
                 // options={options}
@@ -365,44 +363,44 @@ const BusinessSummary = () => {
               />
               <div className="w-[100%] h-[fit-content]">
                 <div className="text-center">
-                  <div className="text-lg py-5">
+                  <div className="font-bold text-lg py-5 md:text-base md:py-3">
                     Monthly Summary ({thisMonth})
                   </div>
-                  <div className="w-[100%] grid grid-cols-5 gap-2 mx-auto">
-                    <div>
-                      <div className="flex items-center justify-center pb-3 gap-2">
+                  <div className="w-full grid grid-cols-5 gap-2 mx-auto lg:flex lg:flex-col">
+                    <div className="lg:flex justify-center gap-2">
+                      <div className="flex items-center justify-center gap-2 lg:pb-1">
                         <img
                           src={monthlyCapitalIcon}
                           alt="monthly capital"
-                          className="h-4 w-7"
+                          className="w-7"
                         />
-                        <div className="text-sm mb-2">
+                        <span className="text-sm">
                           Capital + (Monthly Capital)
-                        </div>
+                        </span>
                       </div>
                       <div className="text-xl font-bold text-oranges">
                         {monthlyCapital.toLocaleString()}
                       </div>
                     </div>
-                    <div>
-                      <div className="flex items-center justify-center pb-3 gap-2">
+                    <div className="lg:flex justify-center gap-2">
+                      <div className="flex justify-center gap-2">
                         <img
                           src={monthlySalesIcon}
                           alt="monthly sales"
-                          className="h-4 w-7"
+                          className="w-7"
                         />
-                        <div className="text-sm mb-2">Sales</div>
+                        <span className="text-sm mb-2">Sales</span>
                       </div>
                       <div className="text-xl font-bold text-[#399CB4]">
                         {monthlySales.toLocaleString()}
                       </div>
                     </div>
-                    <div>
-                      <div className="flex items-center justify-center pb-3 gap-2">
+                    <div className="lg:flex justify-center gap-2">
+                      <div className="flex items-center justify-center gap-2">
                         <img
                           src={monthlyExpensesIcon}
                           alt="monthly expenses"
-                          className="h-4 w-7"
+                          className="w-7"
                         />
                         <div className="text-sm mb-2">Expenses</div>
                       </div>
@@ -410,7 +408,7 @@ const BusinessSummary = () => {
                         {monthlyExpenses.toLocaleString()}
                       </div>
                     </div>
-                    <div>
+                    <div className="lg:flex justify-center gap-2">
                       <div className="text-sm mb-2">
                         Profit - (Monthly Expenses)
                       </div>
@@ -435,12 +433,12 @@ const BusinessSummary = () => {
                         </span>
                       </div>
                     </div>
-                    <div>
+                    <div className="lg:flex justify-center gap-2">
                       <div className="flex items-center justify-center pb-3 gap-2">
                         <img
                           src={monthlyProfitIcon}
                           alt="monthly profit"
-                          className="h-4 w-7"
+                          className="w-7"
                         />
                         <div className="text-sm mb-2">Total Profit</div>
                       </div>

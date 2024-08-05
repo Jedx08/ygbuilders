@@ -29,7 +29,7 @@ const Navbar = () => {
         <div className="grid place-items-center">
           <ul className="flex space-x-3 items-center">
             <li>
-              <Link to="/">
+              <Link to="/home">
                 <div className="flex space-x-1">
                   <FontAwesomeIcon
                     icon={faHouse}
@@ -42,7 +42,7 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/summary" state={{ from: location.pathname }}>
+              <Link to="summary" state={{ from: location.pathname }}>
                 <div className="flex space-x-1">
                   <FontAwesomeIcon
                     icon={faChartLine}

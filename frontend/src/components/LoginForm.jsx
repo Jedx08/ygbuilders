@@ -39,7 +39,7 @@ const LoginForm = ({ next }) => {
       setUsername("");
       setPassword("");
       setSuccess("Success");
-      navigate("/");
+      navigate("/home");
     } catch (err) {
       if (!err?.response) {
         setErrMsg("Can't connect to the Server");
