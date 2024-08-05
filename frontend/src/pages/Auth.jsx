@@ -39,7 +39,7 @@ const Auth = () => {
   return (
     <>
       {authToken ? (
-        <Navigate to="/" />
+        <Navigate to="/home" />
       ) : (
         <>
           <div className="grid grid-cols-1 place-items-center h-s80 bg-light font-pops">

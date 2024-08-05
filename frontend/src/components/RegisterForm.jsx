@@ -81,7 +81,7 @@ const RegisterForm = ({ previous }) => {
         setPassword("");
         setMatchPassword("");
         setSuccess(false);
-        navigate("/");
+        navigate("/home");
       }, 1300);
     } catch (err) {
       if (!err?.response) {

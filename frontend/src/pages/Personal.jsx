@@ -16,8 +16,8 @@ const Personal = () => {
   }, [monthIndex]);
 
   useEffect(() => {
-    if (state?.from !== "/") {
-      navigate("/");
+    if (state?.from !== "/home") {
+      navigate("/home");
     }
   }, []);
 

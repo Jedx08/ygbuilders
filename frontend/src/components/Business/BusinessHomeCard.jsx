@@ -78,25 +78,26 @@ const BusinessHomeCard = () => {
 
   useEffect(() => {
     const getTitle = async () => {
+      setIsLoading(true);
       const _id = await auth?._id;
       if (_id) {
         try {
           const response = await axiosPrivate.get("/user/" + _id);
           const jsonTitle = await response.data.business_title;
-          if (jsonTitle && response.status === 200) {
+          if (response.status === 200) {
             setUpdatedTitle(jsonTitle);
             setTitle(jsonTitle);
             setHasTitle(true);
+            setIsLoading(false);
           }
         } catch (err) {
           console.log(err);
         }
       }
+      setIsLoading(false);
     };
 
     getTitle();
-
-    setIsLoading(false);
   }, [hasTitle]);
 
   const handleSubmit = async (e) => {
@@ -145,246 +146,202 @@ const BusinessHomeCard = () => {
   };
 
   return (
-    <div className="w-[90%] h-hfit rounded-xl bg-white shadow-lg overflow-hidden">
+    <div className="grid content-center w-full h-[24rem] rounded-xl bg-white shadow-lg ">
       {isLoading ? (
-        <div className="w-full h-fit flex justify-center items-center bg-light bg-opacity-70">
+        <div className="w-[380px] flex justify-center">
           <OrbitProgress color="#ff9f1c" size="large" text="" textColor="" />
         </div>
       ) : (
-        <div className="h-hfull content-center justify-items-center">
-          <div className="w-full h-hfull mx-auto text-center bg-white rounded-lg p-2">
-            <div className=" w-full text-center mx-auto place-content-center">
-              <div className=" w-full text-xl text-loranges font-bold">
-                BUSINESS
+        <div className="w-full h-hfit text-center rounded-lg p-2 ">
+          <div className="w-full text-loranges text-center text-xl font-bold">
+            BUSINESS
+          </div>
+
+          {/* Show Title and Data if there is any */}
+          {hasTitle && !businessEditButton && (
+            <div className="flex text-xs items-end justify-end font-semibold px-4">
+              <div
+                onClick={() => {
+                  setBusinessEditButton(true);
+                }}
+                className="bg-loranges hover:bg-oranges flex rounded-md p-1 px-2 space-x-2 cursor-pointer items-center"
+              >
+                <div>
+                  <FaRegPenToSquare className="text-white text-lg" />
+                </div>
+                <p className="text-white">Edit</p>
               </div>
             </div>
+          )}
 
-            {/* Show Title and Data if there is any */}
-            {hasTitle && !businessEditButton && (
-              <div className="rounded-lg">
-                <div className="flex text-xs justify-end font-semibold px-5">
-                  <div
-                    onClick={() => {
-                      setBusinessEditButton(true);
-                    }}
-                    className="bg-loranges hover:bg-oranges flex rounded-md p-1 px-2 space-x-2 cursor-pointer items-center"
-                  >
-                    <div>
-                      <FaRegPenToSquare className="text-white text-lg" />
-                    </div>
-                    <p className="text-white">Edit</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 items-center justify-between px-5">
-                  <div className="text-[7vw] col-span-1">
-                    <FcLibrary />
-                  </div>
-
-                  <div className="text-loranges col-span-2 text-[2.5vw] underline font-semibold content-end cursor-default">
-                    {title || updatedTitle}
-                  </div>
-                </div>
+          {businessEditButton && (
+            <div className="flex gap-2 text-xs items-end justify-end font-semibold px-4">
+              <div
+                onClick={(e) => {
+                  handleUpdate(e);
+                }}
+                className="bg-loranges hover:bg-oranges flex rounded-md p-1 px-2 space-x-2 cursor-pointer items-center"
+              >
+                <p className="text-white">Save</p>
               </div>
-            )}
-            {hasTitle && !businessEditButton && (
-              <div className="w-full mx-auto row-span-1 p-5 justify-between place-content-center">
-                <div className="text-oranges font-semibold text-sm text-start">
+              <div
+                onClick={() => {
+                  setBusinessEditButton(false);
+                }}
+                className="bg-[red] flex rounded-md p-1 px-2 space-x-2 cursor-pointer items-center"
+              >
+                <p className="text-white">Cancel</p>
+              </div>
+            </div>
+          )}
+
+          <div className="">
+            <div className="flex justify-center items-center px-5 xl:px-3">
+              <div className="items-center text-9xl col-span-1 xl:text-7x lg:text-8xl">
+                <FcLibrary />
+              </div>
+              <div className="w-[70%]">
+                {hasTitle ? (
+                  businessEditButton ? (
+                    <div className="space-y-2">
+                      <div>
+                        <div className="text-xl font-bold text-loranges">
+                          Update Title
+                        </div>
+                      </div>
+                      <input
+                        ref={titleRef}
+                        required
+                        type="text"
+                        className="text-center w-full text-2xl h-[50%] mx-auto rounded-xl border border-loranges font-bold outline-none"
+                        onChange={(e) => {
+                          setErrMsg("");
+                          setUpdatedTitle(e.target.value);
+                        }}
+                        value={updatedTitle}
+                      />
+                      <div className="text-xs text-oranges">
+                        {errMsg.toLocaleUpperCase()}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className=" text-oranges text-4xl underline font-semibold cursor-default xl:text-3xl md:text-3xl">
+                      {title}
+                    </div>
+                  )
+                ) : (
+                  <div className="space-y-2">
+                    <div className="text-lg p-[10%]">
+                      Track your Business assets <br /> with a calendar like
+                      interface <br /> plus added features for an easier
+                      Financial Management
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="p-5 w-full mx-auto row-span-1 justify-between place-content-center">
+            {isLoading ? (
+              <Skeleton className="w-full" height={20} />
+            ) : hasTitle ? (
+              <>
+                <div className="text-start text-loranges text-sm font-semibold">
                   Overview
                 </div>
-                {isLoading ? (
-                  <Skeleton className="w-full" height={20} />
-                ) : (
-                  <>
-                    <div className="flex place-content-start gap-5 items-center">
-                      <img
-                        src={profitIcon}
-                        alt="profits"
-                        title="profits"
-                        className="h-[3vw] w-[3.2vw]"
-                      />
-                      <div
-                        className={`font-bold text-[3vw] ${
-                          sales - expenses - overallMonthlyExpenses - capital >
-                          0
-                            ? "text-greens"
-                            : "text-[red]"
-                        }`}
-                      >
-                        {(
-                          sales -
-                          expenses -
-                          overallMonthlyExpenses -
-                          capital
-                        ).toLocaleString()}
-                      </div>
-                      <div className="text-start text-loranges text-sm font-semibold place-content-center">
-                        Total Profit
-                      </div>
-                    </div>
-
-                    <div className="w-full text-xs mt-2">
-                      <div className="w-fit ">
-                        <Link to="/summary" state={{ from: location.pathname }}>
-                          <div className="bg-loranges text-center text-white text-[0.8vw] font-semibold px-5 py-2 rounded-md">
-                            <span className="flex justify-center items-center gap-2">
-                              <FcStatistics className="text-[1.5vw]" />
-                              Summary
-                            </span>
-                          </div>
-                        </Link>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
-
-            {hasTitle && !businessEditButton && (
-              <div className="flex justify-end w-fulltext-xs mt-2 pr-4">
-                <div className="w-fit">
-                  <Link to="/business" state={{ from: location.pathname }}>
-                    <div className="bg-loranges text-center text-white text-[0.8vw] font-semibold px-5 py-2 rounded-md">
-                      <span className="flex justify-center items-center gap-2">
-                        <FcCalendar className="text-[1.5vw]" />
-                        Calendar
-                      </span>
-                    </div>
-                  </Link>
-                </div>
-              </div>
-            )}
-
-            {!hasTitle && businessAddButton && (
-              <div className="w-full mx-auto row-span-2 text-md font-bold place-content-center">
-                <div className="w-[80%] mx-auto text-loranges bg-light rounded-lg p-10">
-                  Track your Business{" "}
-                  <span className="text-greens">INCOME</span>,{" "}
-                  <span className="text-greens">
-                    CAPITAL<span className="text-oranges">,</span> SALES
-                  </span>
-                  , and <span className="text-greens">PROFITS</span> with a
-                  calendar like interface plus added features for an easier
-                  Financial Management
-                </div>
-              </div>
-            )}
-
-            {!hasTitle && businessAddButton && (
-              <div className="w-full mx-auto row-span-1 text-xs mt-2 ">
-                <div
-                  onClick={() => {
-                    setBusinessAddbutton(false);
-                    setBusinessProceedButton(true);
-                  }}
-                  className="mx-auto bg-loranges hover:bg-oranges h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer"
-                >
-                  <div className="text-xl font-bold text-white">
-                    ADD BUSINESS
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {businessProceedButton && (
-              <div>
-                <div className="text-xl font-bold text-loranges">
-                  Add a Title
-                </div>
-                <input
-                  ref={titleRef}
-                  required
-                  type="text"
-                  className="text-center text-2xl w-full h-[50%] mx-auto rounded-xl border border-loranges font-bold outline-none"
-                  onChange={(e) => {
-                    setTitle(e.target.value);
-                  }}
-                  onFocus={() => {
-                    setErrMsg("");
-                  }}
-                  value={title}
-                />
-              </div>
-            )}
-
-            {businessProceedButton && (
-              <div className="boder w-full mx-auto row-span-1 text-xs mt-2 ">
-                {isLoading ? (
-                  <div className="mx-auto bg-oranges h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer">
-                    <ThreeDot
-                      color="#ffff"
-                      size="medium"
-                      text=""
-                      textColor=""
+                <div className="flex place-content-start gap-5">
+                  <div className="items-center place-content-center">
+                    <img
+                      src={profitIcon}
+                      alt="net"
+                      title="net"
+                      className=" w-[30px] md:w-[30px]"
                     />
                   </div>
-                ) : (
                   <div
-                    onClick={(e) => {
-                      handleSubmit(e);
-                    }}
-                    className="mx-auto bg-loranges hover:bg-oranges h-[50%] w-[50%] place-content-center rounded-lg cursor-pointer"
+                    className={`font-bold text-3xl sm:text-3xl ${
+                      sales - expenses - overallMonthlyExpenses - capital > 0
+                        ? "text-oranges"
+                        : "text-[red]"
+                    }`}
                   >
-                    <div className="text-xl font-bold text-white">ADD</div>
+                    {(
+                      sales -
+                      expenses -
+                      overallMonthlyExpenses -
+                      capital
+                    ).toLocaleString()}
                   </div>
-                )}
-              </div>
-            )}
-
-            {businessEditButton && (
-              <div className="space-y-2">
-                <div>
-                  <div className="text-xl font-bold text-loranges">
-                    Update Title
+                  <div className="text-start text-loranges text-sm font-semibold place-content-center">
+                    Total Net
                   </div>
                 </div>
-                <input
-                  ref={titleRef}
-                  required
-                  type="text"
-                  className="text-center w-full h-[50%] mx-auto rounded-xl border border-loranges font-bold outline-none text-2xl"
-                  onChange={(e) => {
-                    setUpdatedTitle(e.target.value);
-                  }}
-                  value={updatedTitle}
-                />
-              </div>
-            )}
 
-            {businessEditButton && (
-              <div>
-                <div className="flex justify-center space-x-3">
-                  <div
-                    className="bg-loranges hover:bg-oranges p-2 text-white rounded-lg cursor-pointer font-bold"
-                    onClick={(e) => {
-                      handleUpdate(e);
-                    }}
-                  >
-                    Save Changes
-                  </div>
-                  <div
-                    className="p-2 bg-[#ff4242] hover:bg-[red] text-white rounded-lg cursor-pointer font-bold"
-                    onClick={() => {
-                      setBusinessEditButton(false);
-                    }}
-                  >
-                    Back
+                <div className="w-full text-xs mt-2">
+                  <div className="w-fit">
+                    <Link to="/summary" state={{ from: location.pathname }}>
+                      <div className="bg-loranges hover:bg-oranges text-center text-white text-[0.8vw] font-semibold px-5 py-2 rounded-md">
+                        <span className="flex justify-center items-center gap-2">
+                          <FcStatistics className="text-lg" />
+                          <span className="text-sm">Summary</span>
+                        </span>
+                      </div>
+                    </Link>
                   </div>
                 </div>
-                {errMsg && (
-                  <p className="text-sm text-semibold text-oranges text-center mt-2">
-                    {errMsg}
-                  </p>
-                )}
-              </div>
+              </>
+            ) : (
+              <>
+                <div className="flex justify-center items-center gap-2">
+                  <input
+                    ref={titleRef}
+                    required
+                    type="text"
+                    placeholder="Add a Title"
+                    className="px-3 py-2 w-[60%] text-xl text-[#050505] rounded-lg border border-loranges font-bold outline-none"
+                    onChange={(e) => {
+                      setTitle(e.target.value);
+                    }}
+                    onFocus={() => {
+                      setErrMsg("");
+                    }}
+                    value={title}
+                  />
+                  <div className="text-xs">
+                    <div
+                      onClick={(e) => {
+                        handleSubmit(e);
+                        setBusinessAddbutton(false);
+                      }}
+                      className="px-2 py-1 w-full bg-loranges hover:bg-oranges rounded-lg cursor-pointer"
+                    >
+                      <div className="text-sm font-bold text-white">
+                        Add Personal
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
             )}
-
-            {/* Error message */}
-            {/* {errMsg && (
-            <p className="text-sm text-semibold text-oranges text-center mt-2">
-              {errMsg}
-            </p>
-          )} */}
           </div>
+
+          {hasTitle && (
+            <div className="flex justify-end w-fulltext-xs mt-2 pr-4">
+              <div className="w-fit">
+                <Link to="/personal" state={{ from: location.pathname }}>
+                  <div className="bg-loranges hover:bg-oranges text-center text-white text-[0.8vw] font-semibold px-5 py-2 rounded-md">
+                    <span className="flex justify-center items-center gap-2">
+                      <FcCalendar className="text-lg" />
+                      <span className="text-sm">Calendar</span>
+                    </span>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* Adding Personal Income */}
         </div>
       )}
     </div>
