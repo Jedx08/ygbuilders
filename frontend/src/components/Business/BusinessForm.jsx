@@ -21,6 +21,7 @@ const BusinessForm = () => {
     exactDaySelected,
     setBusinessIncomeLoading,
     dispatchBusinessIncomeData,
+    inMobile,
   } = useContext(CalendarContext);
 
   const [isData, setIsData] = useState(false);
@@ -211,11 +212,25 @@ const BusinessForm = () => {
 
   return (
     <div className="font-pops h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-70">
-      <form className="rounded-md bg-white overflow-hidden w-80 px-2 shadow-lg">
-        <div className="flex items-center justify-center relative w-full">
+      <form
+        className={`rounded-md bg-white overflow-hidden shadow-lg ${
+          inMobile ? "w-auto pl-5 pr-1" : "w-80 px-2"
+        }`}
+      >
+        <div
+          className={`flex justify-center relative w-full ${
+            inMobile ? "" : "items-center"
+          }`}
+        >
           <div className="text-center mt-6">
-            <h1 className="font-bold text-2xl text-oranges">Business Income</h1>
-            <p className="text-sm font-semibold">
+            <h1
+              className={`font-bold text-oranges ${
+                inMobile ? "text-4xl xs:text-2xl" : "text-2xl items-center"
+              }`}
+            >
+              Business Income
+            </h1>
+            <p className={`font-semibold ${inMobile ? "text-xl" : "text-sm"}`}>
               {exactDaySelected.format("MMMM D, YYYY")}
             </p>
           </div>
@@ -236,16 +251,22 @@ const BusinessForm = () => {
                 setShowBusinessForm(false),
                 setBusinessFormSelectedDate(null);
             }}
-            className="absolute right-0 mb-5 cursor-pointer hover:bg-light hover:rounded-full p-1"
+            className={`cursor-pointer hover:bg-light hover:rounded-full ${
+              inMobile
+                ? "text-3xl font-bold py-1"
+                : "font-bold absolute right-0 mb-5 p-1 text-2xl"
+            }`}
           >
-            <IoClose className="text-2xl text-loranges hover:text-oranges" />
+            <IoClose className="text-loranges hover:text-oranges" />
           </div>
         </div>
 
         {/* Capital */}
         <div className="mb-2 mt-5 w-48 mx-auto">
           <div className="flex items-center justify-center">
-            <label className="text-sm font-bold">Capital:</label>
+            <label className={` font-bold ${inMobile ? "text-lg" : "text-sm"}`}>
+              Capital:
+            </label>
           </div>
           {/* Capital show current data & input */}
           {isData && (
@@ -258,7 +279,10 @@ const BusinessForm = () => {
                   }`}
                 >
                   <div className="pl-2">
-                    <img src={capitalIcon} className="w-10" />
+                    <img
+                      src={capitalIcon}
+                      className={`${inMobile ? "w-16" : "w-12"}`}
+                    />
                   </div>
                   <div>
                     <input
@@ -269,16 +293,25 @@ const BusinessForm = () => {
                           setErrorStyle(false);
                       }}
                       value={newCapital}
-                      className="focus:outline-none pl-3 py-1 w-full"
+                      className={`focus:outline-none pl-3 py-2 w-full ${
+                        inMobile ? "text-xl" : ""
+                      }`}
                     />
                   </div>
                 </div>
               )}
               {/* show current data */}
               {!editData && (
-                <div className="flex items-center justify-between py-1 bg-light rounded-md overflow-hidden">
+                <div
+                  className={`flex items-center justify-between py-1 bg-light rounded-md overflow-hidden ${
+                    inMobile ? "text-xl" : ""
+                  }`}
+                >
                   <div className="pl-2">
-                    <img src={capitalIcon} className="w-7" />
+                    <img
+                      src={capitalIcon}
+                      className={`${inMobile ? "w-10" : "w-8"}`}
+                    />
                   </div>
                   <div className="text-oranges font-medium">
                     <p>{capital.toLocaleString()}</p>
@@ -297,7 +330,10 @@ const BusinessForm = () => {
               }`}
             >
               <div className="pl-2">
-                <img src={capitalIcon} className="w-10" />
+                <img
+                  src={capitalIcon}
+                  className={`${inMobile ? "w-16" : "w-12"}`}
+                />
               </div>
               <div>
                 <input
@@ -308,7 +344,9 @@ const BusinessForm = () => {
                       setErrorStyle(false);
                   }}
                   value={capital}
-                  className="focus:outline-none pl-3 py-1 w-full"
+                  className={`focus:outline-none pl-3 py-2 w-full ${
+                    inMobile ? "text-xl" : ""
+                  }`}
                 />
               </div>
             </div>
@@ -318,7 +356,9 @@ const BusinessForm = () => {
         {/* Sales */}
         <div className="w-48 mx-auto mb-2">
           <div className="flex items-center justify-center">
-            <label className="text-sm font-bold">Sales:</label>
+            <label className={` font-bold ${inMobile ? "text-lg" : "text-sm"}`}>
+              Sales:
+            </label>
           </div>
           {/* Sales show current data & input */}
           {isData && (
@@ -331,7 +371,10 @@ const BusinessForm = () => {
                   }`}
                 >
                   <div className="pl-2">
-                    <img src={salesIcon} className="w-10" />
+                    <img
+                      src={salesIcon}
+                      className={`${inMobile ? "w-16" : "w-12"}`}
+                    />
                   </div>
                   <div>
                     <input
@@ -342,16 +385,25 @@ const BusinessForm = () => {
                           setErrorStyle(false);
                       }}
                       value={newSales}
-                      className="focus:outline-none pl-3 py-1 w-full"
+                      className={`focus:outline-none pl-3 py-2 w-full ${
+                        inMobile ? "text-xl" : ""
+                      }`}
                     />
                   </div>
                 </div>
               )}
               {/* show current data */}
               {!editData && (
-                <div className="flex py-1 items-center justify-between bg-light rounded-md overflow-hidden">
+                <div
+                  className={`flex items-center justify-between py-1 bg-light rounded-md overflow-hidden ${
+                    inMobile ? "text-xl" : ""
+                  }`}
+                >
                   <div className="pl-2">
-                    <img src={salesIcon} className="w-7" />
+                    <img
+                      src={salesIcon}
+                      className={`${inMobile ? "w-10" : "w-8"}`}
+                    />
                   </div>
                   <div className="text-greens font-medium">
                     <p>{sales.toLocaleString()}</p>
@@ -370,7 +422,10 @@ const BusinessForm = () => {
               }`}
             >
               <div className="pl-2">
-                <img src={salesIcon} className="w-10" />
+                <img
+                  src={salesIcon}
+                  className={`${inMobile ? "w-16" : "w-12"}`}
+                />
               </div>
               <div>
                 <input
@@ -381,7 +436,9 @@ const BusinessForm = () => {
                       setErrorStyle(false);
                   }}
                   value={sales}
-                  className={`focus:outline-none pl-3 py-1 w-full`}
+                  className={`focus:outline-none pl-3 py-2 w-full ${
+                    inMobile ? "text-xl" : ""
+                  }`}
                 />
               </div>
             </div>
@@ -391,7 +448,9 @@ const BusinessForm = () => {
         {/* Expenses */}
         <div className="w-48 mx-auto mb-5">
           <div className="flex items-center justify-center">
-            <label className="text-sm font-bold">Expenses:</label>
+            <label className={` font-bold ${inMobile ? "text-lg" : "text-sm"}`}>
+              Expenses:
+            </label>
           </div>
 
           {isData && (
@@ -404,7 +463,10 @@ const BusinessForm = () => {
                   }`}
                 >
                   <div className="pl-2">
-                    <img src={expensesIcon} className="w-10" />
+                    <img
+                      src={expensesIcon}
+                      className={`${inMobile ? "w-16" : "w-12"}`}
+                    />
                   </div>
                   <div>
                     <input
@@ -415,16 +477,25 @@ const BusinessForm = () => {
                           setErrorStyle(false);
                       }}
                       value={newExpenses}
-                      className="focus:outline-none pl-3 py-1 w-full"
+                      className={`focus:outline-none pl-3 py-2 w-full ${
+                        inMobile ? "text-xl" : ""
+                      }`}
                     />
                   </div>
                 </div>
               )}
               {/* show current data */}
               {!editData && (
-                <div className="flex py-1 items-center justify-between bg-light rounded-md overflow-hidden">
+                <div
+                  className={`flex items-center justify-between py-1 bg-light rounded-md overflow-hidden ${
+                    inMobile ? "text-xl" : ""
+                  }`}
+                >
                   <div className="pl-2">
-                    <img src={expensesIcon} className="w-7" />
+                    <img
+                      src={expensesIcon}
+                      className={`${inMobile ? "w-10" : "w-8"}`}
+                    />
                   </div>
                   <div className="text-[red] font-medium">
                     <p>{expenses.toLocaleString()}</p>
@@ -443,7 +514,10 @@ const BusinessForm = () => {
               }`}
             >
               <div className="pl-2">
-                <img src={capitalIcon} className="w-10" />
+                <img
+                  src={capitalIcon}
+                  className={`${inMobile ? "w-16" : "w-12"}`}
+                />
               </div>
               <div>
                 <input
@@ -454,7 +528,9 @@ const BusinessForm = () => {
                       setErrorStyle(false);
                   }}
                   value={expenses}
-                  className="focus:outline-none pl-3 py-1 w-full"
+                  className={`focus:outline-none pl-3 py-2 w-full ${
+                    inMobile ? "text-xl" : ""
+                  }`}
                 />
               </div>
             </div>
@@ -467,13 +543,22 @@ const BusinessForm = () => {
           {editData && (
             <>
               <div className="col-span-1 flex items-center justify-center">
-                <p className="text-sm font-bold">Profit:</p>
+                <p className={` font-bold ${inMobile ? "text-lg" : "text-sm"}`}>
+                  Profit:
+                </p>
               </div>
               <div className="flex bg-light rounded-md overflow-hidden pt-2 pb-1">
                 <div className="pl-2">
-                  <img src={profitIcon} className="w-8" />
+                  <img
+                    src={profitIcon}
+                    className={`${inMobile ? "w-10" : "w-8"}`}
+                  />
                 </div>
-                <div className="flex items-center ml-4">
+                <div
+                  className={`flex items-center ml-4 ${
+                    inMobile ? "text-xl" : ""
+                  }`}
+                >
                   <p
                     className={`font-bold ${
                       newSales - newExpenses - newCapital < 0
@@ -494,13 +579,22 @@ const BusinessForm = () => {
           {!editData && (
             <>
               <div className="col-span-1 flex items-center justify-center">
-                <p className="text-sm font-bold">Profit:</p>
+                <p className={` font-bold ${inMobile ? "text-lg" : "text-sm"}`}>
+                  Profit:
+                </p>
               </div>
               <div className="flex bg-light rounded-md overflow-hidden pt-2 pb-1">
                 <div className="pl-2">
-                  <img src={profitIcon} className="w-8" />
+                  <img
+                    src={profitIcon}
+                    className={`${inMobile ? "w-10" : "w-8"}`}
+                  />
                 </div>
-                <div className="flex items-center ml-4">
+                <div
+                  className={`flex items-center ml-4 ${
+                    inMobile ? "text-xl" : ""
+                  }`}
+                >
                   <p
                     className={`font-bold ${
                       sales - expenses - capital < 0
@@ -524,9 +618,13 @@ const BusinessForm = () => {
         {/* Confirm Delete */}
         {confirmDelete && (
           <div className=" rounded-md mt-1 p-2 bg-light mb-3">
-            <p className="text-xs text-center">
+            <p className={`text-center ${inMobile ? "text-lg" : "text-xs"}`}>
               Confirm deletion for{" "}
-              <span className="text-xs text-[red] font-semibold">
+              <span
+                className={`text-[red] font-semibold ${
+                  inMobile ? "text-lg" : "text-xs"
+                }`}
+              >
                 {exactDaySelected.format("MMMM D, YYYY")}
               </span>{" "}
               income ?
@@ -548,7 +646,7 @@ const BusinessForm = () => {
                     onClick={handleDelete}
                     className="text-[#FF4242] cursor-pointer hover:text-[red] text-sm font-bold flex items-center gap-1"
                   >
-                    <span className="text-xl">
+                    <span className={`${inMobile ? "text-3xl" : "text-xl"}`}>
                       <FaRegTrashCan />
                     </span>
                     Delete
@@ -561,7 +659,7 @@ const BusinessForm = () => {
                     }}
                     className="text-oranges hover:text-loranges font-bold cursor-pointer text-sm flex items-center gap-1"
                   >
-                    <span className="text-xl">
+                    <span className={`${inMobile ? "text-3xl" : "text-xl"}`}>
                       <BsBackspace />
                     </span>{" "}
                     Cancel

@@ -26,6 +26,7 @@ export default {
       // => @media (max-width: 480px) { ... }
     },
     height: {
+      s40: "40vh",
       s60: "60vh",
       s70: "70vh",
       s80: "80vh",

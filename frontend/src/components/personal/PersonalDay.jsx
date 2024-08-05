@@ -18,6 +18,7 @@ const PersonalDay = ({ day }) => {
     dispatchPersonalIncomeData,
     personalIncomeLoading,
     setPersonalIncomeLoading,
+    inMobile,
   } = useContext(CalendarContext);
 
   const getPersonalData = useGetData();
@@ -76,16 +77,18 @@ const PersonalDay = ({ day }) => {
   return (
     <>
       <div
-        className={`border border-light bg-white flex flex-col overflow-hidden h-[135px] md:h-[120px] sm:h-[110px] ssm:h-[auto] ${
+        className={`border border-light bg-white flex flex-col overflow-hidden ${
+          inMobile ? "" : "h-[135px] md:h-[120px] sm:h-[110px] ssm:h-[auto]"
+        } ${
           notThisMonth ? "cursor-default" : "hover:border-greens cursor-pointer"
         }`}
         onClick={personalDataLoading ? null : toggleForm}
       >
         <header className="flex flex-col items-center">
           <p
-            className={`text-lg font-bold pt-1 text-center ${
-              notThisMonth ? "text-[#EEEEEE]" : ""
-            } ${currentDay()}`}
+            className={`font-bold pt-1 text-center ${
+              inMobile ? "text-2xl ssm:text-lg" : "text-lg"
+            } ${notThisMonth ? "text-[#EEEEEE]" : ""} ${currentDay()}`}
           >
             {day.format("D")}
           </p>
@@ -97,15 +100,20 @@ const PersonalDay = ({ day }) => {
               notThisMonth ? "hidden" : ""
             }`}
           >
-            <Skeleton width={100} height={15} count={3} />
+            <Skeleton
+              width={100}
+              height={15}
+              count={3}
+              className={`${inMobile ? "hidden" : ""}`}
+            />
           </div>
         ) : (
           /* displaying data on their respective date */
           dayData.map((d, i) => (
             <div
-              className={`flex font-medium mt-3 justify-center md:text-sm sm:text-xs ssm:hidden ${
-                notThisMonth ? "hidden" : ""
-              }`}
+              className={`flex font-medium mt-3 justify-center ${
+                inMobile ? "hidden" : "md:text-sm sm:text-xs ssm:hidden"
+              } ${notThisMonth ? "hidden" : ""}`}
               key={i}
             >
               <div className="space-y-1">

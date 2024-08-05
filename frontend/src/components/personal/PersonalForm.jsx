@@ -20,6 +20,7 @@ const PersonalForm = () => {
     exactDaySelected,
     dispatchPersonalIncomeData,
     setPersonalIncomeLoading,
+    inMobile,
   } = useContext(CalendarContext);
 
   const [isData, setIsData] = useState(true);
@@ -185,11 +186,25 @@ const PersonalForm = () => {
 
   return (
     <div className="font-pops h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-70">
-      <form className="rounded-md bg-white overflow-hidden w-80 px-2 shadow-lg">
-        <div className="flex items-center justify-center relative w-full">
+      <form
+        className={`rounded-md bg-white overflow-hidden shadow-lg ${
+          inMobile ? "w-auto pl-5 pr-1" : "w-80 px-2"
+        }`}
+      >
+        <div
+          className={`flex  justify-center relative w-full ${
+            inMobile ? "" : "items-center"
+          }`}
+        >
           <div className="text-center mt-6">
-            <h1 className="font-bold text-2xl text-greens">Personal Income</h1>
-            <p className="text-sm font-semibold">
+            <h1
+              className={`font-bold text-greens ${
+                inMobile ? "text-4xl xs:text-2xl" : "text-2xl items-center"
+              }`}
+            >
+              Personal Income
+            </h1>
+            <p className={`font-semibold ${inMobile ? "text-xl" : "text-sm"}`}>
               {exactDaySelected.format("MMMM D, YYYY")}
             </p>
           </div>
@@ -209,21 +224,34 @@ const PersonalForm = () => {
                 setShowPersonalForm(false),
                 setFormSelectedDate(null);
             }}
-            className="absolute right-0 mb-5 cursor-pointer hover:bg-light hover:rounded-full p-1"
+            className={`cursor-pointer hover:bg-light hover:rounded-full ${
+              inMobile
+                ? "text-3xl font-bold py-1"
+                : "font-bold absolute right-0 mb-5 p-1 text-2xl"
+            }`}
           >
-            <IoClose className="text-2xl text-lgreens hover:text-greens" />
+            <IoClose className="text-lgreens hover:text-greens" />
           </div>
         </div>
 
         {/* Gross */}
         <div className="mb-2 mt-5 w-48 mx-auto">
           <div className="flex items-center justify-center">
-            <label className="text-sm font-bold">Gross:</label>
+            <label className={` font-bold ${inMobile ? "text-lg" : "text-sm"}`}>
+              Gross:
+            </label>
           </div>
           {editData || confirmDelete ? (
-            <div className="flex py-1 justify-between items-center bg-light rounded-md overflow-hidden">
+            <div
+              className={`flex py-1 justify-between items-center bg-light rounded-md overflow-hidden ${
+                inMobile ? "text-xl" : ""
+              }`}
+            >
               <div className="pl-2">
-                <img src={pouchIcon} className="w-7" />
+                <img
+                  src={pouchIcon}
+                  className={`${inMobile ? "w-10" : "w-7"}`}
+                />
               </div>
               <div className="text-oranges font-medium">
                 <p>{gross.toLocaleString()}</p>
@@ -241,7 +269,10 @@ const PersonalForm = () => {
               }`}
             >
               <div className="pl-2">
-                <img src={pouchIcon} className="w-10" />
+                <img
+                  src={pouchIcon}
+                  className={`${inMobile ? "w-14" : "w-10"}`}
+                />
               </div>
               <div>
                 <input
@@ -252,7 +283,9 @@ const PersonalForm = () => {
                       setErrorStyle(false);
                   }}
                   value={newGross}
-                  className="focus:outline-none pl-3 py-1 w-full"
+                  className={`focus:outline-none pl-3 py-2 w-full ${
+                    inMobile ? "text-xl" : ""
+                  }`}
                 />
               </div>
             </div>
@@ -268,7 +301,10 @@ const PersonalForm = () => {
               }`}
             >
               <div className="pl-2">
-                <img src={pouchIcon} className="w-10" />
+                <img
+                  src={pouchIcon}
+                  className={`${inMobile ? "w-14" : "w-10"}`}
+                />
               </div>
               <div>
                 <input
@@ -279,7 +315,9 @@ const PersonalForm = () => {
                       setErrorStyle(false);
                   }}
                   value={gross}
-                  className="focus:outline-none pl-3 py-1 w-full"
+                  className={`focus:outline-none pl-3 py-2 w-full ${
+                    inMobile ? "text-xl" : ""
+                  }`}
                 />
               </div>
             </div>
@@ -289,12 +327,21 @@ const PersonalForm = () => {
         {/* Expenses */}
         <div className="w-48 mx-auto mb-5">
           <div className="flex items-center justify-center">
-            <label className="text-sm font-bold">Expenses:</label>
+            <label className={` font-bold ${inMobile ? "text-lg" : "text-sm"}`}>
+              Expenses:
+            </label>
           </div>
           {editData || confirmDelete ? (
-            <div className="flex justify-between items-center py-1 col-span-2 bg-light rounded-md overflow-hidden">
+            <div
+              className={`flex justify-between items-center py-1 col-span-2 bg-light rounded-md overflow-hidden ${
+                inMobile ? "text-xl" : ""
+              }`}
+            >
               <div className="pl-2">
-                <img src={expensesIcon} className="w-9" />
+                <img
+                  src={expensesIcon}
+                  className={`${inMobile ? "w-12" : "w-9"}`}
+                />
               </div>
               <div className="text-[red] font-medium">
                 <p>{expenses.toLocaleString()}</p>
@@ -312,7 +359,10 @@ const PersonalForm = () => {
               }`}
             >
               <div className="pl-2">
-                <img src={expensesIcon} className="w-12" />
+                <img
+                  src={expensesIcon}
+                  className={`${inMobile ? "w-20" : "w-12"}`}
+                />
               </div>
               <div>
                 <input
@@ -323,7 +373,9 @@ const PersonalForm = () => {
                       setErrorStyle(false);
                   }}
                   value={newExpenses}
-                  className="focus:outline-none pl-2 py-1 w-full"
+                  className={`focus:outline-none pl-2 py-2 w-full ${
+                    inMobile ? "text-xl" : ""
+                  }`}
                 />
               </div>
             </div>
@@ -339,7 +391,10 @@ const PersonalForm = () => {
               }`}
             >
               <div className="pl-2">
-                <img src={expensesIcon} className="w-12" />
+                <img
+                  src={expensesIcon}
+                  className={`${inMobile ? "w-20" : "w-12"}`}
+                />
               </div>
               <div>
                 <input
@@ -350,7 +405,9 @@ const PersonalForm = () => {
                       setErrorStyle(false);
                   }}
                   value={expenses}
-                  className="focus:outline-none pl-2 py-1 w-full"
+                  className={`focus:outline-none pl-2 py-2 w-full ${
+                    inMobile ? "text-xl" : ""
+                  }`}
                 />
               </div>
             </div>
@@ -360,13 +417,20 @@ const PersonalForm = () => {
         {/* Net Pay */}
         <div className="w-44 mx-auto px-4">
           <div className="col-span-1 flex items-center justify-center">
-            <p className="text-sm font-bold">Net:</p>
+            <p className={` font-bold ${inMobile ? "text-lg" : "text-sm"}`}>
+              Net:
+            </p>
           </div>
           <div className="flex items-center py-1 bg-light rounded-md overflow-hidden">
             <div className="pl-2">
-              <img src={networthIcon} className="w-9" />
+              <img
+                src={networthIcon}
+                className={`${inMobile ? "w-12" : "w-9"}`}
+              />
             </div>
-            <div className="flex items-center ml-4">
+            <div
+              className={`flex items-center ml-4 ${inMobile ? "text-xl" : ""}`}
+            >
               {editData || confirmDelete ? (
                 <p
                   className={`font-bold ${
@@ -411,9 +475,13 @@ const PersonalForm = () => {
 
         {confirmDelete ? (
           <div className=" rounded-md mt-1 p-2 bg-light mb-3">
-            <p className="text-xs text-center">
+            <p className={`text-center ${inMobile ? "text-lg" : "text-xs"}`}>
               Confirm deletion for{" "}
-              <span className="text-xs text-[red] font-semibold">
+              <span
+                className={`text-[red] font-semibold ${
+                  inMobile ? "text-lg" : "text-xs"
+                }`}
+              >
                 {exactDaySelected.format("MMMM D, YYYY")}
               </span>{" "}
               income ?
@@ -435,7 +503,7 @@ const PersonalForm = () => {
                     onClick={handleDelete}
                     className="text-[#FF4242] cursor-pointer hover:text-[red] text-sm font-bold flex items-center gap-1"
                   >
-                    <span className="text-xl">
+                    <span className={`${inMobile ? "text-3xl" : "text-xl"}`}>
                       <FaRegTrashCan />
                     </span>
                     Delete
@@ -446,7 +514,7 @@ const PersonalForm = () => {
                     }}
                     className="text-greens hover:text-lgreens font-bold cursor-pointer text-sm flex items-center gap-1"
                   >
-                    <span className="text-xl">
+                    <span className={`${inMobile ? "text-3xl" : "text-xl"}`}>
                       <BsBackspace />
                     </span>{" "}
                     Cancel

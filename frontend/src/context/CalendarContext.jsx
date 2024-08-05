@@ -79,6 +79,7 @@ function businessCapitalDataReducer(state, { type, payload }) {
 }
 
 export const CalendarContextProvider = (props) => {
+  const [inMobile, setInMobile] = useState(false);
   const [loadPage, setLoadPage] = useState(false); // load current page
   const [monthIndex, setMonthIndex] = useState(dayjs().month()); // to change month by index
   const [showPersonalForm, setShowPersonalForm] = useState(false); // show personal form
@@ -86,6 +87,8 @@ export const CalendarContextProvider = (props) => {
   const [formSelectedDate, setFormSelectedDate] = useState(null); // selected date for personal form with data
   const [businessFormSelectedDate, setBusinessFormSelectedDate] = // selected date for business form with data
     useState(null);
+  const [isDataPersonal, setIsDataPersonal] = useState(true);
+  const [isDataBusiness, setIsDataBusiness] = useState(true);
   const [exactDaySelected, setExactDaySelected] = useState(dayjs()); // selected date
   const [personalIncomeLoading, setPersonalIncomeLoading] = useState(true);
   const [personalExpensesLoading, setPersonalExpensesLoading] = useState(false);
@@ -185,6 +188,12 @@ export const CalendarContextProvider = (props) => {
         setShowBusinessCapitalInput,
         businessCapitalData,
         dispatchBusinessCapitalData,
+        isDataPersonal,
+        setIsDataPersonal,
+        isDataBusiness,
+        setIsDataBusiness,
+        inMobile,
+        setInMobile,
       }}
     >
       {props.children}
