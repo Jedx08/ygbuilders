@@ -10,6 +10,7 @@ import Business from "./pages/Business";
 import Summary from "./pages/Summary";
 import { useEffect, useContext } from "react";
 import { CalendarContext } from "./context/CalendarContext";
+import Settings from "./pages/Settings";
 
 function App() {
   const { setInMobile } = useContext(CalendarContext);
@@ -39,6 +40,7 @@ function App() {
               <Route path="personal" element={<Personal />} />
               <Route path="business" element={<Business />} />
               <Route path="summary" element={<Summary />} />
+              <Route path="settings" element={<Settings />} />
             </Route>
           </Route>
 

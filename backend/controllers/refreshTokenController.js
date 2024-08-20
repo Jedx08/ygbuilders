@@ -9,17 +9,30 @@ const handleRefreshToken = async (req, res) => {
   const foundUser = await User.findOne({ refreshToken }).exec();
   if (!foundUser) return res.sendStatus(403); //forbidden
   const _id = foundUser?._id;
+  const useremail = foundUser?.useremail;
+  const avatar = foundUser?.avatar;
+
+  //create secure cookie with refresh token
+  res.cookie("jwt", refreshToken, {
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
+    maxAge: 168 * 60 * 60 * 1000,
+  });
 
   //evaluate jwt
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
-    if (err || foundUser.username !== decoded.username)
+    if (err || foundUser.username !== decoded.username) {
       return res.sendStatus(403);
+    }
+
     const accessToken = jwt.sign(
-      { username: decoded.username },
+      { username: decoded.username, _id: foundUser._id },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "30m" }
     );
-    res.json({ accessToken, _id: _id.toString() });
+
+    res.json({ accessToken, useremail, avatar, _id: _id.toString() });
   });
 };
 

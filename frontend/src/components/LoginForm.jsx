@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamation } from "@fortawesome/free-solid-svg-icons";
+import logo from "../media/YG_LOGO.png";
 import useAuth from "../hooks/useAuth";
 import axios from "../api/axios";
+import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
 
 const LOGIN_URL = "/login";
 
-const LoginForm = ({ next }) => {
-  const { setAuth } = useAuth();
+const LoginForm = ({ next, inMobile }) => {
+  const { setAuth, setUserInfo } = useAuth();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
 
@@ -35,7 +36,10 @@ const LoginForm = ({ next }) => {
       );
       const accessToken = response?.data?.accessToken;
       const _id = response?.data?._id;
-      setAuth({ _id, accessToken });
+      const useremail = response?.data?.useremail;
+      const avatar = response?.data?.avatar;
+      setAuth({ _id, accessToken, useremail });
+      setUserInfo({ avatar });
       setUsername("");
       setPassword("");
       setSuccess("Success");
@@ -57,12 +61,31 @@ const LoginForm = ({ next }) => {
 
   return (
     <>
-      <div className="mt-28">
+      <div
+        className={`mt-16 md:mt-10 items-center flex justify-center gap-3 ${
+          inMobile ? "xs:gap-1" : ""
+        }`}
+      >
+        <img src={logo} className="w-14" />
+        <h1
+          className={`font-extrabold text-3xl text-greens ${
+            inMobile ? "" : "hidden md:block"
+          }`}
+        >
+          Your <span className="text-oranges">Gross</span>
+        </h1>
+      </div>
+      <div className="mt-5">
         <section>
           <form onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="username" className="text-sm">
-                Username:
+              <label
+                htmlFor="username"
+                className={`text-sm ${
+                  inMobile ? "text-white" : "md:text-white"
+                }`}
+              >
+                Username or Email:
               </label>
               <div className="mb-2">
                 <input
@@ -72,43 +95,85 @@ const LoginForm = ({ next }) => {
                   autoComplete="off"
                   value={username}
                   required
-                  className="border border-inputLight w-full rounded-md focus:outline-none focus:border-greens py-1 pl-3 caret-greens"
+                  className={`border border-inputLight w-full rounded-md focus:outline-none focus:border-greens py-1 pl-3 caret-greens placeholder:text-xs ${
+                    inMobile
+                      ? "bg-[inherit] text-white"
+                      : "md:bg-[inherit] md:text-white"
+                  }`}
                 />
               </div>
             </div>
             <div>
-              <label htmlFor="password" className="text-sm">
+              <label
+                htmlFor="password"
+                className={`text-sm ${
+                  inMobile ? "text-white" : "md:text-white"
+                }`}
+              >
                 Password:
               </label>
-              <div className="">
+              <div className="flex items-center justify-between md:justify-normal border border-inputLight rounded-md pl-3 pr-2">
                 <input
-                  type="password"
+                  type={!showPassword ? "password" : "text"}
                   id="password"
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="off"
                   value={password}
                   required
-                  className="border border-inputLight w-full rounded-md focus:outline-none focus:border-greens py-1 pl-3 caret-greens"
+                  className={`rounded-md focus:outline-none focus:border-greens py-1 caret-greens placeholder:text-xs  ${
+                    inMobile
+                      ? "bg-[inherit] text-white w-full"
+                      : "md:bg-[inherit] md:text-white w-full md:w-full"
+                  }`}
                 />
+                {password ? (
+                  <>
+                    {!showPassword ? (
+                      <FaRegEyeSlash
+                        onClick={() => {
+                          setShowPassword(true);
+                        }}
+                        className={`cursor-pointer ${
+                          inMobile ? "text-white" : "md:text-white"
+                        }`}
+                      />
+                    ) : (
+                      <FaRegEye
+                        onClick={() => {
+                          setShowPassword(false);
+                        }}
+                        className={`cursor-pointer ${
+                          inMobile ? "text-white" : "md:text-white"
+                        }`}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
 
             {errMsg && (
-              <p className="text-sm text-semibold text-oranges text-center mt-2">
+              <p
+                className={`text-xs font-light text-[red] text-center mt-2 ${
+                  inMobile
+                    ? "text-white font-medium"
+                    : "md:text-white md:font-medium"
+                }`}
+              >
                 {errMsg}
-                <FontAwesomeIcon
-                  icon={faExclamation}
-                  className="text-sm text-oranges font-extrabold ml-1"
-                />
               </p>
             )}
             {success && (
-              <p className="text-sm text-semibold text-greens text-center mt-2">
+              <p
+                className={`text-xs font-light text-greens text-center mt-2 ${
+                  inMobile
+                    ? "text-white font-medium"
+                    : "md:text-white md:font-medium"
+                }`}
+              >
                 {success}
-                <FontAwesomeIcon
-                  icon={faExclamation}
-                  className="text-sm text-greens font-extrabold ml-1"
-                />
               </p>
             )}
 
@@ -119,7 +184,13 @@ const LoginForm = ({ next }) => {
                 </button>
               </div>
               <div>
-                <p className="text-sm">Forgot Password?</p>
+                <p
+                  className={`text-sm ${
+                    inMobile ? "text-white" : "md:text-white"
+                  }`}
+                >
+                  Forgot Password?
+                </p>
               </div>
             </div>
           </form>
@@ -128,11 +199,17 @@ const LoginForm = ({ next }) => {
 
       <hr className="text-inputLight" />
 
-      <div className="mt-10 flex flex-col items-center">
+      <div
+        className={`mt-10 flex flex-col items-center ${
+          inMobile ? "mt-5" : "md:mt-5"
+        }`}
+      >
         <div className="mb-2">
-          <p className="text-sm">New to YourGross?</p>
+          <p className={`text-sm ${inMobile ? "text-white" : "md:text-white"}`}>
+            New to YourGross?
+          </p>
         </div>
-        <div>
+        <div className="mb-5">
           <button
             className="bg-oranges py-1 px-6 rounded-md font-bold text-white hover:bg-loranges"
             onClick={() => {

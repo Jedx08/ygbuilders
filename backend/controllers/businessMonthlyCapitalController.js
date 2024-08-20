@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 // get all data
 const getAllCapitalData = async (req, res) => {
-  const users = req.user;
+  const users = req.user.username;
 
   try {
     const user = await User.findOne({ username: users }).select("_id");
@@ -29,7 +29,7 @@ const createCapitalData = async (req, res) => {
   const { title, amount, month } = req.body;
 
   try {
-    const users = req.user;
+    const users = req.user.username;
     const user = await User.findOne({ username: users }).select("_id");
     const businessCapital = await BusinessCapital.create({
       user_id: user._id,

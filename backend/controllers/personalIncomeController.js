@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 // get all data
 const getAllData = async (req, res) => {
-  const users = req.user;
+  const users = req.user.username;
 
   try {
     const user = await User.findOne({ username: users }).select("_id");
@@ -31,7 +31,7 @@ const createData = async (req, res) => {
   const net = gross - expenses;
 
   try {
-    const users = req.user;
+    const users = req.user.username;
     const user = await User.findOne({ username: users }).select("_id");
     const personal = await Personal.create({
       user_id: user._id,

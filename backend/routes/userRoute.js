@@ -1,10 +1,14 @@
 const express = require("express");
-const { getUser, updateUser } = require("../controllers/userController");
+const {
+  getUser,
+  updateUserPassword,
+  updateAvatar,
+} = require("../controllers/userController");
 
 const router = express.Router();
 
 router.get("/:id", getUser);
-
-router.patch("/", updateUser);
+router.patch("/", updateUserPassword);
+router.patch("/avatar", updateAvatar);
 
 module.exports = router;

@@ -62,7 +62,7 @@ const PersonalMonth = ({ month }) => {
   return (
     <>
       <Navbar />
-      <div className="bg-light font-pops overflow-auto">
+      <div className="bg-light font-pops overflow-auto min-h-[100vh]">
         <div className="mb-24 mx-5">
           <div
             className={`grid grid-flow-col grid-cols-3 mt-5 ${
@@ -76,7 +76,7 @@ const PersonalMonth = ({ month }) => {
               className={`items-center flex ${
                 inMobile
                   ? "order-3 col-span-1 justify-end xs:justify-center xs:order-2 xs:mt-1"
-                  : "col-span-1 lg:order-3 lg:col-span-1 lg:justify-end"
+                  : "col-span-1 order-2 justify-center lg:order-3 lg:col-span-1 lg:justify-end"
               }`}
             >
               <div
@@ -101,11 +101,11 @@ const PersonalMonth = ({ month }) => {
             <div
               className={`grid grid-flow-col items-center ${
                 inMobile
-                  ? "justify-start gap-3 col-span-2 order-2 xs:justify-center xs:order-3 xs:mt-5"
-                  : "gap-5 col-span-1 justify-center lg:justify-start lg:col-span-2 lg:order-2 sm:gap-3 sm:justify-start"
+                  ? "justify-start gap-3 col-span-2 order-2 xs:order-3 xs:mt-5"
+                  : "gap-3 order-1 col-span-1 justify-start lg:justify-start lg:col-span-2 lg:order-2 sm:gap-3 sm:justify-start"
               }`}
             >
-              <div>
+              <div className="flex">
                 <FaAngleLeft
                   className={`text-greens  hover:text-lgreens cursor-pointer ${
                     inMobile
@@ -114,10 +114,18 @@ const PersonalMonth = ({ month }) => {
                   }`}
                   onClick={handlePrevMonth}
                 />
+                <FaAngleRight
+                  className={`text-greens hover:text-lgreens cursor-pointer ${
+                    inMobile
+                      ? "text-4xl sm:text-3xl ssm:text-2xl"
+                      : "text-3xl sm:text-2xl"
+                  }`}
+                  onClick={handleNextMonth}
+                />
               </div>
               <div>
                 <h1
-                  className={`font-extrabold text-center text-greens ${
+                  className={`font-extrabold text-center text-greens select-none ${
                     inMobile
                       ? "text-4xl ssm:text-2xl"
                       : "text-4xl lg:text-3xl sm:font-bold ssm:text-2xl xs:text-lg"
@@ -131,16 +139,6 @@ const PersonalMonth = ({ month }) => {
                   }
                 </h1>
               </div>
-              <div>
-                <FaAngleRight
-                  className={`text-greens hover:text-lgreens cursor-pointer ${
-                    inMobile
-                      ? "text-4xl sm:text-3xl ssm:text-2xl"
-                      : "text-3xl sm:text-2xl"
-                  }`}
-                  onClick={handleNextMonth}
-                />
-              </div>
             </div>
 
             {/* Monthly Expenses */}
@@ -148,7 +146,7 @@ const PersonalMonth = ({ month }) => {
               className={`grid grid-flow-col gap-1 justify-end items-center ${
                 inMobile
                   ? "col-span-3 row-span-1 xs:justify-center"
-                  : "col-span-1 mr-8 lg:col-span-3 lg:row-span-1 lg:mr-0 sm:mr-0 ssm:mr-0"
+                  : "col-span-1 order-3 mr-8 lg:order-1 lg:col-span-3 lg:row-span-1 lg:mr-0 sm:mr-0 ssm:mr-0"
               }`}
             >
               <div
