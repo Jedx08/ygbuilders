@@ -3,15 +3,15 @@ import { useEffect, useState, useRef } from "react";
 import useGetData from "../../hooks/useGetPersonalData";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
-import { ThreeDot, OrbitProgress } from "react-loading-indicators";
 import Skeleton from "react-loading-skeleton";
+import { ThreeDot, OrbitProgress } from "react-loading-indicators";
 import usePersonalExpenses from "../../hooks/usePersonalExpenses";
 import networth from "../../media/networth.png";
 import { FcCalendar, FcBusinessman, FcStatistics } from "react-icons/fc";
 import { FaRegPenToSquare } from "react-icons/fa6";
 
 const PersonalHomeCard = () => {
-  const location = useLocation();
+  const locations = useLocation();
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const getPersonalData = useGetData();
@@ -23,18 +23,21 @@ const PersonalHomeCard = () => {
   const [hasTitle, setHasTitle] = useState(false);
   const [updatedTitle, setUpdatedTitle] = useState(title);
 
-  const [personalAddButton, setPersonalAddbutton] = useState(true);
-  const [personalProceedButton, setPersonalProceedButton] = useState(false);
   const [personalEditButton, setPersonalEditButton] = useState(false);
 
   const [overallMonthlyExpenses, setOVerallMonthlyExpenses] = useState(0);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [dataLoading, setDataLoading] = useState(false);
+  const [addButtonLoading, setAddButtonLoading] = useState(false);
+  const [saveButtonLoading, setSaveButtonLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
   const titleRef = useRef();
 
   useEffect(() => {
+    setDataLoading(true);
+
     let g = 0;
     let e = 0;
     let m_e = 0;
@@ -54,6 +57,7 @@ const PersonalHomeCard = () => {
 
       setGross(g);
       setOVerallMonthlyExpenses(m_e + e);
+      setDataLoading(false);
     };
 
     overallData();
@@ -69,7 +73,7 @@ const PersonalHomeCard = () => {
           const response = await axiosPrivate.get("/user/" + _id);
           const jsonTitle = await response.data.personal_title;
 
-          if (response.status === 200) {
+          if (jsonTitle && response.status === 200) {
             setUpdatedTitle(jsonTitle);
             setTitle(jsonTitle);
             setHasTitle(true);
@@ -85,26 +89,24 @@ const PersonalHomeCard = () => {
     getTitle();
   }, [hasTitle]);
 
-  useEffect(() => {
-    if ((personalEditButton, personalProceedButton)) {
-      titleRef.current.focus();
-    }
-  }, [personalEditButton, personalProceedButton]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (title === "") {
+      return setErrMsg("Please fill out the form");
+    }
+
+    setAddButtonLoading(true);
+
     try {
-      if (title === "") {
-        return setErrMsg("Please fill out the form");
-      }
       const response = await axiosPrivate.patch(
-        "/user",
+        "/user/title",
         JSON.stringify({ personal_title: title })
       );
+
       if (response.status === 200) {
         setTitle(response.data.personal_title);
-        setPersonalProceedButton(false);
+        setAddButtonLoading(false);
         setHasTitle(true);
       }
     } catch (err) {
@@ -115,18 +117,22 @@ const PersonalHomeCard = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
 
+    if (updatedTitle === "") {
+      return setErrMsg("Please fill out the form");
+    }
+
+    setSaveButtonLoading(true);
+
     try {
-      if (updatedTitle === "") {
-        return setErrMsg("Please fill out the form");
-      }
       const response = await axiosPrivate.patch(
-        "/user",
+        "/user/title",
         JSON.stringify({ personal_title: updatedTitle })
       );
 
       if (response.status === 200) {
         setTitle(response.data.personal_title);
         setPersonalEditButton(false);
+        setSaveButtonLoading(false);
         setHasTitle(true);
       }
     } catch (err) {
@@ -165,19 +171,35 @@ const PersonalHomeCard = () => {
 
           {personalEditButton && (
             <div className="flex gap-2 text-xs items-end justify-end font-semibold px-4">
-              <div
-                onClick={(e) => {
-                  handleUpdate(e);
-                }}
-                className="bg-lgreens hover:bg-greens flex rounded-md p-1 px-2 space-x-2 cursor-pointer items-center"
-              >
-                <p className="text-white">Save</p>
-              </div>
+              {saveButtonLoading ? (
+                <div className="bg-lgreens flex rounded-md px-2 py-2 items-center">
+                  <ThreeDot
+                    style={{ fontSize: "8px" }}
+                    variant="pulsate"
+                    color="#fff"
+                    text=""
+                    textColor=""
+                  />
+                </div>
+              ) : (
+                <div
+                  onClick={(e) => {
+                    handleUpdate(e);
+                  }}
+                  className="bg-lgreens hover:bg-greens flex rounded-md p-1 px-2 space-x-2 cursor-pointer items-center"
+                >
+                  <p className="text-white">Save</p>
+                </div>
+              )}
+
               <div
                 onClick={() => {
+                  if (saveButtonLoading) {
+                    location.reload();
+                  }
                   setPersonalEditButton(false);
                 }}
-                className="bg-[red] flex rounded-md p-1 px-2 space-x-2 cursor-pointer items-center"
+                className="bg-[red] hover:bg-[#ff6161] flex rounded-md p-1 px-2 space-x-2 cursor-pointer items-center"
               >
                 <p className="text-white">Cancel</p>
               </div>
@@ -209,7 +231,7 @@ const PersonalHomeCard = () => {
                         }}
                         value={updatedTitle}
                       />
-                      <div className="text-xs text-greens">
+                      <div className="text-xs text-[red]">
                         {errMsg.toLocaleUpperCase()}
                       </div>
                     </div>
@@ -233,11 +255,19 @@ const PersonalHomeCard = () => {
 
           {/* Net overview, calendar and summary page button. Shows add title button if there is no title */}
           <div className="p-5 w-full mx-auto row-span-1 justify-between place-content-center">
+            {hasTitle && (
+              <div className="text-start text-lgreens text-sm font-semibold">
+                Overview
+              </div>
+            )}
             {hasTitle ? (
-              <>
-                <div className="text-start text-lgreens text-sm font-semibold">
-                  Overview
-                </div>
+              dataLoading ? (
+                <Skeleton
+                  className="w-full"
+                  containerClassName="flex-1"
+                  height={30}
+                />
+              ) : (
                 <div className="flex place-content-start gap-5">
                   <div className="items-center place-content-center">
                     <img
@@ -260,20 +290,7 @@ const PersonalHomeCard = () => {
                     Total Net
                   </div>
                 </div>
-
-                <div className="w-full text-xs mt-2">
-                  <div className="w-fit">
-                    <Link to="/summary" state={{ from: location.pathname }}>
-                      <div className="bg-lgreens hover:bg-greens text-center text-white text-[0.8vw] font-semibold px-5 py-2 rounded-md">
-                        <span className="flex justify-center items-center gap-2">
-                          <FcStatistics className="text-lg" />
-                          <span className="text-sm">Summary</span>
-                        </span>
-                      </div>
-                    </Link>
-                  </div>
-                </div>
-              </>
+              )
             ) : (
               <>
                 <div className="flex justify-center items-center gap-2">
@@ -292,27 +309,53 @@ const PersonalHomeCard = () => {
                     value={title}
                   />
                   <div className="text-xs">
-                    <div
-                      onClick={(e) => {
-                        handleSubmit(e);
-                        setPersonalAddbutton(false);
-                      }}
-                      className="px-2 py-1 w-full bg-lgreens hover:bg-greens rounded-lg cursor-pointer"
-                    >
-                      <div className="text-sm font-bold text-white">
-                        Add Personal
+                    {addButtonLoading ? (
+                      <div className="px-2 py-1 w-full bg-lgreens rounded-lg">
+                        <ThreeDot variant="pulsate" color="#ffff" size="10px" />
                       </div>
-                    </div>
+                    ) : (
+                      <>
+                        <div
+                          onClick={(e) => {
+                            handleSubmit(e);
+                          }}
+                          className="px-2 py-1 w-full bg-lgreens hover:bg-greens rounded-lg cursor-pointer"
+                        >
+                          <div className="text-sm font-bold text-white">
+                            Add Personal
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
+
+                <div className="mt-2 text-xs text-[red]">
+                  {errMsg.toLocaleUpperCase()}
+                </div>
               </>
+            )}
+
+            {hasTitle && (
+              <div className="w-full text-xs mt-2">
+                <div className="w-fit">
+                  <Link to="/summary" state={{ from: locations.pathname }}>
+                    <div className="bg-lgreens hover:bg-greens text-center text-white text-[0.8vw] font-semibold px-5 py-2 rounded-md">
+                      <span className="flex justify-center items-center gap-2">
+                        <FcStatistics className="text-lg" />
+                        <span className="text-sm">Summary</span>
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              </div>
             )}
           </div>
 
           {hasTitle && (
             <div className="flex justify-end w-fulltext-xs mt-2 pr-4">
               <div className="w-fit">
-                <Link to="/personal" state={{ from: location.pathname }}>
+                <Link to="/personal" state={{ from: locations.pathname }}>
                   <div className="bg-lgreens hover:bg-greens text-center text-white text-[0.8vw] font-semibold px-5 py-2 rounded-md">
                     <span className="flex justify-center items-center gap-2">
                       <FcCalendar className="text-lg" />

@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import usePersonalExpenses from "../../hooks/usePersonalExpenses";
 import useGetPersonalData from "../../hooks/useGetPersonalData";
 import dayjs from "dayjs";
+// import { Chart } from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Chart } from "chart.js/auto"; // core data for chart, do not remove
 import { Line } from "react-chartjs-2";
 import { CalendarContext } from "../../context/CalendarContext";
@@ -10,10 +12,18 @@ import Skeleton from "react-loading-skeleton";
 import pouch from "../../media/pouch.png";
 import expensesIcon from "../../media/expenses.png";
 import networth from "../../media/networth.png";
+import monthlyGrossIcon from "../../media/monpouch.png";
+import monthlyExpensesIcon from "../../media/monexpenses.png";
+import monthlyNetIcon from "../../media/monprofit.png";
 import PersonalYearlySummary from "./PersonalYearlySummary";
 
 const PersonalSummary = () => {
-  const { monthIndex, setMonthIndex } = useContext(CalendarContext);
+  const {
+    monthIndex,
+    setMonthIndex,
+    personalSummaryView,
+    setPersonalSummaryView,
+  } = useContext(CalendarContext);
 
   const thisMonth = dayjs().month(monthIndex).format("MMMM");
 
@@ -180,57 +190,26 @@ const PersonalSummary = () => {
     setMonthIndex(monthIndex + 1);
   }
 
+  const nextYear = () => {
+    setMonthIndex(monthIndex + 12);
+  };
+
+  const prevYear = () => {
+    setMonthIndex(monthIndex - 12);
+  };
+
   const overallNet = gross - expenses;
+
+  // const year = dayjs().month(monthIndex).year();
 
   const monthlyNet = monthlyGross - monthlyExpenses;
 
+  Chart.register(ChartDataLabels);
+
   return (
     <>
-      <div className="w-full py-5">
-        <div>
-          <h1 className="font-extrabold text-center text-4xl text-greens pb-5">
-            Overall Summary
-          </h1>
-        </div>
-        <div className="w-[60%] mx-auto flex justify-between text-center md:w-[80%] sm:w-[90%]">
-          <div className="bg-white rounded-lg w-[30%] shadow-lg">
-            <div className="flex justify-center gap-2 pt-5">
-              <img src={pouch} alt="puch" className="h-4 w-7" />
-              <p>Gross</p>
-            </div>
-            <div className="text-4xl text-oranges font-bold px-5 py-4 lg:text-3xl md:text-2xl">
-              {gross.toLocaleString()}
-            </div>
-          </div>
-          <div className="bg-white rounded-lg w-[30%] shadow-lg">
-            <div className="flex justify-center gap-2 pt-5">
-              <img src={expensesIcon} alt="puch" className="h-4 w-9" />
-              <p>Expenses</p>
-            </div>
-            <div className="text-4xl text-[red] font-bold px-5 py-4 lg:text-3xl md:text-2xl">
-              {expenses.toLocaleString()}
-            </div>
-          </div>
-          <div className="bg-white rounded-lg w-[30%] shadow-lg">
-            <div className="flex justify-center gap-2 pt-5">
-              <img src={networth} alt="puch" className="h-3 w-9" />
-              <p>Net</p>
-            </div>
-            <div
-              className={
-                overallNet < 0
-                  ? "text-4xl text-[red] font-bold px-5 py-4 lg:text-3xl md:text-2xl"
-                  : "text-4xl text-greens font-bold px-5 py-4 lg:text-3xl md:text-2xl"
-              }
-            >
-              {overallNet.toLocaleString()}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5 mb-2">
+      <div className="flex justify-between px-5">
+        <div className="grid grid-flow-col justify-end place-items-center">
           <div>
             <FaAngleLeft
               className="text-greens text-3xl hover:text-lgreens cursor-pointer"
@@ -238,25 +217,57 @@ const PersonalSummary = () => {
             />
           </div>
           <div>
-            <h1 className="font-extrabold text-center text-4xl text-greens">
+            <FaAngleRight
+              className="text-greens text-3xl hover:text-lgreens cursor-pointer"
+              onClick={handleNextMonth}
+            />
+          </div>
+          <div>
+            <h1 className="font-extrabold text-center text-3xl text-greens ssm:text-2xl">
               {
                 /* display current month and year */
                 dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM")
               }
             </h1>
           </div>
-          <div>
-            <FaAngleRight
-              className="text-greens text-3xl hover:text-lgreens cursor-pointer"
-              onClick={handleNextMonth}
-            />
+        </div>
+        <div className="py-5 grid grid-flow-col justify-start place-items-center gap-5 ssm:gap-3">
+          <div
+            className={`shadow-lg px-5 py-3 rounded-md font-bold ssm:px-2 ssm:py-2 ssm:text-xs
+             ${
+               personalSummaryView
+                 ? "bg-lgreens text-white cursor-default"
+                 : "bg-white cursor-pointer hover:text-lgreens"
+             }
+            `}
+            onClick={() => {
+              setPersonalSummaryView(true);
+            }}
+          >
+            Personal
+          </div>
+          <div
+            className={`shadow-lg px-5 py-3 rounded-md font-bold ssm:px-2 ssm:py-2 ssm:text-xs
+              ${
+                personalSummaryView
+                  ? "bg-white cursor-pointer hover:text-loranges"
+                  : "bg-loranges text-white cursor-default"
+              }
+            `}
+            onClick={() => {
+              setPersonalSummaryView(false);
+            }}
+          >
+            Business
           </div>
         </div>
       </div>
-
-      <div className="bg-light font-pops pb-7">
+      <div className="flex font-bold text-2xl items-center justify-center py-5">
+        Monthly Summary ({thisMonth})
+      </div>
+      <div className="bg-light font-pops">
         {isLoading ? (
-          <div className="w-[60%] mx-auto bg-white p-8 rounded-lg flex items-center flex-col">
+          <div className="w-[60%] mx-auto bg-white p-5 rounded-lg flex items-center flex-col md:w-[90%] ">
             <div className="w-[35%]">
               <Skeleton />
             </div>
@@ -266,98 +277,117 @@ const PersonalSummary = () => {
           </div>
         ) : (
           <>
-            <div className="w-[60%] mx-auto bg-white p-8 rounded-lg shadow-lg lg:w-[80%] md:w-[90%]">
-              <Line
-                className="w-full"
-                // options={options}
-                data={{
-                  labels: dayCount,
-                  datasets: [
-                    {
-                      label: "Gross",
-                      data: grossCount,
-                      borderColor: "#ff9f1c",
-                      backgroundColor: "#fdac3a",
-                    },
-                    {
-                      label: "Expenses",
-                      data: expensesCount,
-                      borderColor: "#ff6384",
-                      backgroundColor: "#FA829C",
-                    },
-                    {
-                      label: "Net",
-                      data: netCount,
-                      borderColor: "#2ec4b6",
-                      backgroundColor: "#3cd5c5",
-                    },
-                  ],
-                }}
-              />
-              <div className="w-[100%]  h-[fit-content] ">
-                <div className="text-center">
-                  <div className="font-bold text-lg py-5">
-                    Monthly Summary ({thisMonth})
+            <div className="flex gap-4 px-5 items-center  md:flex-col">
+              <div className="w-full bg-white py-4 rounded-lg shadow-lg overflow-y-auto">
+                <div className="h-[600px] w-full md:h-[400px] lg:w-[1000px]">
+                  <Line
+                    className="w-full"
+                    data={{
+                      labels: dayCount,
+                      datasets: [
+                        {
+                          label: "Gross",
+                          data: grossCount,
+                          borderColor: "#ff9f1c",
+                          backgroundColor: "#fdac3a",
+                        },
+                        {
+                          label: "Expenses",
+                          data: expensesCount,
+                          borderColor: "#ff6384",
+                          backgroundColor: "#FA829C",
+                        },
+                        {
+                          label: "Net",
+                          data: netCount,
+                          borderColor: "#2ec4b6",
+                          backgroundColor: "#3cd5c5",
+                        },
+                      ],
+                    }}
+                    options={{
+                      plugins: {
+                        legend: {
+                          align: "start",
+                          labels: {
+                            font: {
+                              size: 14,
+                            },
+                          },
+                        },
+                        ChartDataLabels,
+                      },
+                      maintainAspectRatio: false,
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="w-[20%] md:w-full">
+                <div className="w-full flex flex-col gap-4 text-center justify-center md:flex-row mmd:w-full mmd:grid mmd:grid-flow-col mmd:grid-rows-2 mmd:grid-cols-2">
+                  <div className="bg-white rounded-lg w-full shadow-lg ssm:p-2">
+                    <div className="flex flex-col items-center justify-center gap-2 pt-5 xs:flex-col">
+                      <img
+                        src={monthlyGrossIcon}
+                        alt="puch"
+                        className="w-9 sm:w-7"
+                      />
+                      <p className="xs:text-sm">Gross</p>
+                    </div>
+                    <div className="text-2xl text-oranges font-bold p-5 xs:p-3 xs:text-lg">
+                      {monthlyGross.toLocaleString()}
+                    </div>
                   </div>
-                  <div className="w-[100%] grid grid-cols-4 gap-2 mx-auto">
-                    <div>
-                      <div className="text-sm mb-2 flex justify-center gap-2">
-                        <img src={pouch} alt="puch" className="h-4 w-5" />
-                        <p>Gross</p>
-                      </div>
-                      <div className="text-xl text-oranges font-bold">
-                        {monthlyGross.toLocaleString()}
-                      </div>
+                  <div className="bg-white rounded-lg w-full shadow-lg ssm:p-2">
+                    <div className="flex flex-col items-center justify-center gap-2 pt-5 xs:flex-col">
+                      <img
+                        src={monthlyExpensesIcon}
+                        alt="puch"
+                        className="w-9 sm:w-7"
+                      />
+                      <p className="xs:text-sm">Expenses</p>
                     </div>
-                    <div>
-                      <div className="text-sm mb-2 flex justify-center gap-2">
-                        <img
-                          src={expensesIcon}
-                          alt="puch"
-                          className="h-4 w-7"
-                        />
-                        <p>Expenses</p>
-                      </div>
-                      <div className="text-xl text-[red] font-bold">
-                        {monthlyExpenses.toLocaleString()}
-                      </div>
+                    <div className="text-2xl text-[red] font-bold p-5 xs:p-3 xs:text-lg">
+                      {monthlyExpenses.toLocaleString()}
                     </div>
-                    <div>
-                      <div className="text-sm mb-2">
-                        Net - (Monthly Expenses)
-                      </div>
-                      <div className="text-xl font-bold">
-                        <span
-                          className={
-                            monthlyNet < 0 ? "text-[red]" : "text-greens"
-                          }
-                        >
-                          {monthlyNet.toLocaleString()}
-                        </span>{" "}
-                        <span className="text-[red]">
-                          - ({monthExpenses.toLocaleString()})
-                        </span>
-                      </div>
+                  </div>
+                  <div className="bg-white rounded-lg w-full shadow-lg ssm:p-2">
+                    <div className="flex flex-col items-center justify-center gap-2 pt-3 xs:flex-col">
+                      <p className="xs:text-sm">
+                        Net - <br />
+                        (Monthly <br className="hidden md:block" />
+                        Expenses)
+                      </p>
                     </div>
-                    <div>
-                      <div className="flex gap-2 text-sm mb-2 justify-center">
-                        <div>
-                          <img src={networth} alt="puch" className="h-4 w-8" />
-                        </div>
-                        <div className="">
-                          <p>Total Net</p>
-                        </div>
-                      </div>
-
-                      <div
+                    <div className="text-2xl text-[red] font-bold p-5 xs:p-3 xs:text-lg">
+                      <span
                         className={
-                          monthlyNet - monthExpenses < 0
-                            ? "text-[red] text-xl font-bold"
-                            : "text-greens text-xl font-bold"
+                          monthlyNet < 0 ? "text-[red]" : "text-greens"
                         }
                       >
-                        {(monthlyNet - monthExpenses).toLocaleString()}
-                      </div>
+                        {monthlyNet.toLocaleString()}
+                      </span>{" "}
+                      <span className="text-[red]">
+                        - ({monthExpenses.toLocaleString()})
+                      </span>
+                    </div>
+                  </div>
+                  <div className="bg-white rounded-lg w-full shadow-lg ssm:p-2">
+                    <div className="flex flex-col items-center justify-center gap-2 pt-5 xs:flex-col">
+                      <img
+                        src={monthlyNetIcon}
+                        alt="puch"
+                        className="w-9 sm:w-7"
+                      />
+                      <p className="xs:text-sm">Total Net</p>
+                    </div>
+                    <div
+                      className={
+                        monthlyNet - monthExpenses < 0
+                          ? "text-2xl text-[red] font-bold p-5 xs:p-3 xs:text-lg"
+                          : "text-2xl text-greens font-bold p-5 xs:p-3 xs:text-lg"
+                      }
+                    >
+                      {(monthlyNet - monthExpenses).toLocaleString()}
                     </div>
                   </div>
                 </div>
@@ -366,7 +396,82 @@ const PersonalSummary = () => {
           </>
         )}
 
-        <PersonalYearlySummary />
+        <div>
+          <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-2">
+            <div className="flex font-bold text-xl items-center justify-center py-5">
+              Yearly Summary
+            </div>
+            <div>
+              <FaAngleLeft
+                className="text-greens text-3xl hover:text-lgreens cursor-pointer"
+                onClick={prevYear}
+              />
+            </div>
+            <div>
+              <h1 className="font-extrabold text-center text-2xl text-greens">
+                {
+                  /* display current month and year */
+                  dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY")
+                }
+              </h1>
+            </div>
+            <div>
+              <FaAngleRight
+                className="text-greens text-3xl hover:text-lgreens cursor-pointer"
+                onClick={nextYear}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div>
+          <PersonalYearlySummary />
+
+          <div className="w-full py-5">
+            <div>
+              <h1 className="font-extrabold text-center text-3xl text-greens pb-5">
+                Overall Summary
+              </h1>
+            </div>
+            <div className="w-[60%] mx-auto flex justify-between text-center md:w-[80%]">
+              <div className="bg-white rounded-lg w-[30%] shadow-lg">
+                <div className="flex items-center justify-center gap-2 pt-5 xs:flex-col">
+                  <img src={pouch} alt="puch" className="w-7" />
+                  <p>Gross</p>
+                </div>
+                <div className="text-4xl text-oranges font-bold px-5 py-4 lg:text-3xl md:text-2xl sm:text-xl">
+                  {gross.toLocaleString()}
+                </div>
+              </div>
+              <div className="bg-white rounded-lg w-[30%] shadow-lg">
+                <div className="flex items-center justify-center gap-2 pt-5 xs:flex-col">
+                  <img src={expensesIcon} alt="puch" className="w-7" />
+                  <p>Expenses</p>
+                </div>
+                <div className="text-4xl text-[red] font-bold px-5 py-4 lg:text-3xl md:text-2xl sm:text-xl">
+                  {expenses.toLocaleString()}
+                </div>
+              </div>
+              <div className="bg-white rounded-lg w-[30%] shadow-lg">
+                <div className="flex items-center justify-center gap-2 pt-5 xs:flex-col">
+                  <img src={networth} alt="puch" className="w-7" />
+                  <p>Net</p>
+                </div>
+                <div
+                  className={
+                    overallNet < 0
+                      ? "text-4xl text-[red] font-bold px-5 py-4 lg:text-3xl md:text-2xl sm:text-xl"
+                      : "text-4xl text-greens font-bold px-5 py-4 lg:text-3xl md:text-2xl sm:text-xl"
+                  }
+                >
+                  {overallNet.toLocaleString()}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

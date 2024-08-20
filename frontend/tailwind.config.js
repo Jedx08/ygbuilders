@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 export default {
   important: true,
   content: [
@@ -16,6 +17,9 @@ export default {
       md: { max: "767px" },
       // => @media (max-width: 767px) { ... }
 
+      mmd: { max: "658px" },
+      // => @media (max-width: 658px) { ... }
+
       sm: { max: "639px" },
       // => @media (max-width: 639px) { ... }
 
@@ -24,6 +28,9 @@ export default {
 
       xs: { max: "480px" },
       // => @media (max-width: 480px) { ... }
+
+      xxs: { max: "425px" },
+      // => @media (max-width: 425px) { ... }
     },
     height: {
       s40: "40vh",

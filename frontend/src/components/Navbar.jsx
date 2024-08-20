@@ -35,7 +35,7 @@ const Navbar = () => {
         <>
           <div className="font-pops overflow-auto shadow-lg">
             <div className="flex justify-between pl-1 pr-4 py-1 items-center">
-              <div className="border rounded-[50%] overflow-hidden grid place-items-center">
+              <div className="rounded-[50%] overflow-hidden grid place-items-center">
                 <Link to="/">
                   <img src={logo} className="w-12" />
                 </Link>
@@ -55,7 +55,7 @@ const Navbar = () => {
         <>
           <div className="font-pops overflow-auto shadow-lg">
             <div className="flex justify-between p-2">
-              <div className="border rounded-[50%] overflow-hidden grid place-items-center">
+              <div className="rounded-[50%] overflow-hidden grid place-items-center">
                 <Link to="/">
                   <img src={logo} className="w-12" />
                 </Link>

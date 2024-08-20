@@ -1,4 +1,3 @@
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { CalendarContext } from "../../context/CalendarContext";
 import { useContext, useEffect, useState } from "react";
 import localeData from "dayjs/plugin/localeData";
@@ -8,15 +7,15 @@ import { Bar } from "react-chartjs-2";
 import Skeleton from "react-loading-skeleton";
 import useGetPersonalData from "../../hooks/useGetPersonalData";
 import usePersonalExpenses from "../../hooks/usePersonalExpenses";
-import pouch from "../../media/pouch.png";
-import expensesIcon from "../../media/expenses.png";
-import networth from "../../media/networth.png";
+import yearlyGrossIcon from "../../media/yearpouch.png";
+import yearlyExpensesIcon from "../../media/yearexpenses.png";
+import yearlyNetIcon from "../../media/yearprofit.png";
 
 const BusinessYearlySummary = () => {
   const getPersonalData = useGetPersonalData();
   const getMonthlyExpenses = usePersonalExpenses();
 
-  const { monthIndex, setMonthIndex } = useContext(CalendarContext);
+  const { monthIndex } = useContext(CalendarContext);
 
   const [yearlyGross, setYearlyGross] = useState(0);
   const [yearlyExpenses, setYearlyExpenses] = useState(0);
@@ -31,8 +30,6 @@ const BusinessYearlySummary = () => {
 
   dayjs.extend(localeData);
   dayjs().localeData();
-
-  const year = dayjs().month(monthIndex).year();
 
   const yearlyNet = yearlyGross - (yearlyExpenses + thisYearMonthlyExpenses);
 
@@ -56,7 +53,6 @@ const BusinessYearlySummary = () => {
 
       setYearlyGross(g);
       setYearlyExpenses(e);
-      setIsLoading(false);
     };
 
     const thisYearMonthlyExpenses = async () => {
@@ -177,18 +173,11 @@ const BusinessYearlySummary = () => {
       });
 
       setProfitCount(netPerDate);
+      setIsLoading(false);
     };
 
     barGraphData();
   }, [monthIndex]);
-
-  const nextYear = () => {
-    setMonthIndex(monthIndex + 12);
-  };
-
-  const prevYear = () => {
-    setMonthIndex(monthIndex - 12);
-  };
 
   const months = dayjs.months();
 
@@ -197,127 +186,136 @@ const BusinessYearlySummary = () => {
   });
 
   return (
-    <div>
-      <div>
-        <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5">
-          <div>
-            <FaAngleLeft
-              className="text-greens text-3xl hover:text-lgreens cursor-pointer"
-              onClick={prevYear}
-            />
-          </div>
-          <div>
-            <h1 className="font-extrabold text-center text-4xl text-greens">
-              {
-                /* display current month and year */
-                dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY")
-              }
-            </h1>
-          </div>
-          <div>
-            <FaAngleRight
-              className="text-greens text-3xl hover:text-lgreens cursor-pointer"
-              onClick={nextYear}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="w-[60%] mx-auto gap-3 content-center lg:w-[80%] md:w-[90%]">
+    <div className="">
+      <div className="flex flex-col w-[60%] mx-auto gap-3 content-center lg:w-[80%] md:w-[90%]">
         <div className="text-center bg-white rounded-lg  shadow-lg">
           {isLoading ? (
-            <div>
-              <div className="w-[60%] mx-auto pt-2">
-                <Skeleton className="my-2" />
+            <div className="w-full mx-auto bg-white p-5 rounded-lg flex items-center flex-col md:w-full">
+              <div className="w-[35%]">
                 <Skeleton />
-                <Skeleton height={30} />
               </div>
-              <Skeleton className="w-[80%] my-5" height={200} />
+              <div className="w-[100%]">
+                <Skeleton height={500} />
+              </div>
             </div>
           ) : (
-            <div className="p-5 w-full mx-auto">
-              <Bar
-                className="w-full"
-                data={{
-                  labels: newMonths,
-                  datasets: [
-                    {
-                      label: "Gross",
-                      data: grossCount,
-                      borderColor: "#ff9f1c",
-                      backgroundColor: "#fdac3a",
-                    },
-                    {
-                      label: "Expenses",
-                      data: expensesCount,
-                      borderColor: "#ff6384",
-                      backgroundColor: "#FA829C",
-                    },
-                    {
-                      label: "Net",
-                      data: netCount,
-                      borderColor: "#2ec4b6",
-                      backgroundColor: "#3cd5c5",
-                    },
-                  ],
-                }}
-              />
-
-              <div className="p-5 text-center">
-                <div className="font-bold text-lg py-5">
-                  Yearly Summary ({year})
-                </div>
-                <div className="w-[80%] flex justify-between mx-auto sm:w-full">
-                  <div>
-                    <div className="flex items-center justify-center pb-2 gap-2">
-                      <img
-                        src={pouch}
-                        alt="yearly capital"
-                        className="h-4 w-7"
-                      />
-                      <div className="text-md">Gross</div>
-                    </div>
-                    <div className="text-2xl text-oranges font-bold">
-                      {yearlyGross.toLocaleString()}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex items-center justify-center pb-2 gap-2">
-                      <img
-                        src={expensesIcon}
-                        alt="yearly expenses"
-                        className="h-4 w-7"
-                      />
-                      <div className="text-md">Expenses</div>
-                    </div>
-                    <div className="text-2xl text-[red] font-bold">
-                      {(
-                        yearlyExpenses + thisYearMonthlyExpenses
-                      ).toLocaleString()}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex items-center justify-center pb-2 gap-2">
-                      <img
-                        src={networth}
-                        alt="yearly net"
-                        className="h-4 w-7"
-                      />
-                      <div className="text-md">Net</div>
-                    </div>
-                    <div
-                      className={
-                        yearlyNet < 0
-                          ? "text-2xl font-bold text-[red]"
-                          : "text-2xl font-bold text-greens"
-                      }
-                    >
-                      {yearlyNet.toLocaleString()}
-                    </div>
+            <>
+              <div>
+                <div className="w-full h-hfull bg-white py-4 rounded-lg shadow-lg">
+                  <div className="h-[600px] w-full md:h-[500px] lg:w-full">
+                    <Bar
+                      className="w-full h-hfull"
+                      data={{
+                        labels: newMonths,
+                        datasets: [
+                          {
+                            label: "Gross",
+                            data: grossCount,
+                            borderColor: "#ff9f1c",
+                            backgroundColor: "#fdac3a",
+                          },
+                          {
+                            label: "Expenses",
+                            data: expensesCount,
+                            borderColor: "#ff6384",
+                            backgroundColor: "#FA829C",
+                          },
+                          {
+                            label: "Net",
+                            data: netCount,
+                            borderColor: "#2ec4b6",
+                            backgroundColor: "#3cd5c5",
+                          },
+                        ],
+                      }}
+                      options={{
+                        plugins: {
+                          datalabels: {
+                            display:
+                              (grossCount.map((data) => {
+                                if (data === 0) {
+                                  return false;
+                                }
+                              }),
+                              expensesCount.map((data) => {
+                                if (data === 0) {
+                                  return false;
+                                }
+                              }),
+                              netCount.map((data) => {
+                                if (data === 0) {
+                                  return false;
+                                }
+                              })),
+                            anchor: "end",
+                            align: "end",
+                            color: "#000000",
+                            font: {
+                              size: 13,
+                            },
+                          },
+                          legend: {
+                            labels: {
+                              font: {
+                                size: 15,
+                              },
+                            },
+                          },
+                        },
+                        indexAxis: "y",
+                        maintainAspectRatio: false,
+                      }}
+                    />
                   </div>
                 </div>
               </div>
-            </div>
+            </>
           )}
+        </div>
+        <div className="bg-white rounded-md shadow-lg p-5 text-center">
+          <div className="w-[80%] flex justify-between mx-auto sm:w-full">
+            <div className="flex flex-col justify-center items-center gap-2">
+              <div className="flex flex-col items-center justify-center gap-2">
+                <img
+                  src={yearlyGrossIcon}
+                  alt="yearly capital"
+                  className="w-7"
+                />
+                <div className="text-md">Gross</div>
+              </div>
+              <div className="text-2xl text-oranges font-bold">
+                {yearlyGross.toLocaleString()}
+              </div>
+            </div>
+            <div className="flex flex-col justify-center items-center gap-2">
+              <div className="flex flex-col items-center justify-center gap-2">
+                <img
+                  src={yearlyExpensesIcon}
+                  alt="yearly expenses"
+                  className="w-7"
+                />
+                <div className="text-md">Expenses</div>
+              </div>
+              <div className="text-2xl text-[red] font-bold">
+                {(yearlyExpenses + thisYearMonthlyExpenses).toLocaleString()}
+              </div>
+            </div>
+            <div className="flex flex-col justify-center items-center gap-2">
+              <div className="flex flex-col items-center justify-center gap-2">
+                <img src={yearlyNetIcon} alt="yearly net" className="w-7" />
+                <div className="text-md">Net</div>
+              </div>
+              <div
+                className={
+                  yearlyNet < 0
+                    ? "text-2xl font-bold text-[red]"
+                    : "text-2xl font-bold text-greens"
+                }
+              >
+                {yearlyNet.toLocaleString()}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
