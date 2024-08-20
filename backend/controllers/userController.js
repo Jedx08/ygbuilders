@@ -22,14 +22,8 @@ const getUser = async (req, res) => {
   res.status(200).json(user);
 };
 
-const updateUser = async (req, res) => {
+const updateUserTitle = async (req, res) => {
   const username = req.user;
-
-  if (!req.body) {
-    return res
-      .status(400)
-      .json({ message: "Username and Password are required." });
-  }
 
   try {
     const user = await User.findOneAndUpdate(
@@ -39,9 +33,11 @@ const updateUser = async (req, res) => {
       },
       { new: true }
     );
-    res
-      .status(200)
-      .json({ username: user.username, personal_title: user.personal_title });
+    res.status(200).json({
+      username: user.username,
+      personal_title: user.personal_title,
+      business_title: user.business_title,
+    });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -57,5 +53,5 @@ const updateUser = async (req, res) => {
 
 module.exports = {
   getUser,
-  updateUser,
+  updateUserTitle,
 };
