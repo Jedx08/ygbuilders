@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const NotFound = () => {
   return (
-    <div className="h-s100 bg-gradient-to-b from-[#000000] via-[#313131] to-[#3e3e3e]">
+    <div className="h-s100 font-pops bg-gradient-to-b from-[#000000] via-[#313131] to-[#3e3e3e]">
       <div className="justify-center items-center flex flex-col">
         <div className="mt-60">
           <img src={icon} className="w-60" />
@@ -14,7 +14,7 @@ const NotFound = () => {
         <div className="text-sm font-medium mt-2 text-[gray]">
           The page you are looking for doesn’t exist
         </div>
-        <Link to="/home">
+        <Link to="/">
           <div className="w-fit cursor-pointer text-[#f0eded] text-lg bg-oranges hover:bg-loranges px-3 py-1 rounded-md font-semibold mt-5">
             Back to Home
           </div>

@@ -16,8 +16,8 @@ const Business = () => {
   }, [monthIndex]);
 
   useEffect(() => {
-    if (state?.from !== "/home") {
-      navigate("/home");
+    if (state?.from !== "/") {
+      navigate("/");
     }
   }, []);
 

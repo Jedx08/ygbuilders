@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import useGetBusinessData from "../../hooks/useGetBusinessData";
 import useBusinessExpenses from "../../hooks/useBusinessExpenses";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Chart } from "chart.js/auto"; // core data for chart, do not remove
 import { Line } from "react-chartjs-2";
 import Skeleton from "react-loading-skeleton";
@@ -19,7 +20,12 @@ import monthlyProfitIcon from "../../media/busmon_net.png";
 import BusinessYearlySummary from "./BusinessYearlySummary";
 
 const BusinessSummary = () => {
-  const { monthIndex, setMonthIndex } = useContext(CalendarContext);
+  const {
+    monthIndex,
+    setMonthIndex,
+    personalSummaryView,
+    setPersonalSummaryView,
+  } = useContext(CalendarContext);
   const getBusinessData = useGetBusinessData();
   const getMonthlyExpenses = useBusinessExpenses();
   const getMonthlyCapital = useBusinessCapital();
@@ -61,7 +67,6 @@ const BusinessSummary = () => {
       const overallMonthlyExpenses = await getMonthlyExpenses();
 
       overallData.forEach((data) => {
-        // console.log(data);
         return (c += data.capital), (s += data.sales), (e += data.expenses);
       });
 
@@ -232,92 +237,62 @@ const BusinessSummary = () => {
     setMonthIndex(monthIndex + 1);
   }
 
+  const nextYear = () => {
+    setMonthIndex(monthIndex + 12);
+  };
+
+  const prevYear = () => {
+    setMonthIndex(monthIndex - 12);
+  };
+
   const overallProfit = sales - expenses - overallMonthlyExpenses - capital;
   const monthlyProfit =
     monthlySales - monthlyExpenses - monthlyCapital - monthExpenses;
 
+  Chart.register(ChartDataLabels);
+
   return (
     <>
-      <div className=" w-full py-5">
-        <div>
-          <h1 className="font-extrabold text-center text-4xl text-oranges pb-5">
-            Overall Summary
-          </h1>
-        </div>
-        <div className="w-[80%] mx-auto justify-center  flex text-center gap-[4%] lg:w-full md:grid md:grid-rows-2 md:grid-flow-col">
-          <div className="bg-white rounded-lg w-[20%] shadow-lg md:w-full">
-            <div className="flex items-center justify-center pt-3 gap-2">
-              <img src={capitalIcon} alt="capital icon" className="h-4 w-7" />
-              <div>Capital</div>
-            </div>
-            <div className="text-4xl text-oranges font-bold px-5 py-4 lg:text-3xl md:text-2xl">
-              {capital.toLocaleString()}
-            </div>
+      <div className="flex justify-between px-5">
+        <div className="mx-auto py-5 grid grid-flow-col place-items-center gap-5 ssm:gap-3">
+          <div
+            className={`shadow-lg px-5 py-3 rounded-md font-bold
+             ${
+               personalSummaryView
+                 ? "bg-loranges text-white cursor-default"
+                 : "bg-white cursor-pointer hover:text-loranges"
+             }
+            `}
+            onClick={() => {
+              setPersonalSummaryView(true);
+            }}
+          >
+            Personal
           </div>
-          <div className="bg-white rounded-lg w-[20%] shadow-lg md:w-full">
-            <div className="flex items-center justify-center pt-3 gap-2">
-              <img src={salesIcon} alt="sales icon" className="h-4 w-7" />
-              <div>Sales</div>
-            </div>
-            <div className="text-4xl text-[#399CB4] font-bold px-5 py-4 lg:text-3xl md:text-2xl">
-              {sales.toLocaleString()}
-            </div>
-          </div>
-          <div className="bg-white rounded-lg w-[20%] shadow-lg md:w-full">
-            <div className="flex items-center justify-center pt-3 gap-2">
-              <img src={expensesIcon} alt="expenses icon" className="h-4 w-7" />
-              <div>Expenses</div>
-            </div>
-            <div className="text-4xl text-[red] font-bold px-5 py-4 lg:text-3xl md:text-2xl">
-              {(expenses + overallMonthlyExpenses).toLocaleString()}
-            </div>
-          </div>
-          <div className="bg-white rounded-lg w-[20%] shadow-lg md:w-full">
-            <div className="flex items-center justify-center pt-3 gap-2">
-              <img src={profitIcon} alt="profit icon" className="h-4 w-7" />
-              <div>Profit</div>
-            </div>
-            <div
-              className={
-                overallProfit < 0
-                  ? "text-4xl font-bold text-[red] px-5 py-4 lg:text-3xl md:text-2xl"
-                  : "text-4xl font-bold text-greens px-5 py-4 lg:text-3xl md:text-2xl"
+          <div
+            className={`shadow-lg px-5 py-3 rounded-md font-bold 
+              ${
+                personalSummaryView
+                  ? "bg-white cursor-pointer hover:text-loranges"
+                  : "bg-loranges text-white cursor-default"
               }
-            >
-              {overallProfit.toLocaleString()}
-            </div>
+            `}
+            onClick={() => {
+              setPersonalSummaryView(false);
+            }}
+          >
+            Business
           </div>
         </div>
       </div>
 
-      <div>
-        <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5 mb-2">
-          <div>
-            <FaAngleLeft
-              className="text-oranges text-3xl hover:text-loranges cursor-pointer"
-              onClick={handlePrevMonth}
-            />
-          </div>
-          <div>
-            <h1 className="font-extrabold text-center text-4xl text-oranges">
-              {
-                /* display current month and year */
-                dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM")
-              }
-            </h1>
-          </div>
-          <div>
-            <FaAngleRight
-              className="text-oranges text-3xl hover:text-loranges cursor-pointer"
-              onClick={handleNextMonth}
-            />
-          </div>
-        </div>
+      <div className="flex font-bold text-2xl items-center justify-center py-5">
+        Monthly Summary ({thisMonth})
       </div>
 
-      <div className=" bg-light font-pops pb-7">
+      <div className="bg-light font-pops">
         {isLoading ? (
-          <div className="w-[60%] mx-auto bg-white p-5 rounded-lg flex items-center flex-col">
+          <div className="w-[60%] mx-auto bg-white p-5 rounded-lg flex items-center flex-col md:w-[90%] ">
             <div className="w-[35%]">
               <Skeleton />
             </div>
@@ -327,139 +302,292 @@ const BusinessSummary = () => {
           </div>
         ) : (
           <>
-            <div className="w-[60%] mx-auto bg-white p-5 rounded-lg shadow-lg lg:w-[80%] md:w-[90%]">
-              <Line
-                className="w-full"
-                // options={options}
-                data={{
-                  labels: dayCount,
-                  datasets: [
-                    {
-                      label: "Capital",
-                      data: capitalCount,
-                      borderColor: "#ff9f1c",
-                      backgroundColor: "#fdac3a",
-                    },
-                    {
-                      label: "Sales",
-                      data: salesCount,
-                      borderColor: "#399CB4",
-                      backgroundColor: "#41B8D5",
-                    },
-                    {
-                      label: "Expenses",
-                      data: expensesCount,
-                      borderColor: "#ff6384",
-                      backgroundColor: "#FA829C",
-                    },
-                    {
-                      label: "Profit",
-                      data: profitCount,
-                      borderColor: "#2ec4b6",
-                      backgroundColor: "#3cd5c5",
-                    },
-                  ],
-                }}
-              />
-              <div className="w-[100%] h-[fit-content]">
-                <div className="text-center">
-                  <div className="font-bold text-lg py-5 md:text-base md:py-3">
-                    Monthly Summary ({thisMonth})
+            <div className="w-[80%] mx-auto md:w-[90%]">
+              <div className="grid grid-flow-col justify-start place-items-center gap-2 mb-2">
+                <div className="flex">
+                  <div>
+                    <FaAngleLeft
+                      className="text-oranges text-4xl hover:text-loranges cursor-pointer ssm:text-3xl"
+                      onClick={handlePrevMonth}
+                    />
                   </div>
-                  <div className="w-full grid grid-cols-5 gap-2 mx-auto lg:flex lg:flex-col">
-                    <div className="lg:flex justify-center gap-2">
-                      <div className="flex items-center justify-center gap-2 lg:pb-1">
+                  <div>
+                    <FaAngleRight
+                      className="text-oranges text-4xl hover:text-loranges cursor-pointer ssm:text-3xl"
+                      onClick={handleNextMonth}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <h1 className="font-extrabold text-center text-4xl text-oranges ssm:text-3xl">
+                    {
+                      /* display current month and year */
+                      dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM")
+                    }
+                  </h1>
+                </div>
+              </div>
+              <div className="bg-white py-4 rounded-lg shadow-lg overflow-y-auto">
+                <div className="h-[600px] w-full md:h-[400px] lg:w-[800px]">
+                  <Line
+                    className="w-full"
+                    data={{
+                      labels: dayCount,
+                      datasets: [
+                        {
+                          label: "Capital",
+                          data: capitalCount,
+                          borderColor: "#ff9f1c",
+                          backgroundColor: "#fdac3a",
+                          tension: 0.5,
+                        },
+                        {
+                          label: "Sales",
+                          data: salesCount,
+                          borderColor: "#399CB4",
+                          backgroundColor: "#41B8D5",
+                          tension: 0.5,
+                        },
+                        {
+                          label: "Expenses",
+                          data: expensesCount,
+                          borderColor: "#ff6384",
+                          backgroundColor: "#FA829C",
+                          tension: 0.5,
+                        },
+                        {
+                          label: "Profit",
+                          data: profitCount,
+                          borderColor: "#2ec4b6",
+                          backgroundColor: "#3cd5c5",
+                          tension: 0.5,
+                        },
+                      ],
+                    }}
+                    options={{
+                      plugins: {
+                        datalabels: {
+                          font: {
+                            weight: 550,
+                          },
+                        },
+                        legend: {
+                          align: "start",
+                          labels: {
+                            font: {
+                              size: 14,
+                            },
+                          },
+                        },
+                        ChartDataLabels,
+                      },
+                      maintainAspectRatio: false,
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="md:w-full mt-3">
+                <div className="flex flex-wrap items-center justify-center mx-auto gap-2 w-[80%] md:w-[90%] ssm:w-[100%]">
+                  {/* Total Capital */}
+                  <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
+                    <div className="flex items-center justify-center gap-2 pb-1 px-2 pt-3">
+                      <img
+                        src={monthlyCapitalIcon}
+                        alt="puch"
+                        className="w-9 sm:w-7"
+                      />
+                      <p className="sm:text-sm font-medium">Total Capital</p>
+                    </div>
+                    <div className="text-2xl text-oranges font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
+                      {monthlyCapital.toLocaleString()}
+                    </div>
+                  </div>
+                  {/* Sales */}
+                  <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
+                    <div className="flex items-center justify-center gap-2 pb-1 px-2 pt-3">
+                      <img
+                        src={monthlySalesIcon}
+                        alt="puch"
+                        className="w-9 sm:w-7"
+                      />
+                      <p className="sm:text-sm font-medium">Sales</p>
+                    </div>
+                    <div className="text-2xl text-[#399CB4] font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
+                      {monthlySales.toLocaleString()}
+                    </div>
+                  </div>
+                  {/* Expenses */}
+                  <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
+                    <div className="flex items-center justify-center gap-2 pb-1 px-2 pt-3">
+                      <img
+                        src={monthlyExpensesIcon}
+                        alt="puch"
+                        className="w-9 sm:w-7"
+                      />
+                      <p className="sm:text-sm font-medium">Expenses</p>
+                    </div>
+                    <div className="text-2xl text-[red] font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
+                      {monthlyExpenses.toLocaleString()}
+                    </div>
+                  </div>
+                  {/* Profit - Month Expenses */}
+                  <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
+                    <div className="flex items-center justify-center gap-2 pb-1 pt-3 px-3 font-medium">
+                      <div className="flex items-center gap-1 sm:text-sm">
                         <img
                           src={monthlyCapitalIcon}
-                          alt="monthly capital"
-                          className="w-7"
+                          alt="month expenses"
+                          className="w-9 sm:w-7"
                         />
-                        <span className="text-sm">
-                          Capital + (Monthly Capital)
-                        </span>
+                        Monthly profit
                       </div>
-                      <div className="text-xl font-bold text-oranges">
-                        {monthlyCapital.toLocaleString()}
-                      </div>
-                    </div>
-                    <div className="lg:flex justify-center gap-2">
-                      <div className="flex justify-center gap-2">
-                        <img
-                          src={monthlySalesIcon}
-                          alt="monthly sales"
-                          className="w-7"
-                        />
-                        <span className="text-sm mb-2">Sales</span>
-                      </div>
-                      <div className="text-xl font-bold text-[#399CB4]">
-                        {monthlySales.toLocaleString()}
-                      </div>
-                    </div>
-                    <div className="lg:flex justify-center gap-2">
-                      <div className="flex items-center justify-center gap-2">
+                      -
+                      <div className="flex items-center gap-1 sm:text-sm">
+                        Monthly expenses
                         <img
                           src={monthlyExpensesIcon}
-                          alt="monthly expenses"
-                          className="w-7"
+                          alt=""
+                          className="w-9 sm:w-7"
                         />
-                        <div className="text-sm mb-2">Expenses</div>
-                      </div>
-                      <div className="text-xl font-bold text-[red]">
-                        {monthlyExpenses.toLocaleString()}
                       </div>
                     </div>
-                    <div className="lg:flex justify-center gap-2">
-                      <div className="text-sm mb-2">
-                        Profit - (Monthly Expenses)
-                      </div>
-                      <div className="text-xl font-bold">
-                        <span
-                          className={`${
-                            monthlySales - monthlyExpenses - monthlyCapital < 0
-                              ? "text-[red]"
-                              : "text-greens"
-                          }`}
-                        >
-                          (
-                          {(
-                            monthlySales -
-                            monthlyExpenses -
-                            monthlyCapital
-                          ).toLocaleString()}
-                          )
-                        </span>{" "}
-                        <span className="text-[red]">
-                          - ({monthExpenses.toLocaleString()})
-                        </span>
-                      </div>
-                    </div>
-                    <div className="lg:flex justify-center gap-2">
-                      <div className="flex items-center justify-center pb-3 gap-2">
-                        <img
-                          src={monthlyProfitIcon}
-                          alt="monthly profit"
-                          className="w-7"
-                        />
-                        <div className="text-sm mb-2">Total Profit</div>
-                      </div>
-                      <div
-                        className={
-                          monthlyProfit < 0
-                            ? "text-[red] text-xl font-bold"
-                            : "text-greens text-xl font-bold"
-                        }
+                    <div className="text-2xl text-[red] font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
+                      <span
+                        className={`${
+                          monthlySales - monthlyExpenses - monthlyCapital < 0
+                            ? "text-[red]"
+                            : "text-greens"
+                        }`}
                       >
-                        {monthlyProfit.toLocaleString()}
-                      </div>
+                        (
+                        {(
+                          monthlySales -
+                          monthlyExpenses -
+                          monthlyCapital
+                        ).toLocaleString()}
+                        )
+                      </span>{" "}
+                      <span className="text-[red]">
+                        - ({monthExpenses.toLocaleString()})
+                      </span>
+                    </div>
+                  </div>
+                  {/* Total Profit */}
+                  <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
+                    <div className="flex items-center justify-center gap-2 pb-1 pt-3">
+                      <img
+                        src={monthlyProfitIcon}
+                        alt="puch"
+                        className="w-9 sm:w-7"
+                      />
+                      <p className="sm:text-sm font-medium">Total Profit</p>
+                    </div>
+                    <div
+                      className={
+                        monthlyProfit - monthExpenses < 0
+                          ? "text-2xl text-[red] font-bold pb-2 text-center ssm:font-semibold  sm:text-lg"
+                          : "text-2xl text-greens font-bold pb-2 text-center ssm:font-semibold  sm:text-lg"
+                      }
+                    >
+                      {(monthlyProfit - monthExpenses).toLocaleString()}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            <BusinessYearlySummary />
           </>
         )}
+
+        <div>
+          <div className="pt-5 mt-10 grid grid-flow-col justify-center place-items-center gap-2 xxs:flex xxs:items-center xxs:justify-center xxs:gap-0">
+            <div className="font-bold text-3xl text-center items-center justify-center py-5 ssm:text-2xl">
+              Yearly Summary
+            </div>
+            <div className="flex items-center xxs:pr-5">
+              <div>
+                <FaAngleLeft
+                  className="text-oranges text-4xl hover:text-loranges cursor-pointer ssm:text-3xl"
+                  onClick={prevYear}
+                />
+              </div>
+              <div>
+                <h1 className="font-extrabold text-center text-4xl text-oranges select-none ssm:text-3xl">
+                  {
+                    /* display current month and year */
+                    dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY")
+                  }
+                </h1>
+              </div>
+              <div>
+                <FaAngleRight
+                  className="text-oranges text-4xl hover:text-loranges cursor-pointer ssm:text-3xl"
+                  onClick={nextYear}
+                />
+              </div>
+            </div>
+          </div>
+          <BusinessYearlySummary />
+        </div>
+      </div>
+
+      <div className="w-full py-5 mt-10 pb-20">
+        <div>
+          <h1 className="font-bold text-center text-3xl pb-5 ssm:text-2xl">
+            Overall Summary
+          </h1>
+        </div>
+        <div className="w-[80%] gap-1 mx-auto flex flex-wrap items-center justify-center text-center xl:w-[80%] ssm:w-[100%]">
+          <div className="bg-white rounded-lg min-w-[30%] shadow-lg">
+            <div className="flex items-center justify-center gap-2 pt-5 xs:flex-col">
+              <img
+                src={capitalIcon}
+                alt="capital icon"
+                className="w-9 sm:w-7"
+              />
+              <div className="font-medium">Capital</div>
+            </div>
+            <div className="text-4xl text-oranges w-fit mx-auto font-bold px-2 py-4 lg:text-3xl md:text-2xl sm:text-xl">
+              {capital.toLocaleString()}
+            </div>
+          </div>
+          <div className="bg-white rounded-lg min-w-[30%] shadow-lg">
+            <div className="flex items-center justify-center gap-2 pt-5 xs:flex-col">
+              <img src={salesIcon} alt="sales icon" className="w-9 sm:w-7" />
+              <div className="font-medium">Sales</div>
+            </div>
+            <div className="text-4xl text-[#399CB4] w-fit mx-auto font-bold px-2 py-4 lg:text-3xl md:text-2xl sm:text-xl">
+              {sales.toLocaleString()}
+            </div>
+          </div>
+          <div className="bg-white rounded-lg min-w-[30%] shadow-lg">
+            <div className="flex items-center justify-center gap-2 pt-5 xs:flex-col">
+              <img
+                src={expensesIcon}
+                alt="expenses icon"
+                className="w-9 sm:w-7"
+              />
+              <div className="font-medium">Expenses</div>
+            </div>
+            <div className="text-4xl text-[red] w-fit mx-auto font-bold px-2 py-4 lg:text-3xl md:text-2xl sm:text-xl">
+              {(expenses + overallMonthlyExpenses).toLocaleString()}
+            </div>
+          </div>
+          <div className="bg-white rounded-lg min-w-[30%] shadow-lg">
+            <div className="flex items-center justify-center gap-2 pt-5 xs:flex-col">
+              <img src={profitIcon} alt="profit icon" className="w-9 sm:w-7" />
+              <div className="font-medium">Profit</div>
+            </div>
+            <div
+              className={
+                overallProfit < 0
+                  ? "text-4xl text-[red] font-bold px-2 py-4 lg:text-3xl md:text-2xl sm:text-xl"
+                  : "text-4xl text-greens font-bold px-2 py-4 lg:text-3xl md:text-2xl sm:text-xl"
+              }
+            >
+              {overallProfit.toLocaleString()}
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

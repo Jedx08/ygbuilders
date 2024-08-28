@@ -23,6 +23,31 @@ const getUser = async (req, res) => {
   res.status(200).json(user);
 };
 
+const updateUserTitle = async (req, res) => {
+  const username = req.user.username;
+
+  if (!req.body) {
+    res.status(400).json({ message: "Please fill out the form" });
+  }
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { username },
+      {
+        ...req.body,
+      },
+      { new: true }
+    );
+    res.status(200).json({
+      username: user.username,
+      personal_title: user.personal_title,
+      business_title: user.business_title,
+    });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
 const updateUserPassword = async (req, res) => {
   const users = await User.findById(req.user._id).select("password");
 
@@ -83,6 +108,7 @@ const updateAvatar = async (req, res) => {
 
 module.exports = {
   getUser,
+  updateUserTitle,
   updateUserPassword,
   updateAvatar,
 };

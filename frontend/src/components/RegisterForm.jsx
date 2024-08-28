@@ -94,11 +94,10 @@ const RegisterForm = ({ previous, inMobile }) => {
       setPassword("");
       setMatchPassword("");
       setSuccess(false);
-      navigate("/home");
+      navigate("/");
     } catch (err) {
       if (!err?.response) {
         setErrMsg("Can't connect to the Server");
-        console.log(err);
       } else if (err.response?.status === 409) {
         setErrMsg(err.response?.data.message);
       } else {
@@ -417,6 +416,7 @@ const RegisterForm = ({ previous, inMobile }) => {
             setUsername("");
             setPassword("");
             setMatchPassword("");
+            setEmail("");
             setSuccess(false);
             previous();
           }}

@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const handleRegister = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, avatar } = req.body;
   if (!username || !email || !password)
     return res
       .status(400)
@@ -28,6 +28,7 @@ const handleRegister = async (req, res) => {
       username: username,
       useremail: email,
       password: hashedPassword,
+      avatar: avatar,
     });
     // res.status(201).json({ success: `New user ${username} created!` });
 

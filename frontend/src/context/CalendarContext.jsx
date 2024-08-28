@@ -79,6 +79,7 @@ function businessCapitalDataReducer(state, { type, payload }) {
 }
 
 export const CalendarContextProvider = (props) => {
+  const [personalSummaryView, setPersonalSummaryView] = useState(true);
   const [inMobile, setInMobile] = useState(false);
   const [loadPage, setLoadPage] = useState(false); // load current page
   const [isAvatar, setIsAvatar] = useState(false);
@@ -200,6 +201,8 @@ export const CalendarContextProvider = (props) => {
         setIsAvatar,
         avatarLoading,
         setAvatarLoading,
+        personalSummaryView,
+        setPersonalSummaryView,
       }}
     >
       {props.children}

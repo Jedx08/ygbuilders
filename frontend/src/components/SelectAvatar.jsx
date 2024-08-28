@@ -64,7 +64,7 @@ const SelectAvatar = () => {
         </div>
         <div className="px-7 pb-5">
           <div className="text-center font-semibold text-lg text-greens">
-            Select avatar
+            Select Avatar
           </div>
           <div className="flex flex-wrap justify-center gap-5 mt-3">
             <div

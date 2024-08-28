@@ -57,7 +57,7 @@ const Auth = () => {
   return (
     <>
       {authToken ? (
-        <Navigate to="/home" />
+        <Navigate to="/" />
       ) : (
         <>
           {inMobile ? (

@@ -4,6 +4,7 @@ import logo from "../media/YG_LOGO.png";
 import useAuth from "../hooks/useAuth";
 import axios from "../api/axios";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
+import { ThreeDot } from "react-loading-indicators";
 
 const LOGIN_URL = "/login";
 
@@ -15,6 +16,7 @@ const LoginForm = ({ next, inMobile }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -24,6 +26,7 @@ const LoginForm = ({ next, inMobile }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const response = await axios.post(
@@ -43,7 +46,7 @@ const LoginForm = ({ next, inMobile }) => {
       setUsername("");
       setPassword("");
       setSuccess("Success");
-      navigate("/home");
+      navigate("/");
     } catch (err) {
       if (!err?.response) {
         setErrMsg("Can't connect to the Server");
@@ -179,9 +182,15 @@ const LoginForm = ({ next, inMobile }) => {
 
             <div className="flex flex-col items-center mt-5 mb-5">
               <div className="mb-2">
-                <button className="mx-auto py-1 rounded-md px-6 bg-greens font-bold text-white hover:bg-lgreens">
-                  Sign In
-                </button>
+                {isLoading ? (
+                  <div className="mx-auto py-1 rounded-md px-6 bg-lgreens font-bold text-white">
+                    <ThreeDot color="#ffffff" style={{ fontSize: "8px" }} />
+                  </div>
+                ) : (
+                  <button className="mx-auto py-1 rounded-md px-6 bg-greens font-bold text-white hover:bg-lgreens">
+                    Sign In
+                  </button>
+                )}
               </div>
               <div>
                 <p

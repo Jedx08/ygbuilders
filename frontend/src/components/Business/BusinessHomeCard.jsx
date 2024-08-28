@@ -8,8 +8,9 @@ import { ThreeDot, OrbitProgress } from "react-loading-indicators";
 import useBusinessCapital from "../../hooks/useBusinessCapital";
 import useBusinessExpenses from "../../hooks/useBusinessExpenses";
 import profitIcon from "../../media/bus_profit.png";
-import { FcCalendar, FcLibrary, FcStatistics } from "react-icons/fc";
-import { FaRegPenToSquare } from "react-icons/fa6";
+import estab from "../../media/estab.png";
+import { FcCalendar, FcStatistics } from "react-icons/fc";
+import pencil from "../../media/pen.png";
 
 const BusinessHomeCard = () => {
   const getBusinessData = useGetBusinessData();
@@ -24,26 +25,23 @@ const BusinessHomeCard = () => {
   const [sales, setSales] = useState(0);
   const [expenses, setExpenses] = useState(0);
 
-  const [overallMonthlyExpenses, setOVerallMonthlyExpenses] = useState(0);
-
   const [title, setTitle] = useState("");
   const [hasTitle, setHasTitle] = useState(false);
   const [updatedTitle, setUpdatedTitle] = useState(title);
 
-  const [businessAddButton, setBusinessAddbutton] = useState(true);
-  const [businessProceedButton, setBusinessProceedButton] = useState(false);
   const [businessEditButton, setBusinessEditButton] = useState(false);
 
+  const [overallMonthlyExpenses, setOVerallMonthlyExpenses] = useState(0);
+
   const [isLoading, setIsLoading] = useState(true);
+  const [dataLoading, setDataLoading] = useState(false);
+  const [addButtonLoading, setAddButtonLoading] = useState(false);
+  const [saveButtonLoading, setSaveButtonLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
   useEffect(() => {
-    if ((businessEditButton, businessProceedButton)) {
-      titleRef.current.focus();
-    }
-  }, [businessEditButton, businessProceedButton]);
+    setDataLoading(true);
 
-  useEffect(() => {
     let c = 0;
     let s = 0;
     let e = 0;
@@ -71,6 +69,7 @@ const BusinessHomeCard = () => {
       setSales(s);
       setExpenses(e);
       setOVerallMonthlyExpenses(m_e);
+      setDataLoading(false);
     };
 
     overallData();
@@ -80,11 +79,13 @@ const BusinessHomeCard = () => {
     const getTitle = async () => {
       setIsLoading(true);
       const _id = await auth?._id;
+
       if (_id) {
         try {
           const response = await axiosPrivate.get("/user/" + _id);
           const jsonTitle = await response.data.business_title;
-          if (response.status === 200) {
+
+          if (jsonTitle && response.status === 200) {
             setUpdatedTitle(jsonTitle);
             setTitle(jsonTitle);
             setHasTitle(true);
@@ -103,17 +104,20 @@ const BusinessHomeCard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!title) {
+      return setErrMsg("Please fill out the form");
+    }
+
+    setAddButtonLoading(true);
+
     try {
-      if (title === "") {
-        return setErrMsg("Please fill out the form");
-      }
       const response = await axiosPrivate.patch(
-        "/user",
+        "/user/title",
         JSON.stringify({ business_title: title })
       );
       if (response.status === 200) {
         setTitle(response.data.business_title);
-        setBusinessProceedButton(false);
+        setAddButtonLoading(false);
         setHasTitle(true);
       }
     } catch (err) {
@@ -124,18 +128,22 @@ const BusinessHomeCard = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
 
+    if (!updatedTitle) {
+      return setErrMsg("Please fill out the form");
+    }
+
+    setSaveButtonLoading(true);
+
     try {
-      if (updatedTitle === "") {
-        return setErrMsg("Please fill out the form");
-      }
       const response = await axiosPrivate.patch(
-        "/user",
+        "/user/title",
         JSON.stringify({ business_title: updatedTitle })
       );
 
       if (response.status === 200) {
         setTitle(response.data.business_title);
         setBusinessEditButton(false);
+        setSaveButtonLoading(false);
         setHasTitle(true);
       }
     } catch (err) {
@@ -146,18 +154,18 @@ const BusinessHomeCard = () => {
   };
 
   return (
-    <div className="grid content-center w-full h-[24rem] rounded-xl bg-white shadow-lg ">
+    <div className="content-center w-full h-[24rem] rounded-xl bg-white shadow-lg ">
       {isLoading ? (
         <div className="w-[380px] flex justify-center">
           <OrbitProgress color="#ff9f1c" size="large" text="" textColor="" />
         </div>
       ) : (
-        <div className="w-full h-hfit text-center rounded-lg p-2 ">
+        <div className="w-full h-hfit text-center rounded-lg p-2">
           <div className="w-full text-loranges text-center text-xl font-bold">
             BUSINESS
           </div>
 
-          {/* Show Title and Data if there is any */}
+          {/* Title, edit title button and shows intro if there is no title */}
           {hasTitle && !businessEditButton && (
             <div className="flex text-xs items-end justify-end font-semibold px-4">
               <div
@@ -167,7 +175,7 @@ const BusinessHomeCard = () => {
                 className="bg-loranges hover:bg-oranges flex rounded-md p-1 px-2 space-x-2 cursor-pointer items-center"
               >
                 <div>
-                  <FaRegPenToSquare className="text-white text-lg" />
+                  <img src={pencil} alt="pencil" className="w-5" />
                 </div>
                 <p className="text-white">Edit</p>
               </div>
@@ -176,16 +184,32 @@ const BusinessHomeCard = () => {
 
           {businessEditButton && (
             <div className="flex gap-2 text-xs items-end justify-end font-semibold px-4">
-              <div
-                onClick={(e) => {
-                  handleUpdate(e);
-                }}
-                className="bg-loranges hover:bg-oranges flex rounded-md p-1 px-2 space-x-2 cursor-pointer items-center"
-              >
-                <p className="text-white">Save</p>
-              </div>
+              {saveButtonLoading ? (
+                <div className="bg-loranges flex rounded-md px-2 py-2 items-center">
+                  <ThreeDot
+                    style={{ fontSize: "8px" }}
+                    variant="pulsate"
+                    color="#fff"
+                    text=""
+                    textColor=""
+                  />
+                </div>
+              ) : (
+                <div
+                  onClick={(e) => {
+                    handleUpdate(e);
+                  }}
+                  className="bg-loranges hover:bg-oranges flex rounded-md p-1 px-2 space-x-2 cursor-pointer items-center"
+                >
+                  <p className="text-white">Save</p>
+                </div>
+              )}
+
               <div
                 onClick={() => {
+                  if (saveButtonLoading) {
+                    location.reload();
+                  }
                   setBusinessEditButton(false);
                 }}
                 className="bg-[red] flex rounded-md p-1 px-2 space-x-2 cursor-pointer items-center"
@@ -198,7 +222,7 @@ const BusinessHomeCard = () => {
           <div className="">
             <div className="flex justify-center items-center px-5 xl:px-3">
               <div className="items-center text-9xl col-span-1 xl:text-7x lg:text-8xl">
-                <FcLibrary />
+                <img src={estab} alt="" className="w-[128px]" />
               </div>
               <div className="w-[70%]">
                 {hasTitle ? (
@@ -215,8 +239,8 @@ const BusinessHomeCard = () => {
                         type="text"
                         className="text-center w-full text-2xl h-[50%] mx-auto rounded-xl border border-loranges font-bold outline-none"
                         onChange={(e) => {
-                          setErrMsg("");
                           setUpdatedTitle(e.target.value);
+                          setErrMsg("");
                         }}
                         value={updatedTitle}
                       />
@@ -243,13 +267,19 @@ const BusinessHomeCard = () => {
           </div>
 
           <div className="p-5 w-full mx-auto row-span-1 justify-between place-content-center">
-            {isLoading ? (
-              <Skeleton className="w-full" height={20} />
-            ) : hasTitle ? (
-              <>
-                <div className="text-start text-loranges text-sm font-semibold">
-                  Overview
-                </div>
+            {hasTitle && (
+              <div className="text-start text-loranges text-sm font-semibold">
+                Overview
+              </div>
+            )}
+            {hasTitle ? (
+              dataLoading ? (
+                <Skeleton
+                  className="w-full"
+                  containerClassName="flex-1"
+                  height={30}
+                />
+              ) : (
                 <div className="flex place-content-start gap-5">
                   <div className="items-center place-content-center">
                     <img
@@ -274,23 +304,10 @@ const BusinessHomeCard = () => {
                     ).toLocaleString()}
                   </div>
                   <div className="text-start text-loranges text-sm font-semibold place-content-center">
-                    Total Net
+                    Total Profit
                   </div>
                 </div>
-
-                <div className="w-full text-xs mt-2">
-                  <div className="w-fit">
-                    <Link to="/summary" state={{ from: location.pathname }}>
-                      <div className="bg-loranges hover:bg-oranges text-center text-white text-[0.8vw] font-semibold px-5 py-2 rounded-md">
-                        <span className="flex justify-center items-center gap-2">
-                          <FcStatistics className="text-lg" />
-                          <span className="text-sm">Summary</span>
-                        </span>
-                      </div>
-                    </Link>
-                  </div>
-                </div>
-              </>
+              )
             ) : (
               <>
                 <div className="flex justify-center items-center gap-2">
@@ -309,20 +326,47 @@ const BusinessHomeCard = () => {
                     value={title}
                   />
                   <div className="text-xs">
-                    <div
-                      onClick={(e) => {
-                        handleSubmit(e);
-                        setBusinessAddbutton(false);
-                      }}
-                      className="px-2 py-1 w-full bg-loranges hover:bg-oranges rounded-lg cursor-pointer"
-                    >
-                      <div className="text-sm font-bold text-white">
-                        Add Personal
+                    {addButtonLoading ? (
+                      <div className="px-2 py-1 w-[112px] bg-loranges rounded-lg">
+                        <ThreeDot
+                          variant="pulsate"
+                          color="#ffff"
+                          style={{ fontSize: "8px" }}
+                        />
                       </div>
-                    </div>
+                    ) : (
+                      <div
+                        onClick={(e) => {
+                          handleSubmit(e);
+                        }}
+                        className="px-2 py-1 w-full bg-loranges hover:bg-oranges rounded-lg cursor-pointer"
+                      >
+                        <div className="text-sm font-bold text-white">
+                          Add Business
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
+                <div className="mt-2 text-xs text-[red]">
+                  {errMsg.toLocaleUpperCase()}
+                </div>
               </>
+            )}
+
+            {hasTitle && (
+              <div className="w-full text-xs mt-2">
+                <div className="w-fit">
+                  <Link to="/summary" state={{ from: location.pathname }}>
+                    <div className="bg-loranges hover:bg-oranges text-center text-white text-[0.8vw] font-semibold px-5 py-2 rounded-md">
+                      <span className="flex justify-center items-center gap-2">
+                        <FcStatistics className="text-xl" />
+                        <span className="text-sm">Summary</span>
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              </div>
             )}
           </div>
 
@@ -332,7 +376,7 @@ const BusinessHomeCard = () => {
                 <Link to="/business" state={{ from: location.pathname }}>
                   <div className="bg-loranges hover:bg-oranges text-center text-white text-[0.8vw] font-semibold px-5 py-2 rounded-md">
                     <span className="flex justify-center items-center gap-2">
-                      <FcCalendar className="text-lg" />
+                      <FcCalendar className="text-xl" />
                       <span className="text-sm">Calendar</span>
                     </span>
                   </div>
@@ -340,8 +384,6 @@ const BusinessHomeCard = () => {
               </div>
             </div>
           )}
-
-          {/* Adding Personal Income */}
         </div>
       )}
     </div>

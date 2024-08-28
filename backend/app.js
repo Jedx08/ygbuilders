@@ -21,16 +21,6 @@ const cookieParser = require("cookie-parser");
 const refreshTokenRoute = require("./routes/refreshTokenRoute");
 const verifyJWT = require("./middleware/verifyJWT");
 
-const hostname = "api.yourgross.ph";
-const httpPort = 3252;
-const httpsPort = 4262;
-
-httpsOptions = {
-  cert: fs.readFileSync("./ssl/api_yourgross_ph.crt"),
-  ca: fs.readFileSync("./ssl/api_yourgross_ph.ca-bundle"),
-  key: fs.readFileSync("./ssl/api_yourgross_ph.key"),
-};
-
 // express app
 const app = express();
 
@@ -69,22 +59,10 @@ app.use("/api/business-capital", businessMonthlyCapital);
 // user route
 app.use("/user", userRoute);
 
-const httpServer = http.createServer(app);
-const httpsServer = https.createServer(httpsOptions, app);
-
-// redirect to HTTPS
-app.use((req, res, next) => {
-  if (req.protocol === "http") {
-    res.redirect(301, `https://${req.headers.host}${req.url}`);
-  }
-  next();
-});
-
 // connect to DB
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDB");
-  httpServer.listen(httpPort, hostname);
-  httpsServer.listen(httpsPort, hostname, () => {
-    console.log(`listening to: ${hostname}:${httpsPort}`);
+  app.listen(process.env.PORT, () => {
+    console.log("listening to port", process.env.PORT);
   });
 });

@@ -1,18 +1,10 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFacebookF,
-  faInstagram,
-  faTiktok,
-  faXTwitter,
-} from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
     <>
-      <footer className="bg-white font-pops">
+      {/* <footer className="bg-white font-pops">
         <div className="flex justify-center space-x-2 w-8/12 mx-auto py-4">
           <div className="w-4/12">
             <p className="text-sm font-semibold mb-1">Follow us:</p>
@@ -65,6 +57,14 @@ const Footer = () => {
             </div>
           </div>
         </div>
+      </footer> */}
+
+      <footer className="bg-white font-pops">
+        <div className="text-center flex items-center justify-center font-medium text-base py-1 gap-1">
+          <div>&#169;</div>
+          <div>YourGross</div>
+          <div>2024</div>
+        </div>
       </footer>
     </>
   );
@@ -72,18 +72,18 @@ const Footer = () => {
 
 export default Footer;
 
-const Instagram = styled.div`
-  border-radius: 9999px;
-  vertical-align: middle;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background: #d6249f;
-  background: radial-gradient(
-    circle at 30% 107%,
-    #fdf497 0%,
-    #fdf497 5%,
-    #fd5949 45%,
-    #d6249f 60%,
-    #285aeb 90%
-  );
-`;
+// const Instagram = styled.div`
+//   border-radius: 9999px;
+//   vertical-align: middle;
+//   -webkit-background-clip: text;
+//   -webkit-text-fill-color: transparent;
+//   background: #d6249f;
+//   background: radial-gradient(
+//     circle at 30% 107%,
+//     #fdf497 0%,
+//     #fdf497 5%,
+//     #fd5949 45%,
+//     #d6249f 60%,
+//     #285aeb 90%
+//   );
+// `;

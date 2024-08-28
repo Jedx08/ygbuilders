@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import usePersonalExpenses from "../../hooks/usePersonalExpenses";
 import useGetPersonalData from "../../hooks/useGetPersonalData";
 import dayjs from "dayjs";
+// import { Chart } from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Chart } from "chart.js/auto"; // core data for chart, do not remove
 import { Line } from "react-chartjs-2";
 import { CalendarContext } from "../../context/CalendarContext";
@@ -10,10 +12,18 @@ import Skeleton from "react-loading-skeleton";
 import pouch from "../../media/pouch.png";
 import expensesIcon from "../../media/expenses.png";
 import networth from "../../media/networth.png";
+import monthlyGrossIcon from "../../media/monpouch.png";
+import monthlyExpensesIcon from "../../media/monexpenses.png";
+import monthlyNetIcon from "../../media/monprofit.png";
 import PersonalYearlySummary from "./PersonalYearlySummary";
 
 const PersonalSummary = () => {
-  const { monthIndex, setMonthIndex } = useContext(CalendarContext);
+  const {
+    monthIndex,
+    setMonthIndex,
+    personalSummaryView,
+    setPersonalSummaryView,
+  } = useContext(CalendarContext);
 
   const thisMonth = dayjs().month(monthIndex).format("MMMM");
 
@@ -180,83 +190,63 @@ const PersonalSummary = () => {
     setMonthIndex(monthIndex + 1);
   }
 
+  const nextYear = () => {
+    setMonthIndex(monthIndex + 12);
+  };
+
+  const prevYear = () => {
+    setMonthIndex(monthIndex - 12);
+  };
+
   const overallNet = gross - expenses;
+
+  // const year = dayjs().month(monthIndex).year();
 
   const monthlyNet = monthlyGross - monthlyExpenses;
 
+  Chart.register(ChartDataLabels);
+
   return (
     <>
-      <div className="w-full py-5">
-        <div>
-          <h1 className="font-extrabold text-center text-4xl text-greens pb-5">
-            Overall Summary
-          </h1>
-        </div>
-        <div className="w-[60%] mx-auto flex justify-between text-center md:w-[80%] sm:w-[90%]">
-          <div className="bg-white rounded-lg w-[30%] shadow-lg">
-            <div className="flex justify-center gap-2 pt-5">
-              <img src={pouch} alt="puch" className="h-4 w-7" />
-              <p>Gross</p>
-            </div>
-            <div className="text-4xl text-oranges font-bold px-5 py-4 lg:text-3xl md:text-2xl">
-              {gross.toLocaleString()}
-            </div>
+      <div className="flex justify-between px-5">
+        <div className="mx-auto py-5 grid grid-flow-col place-items-center gap-5 ssm:gap-3">
+          <div
+            className={`shadow-lg px-5 py-3 rounded-md font-bold
+             ${
+               personalSummaryView
+                 ? "bg-lgreens text-white cursor-default"
+                 : "bg-white cursor-pointer hover:text-lgreens"
+             }
+            `}
+            onClick={() => {
+              setPersonalSummaryView(true);
+            }}
+          >
+            Personal
           </div>
-          <div className="bg-white rounded-lg w-[30%] shadow-lg">
-            <div className="flex justify-center gap-2 pt-5">
-              <img src={expensesIcon} alt="puch" className="h-4 w-9" />
-              <p>Expenses</p>
-            </div>
-            <div className="text-4xl text-[red] font-bold px-5 py-4 lg:text-3xl md:text-2xl">
-              {expenses.toLocaleString()}
-            </div>
-          </div>
-          <div className="bg-white rounded-lg w-[30%] shadow-lg">
-            <div className="flex justify-center gap-2 pt-5">
-              <img src={networth} alt="puch" className="h-3 w-9" />
-              <p>Net</p>
-            </div>
-            <div
-              className={
-                overallNet < 0
-                  ? "text-4xl text-[red] font-bold px-5 py-4 lg:text-3xl md:text-2xl"
-                  : "text-4xl text-greens font-bold px-5 py-4 lg:text-3xl md:text-2xl"
+          <div
+            className={`shadow-lg px-5 py-3 rounded-md font-bold
+              ${
+                personalSummaryView
+                  ? "bg-white cursor-pointer hover:text-loranges"
+                  : "bg-loranges text-white cursor-default"
               }
-            >
-              {overallNet.toLocaleString()}
-            </div>
+            `}
+            onClick={() => {
+              setPersonalSummaryView(false);
+            }}
+          >
+            Business
           </div>
         </div>
       </div>
-
-      <div>
-        <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5 mb-2">
-          <div>
-            <FaAngleLeft
-              className="text-greens text-3xl hover:text-lgreens cursor-pointer"
-              onClick={handlePrevMonth}
-            />
-          </div>
-          <div>
-            <h1 className="font-extrabold text-center text-4xl text-greens">
-              {
-                /* display current month and year */
-                dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM")
-              }
-            </h1>
-          </div>
-          <div>
-            <FaAngleRight
-              className="text-greens text-3xl hover:text-lgreens cursor-pointer"
-              onClick={handleNextMonth}
-            />
-          </div>
-        </div>
+      <div className="flex font-bold text-3xl text-center items-center justify-center py-5 ssm:text-2xl">
+        Monthly Summary ({thisMonth})
       </div>
 
-      <div className="bg-light font-pops pb-7">
+      <div className="bg-light font-pops">
         {isLoading ? (
-          <div className="w-[60%] mx-auto bg-white p-8 rounded-lg flex items-center flex-col">
+          <div className="w-[60%] mx-auto bg-white p-5 rounded-lg flex items-center flex-col md:w-[90%] ">
             <div className="w-[35%]">
               <Skeleton />
             </div>
@@ -266,98 +256,165 @@ const PersonalSummary = () => {
           </div>
         ) : (
           <>
-            <div className="w-[60%] mx-auto bg-white p-8 rounded-lg shadow-lg lg:w-[80%] md:w-[90%]">
-              <Line
-                className="w-full"
-                // options={options}
-                data={{
-                  labels: dayCount,
-                  datasets: [
-                    {
-                      label: "Gross",
-                      data: grossCount,
-                      borderColor: "#ff9f1c",
-                      backgroundColor: "#fdac3a",
-                    },
-                    {
-                      label: "Expenses",
-                      data: expensesCount,
-                      borderColor: "#ff6384",
-                      backgroundColor: "#FA829C",
-                    },
-                    {
-                      label: "Net",
-                      data: netCount,
-                      borderColor: "#2ec4b6",
-                      backgroundColor: "#3cd5c5",
-                    },
-                  ],
-                }}
-              />
-              <div className="w-[100%]  h-[fit-content] ">
-                <div className="text-center">
-                  <div className="font-bold text-lg py-5">
-                    Monthly Summary ({thisMonth})
+            <div className="w-[80%] mx-auto md:w-[90%]">
+              <div className="grid grid-flow-col justify-start place-items-center gap-2 mb-2">
+                <div className="flex">
+                  <div>
+                    <FaAngleLeft
+                      className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-3xl"
+                      onClick={handlePrevMonth}
+                    />
                   </div>
-                  <div className="w-[100%] grid grid-cols-4 gap-2 mx-auto">
-                    <div>
-                      <div className="text-sm mb-2 flex justify-center gap-2">
-                        <img src={pouch} alt="puch" className="h-4 w-5" />
-                        <p>Gross</p>
-                      </div>
-                      <div className="text-xl text-oranges font-bold">
-                        {monthlyGross.toLocaleString()}
-                      </div>
+                  <div>
+                    <FaAngleRight
+                      className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-3xl"
+                      onClick={handleNextMonth}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <h1 className="font-extrabold text-center text-4xl text-greens ssm:text-3xl">
+                    {
+                      /* display current month and year */
+                      dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM")
+                    }
+                  </h1>
+                </div>
+              </div>
+              <div className="bg-white py-4 rounded-lg shadow-lg overflow-y-auto px-3">
+                <div className="h-[600px] w-full md:h-[400px] md:w-[800px]">
+                  <Line
+                    className="w-full"
+                    data={{
+                      labels: dayCount,
+                      datasets: [
+                        {
+                          label: "Gross",
+                          data: grossCount,
+                          borderColor: "#ff9f1c",
+                          backgroundColor: "#fdac3a",
+                          tension: 0.5,
+                        },
+                        {
+                          label: "Expenses",
+                          data: expensesCount,
+                          borderColor: "#ff6384",
+                          backgroundColor: "#FA829C",
+                          tension: 0.5,
+                        },
+                        {
+                          label: "Net",
+                          data: netCount,
+                          borderColor: "#2ec4b6",
+                          backgroundColor: "#3cd5c5",
+                          tension: 0.5,
+                        },
+                      ],
+                    }}
+                    options={{
+                      plugins: {
+                        datalabels: {
+                          font: {
+                            weight: 550,
+                          },
+                        },
+                        legend: {
+                          align: "start",
+                          labels: {
+                            font: {
+                              size: 14,
+                            },
+                          },
+                        },
+                        ChartDataLabels,
+                      },
+                      maintainAspectRatio: false,
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="md:w-full mt-3">
+                <div className="flex flex-wrap items-center justify-center mx-auto gap-2 w-[80%] md:w-[90%] ssm:w-[100%]">
+                  {/* Monthly Gross */}
+                  <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
+                    <div className="flex items-center justify-center gap-2 pb-1 pt-3">
+                      <img
+                        src={monthlyGrossIcon}
+                        alt="gross"
+                        className="w-9 sm:w-7"
+                      />
+                      <p className="sm:text-sm font-medium">Gross</p>
                     </div>
-                    <div>
-                      <div className="text-sm mb-2 flex justify-center gap-2">
+                    <div className="text-2xl text-oranges font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
+                      {monthlyGross.toLocaleString()}
+                    </div>
+                  </div>
+                  {/* Monthly Expenses */}
+                  <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
+                    <div className="flex items-center justify-center gap-2 pb-1 pt-3">
+                      <img
+                        src={monthlyExpensesIcon}
+                        alt="expenses"
+                        className="w-9 sm:w-7"
+                      />
+                      <p className="sm:text-sm font-medium">Expenses</p>
+                    </div>
+                    <div className="text-2xl text-[red] font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
+                      {monthlyExpenses.toLocaleString()}
+                    </div>
+                  </div>
+                  {/* Monthly Net */}
+                  <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
+                    <div className="flex items-center justify-center gap-2 pb-1 pt-3 px-3 font-medium">
+                      <div className="flex items-center gap-1 sm:text-sm">
                         <img
-                          src={expensesIcon}
-                          alt="puch"
-                          className="h-4 w-7"
+                          src={monthlyNetIcon}
+                          alt="month expenses"
+                          className="w-9 sm:w-7"
                         />
-                        <p>Expenses</p>
+                        Monthly net
                       </div>
-                      <div className="text-xl text-[red] font-bold">
-                        {monthlyExpenses.toLocaleString()}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-sm mb-2">
-                        Net - (Monthly Expenses)
-                      </div>
-                      <div className="text-xl font-bold">
-                        <span
-                          className={
-                            monthlyNet < 0 ? "text-[red]" : "text-greens"
-                          }
-                        >
-                          {monthlyNet.toLocaleString()}
-                        </span>{" "}
-                        <span className="text-[red]">
-                          - ({monthExpenses.toLocaleString()})
-                        </span>
+                      -
+                      <div className="flex items-center gap-1 sm:text-sm">
+                        Monthly expenses
+                        <img
+                          src={monthlyExpensesIcon}
+                          alt=""
+                          className="w-9 sm:w-7"
+                        />
                       </div>
                     </div>
-                    <div>
-                      <div className="flex gap-2 text-sm mb-2 justify-center">
-                        <div>
-                          <img src={networth} alt="puch" className="h-4 w-8" />
-                        </div>
-                        <div className="">
-                          <p>Total Net</p>
-                        </div>
-                      </div>
-
-                      <div
+                    <div className="text-2xl text-[red] font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
+                      <span
                         className={
-                          monthlyNet - monthExpenses < 0
-                            ? "text-[red] text-xl font-bold"
-                            : "text-greens text-xl font-bold"
+                          monthlyNet < 0 ? "text-[red]" : "text-greens"
                         }
                       >
-                        {(monthlyNet - monthExpenses).toLocaleString()}
-                      </div>
+                        ({monthlyNet.toLocaleString()})
+                      </span>{" "}
+                      <span className="text-[red]">
+                        - ({monthExpenses.toLocaleString()})
+                      </span>
+                    </div>
+                  </div>
+                  {/* Montly Total Net */}
+                  <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
+                    <div className="flex items-center justify-center gap-2 pb-1 pt-3">
+                      <img
+                        src={monthlyNetIcon}
+                        alt="total net"
+                        className="w-9 sm:w-7"
+                      />
+                      <p className="sm:text-sm font-medium">Total Net</p>
+                    </div>
+                    <div
+                      className={
+                        monthlyNet - monthExpenses < 0
+                          ? "text-2xl text-[red] font-bold pb-2 text-center ssm:font-semibold  sm:text-lg"
+                          : "text-2xl text-greens font-bold pb-2 text-center ssm:font-semibold  sm:text-lg"
+                      }
+                    >
+                      {(monthlyNet - monthExpenses).toLocaleString()}
                     </div>
                   </div>
                 </div>
@@ -366,7 +423,79 @@ const PersonalSummary = () => {
           </>
         )}
 
-        <PersonalYearlySummary />
+        <div>
+          <div className="pt-5 mt-10 grid grid-flow-col justify-center place-items-center gap-2 xxs:flex xxs:items-center xxs:justify-center xxs:gap-0">
+            <div className="font-bold text-3xl text-center items-center justify-center py-5 ssm:text-2xl">
+              Yearly Summary
+            </div>
+            <div className="flex items-center xxs:pr-5">
+              <div>
+                <FaAngleLeft
+                  className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-3xl"
+                  onClick={prevYear}
+                />
+              </div>
+              <div>
+                <h1 className="font-extrabold text-center text-4xl text-greens select-none ssm:text-3xl">
+                  {
+                    /* display current month and year */
+                    dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY")
+                  }
+                </h1>
+              </div>
+              <div>
+                <FaAngleRight
+                  className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-3xl"
+                  onClick={nextYear}
+                />
+              </div>
+            </div>
+          </div>
+          <PersonalYearlySummary />
+        </div>
+      </div>
+
+      <div className="w-full py-5 mt-10 pb-20">
+        <div>
+          <h1 className="font-bold text-center text-3xl pb-5 ssm:text-2xl">
+            Overall Summary
+          </h1>
+        </div>
+        <div className="w-[60%] gap-1 mx-auto flex flex-wrap items-center justify-center text-center xl:w-[80%] ssm:w-[100%]">
+          <div className="bg-white rounded-lg min-w-[30%] shadow-lg">
+            <div className="flex items-center justify-center gap-2 pt-5 xs:flex-col">
+              <img src={pouch} alt="puch" className="w-9 sm:w-7" />
+              <p className="font-medium">Gross</p>
+            </div>
+            <div className="text-4xl text-oranges w-fit mx-auto font-bold px-2 py-4 lg:text-3xl md:text-2xl sm:text-xl">
+              {gross.toLocaleString()}
+            </div>
+          </div>
+          <div className="bg-white rounded-lg min-w-[30%] shadow-lg">
+            <div className="flex items-center justify-center gap-2 pt-5 xs:flex-col">
+              <img src={expensesIcon} alt="puch" className="w-9 sm:w-7" />
+              <p className="font-medium">Expenses</p>
+            </div>
+            <div className="text-4xl text-[red] w-fit mx-auto font-bold px-2 py-4 lg:text-3xl md:text-2xl sm:text-xl">
+              {expenses.toLocaleString()}
+            </div>
+          </div>
+          <div className="bg-white rounded-lg min-w-[30%] shadow-lg">
+            <div className="flex items-center justify-center gap-2 pt-5 xs:flex-col">
+              <img src={networth} alt="puch" className="w-9 sm:w-7" />
+              <p className="font-medium">Net</p>
+            </div>
+            <div
+              className={`w-fit mx-auto ${
+                overallNet < 0
+                  ? "text-4xl text-[red] font-bold px-2 py-4 lg:text-3xl md:text-2xl sm:text-xl"
+                  : "text-4xl text-greens font-bold px-2 py-4 lg:text-3xl md:text-2xl sm:text-xl"
+              }`}
+            >
+              {overallNet.toLocaleString()}
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

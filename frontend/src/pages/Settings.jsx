@@ -135,9 +135,9 @@ const Settings = () => {
               onClick={() => {
                 setIsAvatar(true);
               }}
-              className="cursor-pointer w-fit mx-auto text-xs mt-1 bg-greens px-2 rounded-md text-white font-light"
+              className="cursor-pointer w-fit mx-auto text-xs mt-1 bg-greens px-2 rounded-md text-white font-medium"
             >
-              Select avatar
+              Change Avatar
             </div>
             <div className=" grid grid-rows-4 place-content-center mt-5 xs:px-6">
               {/* show email */}
@@ -153,7 +153,7 @@ const Settings = () => {
               {/* current password */}
               <div className="grid grid-cols-2 py-1 items-center xs:grid-cols-1 xs:mt-2">
                 <div className="text-sm font-semibold xs:font-medium">
-                  Password:
+                  Current password:
                 </div>
                 <div className="flex items-center border border-inputLight rounded-md pr-2 min-w-[218px]">
                   <input
@@ -287,7 +287,7 @@ const Settings = () => {
                   htmlFor="confirm_password"
                   className="text-sm font-semibold flex gap-1 xs:font-medium"
                 >
-                  Confirm new password:
+                  Confirm password:
                   <FaCheck
                     className={`ml-1 text-lg text-greens font-bold mb-[-2px] ${
                       validConfirmPassword && confirmPassword

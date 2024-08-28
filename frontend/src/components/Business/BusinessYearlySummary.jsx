@@ -1,4 +1,3 @@
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { CalendarContext } from "../../context/CalendarContext";
 import { useContext, useEffect, useState } from "react";
 import localeData from "dayjs/plugin/localeData";
@@ -18,7 +17,7 @@ const BusinessYearlySummary = () => {
   const getMonthlyExpenses = useBusinessExpenses();
   const getMonthlyCapital = useBusinessCapital();
 
-  const { monthIndex, setMonthIndex } = useContext(CalendarContext);
+  const { monthIndex } = useContext(CalendarContext);
 
   const [yearlyCapital, setYearlyCapital] = useState(0);
   const [yearlySales, setYearlySales] = useState(0);
@@ -256,18 +255,8 @@ const BusinessYearlySummary = () => {
     barGraphData();
   }, [monthIndex]);
 
-  const year = dayjs().month(monthIndex).year();
-
   const yearlyProfit =
     yearlySales - yearlyExpenses - thisYearMonthlyExpenses - yearlyCapital;
-
-  const nextYear = () => {
-    setMonthIndex(monthIndex + 12);
-  };
-
-  const prevYear = () => {
-    setMonthIndex(monthIndex - 12);
-  };
 
   const months = dayjs.months();
 
@@ -275,150 +264,168 @@ const BusinessYearlySummary = () => {
     return month.slice(0, 3);
   });
 
+  //identify if yearly data should be displayed or not
+  const setGraphDataDisplay = [];
+
+  for (let i = 0; i < capitalCount.length; i++) {
+    if (
+      (capitalCount[i] ||
+        salesCount[i] ||
+        expensesCount[i] ||
+        profitCount[i]) !== 0
+    ) {
+      setGraphDataDisplay.push(true);
+    } else {
+      setGraphDataDisplay.push(false);
+    }
+  }
+
   return (
     <div>
-      <div>
-        <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-5">
-          <div>
-            <FaAngleLeft
-              className="text-oranges text-3xl hover:text-loranges cursor-pointer"
-              onClick={prevYear}
-            />
-          </div>
-          <div>
-            <h1 className="font-extrabold text-center text-4xl text-oranges">
-              {
-                /* display current month and year */
-                dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY")
-              }
-            </h1>
-          </div>
-          <div>
-            <FaAngleRight
-              className="text-oranges text-3xl hover:text-loranges cursor-pointer"
-              onClick={nextYear}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="w-[60%] mx-auto gap-3 content-center lg:w-[80%] md:w-[90%]">
-        <div className="text-center bg-white rounded-lg  shadow-lg">
+      <div className="flex flex-col w-[80%] mx-auto gap-3 content-center lg:w-[80%] md:w-[90%]">
+        <div className="text-center bg-white rounded-lg shadow-lg">
           {isLoading ? (
-            <div>
-              <div className="w-[60%] mx-auto pt-2">
-                <Skeleton className="my-2" />
+            <div className="w-full mx-auto bg-white p-5 rounded-lg flex items-center flex-col md:w-full">
+              <div className="w-[35%]">
                 <Skeleton />
-                <Skeleton height={30} />
               </div>
-              <Skeleton className="w-[80%] my-5" height={200} />
+              <div className="w-[100%]">
+                <Skeleton height={500} />
+              </div>
             </div>
           ) : (
             <>
-              <div className="p-8 w-full rounded-lg mx-auto sm:p-4">
-                <Bar
-                  className="w-full"
-                  data={{
-                    labels: newMonths,
-                    datasets: [
-                      {
-                        label: "Capital",
-                        data: capitalCount,
-                        borderColor: "#ff9f1c",
-                        backgroundColor: "#fdac3a",
-                      },
-                      {
-                        label: "Sales",
-                        data: salesCount,
-                        borderColor: "#399CB4",
-                        backgroundColor: "#41B8D5",
-                      },
-                      {
-                        label: "Expenses",
-                        data: expensesCount,
-                        borderColor: "#ff6384",
-                        backgroundColor: "#FA829C",
-                      },
-                      {
-                        label: "Profit",
-                        data: profitCount,
-                        borderColor: "#2ec4b6",
-                        backgroundColor: "#3cd5c5",
-                      },
-                    ],
-                  }}
-                />
+              <div>
+                <div className="w-full h-hfull bg-white py-4 rounded-lg shadow-lg">
+                  <div className="h-[770px] w-full md:h-[500px] lg:w-full">
+                    <Bar
+                      className="w-full h-hfull"
+                      data={{
+                        labels: newMonths,
+                        datasets: [
+                          {
+                            label: "Capital",
+                            data: capitalCount,
+                            borderColor: "#ff9f1c",
+                            backgroundColor: "#fdac3a",
+                          },
+                          {
+                            label: "Sales",
+                            data: salesCount,
+                            borderColor: "#399CB4",
+                            backgroundColor: "#41B8D5",
+                          },
+                          {
+                            label: "Expenses",
+                            data: expensesCount,
+                            borderColor: "#ff6384",
+                            backgroundColor: "#FA829C",
+                          },
 
-                <div className="p-5 text-center md:p-2">
-                  <div className="font-bold text-lg py-5 md:py-3 md:text-base">
-                    Yearly Summary ({year})
-                  </div>
-                  <div className="w-[80%] flex justify-between mx-auto lg:w-full">
-                    <div>
-                      <div className="flex items-center justify-center pb-2 gap-2">
-                        <img
-                          src={yearlyCapitalIcon}
-                          alt="yearly capital"
-                          className="h-4 w-7"
-                        />
-                        <div className="text-base md:text-sm">Capital</div>
-                      </div>
-                      <div className="text-2xl text-oranges font-bold md:text-xl">
-                        {yearlyCapital.toLocaleString()}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex items-center justify-center pb-2 gap-2">
-                        <img
-                          src={yearlySalesIcon}
-                          alt="yearly sales"
-                          className="h-4 w-7"
-                        />
-                        <div className="text-base md:text-sm">Sales</div>
-                      </div>
-                      <div className="text-2xl text-[#399CB4] font-bold md:text-xl">
-                        {yearlySales.toLocaleString()}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex items-center justify-center pb-2 gap-2">
-                        <img
-                          src={yearlyExpensesIcon}
-                          alt="yearly expenses"
-                          className="h-4 w-7"
-                        />
-                        <div className="text-base md:text-sm">Expenses</div>
-                      </div>
-                      <div className="text-2xl text-[red] font-bold md:text-xl">
-                        {(
-                          yearlyExpenses + thisYearMonthlyExpenses
-                        ).toLocaleString()}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex items-center justify-center pb-2 gap-2">
-                        <img
-                          src={yearlyProfitIcon}
-                          alt="yearly profit"
-                          className="h-4 w-7"
-                        />
-                        <div className="text-base md:text-sm">Profit</div>
-                      </div>
-                      <div
-                        className={
-                          yearlyProfit < 0
-                            ? "text-2xl font-bold text-[red] md:text-xl"
-                            : "text-2xl font-bold text-greens md:text-xl"
-                        }
-                      >
-                        {yearlyProfit.toLocaleString()}
-                      </div>
-                    </div>
+                          {
+                            label: "Profit",
+                            data: profitCount,
+                            borderColor: "#2ec4b6",
+                            backgroundColor: "#3cd5c5",
+                          },
+                        ],
+                      }}
+                      options={{
+                        plugins: {
+                          datalabels: {
+                            display: setGraphDataDisplay,
+                            anchor: "end",
+                            align: "start",
+                            color: "#000000",
+                            font: {
+                              weight: 550,
+                              size: 13,
+                            },
+                          },
+                          legend: {
+                            labels: {
+                              font: {
+                                size: 15,
+                              },
+                            },
+                          },
+                        },
+                        indexAxis: "y",
+                        maintainAspectRatio: false,
+                      }}
+                    />
                   </div>
                 </div>
               </div>
             </>
           )}
         </div>
+        {isLoading ? (
+          <></>
+        ) : (
+          <div className="bg-white rounded-md shadow-lg p-5 text-center">
+            <div className="w-[80%] flex flex-wrap justify-between mx-auto sm:w-full xxs:justify-center xxs:gap-3">
+              <div className="flex flex-col justify-center items-center gap-2">
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <img
+                    src={yearlyCapitalIcon}
+                    alt="yearly capital"
+                    className="w-9 sm:w-7"
+                  />
+                  <div className="text-md font-medium sm:text-sm">Capital</div>
+                </div>
+                <div className="text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
+                  {yearlyCapital.toLocaleString()}
+                </div>
+              </div>
+              <div className="flex flex-col justify-center items-center gap-2">
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <img
+                    src={yearlySalesIcon}
+                    alt="yearly capital"
+                    className="w-9 sm:w-7"
+                  />
+                  <div className="text-md font-medium sm:text-sm">Sales</div>
+                </div>
+                <div className="text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
+                  {yearlyCapital.toLocaleString()}
+                </div>
+              </div>
+              <div className="flex flex-col justify-center items-center gap-2">
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <img
+                    src={yearlyExpensesIcon}
+                    alt="yearly expenses"
+                    className="w-9 sm:w-7"
+                  />
+                  <div className="text-md font-medium sm:text-sm">Expenses</div>
+                </div>
+                <div className="text-2xl text-[red] font-bold sm:text-xl ssm:font-semibold">
+                  {(yearlyExpenses + thisYearMonthlyExpenses).toLocaleString()}
+                </div>
+              </div>
+              <div className="flex flex-col justify-center items-center gap-2">
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <img
+                    src={yearlyProfitIcon}
+                    alt="yearly net"
+                    className="w-9 sm:w-7"
+                  />
+                  <div className="text-md font-medium sm:text-sm">Net</div>
+                </div>
+                <div
+                  className={
+                    yearlyProfit < 0
+                      ? "text-2xl font-bold text-[red] sm:text-xl ssm:font-semibold"
+                      : "text-2xl font-bold text-greens sm:text-xl ssm:font-semibold"
+                  }
+                >
+                  {yearlyProfit.toLocaleString()}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
