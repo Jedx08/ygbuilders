@@ -484,12 +484,12 @@ const BusinessSummary = () => {
                     </div>
                     <div
                       className={
-                        monthlyProfit - monthExpenses < 0
+                        monthlyProfit < 0
                           ? "text-2xl text-[red] font-bold pb-2 text-center ssm:font-semibold  sm:text-lg"
                           : "text-2xl text-greens font-bold pb-2 text-center ssm:font-semibold  sm:text-lg"
                       }
                     >
-                      {(monthlyProfit - monthExpenses).toLocaleString()}
+                      {monthlyProfit.toLocaleString()}
                     </div>
                   </div>
                 </div>

@@ -75,7 +75,18 @@ const RegisterForm = ({ previous, inMobile }) => {
     try {
       const response = await axios.post(
         REGISTER_URL,
-        JSON.stringify({ username, email, password, avatar: "avatar1" }),
+        JSON.stringify({
+          username,
+          email,
+          password,
+          avatar: "avatar1",
+          instructions: {
+            home: true,
+            calendarP: true,
+            calendarB: true,
+            summary: true,
+          },
+        }),
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,

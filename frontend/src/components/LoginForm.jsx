@@ -50,14 +50,18 @@ const LoginForm = ({ next, inMobile }) => {
     } catch (err) {
       if (!err?.response) {
         setErrMsg("Can't connect to the Server");
+        setIsLoading(false);
       } else if (err.response?.status === 400) {
         setErrMsg("Username and Password are required");
+        setIsLoading(false);
       } else if (err.response?.status === 401) {
         setErrMsg(
           "Your login credentials don't match an account in our system"
         );
+        setIsLoading(false);
       } else {
         setErrMsg("Login Failed");
+        setIsLoading(false);
       }
     }
   };

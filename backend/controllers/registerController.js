@@ -3,7 +3,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const handleRegister = async (req, res) => {
-  const { username, email, password, avatar } = req.body;
+  const { username, email, password, avatar, instructions } = req.body;
+
   if (!username || !email || !password)
     return res
       .status(400)
@@ -29,6 +30,7 @@ const handleRegister = async (req, res) => {
       useremail: email,
       password: hashedPassword,
       avatar: avatar,
+      instructions: instructions,
     });
     // res.status(201).json({ success: `New user ${username} created!` });
 
@@ -64,7 +66,13 @@ const handleRegister = async (req, res) => {
       });
 
       console.log("New Account: ", username);
-      res.json({ accessToken, useremail, avatar, _id: _id.toString() });
+      res.json({
+        accessToken,
+        useremail,
+        avatar,
+        _id: _id.toString(),
+        instructions,
+      });
     }
   } catch (err) {
     res.status(500).json({ message: err.message });

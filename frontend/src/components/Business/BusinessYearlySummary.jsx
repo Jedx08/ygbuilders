@@ -388,7 +388,7 @@ const BusinessYearlySummary = () => {
                   <div className="text-md font-medium sm:text-sm">Sales</div>
                 </div>
                 <div className="text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
-                  {yearlyCapital.toLocaleString()}
+                  {yearlySales.toLocaleString()}
                 </div>
               </div>
               <div className="flex flex-col justify-center items-center gap-2">

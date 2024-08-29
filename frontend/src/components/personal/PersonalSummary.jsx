@@ -1,4 +1,6 @@
 import { useContext, useEffect, useState } from "react";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useAuth from "../../hooks/useAuth";
 import usePersonalExpenses from "../../hooks/usePersonalExpenses";
 import useGetPersonalData from "../../hooks/useGetPersonalData";
 import dayjs from "dayjs";
@@ -16,6 +18,8 @@ import monthlyGrossIcon from "../../media/monpouch.png";
 import monthlyExpensesIcon from "../../media/monexpenses.png";
 import monthlyNetIcon from "../../media/monprofit.png";
 import PersonalYearlySummary from "./PersonalYearlySummary";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 const PersonalSummary = () => {
   const {
@@ -24,6 +28,8 @@ const PersonalSummary = () => {
     personalSummaryView,
     setPersonalSummaryView,
   } = useContext(CalendarContext);
+
+  const { auth } = useAuth();
 
   const thisMonth = dayjs().month(monthIndex).format("MMMM");
 
@@ -41,8 +47,11 @@ const PersonalSummary = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const [instructions, setInstructions] = useState(null);
+
   const getPersonalData = useGetPersonalData();
   const getMonthlyExpenses = usePersonalExpenses();
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     let g = 0;
@@ -183,6 +192,44 @@ const PersonalSummary = () => {
     monthlyExpensesData();
   }, [monthIndex]);
 
+  useEffect(() => {
+    const showInstructions = async () => {
+      try {
+        const _id = await auth?._id;
+
+        if (_id) {
+          const response = await axiosPrivate.get("/user/" + _id);
+          setInstructions(response.data.instructions);
+
+          if (response.data.instructions.summary && !isLoading) {
+            showTour();
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    showInstructions();
+  }, [isLoading]);
+
+  useEffect(() => {
+    const toggleInstructions = async () => {
+      try {
+        if (instructions) {
+          await axiosPrivate.patch(
+            "/user/instructions",
+            JSON.stringify({ instructions: instructions })
+          );
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    toggleInstructions();
+  }, [instructions]);
+
   function handlePrevMonth() {
     setMonthIndex(monthIndex - 1);
   }
@@ -190,26 +237,77 @@ const PersonalSummary = () => {
     setMonthIndex(monthIndex + 1);
   }
 
-  const nextYear = () => {
-    setMonthIndex(monthIndex + 12);
-  };
-
-  const prevYear = () => {
-    setMonthIndex(monthIndex - 12);
-  };
-
   const overallNet = gross - expenses;
-
-  // const year = dayjs().month(monthIndex).year();
 
   const monthlyNet = monthlyGross - monthlyExpenses;
 
   Chart.register(ChartDataLabels);
 
+  const showTour = async () => {
+    const driverObj = driver({
+      showProgress: true,
+      steps: [
+        {
+          element: "#summaryView",
+          popover: {
+            title: "Personal-Business button",
+            description: "You can change the summary view using these buttons.",
+            side: "left",
+          },
+        },
+        {
+          element: "#lineGraph",
+          popover: {
+            title: "Monthly Line Graph",
+            description:
+              "In here, you can view your Income with a Line Graph. You can change the graph view by clicking the colored buttons.",
+          },
+        },
+        {
+          element: "#lineGraphOverview",
+          popover: {
+            title: "Line Graph Overview",
+            description:
+              "In this section you can easily see your monthly income information",
+          },
+        },
+        {
+          element: "#barGraph",
+          popover: {
+            title: "Yearly Bar Graph",
+            description:
+              "Just like the first graph, in this section you can monitor your yearly Income",
+          },
+        },
+        {
+          element: "#barGraphOverview",
+          popover: {
+            title: "Bar Graph Overview",
+            description: "Just like the title says",
+          },
+        },
+        {
+          element: "#overall",
+          popover: {
+            title: "Overall Income",
+            description: "Here you can see the overall income information",
+          },
+        },
+      ],
+    });
+
+    driverObj.drive();
+
+    setInstructions((prev) => ({ ...prev, summary: false }));
+  };
+
   return (
     <>
       <div className="flex justify-between px-5">
-        <div className="mx-auto py-5 grid grid-flow-col place-items-center gap-5 ssm:gap-3">
+        <div
+          id="summaryView"
+          className="mx-auto py-5 grid grid-flow-col place-items-center gap-5 ssm:gap-3"
+        >
           <div
             className={`shadow-lg px-5 py-3 rounded-md font-bold
              ${
@@ -257,205 +355,181 @@ const PersonalSummary = () => {
         ) : (
           <>
             <div className="w-[80%] mx-auto md:w-[90%]">
-              <div className="grid grid-flow-col justify-start place-items-center gap-2 mb-2">
-                <div className="flex">
-                  <div>
-                    <FaAngleLeft
-                      className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-3xl"
-                      onClick={handlePrevMonth}
-                    />
+              <span id="lineGraph">
+                <div
+                  id="month"
+                  className="w-fit grid grid-flow-col justify-start place-items-center gap-2 mb-2"
+                >
+                  <div className="flex">
+                    <div>
+                      <FaAngleLeft
+                        className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-3xl"
+                        onClick={handlePrevMonth}
+                      />
+                    </div>
+                    <div>
+                      <FaAngleRight
+                        className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-3xl"
+                        onClick={handleNextMonth}
+                      />
+                    </div>
                   </div>
                   <div>
-                    <FaAngleRight
-                      className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-3xl"
-                      onClick={handleNextMonth}
-                    />
+                    <h1 className="font-extrabold text-center text-4xl text-greens ssm:text-3xl">
+                      {
+                        /* display current month and year */
+                        dayjs(new Date(dayjs().year(), monthIndex)).format(
+                          "MMMM"
+                        )
+                      }
+                    </h1>
                   </div>
                 </div>
-                <div>
-                  <h1 className="font-extrabold text-center text-4xl text-greens ssm:text-3xl">
-                    {
-                      /* display current month and year */
-                      dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM")
-                    }
-                  </h1>
-                </div>
-              </div>
-              <div className="bg-white py-4 rounded-lg shadow-lg overflow-y-auto px-3">
-                <div className="h-[600px] w-full md:h-[400px] md:w-[800px]">
-                  <Line
-                    className="w-full"
-                    data={{
-                      labels: dayCount,
-                      datasets: [
-                        {
-                          label: "Gross",
-                          data: grossCount,
-                          borderColor: "#ff9f1c",
-                          backgroundColor: "#fdac3a",
-                          tension: 0.5,
-                        },
-                        {
-                          label: "Expenses",
-                          data: expensesCount,
-                          borderColor: "#ff6384",
-                          backgroundColor: "#FA829C",
-                          tension: 0.5,
-                        },
-                        {
-                          label: "Net",
-                          data: netCount,
-                          borderColor: "#2ec4b6",
-                          backgroundColor: "#3cd5c5",
-                          tension: 0.5,
-                        },
-                      ],
-                    }}
-                    options={{
-                      plugins: {
-                        datalabels: {
-                          font: {
-                            weight: 550,
+                <div className="bg-white py-4 rounded-lg shadow-lg overflow-y-auto px-3">
+                  <div className="h-[600px] w-full md:h-[400px] md:w-[800px]">
+                    <Line
+                      className="w-full"
+                      data={{
+                        labels: dayCount,
+                        datasets: [
+                          {
+                            label: "Gross",
+                            data: grossCount,
+                            borderColor: "#ff9f1c",
+                            backgroundColor: "#fdac3a",
+                            tension: 0.5,
                           },
-                        },
-                        legend: {
-                          align: "start",
-                          labels: {
+                          {
+                            label: "Expenses",
+                            data: expensesCount,
+                            borderColor: "#ff6384",
+                            backgroundColor: "#FA829C",
+                            tension: 0.5,
+                          },
+                          {
+                            label: "Net",
+                            data: netCount,
+                            borderColor: "#2ec4b6",
+                            backgroundColor: "#3cd5c5",
+                            tension: 0.5,
+                          },
+                        ],
+                      }}
+                      options={{
+                        plugins: {
+                          datalabels: {
                             font: {
-                              size: 14,
+                              weight: 550,
                             },
                           },
+                          legend: {
+                            align: "start",
+                            labels: {
+                              font: {
+                                size: 14,
+                              },
+                            },
+                          },
+                          ChartDataLabels,
                         },
-                        ChartDataLabels,
-                      },
-                      maintainAspectRatio: false,
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="md:w-full mt-3">
-                <div className="flex flex-wrap items-center justify-center mx-auto gap-2 w-[80%] md:w-[90%] ssm:w-[100%]">
-                  {/* Monthly Gross */}
-                  <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
-                    <div className="flex items-center justify-center gap-2 pb-1 pt-3">
-                      <img
-                        src={monthlyGrossIcon}
-                        alt="gross"
-                        className="w-9 sm:w-7"
-                      />
-                      <p className="sm:text-sm font-medium">Gross</p>
-                    </div>
-                    <div className="text-2xl text-oranges font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
-                      {monthlyGross.toLocaleString()}
-                    </div>
-                  </div>
-                  {/* Monthly Expenses */}
-                  <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
-                    <div className="flex items-center justify-center gap-2 pb-1 pt-3">
-                      <img
-                        src={monthlyExpensesIcon}
-                        alt="expenses"
-                        className="w-9 sm:w-7"
-                      />
-                      <p className="sm:text-sm font-medium">Expenses</p>
-                    </div>
-                    <div className="text-2xl text-[red] font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
-                      {monthlyExpenses.toLocaleString()}
-                    </div>
-                  </div>
-                  {/* Monthly Net */}
-                  <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
-                    <div className="flex items-center justify-center gap-2 pb-1 pt-3 px-3 font-medium">
-                      <div className="flex items-center gap-1 sm:text-sm">
-                        <img
-                          src={monthlyNetIcon}
-                          alt="month expenses"
-                          className="w-9 sm:w-7"
-                        />
-                        Monthly net
-                      </div>
-                      -
-                      <div className="flex items-center gap-1 sm:text-sm">
-                        Monthly expenses
-                        <img
-                          src={monthlyExpensesIcon}
-                          alt=""
-                          className="w-9 sm:w-7"
-                        />
-                      </div>
-                    </div>
-                    <div className="text-2xl text-[red] font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
-                      <span
-                        className={
-                          monthlyNet < 0 ? "text-[red]" : "text-greens"
-                        }
-                      >
-                        ({monthlyNet.toLocaleString()})
-                      </span>{" "}
-                      <span className="text-[red]">
-                        - ({monthExpenses.toLocaleString()})
-                      </span>
-                    </div>
-                  </div>
-                  {/* Montly Total Net */}
-                  <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
-                    <div className="flex items-center justify-center gap-2 pb-1 pt-3">
-                      <img
-                        src={monthlyNetIcon}
-                        alt="total net"
-                        className="w-9 sm:w-7"
-                      />
-                      <p className="sm:text-sm font-medium">Total Net</p>
-                    </div>
-                    <div
-                      className={
-                        monthlyNet - monthExpenses < 0
-                          ? "text-2xl text-[red] font-bold pb-2 text-center ssm:font-semibold  sm:text-lg"
-                          : "text-2xl text-greens font-bold pb-2 text-center ssm:font-semibold  sm:text-lg"
-                      }
-                    >
-                      {(monthlyNet - monthExpenses).toLocaleString()}
-                    </div>
+                        maintainAspectRatio: false,
+                      }}
+                    />
                   </div>
                 </div>
-              </div>
+              </span>
             </div>
           </>
         )}
-
-        <div>
-          <div className="pt-5 mt-10 grid grid-flow-col justify-center place-items-center gap-2 xxs:flex xxs:items-center xxs:justify-center xxs:gap-0">
-            <div className="font-bold text-3xl text-center items-center justify-center py-5 ssm:text-2xl">
-              Yearly Summary
+        <div id="lineGraphOverview" className="md:w-full mt-3">
+          <div className="flex flex-wrap items-center justify-center mx-auto gap-2 w-[80%] md:w-[90%] ssm:w-[100%]">
+            {/* Monthly Gross */}
+            <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
+              <div className="flex items-center justify-center gap-2 pb-1 pt-3">
+                <img
+                  src={monthlyGrossIcon}
+                  alt="gross"
+                  className="w-9 sm:w-7"
+                />
+                <p className="sm:text-sm font-medium">Gross</p>
+              </div>
+              <div className="text-2xl text-oranges font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
+                {monthlyGross.toLocaleString()}
+              </div>
             </div>
-            <div className="flex items-center xxs:pr-5">
-              <div>
-                <FaAngleLeft
-                  className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-3xl"
-                  onClick={prevYear}
+            {/* Monthly Expenses */}
+            <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
+              <div className="flex items-center justify-center gap-2 pb-1 pt-3">
+                <img
+                  src={monthlyExpensesIcon}
+                  alt="expenses"
+                  className="w-9 sm:w-7"
                 />
+                <p className="sm:text-sm font-medium">Expenses</p>
               </div>
-              <div>
-                <h1 className="font-extrabold text-center text-4xl text-greens select-none ssm:text-3xl">
-                  {
-                    /* display current month and year */
-                    dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY")
-                  }
-                </h1>
+              <div className="text-2xl text-[red] font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
+                {monthlyExpenses.toLocaleString()}
               </div>
-              <div>
-                <FaAngleRight
-                  className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-3xl"
-                  onClick={nextYear}
+            </div>
+            {/* Monthly Net */}
+            <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
+              <div className="flex items-center justify-center gap-2 pb-1 pt-3 px-3 font-medium">
+                <div className="flex items-center gap-1 sm:text-sm">
+                  <img
+                    src={monthlyNetIcon}
+                    alt="month expenses"
+                    className="w-9 sm:w-7"
+                  />
+                  Monthly net
+                </div>
+                -
+                <div className="flex items-center gap-1 sm:text-sm">
+                  Monthly expenses
+                  <img
+                    src={monthlyExpensesIcon}
+                    alt=""
+                    className="w-9 sm:w-7"
+                  />
+                </div>
+              </div>
+              <div className="text-2xl text-[red] font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
+                <span className={monthlyNet < 0 ? "text-[red]" : "text-greens"}>
+                  ({monthlyNet.toLocaleString()})
+                </span>{" "}
+                <span className="text-[red]">
+                  - ({monthExpenses.toLocaleString()})
+                </span>
+              </div>
+            </div>
+            {/* Montly Total Net */}
+            <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
+              <div className="flex items-center justify-center gap-2 pb-1 pt-3">
+                <img
+                  src={monthlyNetIcon}
+                  alt="total net"
+                  className="w-9 sm:w-7"
                 />
+                <p className="sm:text-sm font-medium">Total Net</p>
+              </div>
+              <div
+                className={
+                  monthlyNet - monthExpenses < 0
+                    ? "text-2xl text-[red] font-bold pb-2 text-center ssm:font-semibold  sm:text-lg"
+                    : "text-2xl text-greens font-bold pb-2 text-center ssm:font-semibold  sm:text-lg"
+                }
+              >
+                {(monthlyNet - monthExpenses).toLocaleString()}
               </div>
             </div>
           </div>
+        </div>
+
+        <div>
           <PersonalYearlySummary />
         </div>
       </div>
 
-      <div className="w-full py-5 mt-10 pb-20">
+      <div id="overall" className="w-full py-5 mt-10 pb-20">
         <div>
           <h1 className="font-bold text-center text-3xl pb-5 ssm:text-2xl">
             Overall Summary

@@ -98,6 +98,27 @@ const updateAvatar = async (req, res) => {
   }
 };
 
+const toggleInstructions = async (req, res) => {
+  const username = req.user.username;
+
+  if (!req.body) {
+    res.status(400).json({ message: "Bad Request" });
+  }
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { username },
+      {
+        ...req.body,
+      },
+      { new: true }
+    );
+    res.status(200).json(user.instructions);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
 // const deleteUser = async (req, res) => {
 //   const { id } = req.params;
 
@@ -111,4 +132,5 @@ module.exports = {
   updateUserTitle,
   updateUserPassword,
   updateAvatar,
+  toggleInstructions,
 };

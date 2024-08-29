@@ -49,7 +49,7 @@ const Navbar = () => {
     <>
       {inMobile ? (
         <>
-          <div className="font-pops overflow-auto shadow-lg">
+          <div className="font-pops overflow-auto">
             <div className="flex justify-between pl-1 pr-4 py-1 items-center">
               <div className="pl-2">
                 <Link to="/">

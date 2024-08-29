@@ -150,6 +150,7 @@ const PersonalMonth = ({ month }) => {
               }`}
             >
               <div
+                id="personalMonthlyExpenses"
                 onClick={() => setShowPersonalExpensesForm(true)}
                 className={`bg-white px-3 rounded-md text-center cursor-pointer shadow-lg ${
                   inMobile ? "py-2" : "ssm:px-2 py-1"

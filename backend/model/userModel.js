@@ -15,6 +15,12 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    instructions: {
+      home: Boolean,
+      calendarP: Boolean,
+      calendarB: Boolean,
+      summary: Boolean,
+    },
     avatar: String,
     personal_title: String,
     business_title: String,

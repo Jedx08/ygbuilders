@@ -154,7 +154,10 @@ const BusinessHomeCard = () => {
   };
 
   return (
-    <div className="content-center w-full h-[24rem] rounded-xl bg-white shadow-lg ">
+    <div
+      id="businessHomeCard"
+      className="content-center w-full h-[24rem] rounded-xl bg-white shadow-lg "
+    >
       {isLoading ? (
         <div className="w-[380px] flex justify-center">
           <OrbitProgress color="#ff9f1c" size="large" text="" textColor="" />
@@ -266,7 +269,10 @@ const BusinessHomeCard = () => {
             </div>
           </div>
 
-          <div className="p-5 w-full mx-auto row-span-1 justify-between place-content-center">
+          <div
+            id="addBusiness"
+            className="p-5 w-full mx-auto row-span-1 justify-between place-content-center"
+          >
             {hasTitle && (
               <div className="text-start text-loranges text-sm font-semibold">
                 Overview

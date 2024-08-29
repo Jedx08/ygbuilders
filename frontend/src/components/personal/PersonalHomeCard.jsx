@@ -9,6 +9,7 @@ import usePersonalExpenses from "../../hooks/usePersonalExpenses";
 import networth from "../../media/networth.png";
 import { FcCalendar, FcStatistics } from "react-icons/fc";
 import { CalendarContext } from "../../context/CalendarContext";
+
 import SelectAvatar from "../SelectAvatar";
 import avatar1 from "../../media/avatar1.png";
 import avatar2 from "../../media/avatar2.png";
@@ -168,7 +169,10 @@ const PersonalHomeCard = () => {
   }
 
   return (
-    <div className="grid content-center justify-items-center w-full h-[24rem] rounded-xl bg-white shadow-lg">
+    <div
+      id="personalHomeCard"
+      className="grid content-center justify-items-center w-full h-[24rem] rounded-xl bg-white shadow-lg"
+    >
       {isLoading ? (
         <div className="w-[380px] flex justify-center">
           <OrbitProgress color="#2ec4b6" size="large" text="" textColor="" />
@@ -294,7 +298,10 @@ const PersonalHomeCard = () => {
           </div>
 
           {/* Net overview, calendar and summary page button. Shows add title button if there is no title */}
-          <div className="p-5 w-full mx-auto row-span-1 justify-between place-content-center">
+          <div
+            id="addPersonal"
+            className="p-5 w-full mx-auto row-span-1 justify-between place-content-center"
+          >
             {hasTitle && (
               <div className="text-start text-lgreens text-sm font-semibold">
                 Overview
