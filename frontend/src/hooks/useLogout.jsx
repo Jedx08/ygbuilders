@@ -2,10 +2,11 @@ import axios from "../api/axios";
 import useAuth from "./useAuth";
 
 const useLogout = () => {
-  const { setAuth } = useAuth();
+  const { setAuth, setUserInfo } = useAuth();
 
   const logout = async () => {
     setAuth({});
+    setUserInfo({});
 
     try {
       await axios("/logout", {

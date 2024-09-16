@@ -265,7 +265,10 @@ const BusinessForm = () => {
         <div className="mb-2 mt-5 w-48 mx-auto">
           <div className="flex items-center justify-center">
             <label className={` font-bold ${inMobile ? "text-lg" : "text-sm"}`}>
-              Capital:
+              Capital:{" "}
+              <span className="text-xs text-[#A6ACAF] font-normal">
+                (Optional)
+              </span>
             </label>
           </div>
           {/* Capital show current data & input */}

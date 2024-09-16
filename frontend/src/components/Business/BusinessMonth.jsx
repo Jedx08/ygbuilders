@@ -16,6 +16,10 @@ import BMonthlyCapitalForm from "./BMonthlyCapitalForm";
 import useBusinessExpenses from "../../hooks/useBusinessExpenses";
 import useBusinessCapital from "../../hooks/useBusinessCapital";
 import BusinessMobileData from "./BusinessMobileData";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useAuth from "../../hooks/useAuth";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 const BusinessMonth = ({ month }) => {
   const {
@@ -36,11 +40,15 @@ const BusinessMonth = ({ month }) => {
     inMobile,
   } = useContext(CalendarContext);
 
+  const { userInfo } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
+
   const getBusinessExpenses = useBusinessExpenses();
   const getBusinessCapital = useBusinessCapital();
 
   const [monthlyExpenses, setMonthlyExpenses] = useState("");
   const [monthlyCapital, setMonthlyCapital] = useState("");
+  const [instructions, setInstructions] = useState(null);
 
   function handlePrevMonth() {
     setMonthIndex(monthIndex - 1);
@@ -83,6 +91,88 @@ const BusinessMonth = ({ month }) => {
     }
   }, [businessExpensesData, businessCapitalData, monthIndex]);
 
+  useEffect(() => {
+    const showInstructions = async () => {
+      try {
+        setInstructions(userInfo.instructions);
+
+        if (userInfo.instructions.calendarB) {
+          showTour();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    showInstructions();
+  }, []);
+
+  useEffect(() => {
+    const toggleInstructions = async () => {
+      try {
+        if (instructions) {
+          await axiosPrivate.patch(
+            "/user/instructions",
+            JSON.stringify({ instructions: instructions })
+          );
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    toggleInstructions();
+  }, [instructions]);
+
+  const showTour = () => {
+    const driverObj = driver({
+      showProgress: true,
+      steps: [
+        {
+          element: "#monthlyCapital",
+          popover: {
+            title: "Monthly Expenses",
+            description: "Here you can add your monthly Capital. (Optional)",
+            side: "left",
+          },
+        },
+        {
+          element: "#monthlyExpenses",
+          popover: {
+            title: "Monthly Expenses",
+            description:
+              "Here you can add your monthly Bills, Loan, Insurance, Rent and etc...",
+            side: "left",
+          },
+        },
+        {
+          element: "#howtouse",
+          popover: {
+            title: "Instructions",
+            description:
+              "If you want to view the instructions again you can click here.",
+            side: "left",
+            align: "start",
+          },
+        },
+        {
+          element: "#calendar",
+          popover: {
+            title: "Calendar",
+            description:
+              "Here you can add and edit your data. just click a date.",
+            side: "left",
+            align: "start",
+          },
+        },
+      ],
+    });
+
+    driverObj.drive();
+
+    setInstructions((prev) => ({ ...prev, calendarB: false }));
+  };
+
   return (
     <>
       <Navbar />
@@ -104,7 +194,11 @@ const BusinessMonth = ({ month }) => {
               }`}
             >
               <div
-                className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-lg rounded-md mt-2 ${
+                id="howtouse"
+                onClick={() => {
+                  showTour();
+                }}
+                className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-lg rounded-md mt-2 cursor-pointer  hover:border-2 hover:border-loranges ${
                   inMobile
                     ? "text-xl sm:text-lg ssm:text-xs xs:mt-0"
                     : "text-sm lg:text-xs md:py-1"
@@ -116,8 +210,7 @@ const BusinessMonth = ({ month }) => {
                   }`}
                 />
                 <p>
-                  Click a Date to <span className="font-bold">Add/Edit</span>{" "}
-                  data
+                  How to use? <span className="font-bold">Instructions</span>
                 </p>
               </div>
             </div>
@@ -175,6 +268,7 @@ const BusinessMonth = ({ month }) => {
               }`}
             >
               <div
+                id="monthlyCapital"
                 onClick={() => setShowBusinessCapitalForm(true)}
                 className={`bg-white px-3 rounded-md text-center cursor-pointer shadow-lg ${
                   inMobile ? "py-2" : "ssm:px-2 py-1"
@@ -226,6 +320,7 @@ const BusinessMonth = ({ month }) => {
 
               {/* Monthly Expenses */}
               <div
+                id="monthlyExpenses"
                 onClick={() => setShowBusinessExpensesForm(true)}
                 className={`bg-white px-3 rounded-md text-center cursor-pointer shadow-lg ${
                   inMobile ? "py-2" : "ssm:px-2 py-1"
@@ -291,6 +386,7 @@ const BusinessMonth = ({ month }) => {
             <div className="text-loranges">SAT</div>
           </div>
           <div
+            id="calendar"
             className={`flex-1 grid grid-cols-7 grid-rows-6 mt-1 overflow-auto rounded-lg shadow-lg ${
               inMobile ? "h-s40" : ""
             }`}

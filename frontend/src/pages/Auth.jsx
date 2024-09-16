@@ -62,8 +62,8 @@ const Auth = () => {
         <>
           {inMobile ? (
             <>
-              <div className="min-h-[80vh] bg-light font-pops border border-light">
-                <div className="shadow-lg rounded-md mt-20 overflow-hidden bg-gradient-to-br from-[#1c1d1d] to-greens w-[380px] mx-auto xs:w-[90vw]">
+              <div className="min-h-[97vh] bg-light font-pops border border-light">
+                <div className="shadow-lg rounded-md mt-20 overflow-hidden bg-white w-[380px] mx-auto xs:w-[90vw]">
                   <Slider
                     ref={(slider) => {
                       sliderRef = slider;
@@ -83,7 +83,7 @@ const Auth = () => {
             </>
           ) : (
             <>
-              <div className="grid grid-cols-1 place-items-center min-h-[95vh] bg-light font-pops relative">
+              <div className="h-hfull grid grid-cols-1 place-items-center min-h-[97vh] bg-light font-pops relative">
                 <div className="grid grid-cols-3 w-1/2 mt-20 mb-20 h-hfit rounded-lg bg-white shadow-lg overflow-hidden 2xl:w-[60vw] xl:w-[70vw] lg:w-[90vw] md:w-[50vw] md:grid-cols-1 sm:w-[60vw]">
                   {/* Introduction */}
                   <div className="col-span-2 p-3 text-white bg-gradient-to-br from-[#1c1d1d] to-greens bg-center bg-cover md:hidden">
@@ -106,7 +106,7 @@ const Auth = () => {
                     </div>
                   </div>
 
-                  <div className="col-span-1 md:row-span-2 md:order-1 md:overflow-hidden md:bg-gradient-to-br md:from-[#1c1d1d] md:to-greens">
+                  <div className="col-span-1 md:row-span-2 md:order-1 md:overflow-hidden md:bg-white">
                     <Slider
                       ref={(slider) => {
                         sliderRef = slider;

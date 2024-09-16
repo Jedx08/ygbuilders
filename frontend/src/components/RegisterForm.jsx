@@ -5,6 +5,7 @@ import { FaInfoCircle } from "react-icons/fa";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
+import { ThreeDot } from "react-loading-indicators";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -13,7 +14,6 @@ const REGISTER_URL = "/register";
 
 const RegisterForm = ({ previous, inMobile }) => {
   const navigate = useNavigate();
-
   const { setAuth, setUserInfo } = useAuth();
 
   const [username, setUsername] = useState("");
@@ -35,6 +35,7 @@ const RegisterForm = ({ previous, inMobile }) => {
 
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const result = USER_REGEX.test(username);
@@ -59,25 +60,27 @@ const RegisterForm = ({ previous, inMobile }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
     if (!validUsername) {
-      return setErrMsg("Username must valid");
+      return setErrMsg("Username must be valid"), setIsLoading(false);
     }
     if (!validEmail) {
-      return setErrMsg("Email must valid");
+      return setErrMsg("Email must be valid"), setIsLoading(false);
     }
     if (!validPassword) {
-      return setErrMsg("Password must valid");
+      return setErrMsg("Password must be valid"), setIsLoading(false);
     }
     if (!validMatch) {
-      return setErrMsg("Password does not match");
+      return setErrMsg("Password does not match"), setIsLoading(false);
     }
 
     try {
       const response = await axios.post(
         REGISTER_URL,
         JSON.stringify({
-          username,
-          email,
+          username: username.toLowerCase(),
+          email: email.toLowerCase(),
           password,
           avatar: "avatar1",
           instructions: {
@@ -85,6 +88,7 @@ const RegisterForm = ({ previous, inMobile }) => {
             calendarP: true,
             calendarB: true,
             summary: true,
+            savings: true,
           },
         }),
         {
@@ -92,52 +96,77 @@ const RegisterForm = ({ previous, inMobile }) => {
           withCredentials: true,
         }
       );
-
       const accessToken = await response?.data?.accessToken;
       const _id = await response?.data?._id;
-      const useremail = await response?.data?.useremail;
+      const getEmail = await response?.data?.email;
       const avatar = await response?.data?.avatar;
-      setAuth({ _id, accessToken, useremail });
-      setUserInfo({ avatar });
+      const instructions = await response?.data?.instructions;
+      const provider = await response?.data?.provider;
+      setAuth({ _id, accessToken });
+      setUserInfo({ avatar, instructions, provider, email: getEmail });
       setSuccess("Success");
       setUsername("");
       setEmail("");
       setPassword("");
       setMatchPassword("");
       setSuccess(false);
-      navigate("/");
+      setIsLoading(false);
+      navigate("/home");
     } catch (err) {
       if (!err?.response) {
         setErrMsg("Can't connect to the Server");
+        setIsLoading(false);
       } else if (err.response?.status === 409) {
         setErrMsg(err.response?.data.message);
+        setIsLoading(false);
       } else {
         setErrMsg("Registration Failed");
+        setIsLoading(false);
       }
+    }
+  };
+
+  // username length validation
+  const userInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 24) {
+      setUsername(value);
+    }
+  };
+  // email length validation
+  const emailInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 100) {
+      setEmail(value);
+    }
+  };
+  // password length validation
+  const passInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 24) {
+      setPassword(value);
+    }
+  };
+  // confirm password length validation
+  const confirmPassInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 24) {
+      setMatchPassword(value);
     }
   };
 
   return (
     <>
-      <div className="mt-5">
-        <h1
-          className={`font-bold text-4xl mb-5 ${
-            inMobile ? "text-white" : "md:text-white"
-          }`}
-        >
-          Sign Up
-        </h1>
+      <div className="mt-10">
+        <h1 className={`font-bold text-4xl mb-5`}>Sign Up</h1>
         <section>
-          <form onSubmit={handleSubmit}>
+          <form>
+            {/* onSubmit={handleSubmit} */}
             {/* Username */}
             <div>
               <label
                 htmlFor="register_username"
-                className={`${
-                  inMobile
-                    ? "text-sm flex text-white"
-                    : "text-sm flex md:text-white"
-                }`}
+                className={`${inMobile ? "text-sm flex" : "text-sm flex"}`}
               >
                 Username:
                 <FaCheck
@@ -156,22 +185,18 @@ const RegisterForm = ({ previous, inMobile }) => {
                   type="text"
                   id="register_username"
                   autoComplete="off"
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={userInput}
                   value={username}
                   required
                   aria-invalid={validUsername ? "false" : "true"}
                   aria-describedby="uidnote"
                   onFocus={() => setUsernameFocus(true)}
                   onBlur={() => setUsernameFocus(false)}
-                  className={`border border-inputLight w-full rounded-md focus:outline-none focus:border-oranges py-1 pl-3 caret-oranges mb-2  ${
-                    inMobile
-                      ? "bg-[inherit] text-white"
-                      : "md:bg-[inherit] md:text-white"
-                  }`}
+                  className={`border border-inputLight w-full rounded-md focus:outline-none focus:border-oranges py-1 pl-3 caret-oranges mb-2`}
                 />
                 <p
                   id="uidnote"
-                  className={`text-xs bg-loranges p-2 rounded-md ${
+                  className={`text-xs bg-loranges p-2 rounded-md text-white ${
                     usernameFocus && username && !validUsername
                       ? "absolute"
                       : "hidden"
@@ -189,12 +214,7 @@ const RegisterForm = ({ previous, inMobile }) => {
 
             {/* Email */}
             <div>
-              <label
-                htmlFor="register_username"
-                className={`text-sm flex  ${
-                  inMobile ? "text-white" : "md:text-white"
-                }`}
-              >
+              <label htmlFor="register_username" className={`text-sm flex`}>
                 Email:
                 <FaCheck
                   className={`ml-1 text-lg text-greens font-bold mb-[-2px] ${
@@ -211,26 +231,17 @@ const RegisterForm = ({ previous, inMobile }) => {
                 <input
                   type="email"
                   autoComplete="off"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={emailInput}
                   value={email}
                   required
-                  className={`border border-inputLight w-full rounded-md focus:outline-none focus:border-oranges py-1 pl-3 caret-oranges mb-2 ${
-                    inMobile
-                      ? "bg-[inherit] text-white"
-                      : "md:bg-[inherit] md:text-white"
-                  }`}
+                  className={`border border-inputLight w-full rounded-md focus:outline-none focus:border-oranges py-1 pl-3 caret-oranges mb-2`}
                 />
               </div>
             </div>
 
             {/* Password */}
             <div>
-              <label
-                htmlFor="register_password"
-                className={`text-sm flex ${
-                  inMobile ? "text-white" : "md:text-white"
-                }`}
-              >
+              <label htmlFor="register_password" className={`text-sm flex`}>
                 Password:
                 <FaCheck
                   className={`ml-1 text-lg text-greens font-bold mb-[-2px] ${
@@ -247,18 +258,14 @@ const RegisterForm = ({ previous, inMobile }) => {
                 <input
                   type={!showPassword ? "password" : "text"}
                   id="register_password"
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={passInput}
                   value={password}
                   required
                   aria-invalid={validPassword ? "false" : "true"}
                   aria-describedby="pwdnote"
                   onFocus={() => setPasswordFocus(true)}
                   onBlur={() => setPasswordFocus(false)}
-                  className={`rounded-md w-full focus:outline-none focus:border-oranges py-1 caret-oranges ${
-                    inMobile
-                      ? "bg-[inherit] text-white"
-                      : "md:bg-[inherit] md:text-white md:w-full"
-                  }`}
+                  className={`rounded-md w-full focus:outline-none focus:border-oranges py-1 caret-oranges`}
                 />
                 {password ? (
                   <>
@@ -267,18 +274,14 @@ const RegisterForm = ({ previous, inMobile }) => {
                         onClick={() => {
                           setShowPassword(true);
                         }}
-                        className={`cursor-pointer ${
-                          inMobile ? "text-white" : "md:text-white"
-                        }`}
+                        className={`cursor-pointer`}
                       />
                     ) : (
                       <FaRegEye
                         onClick={() => {
                           setShowPassword(false);
                         }}
-                        className={`cursor-pointer ${
-                          inMobile ? "text-white" : "md:text-white"
-                        }`}
+                        className={`cursor-pointer`}
                       />
                     )}
                   </>
@@ -290,7 +293,7 @@ const RegisterForm = ({ previous, inMobile }) => {
                 <p
                   id="pwdnote"
                   className={`text-xs bg-loranges p-2 rounded-md shadow-lg ${
-                    inMobile ? "text-white" : "md:text-white"
+                    inMobile ? "text-white" : "text-white"
                   } ${passwordFocus && !validPassword ? "absolute" : "hidden"}`}
                 >
                   <span className="flex items-center">
@@ -311,12 +314,7 @@ const RegisterForm = ({ previous, inMobile }) => {
 
             {/* Confirm Password */}
             <div>
-              <label
-                htmlFor="confirm-password"
-                className={`text-sm flex ${
-                  inMobile ? "text-white" : "md:text-white"
-                }`}
-              >
+              <label htmlFor="confirm-password" className={`text-sm flex`}>
                 Confirm Password:
                 <FaCheck
                   className={`ml-1 text-lg text-greens font-bold mb-[-2px] ${
@@ -333,18 +331,14 @@ const RegisterForm = ({ previous, inMobile }) => {
                 <input
                   type={!showMatchPassword ? "password" : "text"}
                   id="confirm-password"
-                  onChange={(e) => setMatchPassword(e.target.value)}
+                  onChange={confirmPassInput}
                   value={matchPassword}
                   required
                   aria-invalid={validMatch ? "false" : "true"}
                   aria-describedby="confirmnote"
                   onFocus={() => setMatchFocus(true)}
                   onBlur={() => setMatchFocus(false)}
-                  className={`border-inputLight w-full rounded-md focus:outline-none focus:border-oranges py-1 caret-oranges ${
-                    inMobile
-                      ? "bg-[inherit] text-white"
-                      : "md:bg-[inherit] md:text-white"
-                  }`}
+                  className={`border-inputLight w-full rounded-md focus:outline-none focus:border-oranges py-1 caret-oranges`}
                 />
                 {matchPassword ? (
                   <>
@@ -353,18 +347,14 @@ const RegisterForm = ({ previous, inMobile }) => {
                         onClick={() => {
                           setShowMatchPassword(true);
                         }}
-                        className={`cursor-pointer ${
-                          inMobile ? "text-white" : "md:text-white"
-                        }`}
+                        className={`cursor-pointer`}
                       />
                     ) : (
                       <FaRegEye
                         onClick={() => {
                           setShowMatchPassword(false);
                         }}
-                        className={`cursor-pointer ${
-                          inMobile ? "text-white" : "md:text-white"
-                        }`}
+                        className={`cursor-pointer`}
                       />
                     )}
                   </>
@@ -376,7 +366,7 @@ const RegisterForm = ({ previous, inMobile }) => {
                 <p
                   id="confirmnote"
                   className={`text-xs bg-loranges p-2 rounded-md shadow-lg ${
-                    inMobile ? "text-white" : "md:text-white"
+                    inMobile ? "text-white" : "text-white"
                   } ${matchFocus && !validMatch ? "absolute" : "hidden"}`}
                 >
                   <span className="flex items-center">
@@ -389,40 +379,42 @@ const RegisterForm = ({ previous, inMobile }) => {
             </div>
             {errMsg && (
               <p
-                className={`text-xs text-semibold text-[red] text-center mt-2 flex justify-center items-center  ${
-                  inMobile ? "text-white" : "md:text-white"
-                }`}
+                className={`text-xs text-semibold text-[red] text-center mt-2 flex justify-center items-center`}
               >
                 {errMsg}
               </p>
             )}
             {success && (
               <p
-                className={`text-xs text-semibold text-greens text-center mt-2 flex justify-center items-center ${
-                  inMobile ? "text-white" : "md:text-white"
-                }`}
+                className={`text-xs text-semibold text-greens text-center mt-2 flex justify-center items-center`}
               >
                 {success}
               </p>
             )}
             <div className="flex flex-col items-center mt-5 mb-5">
-              <button
-                type="submit"
-                className="mx-auto bg-oranges py-1 px-6 rounded-md font-bold text-white hover:bg-loranges"
-              >
-                Register
-              </button>
+              {isLoading ? (
+                <div className="mx-auto py-1 rounded-md px-6 bg-loranges font-bold text-white">
+                  <ThreeDot color="#ffffff" style={{ fontSize: "8px" }} />
+                </div>
+              ) : (
+                // <button
+                //   type="submit"
+                //   className="mx-auto bg-oranges py-1 px-6 rounded-md font-bold text-white hover:bg-loranges"
+                // >
+                //   Register
+                // </button>
+                <div className="mx-auto bg-oranges py-1 px-6 rounded-md font-bold text-white hover:bg-loranges cursor-not-allowed">
+                  Register
+                </div>
+              )}
             </div>
           </form>
         </section>
       </div>
 
-      <hr className="text-inputLight" />
-
-      <div className="flex flex-col items-center mt-5 mb-5 md:mt-2">
-        <p className="text-sm md:text-white">Already have an account?</p>
-        <button
-          className="mx-auto py-1 rounded-md px-6 bg-greens font-bold text-white mt-2 hover:bg-lgreens"
+      <div className="flex flex-wrap items-center gap-1 justify-center mt-5 mb-5 md:mt-2">
+        <p className="text-sm">Already have an account?</p>
+        <div
           onClick={() => {
             setUsername("");
             setPassword("");
@@ -431,9 +423,10 @@ const RegisterForm = ({ previous, inMobile }) => {
             setSuccess(false);
             previous();
           }}
+          className="text-greens hover:text-lgreens text-base font-semibold underline cursor-pointer"
         >
-          Sign In
-        </button>
+          Sign in
+        </div>
       </div>
     </>
   );

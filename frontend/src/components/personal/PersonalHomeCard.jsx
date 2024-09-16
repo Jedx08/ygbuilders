@@ -9,7 +9,6 @@ import usePersonalExpenses from "../../hooks/usePersonalExpenses";
 import networth from "../../media/networth.png";
 import { FcCalendar, FcStatistics } from "react-icons/fc";
 import { CalendarContext } from "../../context/CalendarContext";
-
 import SelectAvatar from "../SelectAvatar";
 import avatar1 from "../../media/avatar1.png";
 import avatar2 from "../../media/avatar2.png";

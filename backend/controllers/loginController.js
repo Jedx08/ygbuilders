@@ -10,15 +10,17 @@ const handleLogin = async (req, res) => {
       .json({ message: "Username or Email and Password are required." });
 
   const foundUser =
-    (await User.findOne({ username }).exec()) ||
-    (await User.findOne({ useremail: username }).exec());
+    (await User.findOne({ username: username.toLowerCase() }).exec()) ||
+    (await User.findOne({ email: username.toLowerCase() }).exec());
   if (!foundUser)
     return res.status(401).json({
       message: "Your login credentials don't match an account in our system.",
     });
   const _id = foundUser?._id;
-  const useremail = foundUser?.useremail;
+  const email = foundUser?.email;
   const avatar = foundUser?.avatar;
+  const provider = foundUser?.provider;
+  const instructions = foundUser?.instructions;
   // evaluate password
   const match = await bcrypt.compare(password, foundUser.password);
   if (match) {
@@ -44,7 +46,14 @@ const handleLogin = async (req, res) => {
       maxAge: 168 * 60 * 60 * 1000,
     });
 
-    res.json({ accessToken, useremail, avatar, _id: _id.toString() });
+    res.json({
+      accessToken,
+      email,
+      avatar,
+      _id: _id.toString(),
+      instructions,
+      provider,
+    });
   } else {
     res.status(401).json({
       message: "Your login credentials don't match an account in our system.",

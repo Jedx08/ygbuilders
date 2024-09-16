@@ -390,7 +390,7 @@ const BusinessSummary = () => {
                 <div className="flex flex-wrap items-center justify-center mx-auto gap-2 w-[80%] md:w-[90%] ssm:w-[100%]">
                   {/* Total Capital */}
                   <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
-                    <div className="flex items-center justify-center gap-2 pb-1 px-2 pt-3">
+                    <div className="flex items-center justify-center gap-2 pb-1 px-2 pt-3 xs:px-3">
                       <img
                         src={monthlyCapitalIcon}
                         alt="puch"
@@ -404,7 +404,7 @@ const BusinessSummary = () => {
                   </div>
                   {/* Sales */}
                   <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
-                    <div className="flex items-center justify-center gap-2 pb-1 px-2 pt-3">
+                    <div className="flex items-center justify-center gap-2 pb-1 px-2 pt-3 xs:px-3">
                       <img
                         src={monthlySalesIcon}
                         alt="puch"
@@ -418,7 +418,7 @@ const BusinessSummary = () => {
                   </div>
                   {/* Expenses */}
                   <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
-                    <div className="flex items-center justify-center gap-2 pb-1 px-2 pt-3">
+                    <div className="flex items-center justify-center gap-2 pb-1 px-2 pt-3 xs:px-3">
                       <img
                         src={monthlyExpensesIcon}
                         alt="puch"
@@ -432,7 +432,7 @@ const BusinessSummary = () => {
                   </div>
                   {/* Profit - Month Expenses */}
                   <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
-                    <div className="flex items-center justify-center gap-2 pb-1 pt-3 px-3 font-medium">
+                    <div className="flex items-center justify-center gap-2 pb-1 pt-3 px-3 font-medium xs:px-3">
                       <div className="flex items-center gap-1 sm:text-sm">
                         <img
                           src={monthlyCapitalIcon}
@@ -474,7 +474,7 @@ const BusinessSummary = () => {
                   </div>
                   {/* Total Profit */}
                   <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
-                    <div className="flex items-center justify-center gap-2 pb-1 pt-3">
+                    <div className="flex items-center justify-center gap-2 pb-1 pt-3 xs:px-3">
                       <img
                         src={monthlyProfitIcon}
                         alt="puch"

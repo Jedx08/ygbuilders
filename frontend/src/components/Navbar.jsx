@@ -52,7 +52,7 @@ const Navbar = () => {
           <div className="font-pops overflow-auto">
             <div className="flex justify-between pl-1 pr-4 py-1 items-center">
               <div className="pl-2">
-                <Link to="/">
+                <Link to="/home">
                   <img src={logo} className="w-12" />
                 </Link>
               </div>
@@ -72,14 +72,14 @@ const Navbar = () => {
           <div className="font-pops overflow-auto shadow-lg">
             <div className="flex justify-between px-2 py-1 pl-2">
               <div>
-                <Link to="/">
+                <Link to="/home">
                   <img src={logo} className="w-12" />
                 </Link>
               </div>
               <div className="grid place-items-center">
                 <ul className="flex space-x-4 items-center">
                   <li>
-                    <Link to="/">
+                    <Link to="/home">
                       <div className="flex space-x-1 items-center">
                         <GoHomeFill className="text-2xl text-greens hover:text-lgreens" />
                         <p className="font-bold text-lg text-lgreens hover:text-greens">
@@ -173,7 +173,7 @@ const Navbar = () => {
               </div>
               <div className="grid grid-rows-4 justify-center items-center mt-5">
                 {/* Home */}
-                <Link to="/">
+                <Link to="/home">
                   <div className="py-1 row-span-1 flex space-x-3 items-center cursor-pointer hover:text-lgreens">
                     <div className="border border-light bg-[#2222] p-2 rounded-[50%]">
                       <GoHomeFill className="text-2xl text-greens" />

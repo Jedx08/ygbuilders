@@ -14,6 +14,7 @@ const businessMonthlyCapital = require("./routes/businessMonthlyCapitalRoute");
 const corsOptions = require("./config/corsOptions");
 const credentials = require("./middleware/credentials");
 const userRoute = require("./routes/userRoute");
+const facebookLoginRoute = require("./routes/facebookLoginRoute");
 const registerRoute = require("./routes/registerRoute");
 const loginRoute = require("./routes/loginRoute");
 const logoutRoute = require("./routes/logoutRoute");
@@ -24,8 +25,7 @@ const verifyJWT = require("./middleware/verifyJWT");
 // express app
 const app = express();
 
-// connect to MongoDB
-connectDB();
+app.use(express.static("public"));
 
 // Handle options credentials check - before CORS!
 // and fetch cookies credentials requirement
@@ -34,6 +34,9 @@ app.use(credentials);
 // Cross Origin Resource Sharing
 app.use(cors(corsOptions));
 
+// connect to MongoDB
+connectDB();
+
 // built in middleware for json
 app.use(express.json());
 
@@ -41,6 +44,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // user/auth routes
+app.use("/auth/facebook", facebookLoginRoute);
 app.use("/register", registerRoute);
 app.use("/login", loginRoute);
 app.use("/refresh", refreshTokenRoute);

@@ -9,8 +9,10 @@ const handleRefreshToken = async (req, res) => {
   const foundUser = await User.findOne({ refreshToken }).exec();
   if (!foundUser) return res.sendStatus(403); //forbidden
   const _id = foundUser?._id;
-  const useremail = foundUser?.useremail;
+  const email = foundUser?.email;
   const avatar = foundUser?.avatar;
+  const instructions = foundUser?.instructions;
+  const provider = foundUser?.provider;
 
   //create secure cookie with refresh token
   res.cookie("jwt", refreshToken, {
@@ -32,7 +34,14 @@ const handleRefreshToken = async (req, res) => {
       { expiresIn: "30m" }
     );
 
-    res.json({ accessToken, useremail, avatar, _id: _id.toString() });
+    res.json({
+      accessToken,
+      email,
+      avatar,
+      _id: _id.toString(),
+      instructions,
+      provider,
+    });
   });
 };
 

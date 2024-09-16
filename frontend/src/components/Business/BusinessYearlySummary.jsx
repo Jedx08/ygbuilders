@@ -411,7 +411,7 @@ const BusinessYearlySummary = () => {
                     alt="yearly net"
                     className="w-9 sm:w-7"
                   />
-                  <div className="text-md font-medium sm:text-sm">Net</div>
+                  <div className="text-md font-medium sm:text-sm">Profit</div>
                 </div>
                 <div
                   className={

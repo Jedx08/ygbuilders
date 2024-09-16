@@ -5,6 +5,7 @@ export default {
   content: [
     "./src/pages/**/*.{js,jsx,ts,tsx}",
     "./src/components/**/*.{js,jsx,ts,tsx}",
+    "./src/landingpage/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
     screens: {
@@ -63,9 +64,6 @@ export default {
       },
       colors: {
         inputLight: "#c9ccd1",
-      },
-      backgroundImage: {
-        employee: "https://cdn-icons-png.flaticon.com/512/8327/8327833.png",
       },
     },
   },

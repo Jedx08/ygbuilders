@@ -38,7 +38,12 @@ const SelectAvatar = () => {
       const json = await response.data;
 
       if (response.status === 200) {
-        setUserInfo({ avatar: json.avatar });
+        setUserInfo((prev) => {
+          return {
+            ...prev,
+            avatar: json.avatar,
+          };
+        });
         setIsLoading(false);
         setIsAvatar(false);
       }

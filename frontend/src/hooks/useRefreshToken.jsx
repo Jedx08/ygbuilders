@@ -13,12 +13,14 @@ const useRefreshToken = () => {
         ...prev,
         accessToken: response.data.accessToken,
         _id: response.data._id,
-        useremail: response.data.useremail,
       };
     });
     setUserInfo(() => {
       return {
         avatar: response.data.avatar,
+        instructions: response.data.instructions,
+        email: response.data.email,
+        provider: response.data.provider,
       };
     });
     return response.data.accessToken;

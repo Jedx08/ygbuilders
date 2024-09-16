@@ -10,22 +10,17 @@ import "driver.js/dist/driver.css";
 
 const Home = () => {
   const axiosPrivate = useAxiosPrivate();
-  const { auth } = useAuth();
+  const { userInfo } = useAuth();
 
   const [instructions, setInstructions] = useState(null);
 
   useEffect(() => {
     const showInstructions = async () => {
       try {
-        const _id = await auth?._id;
+        setInstructions(userInfo.instructions);
 
-        if (_id) {
-          const response = await axiosPrivate.get("/user/" + _id);
-          setInstructions(response.data.instructions);
-
-          if (response.data.instructions.home) {
-            showTour();
-          }
+        if (userInfo.instructions.home) {
+          showTour();
         }
       } catch (err) {
         console.log(err);
@@ -62,7 +57,6 @@ const Home = () => {
             title: "Personal Income",
             description:
               "Here you can track and manage your personal finances.",
-            side: "left",
           },
         },
         {
@@ -71,8 +65,6 @@ const Home = () => {
             title: "Personal Title",
             description:
               "You can start by creating a title. It can still be changed later.",
-            side: "left",
-            align: "start",
           },
         },
         {
@@ -81,8 +73,6 @@ const Home = () => {
             title: "Business Income",
             description:
               "Much like the first one but with added features for your business.",
-            side: "left",
-            align: "start",
           },
         },
         {
@@ -91,8 +81,6 @@ const Home = () => {
             title: "Business Title",
             description:
               "Here you can name the business you're managing. It can still be changed later.",
-            side: "left",
-            align: "start",
           },
         },
       ],

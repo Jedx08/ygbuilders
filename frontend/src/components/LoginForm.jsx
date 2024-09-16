@@ -4,7 +4,9 @@ import logo from "../media/YG_LOGO.png";
 import useAuth from "../hooks/useAuth";
 import axios from "../api/axios";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
-import { ThreeDot } from "react-loading-indicators";
+import { ThreeDot, OrbitProgress } from "react-loading-indicators";
+import { LoginSocialFacebook } from "reactjs-social-login";
+import { FacebookLoginButton } from "react-social-login-buttons";
 
 const LOGIN_URL = "/login";
 
@@ -31,7 +33,7 @@ const LoginForm = ({ next, inMobile }) => {
     try {
       const response = await axios.post(
         LOGIN_URL,
-        JSON.stringify({ username, password }),
+        JSON.stringify({ username: username.toLowerCase(), password }),
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
@@ -39,14 +41,16 @@ const LoginForm = ({ next, inMobile }) => {
       );
       const accessToken = response?.data?.accessToken;
       const _id = response?.data?._id;
-      const useremail = response?.data?.useremail;
+      const email = response?.data?.email;
       const avatar = response?.data?.avatar;
-      setAuth({ _id, accessToken, useremail });
-      setUserInfo({ avatar });
+      const instructions = response?.data?.instructions;
+      const provider = response?.data?.provider;
+      setAuth({ _id, accessToken });
+      setUserInfo({ avatar, instructions, email, provider });
       setUsername("");
       setPassword("");
       setSuccess("Success");
-      navigate("/");
+      navigate("/home");
     } catch (err) {
       if (!err?.response) {
         setErrMsg("Can't connect to the Server");
@@ -65,174 +69,251 @@ const LoginForm = ({ next, inMobile }) => {
       }
     }
   };
+  const userInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 100) {
+      setUsername(value);
+    }
+  };
+  const passInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 24) {
+      setPassword(value);
+    }
+  };
 
   return (
     <>
-      <div
-        className={`mt-16 md:mt-10 items-center flex justify-center gap-3 ${
-          inMobile ? "xs:gap-1" : ""
-        }`}
-      >
-        <img src={logo} className="w-14" />
-        <h1
-          className={`font-extrabold text-3xl text-greens ${
-            inMobile ? "" : "hidden md:block"
+      <div className="">
+        {/* logo */}
+        <div
+          className={`mt-10 mb-8 items-center flex justify-center gap-3 md:mb-0 ${
+            inMobile ? "xs:gap-1" : ""
           }`}
         >
-          Your <span className="text-oranges">Gross</span>
-        </h1>
-      </div>
-      <div className="mt-5">
-        <section>
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label
-                htmlFor="username"
-                className={`text-sm ${
-                  inMobile ? "text-white" : "md:text-white"
-                }`}
-              >
-                Username or Email:
-              </label>
-              <div className="mb-2">
-                <input
-                  type="text"
-                  id="username"
-                  onChange={(e) => setUsername(e.target.value)}
-                  autoComplete="off"
-                  value={username}
-                  required
-                  className={`border border-inputLight w-full rounded-md focus:outline-none focus:border-greens py-1 pl-3 caret-greens placeholder:text-xs ${
-                    inMobile
-                      ? "bg-[inherit] text-white"
-                      : "md:bg-[inherit] md:text-white"
-                  }`}
-                />
-              </div>
-            </div>
-            <div>
-              <label
-                htmlFor="password"
-                className={`text-sm ${
-                  inMobile ? "text-white" : "md:text-white"
-                }`}
-              >
-                Password:
-              </label>
-              <div className="flex items-center justify-between md:justify-normal border border-inputLight rounded-md pl-3 pr-2">
-                <input
-                  type={!showPassword ? "password" : "text"}
-                  id="password"
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="off"
-                  value={password}
-                  required
-                  className={`rounded-md focus:outline-none focus:border-greens py-1 caret-greens placeholder:text-xs  ${
-                    inMobile
-                      ? "bg-[inherit] text-white w-full"
-                      : "md:bg-[inherit] md:text-white w-full md:w-full"
-                  }`}
-                />
-                {password ? (
-                  <>
-                    {!showPassword ? (
-                      <FaRegEyeSlash
-                        onClick={() => {
-                          setShowPassword(true);
-                        }}
-                        className={`cursor-pointer ${
-                          inMobile ? "text-white" : "md:text-white"
-                        }`}
-                      />
-                    ) : (
-                      <FaRegEye
-                        onClick={() => {
-                          setShowPassword(false);
-                        }}
-                        className={`cursor-pointer ${
-                          inMobile ? "text-white" : "md:text-white"
-                        }`}
-                      />
-                    )}
-                  </>
-                ) : (
-                  <></>
-                )}
-              </div>
-            </div>
-
-            {errMsg && (
-              <p
-                className={`text-xs font-light text-[red] text-center mt-2 ${
-                  inMobile
-                    ? "text-white font-medium"
-                    : "md:text-white md:font-medium"
-                }`}
-              >
-                {errMsg}
-              </p>
-            )}
-            {success && (
-              <p
-                className={`text-xs font-light text-greens text-center mt-2 ${
-                  inMobile
-                    ? "text-white font-medium"
-                    : "md:text-white md:font-medium"
-                }`}
-              >
-                {success}
-              </p>
-            )}
-
-            <div className="flex flex-col items-center mt-5 mb-5">
-              <div className="mb-2">
-                {isLoading ? (
-                  <div className="mx-auto py-1 rounded-md px-6 bg-lgreens font-bold text-white">
-                    <ThreeDot color="#ffffff" style={{ fontSize: "8px" }} />
-                  </div>
-                ) : (
-                  <button className="mx-auto py-1 rounded-md px-6 bg-greens font-bold text-white hover:bg-lgreens">
-                    Sign In
-                  </button>
-                )}
-              </div>
-              <div>
-                <p
-                  className={`text-sm ${
-                    inMobile ? "text-white" : "md:text-white"
-                  }`}
-                >
-                  Forgot Password?
-                </p>
-              </div>
-            </div>
-          </form>
-        </section>
-      </div>
-
-      <hr className="text-inputLight" />
-
-      <div
-        className={`mt-10 flex flex-col items-center ${
-          inMobile ? "mt-5" : "md:mt-5"
-        }`}
-      >
-        <div className="mb-2">
-          <p className={`text-sm ${inMobile ? "text-white" : "md:text-white"}`}>
-            New to YourGross?
-          </p>
-        </div>
-        <div className="mb-5">
-          <button
-            className="bg-oranges py-1 px-6 rounded-md font-bold text-white hover:bg-loranges"
-            onClick={() => {
-              setUsername("");
-              setPassword("");
-              next();
-            }}
+          <img src={logo} className="w-14" />
+          <h1
+            className={`font-extrabold text-3xl text-greens ${
+              inMobile ? "" : "hidden md:block"
+            }`}
           >
-            Create Account
-          </button>
+            Your <span className="text-oranges">Gross</span>
+          </h1>
+        </div>
+
+        {/* login input */}
+        <div className="mt-10 min-h-[288px] flex justify-center items-center">
+          {isLoading ? (
+            <OrbitProgress
+              dense
+              color="#2ec4b6"
+              size="small"
+              text=""
+              textColor=""
+            />
+          ) : (
+            <section>
+              <form onSubmit={handleSubmit}>
+                <LoginSocialFacebook
+                  appId="1272021290875971"
+                  onResolve={async (fbresponse) => {
+                    setIsLoading(true);
+
+                    const result = await fbresponse.data;
+
+                    if (!result) {
+                      return setErrMsg("Login failed"), setIsLoading(false);
+                    }
+
+                    try {
+                      const response = await axios.post(
+                        "/auth/facebook",
+                        JSON.stringify({
+                          username: result.email,
+                          email: result.email,
+                          facebookId: result.id,
+                          firstname: result.first_name,
+                          lastname: result.last_name,
+                          instructions: {
+                            home: true,
+                            calendarP: true,
+                            calendarB: true,
+                            summary: true,
+                            savings: true,
+                          },
+                        }),
+                        {
+                          headers: { "Content-Type": "application/json" },
+                          withCredentials: true,
+                        }
+                      );
+                      if (response.status === 200) {
+                        const accessToken = response?.data?.accessToken;
+                        const _id = response?.data?._id;
+                        const email = response?.data?.email;
+                        const avatar = response?.data?.avatar;
+                        const instructions = response?.data?.instructions;
+                        const provider = response?.data?.provider;
+                        setAuth({ _id, accessToken });
+                        setUserInfo({ email, avatar, instructions, provider });
+                        setSuccess("Success");
+                        navigate("/home");
+                      }
+                    } catch (error) {
+                      if (!error?.response) {
+                        setErrMsg("Can't connect to the Server");
+                        setIsLoading(false);
+                      }
+                      if (error.response?.status === 400) {
+                        setErrMsg(error.response?.data.message);
+                        setIsLoading(false);
+                      } else if (error.response?.status === 401) {
+                        setErrMsg(error.response?.data.message);
+                        setIsLoading(false);
+                      } else {
+                        setErrMsg("Login Failed");
+                        setIsLoading(false);
+                      }
+                    }
+                  }}
+                  onReject={(error) => {
+                    if (error) {
+                      setErrMsg("Login Failed");
+                      setIsLoading(false);
+                    }
+                  }}
+                >
+                  <FacebookLoginButton
+                    className="text-sm h-hfit py-1 mb-2 shadow-none"
+                    iconSize={"20px"}
+                  />
+                </LoginSocialFacebook>
+
+                <div className="text-sm font-medium text-center text-[#bbbbbb] py-1">
+                  or
+                </div>
+
+                {/* Username Email */}
+                <div>
+                  <label htmlFor="username" className="text-sm">
+                    Username or Email:
+                  </label>
+                  <div className="mb-2">
+                    <input
+                      type="text"
+                      id="username"
+                      onChange={userInput}
+                      autoComplete="off"
+                      value={username}
+                      required
+                      className={`border border-greens w-full rounded-md focus:outline-none py-1 pl-3 caret-greens placeholder:text-xs ${
+                        inMobile ? "bg-[inherit]" : "md:bg-[inherit]"
+                      }`}
+                    />
+                  </div>
+                </div>
+                {/* Password */}
+                <div>
+                  <label htmlFor="password" className="text-sm">
+                    Password:
+                  </label>
+                  <div className="flex items-center justify-between md:justify-normal border border-greens rounded-md pl-3 pr-2">
+                    <input
+                      type={!showPassword ? "password" : "text"}
+                      id="password"
+                      onChange={passInput}
+                      autoComplete="off"
+                      value={password}
+                      required
+                      className={`rounded-md focus:outline-none focus:border-greens py-1 caret-greens placeholder:text-xs  ${
+                        inMobile
+                          ? "bg-[inherit] w-full"
+                          : "md:bg-[inherit] md: w-full md:w-full"
+                      }`}
+                    />
+                    {password ? (
+                      <>
+                        {!showPassword ? (
+                          <FaRegEyeSlash
+                            onClick={() => {
+                              setShowPassword(true);
+                            }}
+                            className={`cursor-pointer`}
+                          />
+                        ) : (
+                          <FaRegEye
+                            onClick={() => {
+                              setShowPassword(false);
+                            }}
+                            className={`cursor-pointer`}
+                          />
+                        )}
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                </div>
+
+                {errMsg && (
+                  <p
+                    className={`text-xs font-light text-[red] text-center mt-2 ${
+                      inMobile ? "font-medium" : "md:font-medium"
+                    }`}
+                  >
+                    {errMsg}
+                  </p>
+                )}
+                {success && (
+                  <p
+                    className={`text-xs font-light text-greens text-center mt-2 ${
+                      inMobile ? "font-medium" : "md:font-medium"
+                    }`}
+                  >
+                    {success}
+                  </p>
+                )}
+
+                <div className="flex flex-col items-center mt-5 mb-5">
+                  <div className="mb-2">
+                    {isLoading ? (
+                      <div className="mx-auto py-1 rounded-md px-6 bg-lgreens font-bold text-white">
+                        <ThreeDot color="#ffffff" style={{ fontSize: "8px" }} />
+                      </div>
+                    ) : (
+                      <button className="mx-auto py-1 rounded-md px-6 bg-greens font-bold text-white hover:bg-lgreens">
+                        Sign In
+                      </button>
+                    )}
+                  </div>
+                  <div>
+                    <p className="text-sm">Forgot Password?</p>
+                  </div>
+                </div>
+              </form>
+            </section>
+          )}
+        </div>
+
+        {/* to register page */}
+        <div
+          className={`mt-10 flex flex-col items-center ${
+            inMobile ? "mt-5" : "md:mt-5"
+          }`}
+        >
+          <div className="mb-2 flex flex-wrap items-center justify-center text-sm gap-1">
+            <p className="">New to YourGross?</p>
+            <div
+              onClick={() => {
+                setUsername("");
+                setPassword("");
+                next();
+              }}
+              className="text-oranges hover:text-loranges font-semibold underline cursor-pointer"
+            >
+              Register
+            </div>
+          </div>
         </div>
       </div>
     </>

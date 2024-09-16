@@ -11,6 +11,7 @@ import Summary from "./pages/Summary";
 import { useEffect, useContext } from "react";
 import { CalendarContext } from "./context/CalendarContext";
 import Settings from "./pages/Settings";
+import LandingPage from "./landingpage/LandingPage";
 
 function App() {
   const { setInMobile } = useContext(CalendarContext);
@@ -34,9 +35,10 @@ function App() {
         <Route path="/" element={<Layout />}>
           {/* Protected Routes */}
           <Route element={<PersistLogin />}>
+            <Route path="/" element={<LandingPage />} />
             <Route path="login" element={<Auth />} />
             <Route element={<RequireAuth />}>
-              <Route exact path="/" element={<Home />} />
+              <Route exact path="/home" element={<Home />} />
               <Route path="personal" element={<Personal />} />
               <Route path="business" element={<Business />} />
               <Route path="summary" element={<Summary />} />

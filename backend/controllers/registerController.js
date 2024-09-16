@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const handleRegister = async (req, res) => {
-  const { username, email, password, avatar, instructions } = req.body;
+  const { username, email, password, instructions } = req.body;
 
   if (!username || !email || !password)
     return res
@@ -15,8 +15,8 @@ const handleRegister = async (req, res) => {
   if (duplicate)
     return res.status(409).json({ message: `${username} is already in used` }); // conflict
 
-  // check for duplicate useremail in DB
-  const duplicateEmail = await User.findOne({ useremail: email }).exec();
+  // check for duplicate email in DB
+  const duplicateEmail = await User.findOne({ email: email }).exec();
   if (duplicateEmail)
     return res.status(409).json({ message: `Email is already in used` }); // conflict
 
@@ -26,23 +26,21 @@ const handleRegister = async (req, res) => {
 
     // create and store the new user
     const created = await User.create({
-      username: username,
-      useremail: email,
+      username: username.toLowerCase(),
+      email: email.toLowerCase(),
       password: hashedPassword,
-      avatar: avatar,
       instructions: instructions,
     });
-    // res.status(201).json({ success: `New user ${username} created!` });
-
-    // Test Reg and AccessToken
 
     if (created) {
       const foundUser =
-        (await User.findOne({ username }).exec()) ||
-        (await User.findOne({ useremail }).exec());
+        (await User.findOne({ username: username.toLowerCase() }).exec()) ||
+        (await User.findOne({ email: email.toLowerCase() }).exec());
       const _id = foundUser?._id;
-      const useremail = foundUser?.useremail;
+      const email = foundUser?.email;
       const avatar = foundUser?.avatar;
+      const provider = foundUser?.provider;
+      const instructions = foundUser?.instructions;
       const accessToken = jwt.sign(
         { username: foundUser.username, _id: _id },
         process.env.ACCESS_TOKEN_SECRET,
@@ -65,13 +63,14 @@ const handleRegister = async (req, res) => {
         maxAge: 168 * 60 * 60 * 1000,
       });
 
-      console.log("New Account: ", username);
+      console.log("New Account: ", email);
       res.json({
         accessToken,
-        useremail,
+        email,
         avatar,
         _id: _id.toString(),
         instructions,
+        provider,
       });
     }
   } catch (err) {

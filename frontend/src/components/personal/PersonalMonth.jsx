@@ -13,6 +13,10 @@ import PMonthlyExpensesForm from "./PMonthlyExpensesForm";
 import expensesIcon from "../../media/monexpenses.png";
 import usePersonalExpenses from "../../hooks/usePersonalExpenses";
 import PersonalMobileData from "./PersonalMobileData";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useAuth from "../../hooks/useAuth";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 const PersonalMonth = ({ month }) => {
   const {
@@ -29,8 +33,11 @@ const PersonalMonth = ({ month }) => {
   } = useContext(CalendarContext);
 
   const getPersonalExpenses = usePersonalExpenses();
+  const { userInfo } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
 
   const [monthlyExpenses, setMonthlyExpenses] = useState("");
+  const [instructions, setInstructions] = useState(null);
 
   function handlePrevMonth() {
     setMonthIndex(monthIndex - 1);
@@ -59,6 +66,80 @@ const PersonalMonth = ({ month }) => {
     }
   }, [personalExpensesData, monthIndex]);
 
+  useEffect(() => {
+    const showInstructions = async () => {
+      try {
+        setInstructions(userInfo.instructions);
+
+        if (userInfo.instructions.calendarP) {
+          showTour();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    showInstructions();
+  }, []);
+
+  useEffect(() => {
+    const toggleInstructions = async () => {
+      try {
+        if (instructions) {
+          await axiosPrivate.patch(
+            "/user/instructions",
+            JSON.stringify({ instructions: instructions })
+          );
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    toggleInstructions();
+  }, [instructions]);
+
+  const showTour = () => {
+    const driverObj = driver({
+      showProgress: true,
+      steps: [
+        {
+          element: "#monthlyExpenses",
+          popover: {
+            title: "Monthly Expenses",
+            description:
+              "Here you can add your monthly Bills, Loan, Insurance, Tuition, Rent and etc...",
+            side: "left",
+          },
+        },
+        {
+          element: "#howtouse",
+          popover: {
+            title: "Instructions",
+            description:
+              "If you want to view the instructions again you can click here.",
+            side: "left",
+            align: "start",
+          },
+        },
+        {
+          element: "#calendar",
+          popover: {
+            title: "Calendar",
+            description:
+              "Here you can add and edit your data. just click a date.",
+            side: "left",
+            align: "start",
+          },
+        },
+      ],
+    });
+
+    driverObj.drive();
+
+    setInstructions((prev) => ({ ...prev, calendarP: false }));
+  };
+
   return (
     <>
       <Navbar />
@@ -75,12 +156,16 @@ const PersonalMonth = ({ month }) => {
             <div
               className={`items-center flex ${
                 inMobile
-                  ? "order-3 col-span-1 justify-end xs:justify-center xs:order-2 xs:mt-1"
+                  ? "order-3 col-span-1 justify-end xs:order-2 xs:mt-1"
                   : "col-span-1 order-2 justify-center lg:order-3 lg:col-span-1 lg:justify-end"
               }`}
             >
               <div
-                className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-lg rounded-md mt-2 ${
+                id="howtouse"
+                onClick={() => {
+                  showTour();
+                }}
+                className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-lg rounded-md mt-2 cursor-pointer hover:border-2 hover:border-lgreens ${
                   inMobile
                     ? "text-xl sm:text-lg ssm:text-xs xs:mt-0"
                     : "text-sm lg:text-xs md:py-1"
@@ -92,8 +177,7 @@ const PersonalMonth = ({ month }) => {
                   }`}
                 />
                 <p>
-                  Click a Date to <span className="font-bold">Add/Edit</span>{" "}
-                  data
+                  How to use? <span className="font-bold">Instructions</span>
                 </p>
               </div>
             </div>
@@ -145,12 +229,12 @@ const PersonalMonth = ({ month }) => {
             <div
               className={`grid grid-flow-col gap-1 justify-end items-center ${
                 inMobile
-                  ? "col-span-3 row-span-1 xs:justify-center"
+                  ? "col-span-3 row-span-1"
                   : "col-span-1 order-3 mr-8 lg:order-1 lg:col-span-3 lg:row-span-1 lg:mr-0 sm:mr-0 ssm:mr-0"
               }`}
             >
               <div
-                id="personalMonthlyExpenses"
+                id="monthlyExpenses"
                 onClick={() => setShowPersonalExpensesForm(true)}
                 className={`bg-white px-3 rounded-md text-center cursor-pointer shadow-lg ${
                   inMobile ? "py-2" : "ssm:px-2 py-1"
@@ -214,6 +298,7 @@ const PersonalMonth = ({ month }) => {
             <div className="text-loranges">SAT</div>
           </div>
           <div
+            id="calendar"
             className={`flex-1 grid grid-cols-7 grid-rows-6 mt-1 overflow-auto rounded-lg shadow-lg ${
               inMobile ? "h-s40" : ""
             }`}
@@ -256,7 +341,7 @@ const PersonalMonth = ({ month }) => {
                 </div>
               </div>
             )}
-            <div className={`${inMobile ? "" : "hidden ssm:block"}`}>
+            <div id="data" className={`${inMobile ? "" : "hidden ssm:block"}`}>
               {month.map((row, i) => (
                 <React.Fragment key={i}>
                   {row.map((day, idx) => (

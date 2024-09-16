@@ -312,9 +312,9 @@ const BusinessYearlySummary = () => {
         <div className="w-full flex justify-center mt-5 text-center">
           <div
             id="barGraphOverview"
-            className="w-[80%] bg-white flex flex-wrap justify-between px-10 py-5 rounded-md shadow-lg xxs:justify-center xxs:gap-3"
+            className="w-[80%] flex flex-wrap rounded-md justify-center items-center gap-2 md:w-[90%] ssm:w-[100%]"
           >
-            <div className="flex flex-col justify-center items-center gap-2">
+            <div className="flex flex-col justify-center items-center gap-2 min-w-[25%] bg-white shadow-lg rounded-md px-5 py-3">
               <div className="flex items-center justify-center gap-2">
                 <img
                   src={yearlyGrossIcon}
@@ -327,7 +327,7 @@ const BusinessYearlySummary = () => {
                 {yearlyGross.toLocaleString()}
               </div>
             </div>
-            <div className="flex flex-col justify-center items-center gap-2">
+            <div className="flex flex-col justify-center items-center gap-2 min-w-[30%] bg-white shadow-lg rounded-md px-5 py-3">
               <div className="flex items-center justify-center gap-2">
                 <img
                   src={yearlyExpensesIcon}
@@ -340,7 +340,7 @@ const BusinessYearlySummary = () => {
                 {(yearlyExpenses + thisYearMonthlyExpenses).toLocaleString()}
               </div>
             </div>
-            <div className="flex flex-col justify-center items-center gap-2">
+            <div className="flex flex-col justify-center items-center gap-2 min-w-[30%] bg-white shadow-lg rounded-md px-5 py-3">
               <div className="flex items-center justify-center gap-2">
                 <img
                   src={yearlyNetIcon}

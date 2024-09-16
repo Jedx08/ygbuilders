@@ -29,7 +29,7 @@ const PersonalSummary = () => {
     setPersonalSummaryView,
   } = useContext(CalendarContext);
 
-  const { auth } = useAuth();
+  const { auth, userInfo } = useAuth();
 
   const thisMonth = dayjs().month(monthIndex).format("MMMM");
 
@@ -195,15 +195,9 @@ const PersonalSummary = () => {
   useEffect(() => {
     const showInstructions = async () => {
       try {
-        const _id = await auth?._id;
-
-        if (_id) {
-          const response = await axiosPrivate.get("/user/" + _id);
-          setInstructions(response.data.instructions);
-
-          if (response.data.instructions.summary && !isLoading) {
-            showTour();
-          }
+        setInstructions(userInfo.instructions);
+        if (userInfo.instructions.summary && !isLoading) {
+          showTour();
         }
       } catch (err) {
         console.log(err);
@@ -445,7 +439,7 @@ const PersonalSummary = () => {
           <div className="flex flex-wrap items-center justify-center mx-auto gap-2 w-[80%] md:w-[90%] ssm:w-[100%]">
             {/* Monthly Gross */}
             <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
-              <div className="flex items-center justify-center gap-2 pb-1 pt-3">
+              <div className="flex items-center justify-center gap-2 pb-1 pt-3 xs:px-3">
                 <img
                   src={monthlyGrossIcon}
                   alt="gross"
@@ -459,7 +453,7 @@ const PersonalSummary = () => {
             </div>
             {/* Monthly Expenses */}
             <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
-              <div className="flex items-center justify-center gap-2 pb-1 pt-3">
+              <div className="flex items-center justify-center gap-2 pb-1 pt-3 xs:px-3">
                 <img
                   src={monthlyExpensesIcon}
                   alt="expenses"
@@ -503,7 +497,7 @@ const PersonalSummary = () => {
             </div>
             {/* Montly Total Net */}
             <div className="bg-white rounded-lg shadow-lg w-fit min-w-[30%]">
-              <div className="flex items-center justify-center gap-2 pb-1 pt-3">
+              <div className="flex items-center justify-center gap-2 pb-1 pt-3 xs:px-3">
                 <img
                   src={monthlyNetIcon}
                   alt="total net"

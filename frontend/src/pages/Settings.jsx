@@ -15,7 +15,7 @@ import avatar3 from "../media/avatar3.png";
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 const Settings = () => {
-  const { auth, userInfo } = useAuth();
+  const { userInfo } = useAuth();
   const axiosPrivate = useAxiosPrivate();
 
   const { isAvatar, setIsAvatar } = useContext(CalendarContext);
@@ -122,7 +122,7 @@ const Settings = () => {
           <div className="text-center">
             <h1 className="font-bold text-2xl">Account Settings</h1>
           </div>
-          <div className="bg-white mt-5 px-10 py-5 overflow-hidden w-fit h-hfit mx-auto shadow-lg rounded-md">
+          <div className="bg-white mt-5 px-10 py-5 overflow-hidden w-fit h-hfit mx-auto shadow-lg rounded-md xs:px-0">
             <div
               onClick={() => {
                 setIsAvatar(true);
@@ -139,264 +139,291 @@ const Settings = () => {
             >
               Change Avatar
             </div>
-            <div className=" grid grid-rows-4 place-content-center mt-5 xs:px-6">
+
+            <div
+              className={`grid  place-content-center mt-5 xs:px-6 ${
+                userInfo.provider === "facebook" ? "grid-rows-2" : "grid-rows-4"
+              }`}
+            >
+              {/* Status */}
+              <div className="grid grid-cols-2 py-1 items-center xs:grid-cols-1">
+                <div className="text-sm font-semibold xs:font-medium">
+                  Account type:
+                </div>
+                <div className="bg-light rounded-md text-center py-1 text-xs">
+                  {userInfo?.provider}
+                </div>
+              </div>
               {/* show email */}
               <div className="grid grid-cols-2 py-1 items-center xs:grid-cols-1">
                 <div className="text-sm font-semibold xs:font-medium">
                   Email:
                 </div>
                 <div className="bg-light rounded-md text-center py-1 text-xs">
-                  {auth?.useremail}
+                  {userInfo?.email}
                 </div>
               </div>
 
-              {/* current password */}
-              <div className="grid grid-cols-2 py-1 items-center xs:grid-cols-1 xs:mt-2">
-                <div className="text-sm font-semibold xs:font-medium">
-                  Current password:
-                </div>
-                <div className="flex items-center border border-inputLight rounded-md pr-2 min-w-[218px]">
-                  <input
-                    type={!showPassword ? "password" : "text"}
-                    autoComplete="off"
-                    placeholder="Current Password"
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                    }}
-                    onFocus={() => {
-                      setErrMsg("");
-                      setSuccessMsg("");
-                    }}
-                    value={password}
-                    className="text-sm rounded-md focus:outline-none px-2 placeholder:text-xs py-1"
-                  />
-
-                  {password ? (
-                    <>
-                      {!showPassword ? (
-                        <FaRegEyeSlash
-                          onClick={() => {
-                            setShowPassword(true);
-                          }}
-                          className="cursor-pointer"
-                        />
-                      ) : (
-                        <FaRegEye
-                          onClick={() => {
-                            setShowPassword(false);
-                          }}
-                          className="cursor-pointer"
-                        />
-                      )}
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-              </div>
-
-              {/* new password */}
-              <div className="grid grid-cols-2 py-1 items-center xs:grid-cols-1 xs:mt-2">
-                <label
-                  htmlFor="new_password"
-                  className="text-sm font-semibold flex gap-1 xs:font-medium"
-                >
-                  New password:
-                  <FaCheck
-                    className={`ml-1 text-lg text-greens font-bold mb-[-2px] ${
-                      validNewPassword ? "valid" : "hidden"
-                    }`}
-                  />
-                  <FaXmark
-                    className={`ml-1 text-lg text-[red] font-bold mb-[-2px] ${
-                      validNewPassword || !newPassword ? "hidden" : "invalid"
-                    }`}
-                  />
-                </label>
-                <div>
-                  <div className="flex items-center border border-inputLight rounded-md pr-2 min-w-[218px]">
-                    <input
-                      type={!showNewPassword ? "password" : "text"}
-                      id="new_password"
-                      autoComplete="off"
-                      placeholder="New Password"
-                      aria-invalid={validNewPassword ? "false" : "true"}
-                      aria-describedby="newpwd"
-                      onChange={(e) => {
-                        setNewPassword(e.target.value);
-                      }}
-                      onFocus={() => {
-                        setNewPasswordFocus(true);
-                        setErrMsg("");
-                        setSuccessMsg("");
-                      }}
-                      onBlur={() => setNewPasswordFocus(false)}
-                      value={newPassword}
-                      className="rounded-md focus:outline-none px-2 placeholder:text-xs py-1 text-sm"
-                    />
-
-                    {newPassword && (
-                      <>
-                        {!showNewPassword ? (
-                          <FaRegEyeSlash
-                            onClick={() => {
-                              setShowNewPassword(true);
-                            }}
-                            className="cursor-pointer"
-                          />
-                        ) : (
-                          <FaRegEye
-                            onClick={() => {
-                              setShowNewPassword(false);
-                            }}
-                            className="cursor-pointer"
-                          />
-                        )}
-                      </>
-                    )}
+              {/* show change password */}
+              {userInfo.provider === "facebook" ? (
+                <></>
+              ) : (
+                <>
+                  <div className="text-base flex items-end justify-center font-bold xs:font-semibold">
+                    YourGross account
                   </div>
 
-                  <p
-                    id="newpwd"
-                    className={`text-xs bg-[#eceef2] p-2 rounded-md shadow-lg ${
-                      newPasswordFocus && !validNewPassword
-                        ? "absolute"
-                        : "hidden"
-                    }`}
-                  >
-                    <span className="flex items-center">
-                      <FaInfoCircle className="mr-1" />8 to 24 characters.
-                    </span>
-                    Must include uppercase and lowercase <br />
-                    <span>letters, a number and a</span>
-                    special
-                    <br />
-                    character. <br /> Allowed special characters:{" "}
-                    <span aria-label="exclamation mark">!</span>{" "}
-                    <span aria-label="at symbol">@</span>{" "}
-                    <span aria-label="hashtag">#</span>{" "}
-                    <span aria-label="dollar sign">$</span>{" "}
-                    <span aria-label="percent">%</span>
-                  </p>
-                </div>
-              </div>
-
-              {/* confirm new password */}
-              <div className="grid grid-cols-2 py-1 items-center xs:grid-cols-1 xs:mt-2">
-                <label
-                  htmlFor="confirm_password"
-                  className="text-sm font-semibold flex gap-1 xs:font-medium"
-                >
-                  Confirm password:
-                  <FaCheck
-                    className={`ml-1 text-lg text-greens font-bold mb-[-2px] ${
-                      validConfirmPassword && confirmPassword
-                        ? "valid"
-                        : "hidden"
-                    }`}
-                  />
-                  <FaXmark
-                    className={`ml-1 text-lg text-[red] font-bold mb-[-2px] ${
-                      validConfirmPassword || !confirmPassword
-                        ? "hidden"
-                        : "invalid"
-                    }`}
-                  />
-                </label>
-                <div>
-                  <div className="flex items-center border border-inputLight rounded-md pr-2 min-w-[218px]">
-                    <input
-                      type={!showConfirmPassword ? "password" : "text"}
-                      id="confirm_password"
-                      autoComplete="off"
-                      placeholder="Confirm new password"
-                      aria-invalid={validConfirmPassword ? "false" : "true"}
-                      aria-describedby="confirmpwd"
-                      onChange={(e) => {
-                        setConfirmPassword(e.target.value);
-                      }}
-                      onFocus={() => {
-                        setConfirmPasswordFocus(true);
-                        setErrMsg("");
-                        setSuccessMsg("");
-                      }}
-                      onBlur={() => setConfirmPasswordFocus(false)}
-                      value={confirmPassword}
-                      className="text-sm rounded-md focus:outline-none px-2 placeholder:text-xs py-1"
-                    />
-
-                    {confirmPassword && (
-                      <>
-                        {!showConfirmPassword ? (
-                          <FaRegEyeSlash
-                            onClick={() => {
-                              setShowConfirmPassword(true);
-                            }}
-                            className="cursor-pointer"
-                          />
-                        ) : (
-                          <FaRegEye
-                            onClick={() => {
-                              setShowConfirmPassword(false);
-                            }}
-                            className="cursor-pointer"
-                          />
-                        )}
-                      </>
-                    )}
-                  </div>
-                  <p
-                    id="confirmpwd"
-                    className={`text-xs bg-[#eceef2] p-2 rounded-md ${
-                      confirmPasswordFocus && !validConfirmPassword
-                        ? "absolute"
-                        : "hidden"
-                    }`}
-                  >
-                    <span className="flex items-center">
-                      <FaInfoCircle className="mr-1" />
-                      Must match the new password
-                    </span>
-                    input field.
-                  </p>
-                </div>
-              </div>
-
-              {successMsg && (
-                <div className="text-greens text-xs text-center mt-2">
-                  {successMsg}
-                </div>
-              )}
-
-              {errMsg && (
-                <div className="text-[red] text-xs text-center mt-2">
-                  {errMsg}
-                </div>
-              )}
-
-              {/* Update Button */}
-              <div className="mt-5 mx-auto">
-                {isLoading ? (
-                  <div className="w-fit rounded-md px-6 py-1 font-semibold text-white bg-[#1a849f]">
-                    <div>
-                      <ThreeDot
-                        style={{ fontSize: "7px" }}
-                        variant="pulsate"
-                        color="#ffffff"
-                        text=""
-                        textColor=""
+                  {/* current password */}
+                  <div className="grid grid-cols-2 py-1 items-center xs:grid-cols-1 mt-1">
+                    <div className="text-sm font-semibold xs:font-medium">
+                      Current password:
+                    </div>
+                    <div className="flex items-center border border-inputLight rounded-md pr-2 min-w-[218px]">
+                      <input
+                        type={!showPassword ? "password" : "text"}
+                        autoComplete="off"
+                        placeholder="Current Password"
+                        onChange={(e) => {
+                          setPassword(e.target.value);
+                        }}
+                        onFocus={() => {
+                          setErrMsg("");
+                          setSuccessMsg("");
+                        }}
+                        value={password}
+                        className="text-sm rounded-md focus:outline-none px-2 placeholder:text-xs py-1"
                       />
+
+                      {password ? (
+                        <>
+                          {!showPassword ? (
+                            <FaRegEyeSlash
+                              onClick={() => {
+                                setShowPassword(true);
+                              }}
+                              className="cursor-pointer"
+                            />
+                          ) : (
+                            <FaRegEye
+                              onClick={() => {
+                                setShowPassword(false);
+                              }}
+                              className="cursor-pointer"
+                            />
+                          )}
+                        </>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   </div>
-                ) : (
-                  <div
-                    onClick={handleUpdate}
-                    className="w-fit rounded-md px-3 py-[2px] font-semibold cursor-pointer text-white bg-[#399CB4] hover:bg-[#1a849f]"
-                  >
-                    Update
+
+                  {/* new password */}
+                  <div className="grid grid-cols-2 py-1 items-center xs:grid-cols-1 xs:mt-2">
+                    <label
+                      htmlFor="new_password"
+                      className="text-sm font-semibold flex gap-1 xs:font-medium"
+                    >
+                      New password:
+                      <FaCheck
+                        className={`ml-1 text-lg text-greens font-bold mb-[-2px] ${
+                          validNewPassword ? "valid" : "hidden"
+                        }`}
+                      />
+                      <FaXmark
+                        className={`ml-1 text-lg text-[red] font-bold mb-[-2px] ${
+                          validNewPassword || !newPassword
+                            ? "hidden"
+                            : "invalid"
+                        }`}
+                      />
+                    </label>
+                    <div>
+                      <div className="flex items-center border border-inputLight rounded-md pr-2 min-w-[218px]">
+                        <input
+                          type={!showNewPassword ? "password" : "text"}
+                          id="new_password"
+                          autoComplete="off"
+                          placeholder="New Password"
+                          aria-invalid={validNewPassword ? "false" : "true"}
+                          aria-describedby="newpwd"
+                          onChange={(e) => {
+                            setNewPassword(e.target.value);
+                          }}
+                          onFocus={() => {
+                            setNewPasswordFocus(true);
+                            setErrMsg("");
+                            setSuccessMsg("");
+                          }}
+                          onBlur={() => setNewPasswordFocus(false)}
+                          value={newPassword}
+                          className="rounded-md focus:outline-none px-2 placeholder:text-xs py-1 text-sm"
+                        />
+
+                        {newPassword && (
+                          <>
+                            {!showNewPassword ? (
+                              <FaRegEyeSlash
+                                onClick={() => {
+                                  setShowNewPassword(true);
+                                }}
+                                className="cursor-pointer"
+                              />
+                            ) : (
+                              <FaRegEye
+                                onClick={() => {
+                                  setShowNewPassword(false);
+                                }}
+                                className="cursor-pointer"
+                              />
+                            )}
+                          </>
+                        )}
+                      </div>
+
+                      <p
+                        id="newpwd"
+                        className={`text-xs bg-[#eceef2] p-2 rounded-md shadow-lg ${
+                          newPasswordFocus && !validNewPassword
+                            ? "absolute"
+                            : "hidden"
+                        }`}
+                      >
+                        <span className="flex items-center">
+                          <FaInfoCircle className="mr-1" />8 to 24 characters.
+                        </span>
+                        Must include uppercase and lowercase <br />
+                        <span>letters, a number and a</span>
+                        special
+                        <br />
+                        character. <br /> Allowed special characters:{" "}
+                        <span aria-label="exclamation mark">!</span>{" "}
+                        <span aria-label="at symbol">@</span>{" "}
+                        <span aria-label="hashtag">#</span>{" "}
+                        <span aria-label="dollar sign">$</span>{" "}
+                        <span aria-label="percent">%</span>
+                      </p>
+                    </div>
                   </div>
-                )}
-              </div>
+
+                  {/* confirm new password */}
+                  <div className="grid grid-cols-2 py-1 items-center xs:grid-cols-1 xs:mt-2">
+                    <label
+                      htmlFor="confirm_password"
+                      className="text-sm font-semibold flex gap-1 xs:font-medium"
+                    >
+                      Confirm password:
+                      <FaCheck
+                        className={`ml-1 text-lg text-greens font-bold mb-[-2px] ${
+                          validConfirmPassword && confirmPassword
+                            ? "valid"
+                            : "hidden"
+                        }`}
+                      />
+                      <FaXmark
+                        className={`ml-1 text-lg text-[red] font-bold mb-[-2px] ${
+                          validConfirmPassword || !confirmPassword
+                            ? "hidden"
+                            : "invalid"
+                        }`}
+                      />
+                    </label>
+                    <div>
+                      <div className="flex items-center border border-inputLight rounded-md pr-2 min-w-[218px]">
+                        <input
+                          type={!showConfirmPassword ? "password" : "text"}
+                          id="confirm_password"
+                          autoComplete="off"
+                          placeholder="Confirm new password"
+                          aria-invalid={validConfirmPassword ? "false" : "true"}
+                          aria-describedby="confirmpwd"
+                          onChange={(e) => {
+                            setConfirmPassword(e.target.value);
+                          }}
+                          onFocus={() => {
+                            setConfirmPasswordFocus(true);
+                            setErrMsg("");
+                            setSuccessMsg("");
+                          }}
+                          onBlur={() => setConfirmPasswordFocus(false)}
+                          value={confirmPassword}
+                          className="text-sm rounded-md focus:outline-none px-2 placeholder:text-xs py-1"
+                        />
+
+                        {confirmPassword && (
+                          <>
+                            {!showConfirmPassword ? (
+                              <FaRegEyeSlash
+                                onClick={() => {
+                                  setShowConfirmPassword(true);
+                                }}
+                                className="cursor-pointer"
+                              />
+                            ) : (
+                              <FaRegEye
+                                onClick={() => {
+                                  setShowConfirmPassword(false);
+                                }}
+                                className="cursor-pointer"
+                              />
+                            )}
+                          </>
+                        )}
+                      </div>
+                      <p
+                        id="confirmpwd"
+                        className={`text-xs bg-[#eceef2] p-2 rounded-md ${
+                          confirmPasswordFocus && !validConfirmPassword
+                            ? "absolute"
+                            : "hidden"
+                        }`}
+                      >
+                        <span className="flex items-center">
+                          <FaInfoCircle className="mr-1" />
+                          Must match the new password
+                        </span>
+                        input field.
+                      </p>
+                    </div>
+                  </div>
+
+                  {successMsg && (
+                    <div className="text-greens text-xs text-center mt-2">
+                      {successMsg}
+                    </div>
+                  )}
+
+                  {errMsg && (
+                    <div className="text-[red] text-xs text-center mt-2">
+                      {errMsg}
+                    </div>
+                  )}
+
+                  {/* Update Button */}
+                  <div className="mt-5 mx-auto">
+                    {isLoading ? (
+                      <div className="w-fit rounded-md px-6 py-1 font-semibold text-white bg-[#1a849f]">
+                        <div>
+                          <ThreeDot
+                            style={{ fontSize: "7px" }}
+                            variant="pulsate"
+                            color="#ffffff"
+                            text=""
+                            textColor=""
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div
+                        onClick={handleUpdate}
+                        className="w-fit rounded-md px-3 py-[2px] font-semibold cursor-pointer text-white bg-[#399CB4] hover:bg-[#1a849f]"
+                      >
+                        Update
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
