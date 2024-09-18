@@ -49,6 +49,8 @@ const handleLoginFacebook = async (req, res) => {
         const instructions = users?.instructions;
         const provider = users?.provider;
         const useremail = users?.email;
+        const personal_title = users?.personal_title;
+        const business_title = users?.business_title;
 
         //create secure cookie with refresh token
         res.cookie("jwt", refreshToken, {
@@ -66,6 +68,8 @@ const handleLoginFacebook = async (req, res) => {
           _id,
           instructions,
           provider,
+          personal_title,
+          business_title,
         });
       }
     }
@@ -77,6 +81,8 @@ const handleLoginFacebook = async (req, res) => {
       const avatar = foundUser?.avatar;
       const provider = foundUser?.provider;
       const instructions = foundUser?.instructions;
+      const personal_title = foundUser?.personal_title;
+      const business_title = foundUser?.business_title;
 
       const accessToken = jwt.sign(
         { username: foundUser.username, _id: foundUser._id },
@@ -107,6 +113,8 @@ const handleLoginFacebook = async (req, res) => {
         _id: _id.toString(),
         instructions,
         provider,
+        personal_title,
+        business_title,
       });
     }
 
@@ -145,6 +153,8 @@ const handleLoginFacebook = async (req, res) => {
         _id: foundUser._id.toString(),
         instructions: foundUser?.instructions,
         provider: foundUser?.provider,
+        personal_title: foundUser?.personal_title,
+        business_title: foundUser?.business_title,
       });
     }
   } catch (err) {

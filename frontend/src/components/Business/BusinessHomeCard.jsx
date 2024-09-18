@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import useGetBusinessData from "../../hooks/useGetBusinessData";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
@@ -11,13 +11,28 @@ import profitIcon from "../../media/bus_profit.png";
 import estab from "../../media/estab.png";
 import { FcCalendar, FcStatistics } from "react-icons/fc";
 import pencil from "../../media/pen.png";
+import { CalendarContext } from "../../context/CalendarContext";
 
 const BusinessHomeCard = () => {
   const getBusinessData = useGetBusinessData();
   const getMonthlyCapital = useBusinessCapital();
   const getMonthlyExpenses = useBusinessExpenses();
+  const {
+    setPersonalSummaryView,
+    businessIncomeData,
+    businessIncomeLoading,
+    setBusinessIncomeLoading,
+    businessExpensesData,
+    businessExpensesLoading,
+    setBusinessExpensesLoading,
+    businessCapitalData,
+    businessCapitalLoading,
+    setBusinessCapitalLoading,
+  } = useContext(CalendarContext);
+
   const location = useLocation();
-  const { auth } = useAuth();
+  const { userInfo } = useAuth();
+
   const axiosPrivate = useAxiosPrivate();
   const titleRef = useRef();
 
@@ -39,6 +54,34 @@ const BusinessHomeCard = () => {
   const [saveButtonLoading, setSaveButtonLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
+  // getting businessIncome
+  // will re-trigger when businessIncomeLoading is set to true
+  useEffect(() => {
+    if (businessIncomeLoading) {
+      getBusinessData();
+      setBusinessIncomeLoading(false);
+    }
+  }, [businessIncomeLoading]);
+
+  // getting monthlyExpenses
+  // will re-trigger when businessExpensesLoading is set to true
+  useEffect(() => {
+    if (businessExpensesLoading) {
+      getMonthlyExpenses();
+      setBusinessExpensesLoading(false);
+    }
+  }, [businessExpensesLoading]);
+
+  // getting monthlyCapital
+  // will re-trigger when businessCapitalLoading is set to true
+  useEffect(() => {
+    if (businessCapitalLoading) {
+      getMonthlyCapital();
+      setBusinessCapitalLoading(false);
+    }
+  }, [businessCapitalLoading]);
+
+  // calculating overall data displayed in homepage
   useEffect(() => {
     setDataLoading(true);
 
@@ -49,19 +92,15 @@ const BusinessHomeCard = () => {
     let m_c = 0;
 
     const overallData = async () => {
-      const overallData = await getBusinessData();
-      const monthCapital = await getMonthlyCapital();
-      const overallMonthlyExpenses = await getMonthlyExpenses();
-
-      overallData.forEach((data) => {
+      businessIncomeData.forEach((data) => {
         return (c += data.capital), (s += data.sales), (e += data.expenses);
       });
 
-      overallMonthlyExpenses.forEach((data) => {
+      businessExpensesData.forEach((data) => {
         m_e += data.amount;
       });
 
-      monthCapital.forEach((data) => {
+      businessCapitalData.forEach((data) => {
         m_c += data.amount;
       });
 
@@ -73,34 +112,21 @@ const BusinessHomeCard = () => {
     };
 
     overallData();
-  }, []);
+  }, [businessIncomeData, businessExpensesData, businessCapitalData]);
 
+  // getting personal title from user info
   useEffect(() => {
-    const getTitle = async () => {
-      setIsLoading(true);
-      const _id = await auth?._id;
-
-      if (_id) {
-        try {
-          const response = await axiosPrivate.get("/user/" + _id);
-          const jsonTitle = await response.data.business_title;
-
-          if (jsonTitle && response.status === 200) {
-            setUpdatedTitle(jsonTitle);
-            setTitle(jsonTitle);
-            setHasTitle(true);
-            setIsLoading(false);
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      }
+    if (userInfo.business_title) {
+      setUpdatedTitle(userInfo.business_title);
+      setTitle(userInfo.business_title);
+      setHasTitle(true);
       setIsLoading(false);
-    };
+    }
 
-    getTitle();
+    setIsLoading(false);
   }, [hasTitle]);
 
+  // function to submit personal user title when there is none
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -125,6 +151,7 @@ const BusinessHomeCard = () => {
     }
   };
 
+  //function for updating personal user title
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -362,7 +389,12 @@ const BusinessHomeCard = () => {
 
             {hasTitle && (
               <div className="w-full text-xs mt-2">
-                <div className="w-fit">
+                <div
+                  className="w-fit"
+                  onClick={() => {
+                    setPersonalSummaryView(false);
+                  }}
+                >
                   <Link to="/summary" state={{ from: location.pathname }}>
                     <div className="bg-loranges hover:bg-oranges text-center text-white text-[0.8vw] font-semibold px-5 py-2 rounded-md">
                       <span className="flex justify-center items-center gap-2">

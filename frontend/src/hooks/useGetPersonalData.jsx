@@ -10,6 +10,7 @@ const useGetPersonalData = () => {
     try {
       const response = await axiosPrivate.get("/api/personal-income");
       const result = await response.data;
+
       if (response.status === 200) {
         dispatchPersonalIncomeData({ type: "set", payload: result });
         return result;

@@ -21,6 +21,8 @@ const useRefreshToken = () => {
         instructions: response.data.instructions,
         email: response.data.email,
         provider: response.data.provider,
+        personal_title: response.data.personal_title,
+        business_title: response.data.business_title,
       };
     });
     return response.data.accessToken;

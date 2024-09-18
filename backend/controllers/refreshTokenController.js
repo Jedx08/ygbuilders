@@ -13,6 +13,8 @@ const handleRefreshToken = async (req, res) => {
   const avatar = foundUser?.avatar;
   const instructions = foundUser?.instructions;
   const provider = foundUser?.provider;
+  const personal_title = foundUser?.personal_title;
+  const business_title = foundUser?.business_title;
 
   //create secure cookie with refresh token
   res.cookie("jwt", refreshToken, {
@@ -41,6 +43,8 @@ const handleRefreshToken = async (req, res) => {
       _id: _id.toString(),
       instructions,
       provider,
+      personal_title,
+      business_title,
     });
   });
 };

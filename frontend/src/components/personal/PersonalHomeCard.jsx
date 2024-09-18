@@ -18,9 +18,19 @@ import pencil from "../../media/pen.png";
 const PersonalHomeCard = () => {
   const locations = useLocation();
   const axiosPrivate = useAxiosPrivate();
-  const { auth, userInfo } = useAuth();
+  const { userInfo } = useAuth();
 
-  const { isAvatar, setIsAvatar } = useContext(CalendarContext);
+  const {
+    isAvatar,
+    setIsAvatar,
+    personalIncomeData,
+    personalIncomeLoading,
+    setPersonalIncomeLoading,
+    personalExpensesData,
+    personalExpensesLoading,
+    setPersonalExpensesLoading,
+    setPersonalSummaryView,
+  } = useContext(CalendarContext);
 
   const getPersonalData = useGetData();
   const getMonthlyExpenses = usePersonalExpenses();
@@ -42,7 +52,27 @@ const PersonalHomeCard = () => {
   const [errMsg, setErrMsg] = useState("");
 
   const titleRef = useRef();
+  console.log(userInfo.personal_title);
 
+  // getting monthlyExpenses
+  // will re-trigger when personalExpensesLoading is set to true
+  useEffect(() => {
+    if (personalExpensesLoading) {
+      getMonthlyExpenses();
+      setPersonalExpensesLoading(false);
+    }
+  }, [personalExpensesLoading]);
+
+  // getting personalIncome
+  // will re-trigger when personalIncomeLoading is set to true
+  useEffect(() => {
+    if (personalIncomeLoading) {
+      getPersonalData();
+      setPersonalIncomeLoading(false);
+    }
+  }, [personalIncomeLoading]);
+
+  // calculating overall data displayed in homepage
   useEffect(() => {
     setDataLoading(true);
 
@@ -51,52 +81,38 @@ const PersonalHomeCard = () => {
     let m_e = 0;
 
     //overall data
-    const overallData = async () => {
-      const overallData = await getPersonalData();
-      const monthData = await getMonthlyExpenses();
+    if (!personalIncomeLoading) {
+      const overallData = async () => {
+        personalIncomeData.forEach((data) => {
+          return (g += data.gross), (e += data.expenses);
+        });
 
-      overallData.forEach((data) => {
-        return (g += data.gross), (e += data.expenses);
-      });
+        personalExpensesData.forEach((data) => {
+          m_e += data.amount;
+        });
 
-      monthData.forEach((data) => {
-        m_e += data.amount;
-      });
+        setGross(g);
+        setOVerallMonthlyExpenses(m_e + e);
+        setDataLoading(false);
+      };
 
-      setGross(g);
-      setOVerallMonthlyExpenses(m_e + e);
-      setDataLoading(false);
-    };
+      overallData();
+    }
+  }, [personalIncomeData, personalExpensesData]);
 
-    overallData();
-  }, []);
-
+  // getting personal title from user info
   useEffect(() => {
-    const getTitle = async () => {
-      setIsLoading(true);
-      const _id = await auth?._id;
-
-      if (_id) {
-        try {
-          const response = await axiosPrivate.get("/user/" + _id);
-          const jsonTitle = await response.data.personal_title;
-
-          if (jsonTitle && response.status === 200) {
-            setUpdatedTitle(jsonTitle);
-            setTitle(jsonTitle);
-            setHasTitle(true);
-            setIsLoading(false);
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      }
+    if (userInfo.personal_title) {
+      setUpdatedTitle(userInfo.personal_title);
+      setTitle(userInfo.personal_title);
+      setHasTitle(true);
       setIsLoading(false);
-    };
+    }
 
-    getTitle();
+    setIsLoading(false);
   }, [hasTitle]);
 
+  // function to submit personal user title when there is none
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -122,6 +138,7 @@ const PersonalHomeCard = () => {
     }
   };
 
+  //function for updating personal user title
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -388,7 +405,12 @@ const PersonalHomeCard = () => {
 
             {hasTitle && (
               <div className="w-full text-xs mt-2">
-                <div className="w-fit">
+                <div
+                  className="w-fit"
+                  onClick={() => {
+                    setPersonalSummaryView(true);
+                  }}
+                >
                   <Link to="/summary" state={{ from: locations.pathname }}>
                     <div className="bg-lgreens hover:bg-greens text-center text-white text-[0.8vw] font-semibold px-5 py-2 rounded-md">
                       <span className="flex justify-center items-center gap-2">

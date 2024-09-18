@@ -17,7 +17,18 @@ const BusinessYearlySummary = () => {
   const getMonthlyExpenses = useBusinessExpenses();
   const getMonthlyCapital = useBusinessCapital();
 
-  const { monthIndex } = useContext(CalendarContext);
+  const {
+    monthIndex,
+    businessIncomeData,
+    businessIncomeLoading,
+    setBusinessIncomeLoading,
+    businessExpensesData,
+    businessExpensesLoading,
+    setBusinessExpensesLoading,
+    businessCapitalData,
+    businessCapitalLoading,
+    setBusinessCapitalLoading,
+  } = useContext(CalendarContext);
 
   const [yearlyCapital, setYearlyCapital] = useState(0);
   const [yearlySales, setYearlySales] = useState(0);
@@ -32,9 +43,45 @@ const BusinessYearlySummary = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const yearlyProfit =
+    yearlySales - yearlyExpenses - thisYearMonthlyExpenses - yearlyCapital;
+
+  // dayjs months (jan - dec)
   dayjs.extend(localeData);
   dayjs().localeData();
+  const months = dayjs.months();
+  const newMonths = months.map((month) => {
+    return month.slice(0, 3);
+  });
 
+  // getting businessIncome
+  // will re-trigger when businessIncomeLoading is set to true
+  useEffect(() => {
+    if (businessIncomeLoading) {
+      getBusinessData();
+      setBusinessIncomeLoading(false);
+    }
+  }, [businessIncomeLoading]);
+
+  // getting monthlyExpenses
+  // will re-trigger when businessExpensesLoading is set to true
+  useEffect(() => {
+    if (businessExpensesLoading) {
+      getMonthlyExpenses();
+      setBusinessExpensesLoading(false);
+    }
+  }, [businessExpensesLoading]);
+
+  // getting monthlyCapital
+  // will re-trigger when businessCapitalLoading is set to true
+  useEffect(() => {
+    if (businessCapitalLoading) {
+      getMonthlyCapital();
+      setBusinessCapitalLoading(false);
+    }
+  }, [businessCapitalLoading]);
+
+  // calculation for yearly income
   useEffect(() => {
     let c = 0;
     let s = 0;
@@ -43,10 +90,7 @@ const BusinessYearlySummary = () => {
     let m_c = 0;
 
     const YearlyIncomeData = async () => {
-      const yearData = await getBusinessData();
-      const monthCapital = await getMonthlyCapital();
-
-      yearData
+      businessIncomeData
         .filter(
           (data) =>
             dayjs(data.day).format("YY") ===
@@ -56,7 +100,7 @@ const BusinessYearlySummary = () => {
           (c += data.capital), (s += data.sales), (e += data.expenses);
         });
 
-      monthCapital
+      businessCapitalData
         .filter(
           (data) =>
             dayjs(data.moth).format("YYYY") ===
@@ -73,9 +117,7 @@ const BusinessYearlySummary = () => {
     };
 
     const thisYearMonthlyExpenses = async () => {
-      const thisYearMonthlyExpenses = await getMonthlyExpenses();
-
-      thisYearMonthlyExpenses
+      businessExpensesData
         .filter(
           (data) =>
             data.month.split(" ")[1] ===
@@ -90,28 +132,31 @@ const BusinessYearlySummary = () => {
 
     thisYearMonthlyExpenses();
     YearlyIncomeData();
-  }, [monthIndex]);
+  }, [
+    monthIndex,
+    businessCapitalData,
+    businessExpensesData,
+    businessIncomeData,
+  ]);
 
+  // calculation for bar graph data
   useEffect(() => {
     const barGraphData = async () => {
-      const yearData = await getBusinessData();
-      const monthCapital = await getMonthlyCapital();
-      const monthExpenses = await getMonthlyExpenses();
       const allMonths = dayjs.months();
 
-      const filteredData = yearData.filter(
+      const filteredData = businessIncomeData.filter(
         (data) =>
           dayjs(data.day).format("YY") ===
           dayjs().month(monthIndex).format("YY")
       );
 
-      const filteredMonthlyCapital = monthCapital.filter(
+      const filteredMonthlyCapital = businessCapitalData.filter(
         (data) =>
           dayjs(data.moth).format("YYYY") ===
           dayjs().month(monthIndex).format("YYYY")
       );
 
-      const filteredMonthlyExpenses = monthExpenses.filter(
+      const filteredMonthlyExpenses = businessExpensesData.filter(
         (data) =>
           dayjs(data.moth).format("YYYY") ===
           dayjs().month(monthIndex).format("YYYY")
@@ -253,18 +298,14 @@ const BusinessYearlySummary = () => {
     };
 
     barGraphData();
-  }, [monthIndex]);
+  }, [
+    monthIndex,
+    businessCapitalData,
+    businessExpensesData,
+    businessIncomeData,
+  ]);
 
-  const yearlyProfit =
-    yearlySales - yearlyExpenses - thisYearMonthlyExpenses - yearlyCapital;
-
-  const months = dayjs.months();
-
-  const newMonths = months.map((month) => {
-    return month.slice(0, 3);
-  });
-
-  //identify if yearly data should be displayed or not
+  //identifier if yearly data should be displayed or not
   const setGraphDataDisplay = [];
 
   for (let i = 0; i < capitalCount.length; i++) {

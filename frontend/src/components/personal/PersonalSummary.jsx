@@ -25,11 +25,17 @@ const PersonalSummary = () => {
   const {
     monthIndex,
     setMonthIndex,
+    personalIncomeData,
+    personalIncomeLoading,
+    setPersonalIncomeLoading,
+    personalExpensesData,
+    personalExpensesLoading,
+    setPersonalExpensesLoading,
     personalSummaryView,
     setPersonalSummaryView,
   } = useContext(CalendarContext);
 
-  const { auth, userInfo } = useAuth();
+  const { userInfo } = useAuth();
 
   const thisMonth = dayjs().month(monthIndex).format("MMMM");
 
@@ -53,31 +59,13 @@ const PersonalSummary = () => {
   const getMonthlyExpenses = usePersonalExpenses();
   const axiosPrivate = useAxiosPrivate();
 
-  useEffect(() => {
-    let g = 0;
-    let e = 0;
+  const overallNet = gross - expenses;
 
-    setIsLoading(true);
-    const overallData = async () => {
-      const overallMonthExpenses = await getMonthlyExpenses();
-      const overallData = await getPersonalData();
+  const monthlyNet = monthlyGross - monthlyExpenses;
 
-      overallData.forEach((data) => {
-        return (g += data.gross), (e += data.expenses);
-      });
+  Chart.register(ChartDataLabels);
 
-      overallMonthExpenses.forEach((data) => {
-        return (e += data.amount);
-      });
-
-      setGross(g);
-      setExpenses(e);
-      setIsLoading(false);
-    };
-
-    overallData();
-  }, []);
-
+  //number of days per month using dayjs
   const monthCount = dayjs().month(monthIndex).daysInMonth();
 
   let dayCount = [];
@@ -86,11 +74,28 @@ const PersonalSummary = () => {
     dayCount.push(i + 1);
   }
 
+  // getting monthlyExpenses
+  // will re-trigger when personalExpensesLoading is set to true
+  useEffect(() => {
+    if (personalExpensesLoading) {
+      getMonthlyExpenses();
+      setPersonalExpensesLoading(false);
+    }
+  }, [personalExpensesLoading]);
+
+  // getting personalIncome
+  // will re-trigger when personalIncomeLoading is set to true
+  useEffect(() => {
+    if (personalIncomeLoading) {
+      getPersonalData();
+      setPersonalIncomeLoading(false);
+    }
+  }, [personalIncomeLoading]);
+
+  // calculation for line graph data
   useEffect(() => {
     const lineGraphData = async () => {
-      const monthData = await getPersonalData();
-
-      const filteredData = monthData.filter(
+      const filteredData = personalIncomeData.filter(
         (data) =>
           dayjs(data.day).format("MM-YY") ===
           dayjs().month(monthIndex).format("MM-YY")
@@ -148,17 +153,16 @@ const PersonalSummary = () => {
     };
 
     lineGraphData();
-  }, [monthIndex]);
+  }, [personalIncomeData, monthIndex]);
 
+  //calculation for monthly income
   useEffect(() => {
     let g = 0;
     let e = 0;
     let m_e = 0;
 
     const monthlyIncomeData = async () => {
-      const monthData = await getPersonalData();
-
-      monthData
+      personalIncomeData
         .filter(
           (data) =>
             dayjs(data.day).format("MM-YY") ===
@@ -175,9 +179,7 @@ const PersonalSummary = () => {
     };
 
     const monthlyExpensesData = async () => {
-      const monthData = await getMonthlyExpenses();
-
-      monthData
+      personalExpensesData
         .filter(
           (data) => data.month === dayjs().month(monthIndex).format("MMMM YYYY")
         )
@@ -190,8 +192,32 @@ const PersonalSummary = () => {
 
     monthlyIncomeData();
     monthlyExpensesData();
-  }, [monthIndex]);
+  }, [personalIncomeData, personalExpensesData, monthIndex]);
 
+  // calculation for overall income
+  useEffect(() => {
+    let g = 0;
+    let e = 0;
+
+    setIsLoading(true);
+    const overallData = async () => {
+      personalIncomeData.forEach((data) => {
+        return (g += data.gross), (e += data.expenses);
+      });
+
+      personalExpensesData.forEach((data) => {
+        return (e += data.amount);
+      });
+
+      setGross(g);
+      setExpenses(e);
+      setIsLoading(false);
+    };
+
+    overallData();
+  }, [personalIncomeData, personalExpensesData]);
+
+  // identifier if instructions is already shown
   useEffect(() => {
     const showInstructions = async () => {
       try {
@@ -207,6 +233,7 @@ const PersonalSummary = () => {
     showInstructions();
   }, [isLoading]);
 
+  // saving instructions to db
   useEffect(() => {
     const toggleInstructions = async () => {
       try {
@@ -224,6 +251,7 @@ const PersonalSummary = () => {
     toggleInstructions();
   }, [instructions]);
 
+  // next and prev month functions
   function handlePrevMonth() {
     setMonthIndex(monthIndex - 1);
   }
@@ -231,12 +259,7 @@ const PersonalSummary = () => {
     setMonthIndex(monthIndex + 1);
   }
 
-  const overallNet = gross - expenses;
-
-  const monthlyNet = monthlyGross - monthlyExpenses;
-
-  Chart.register(ChartDataLabels);
-
+  // driver js tour content
   const showTour = async () => {
     const driverObj = driver({
       showProgress: true,

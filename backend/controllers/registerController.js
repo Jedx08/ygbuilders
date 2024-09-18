@@ -41,6 +41,8 @@ const handleRegister = async (req, res) => {
       const avatar = foundUser?.avatar;
       const provider = foundUser?.provider;
       const instructions = foundUser?.instructions;
+      const personal_title = foundUser?.personal_title;
+      const business_title = foundUser?.business_title;
       const accessToken = jwt.sign(
         { username: foundUser.username, _id: _id },
         process.env.ACCESS_TOKEN_SECRET,
@@ -71,6 +73,8 @@ const handleRegister = async (req, res) => {
         _id: _id.toString(),
         instructions,
         provider,
+        personal_title,
+        business_title,
       });
     }
   } catch (err) {

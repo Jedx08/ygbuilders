@@ -2,7 +2,7 @@ import { CalendarContext } from "../../context/CalendarContext";
 import { useContext, useEffect, useState } from "react";
 import localeData from "dayjs/plugin/localeData";
 import dayjs from "dayjs";
-import { Chart } from "chart.js/auto"; // core data for chart, do not remove
+import { Chart } from "chart.js/auto"; // core data for chartjs, do not remove
 import { Bar } from "react-chartjs-2";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
@@ -16,7 +16,16 @@ const BusinessYearlySummary = () => {
   const getPersonalData = useGetPersonalData();
   const getMonthlyExpenses = usePersonalExpenses();
 
-  const { monthIndex, setMonthIndex } = useContext(CalendarContext);
+  const {
+    monthIndex,
+    setMonthIndex,
+    personalIncomeData,
+    personalIncomeLoading,
+    setPersonalIncomeLoading,
+    personalExpensesData,
+    personalExpensesLoading,
+    setPersonalExpensesLoading,
+  } = useContext(CalendarContext);
 
   const [yearlyGross, setYearlyGross] = useState(0);
   const [yearlyExpenses, setYearlyExpenses] = useState(0);
@@ -29,20 +38,44 @@ const BusinessYearlySummary = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  // dayjs months (jan - dec)
   dayjs.extend(localeData);
   dayjs().localeData();
+  const months = dayjs.months();
 
+  const newMonths = months.map((month) => {
+    return month.slice(0, 3);
+  });
+
+  // calculated yearly net
   const yearlyNet = yearlyGross - (yearlyExpenses + thisYearMonthlyExpenses);
 
+  // getting monthlyExpenses
+  // will re-trigger when personalExpensesLoading is set to true
+  useEffect(() => {
+    if (personalExpensesLoading) {
+      getMonthlyExpenses();
+      setPersonalExpensesLoading(false);
+    }
+  }, [personalExpensesLoading]);
+
+  // getting personalIncome
+  // will re-trigger when personalIncomeLoading is set to true
+  useEffect(() => {
+    if (personalIncomeLoading) {
+      getPersonalData();
+      setPersonalIncomeLoading(false);
+    }
+  }, [personalIncomeLoading]);
+
+  // calculation for yearly income
   useEffect(() => {
     let g = 0;
     let e = 0;
     let m_e = 0;
 
     const YearlyIncomeData = async () => {
-      const yearData = await getPersonalData();
-
-      yearData
+      personalIncomeData
         .filter(
           (data) =>
             dayjs(data.day).format("YY") ===
@@ -57,9 +90,7 @@ const BusinessYearlySummary = () => {
     };
 
     const thisYearMonthlyExpenses = async () => {
-      const thisYearMonthlyExpenses = await getMonthlyExpenses();
-
-      thisYearMonthlyExpenses
+      personalExpensesData
         .filter(
           (data) =>
             data.month.split(" ")[1] ===
@@ -74,21 +105,20 @@ const BusinessYearlySummary = () => {
 
     thisYearMonthlyExpenses();
     YearlyIncomeData();
-  }, [monthIndex]);
+  }, [personalIncomeData, personalExpensesData, monthIndex]);
 
+  // calculation for bar graph data
   useEffect(() => {
     const barGraphData = async () => {
-      const yearData = await getPersonalData();
-      const monthExpenses = await getMonthlyExpenses();
       const allMonths = dayjs.months();
 
-      const filteredData = yearData.filter(
+      const filteredData = personalIncomeData.filter(
         (data) =>
           dayjs(data.day).format("YY") ===
           dayjs().month(monthIndex).format("YY")
       );
 
-      const filteredMonthlyExpenses = monthExpenses.filter(
+      const filteredMonthlyExpenses = personalExpensesData.filter(
         (data) =>
           dayjs(data.moth).format("YYYY") ===
           dayjs().month(monthIndex).format("YYYY")
@@ -178,15 +208,9 @@ const BusinessYearlySummary = () => {
     };
 
     barGraphData();
-  }, [monthIndex]);
+  }, [monthIndex, personalIncomeData, personalExpensesData]);
 
-  const months = dayjs.months();
-
-  const newMonths = months.map((month) => {
-    return month.slice(0, 3);
-  });
-
-  //identify if yearly data should be displayed or not
+  //identifier if yearly data should be displayed or not
   const setGraphDataDisplay = [];
 
   for (let i = 0; i < grossCount.length; i++) {
@@ -196,6 +220,8 @@ const BusinessYearlySummary = () => {
       setGraphDataDisplay.push(false);
     }
   }
+
+  // next and previous year functions
   const nextYear = () => {
     setMonthIndex(monthIndex + 12);
   };

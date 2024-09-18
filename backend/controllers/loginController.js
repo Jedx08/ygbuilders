@@ -21,6 +21,8 @@ const handleLogin = async (req, res) => {
   const avatar = foundUser?.avatar;
   const provider = foundUser?.provider;
   const instructions = foundUser?.instructions;
+  const personal_title = foundUser?.personal_title;
+  const business_title = foundUser?.business_title;
   // evaluate password
   const match = await bcrypt.compare(password, foundUser.password);
   if (match) {
@@ -53,6 +55,8 @@ const handleLogin = async (req, res) => {
       _id: _id.toString(),
       instructions,
       provider,
+      personal_title,
+      business_title,
     });
   } else {
     res.status(401).json({

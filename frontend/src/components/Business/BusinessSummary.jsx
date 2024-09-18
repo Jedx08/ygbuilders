@@ -25,6 +25,15 @@ const BusinessSummary = () => {
     setMonthIndex,
     personalSummaryView,
     setPersonalSummaryView,
+    businessIncomeData,
+    businessIncomeLoading,
+    setBusinessIncomeLoading,
+    businessExpensesData,
+    businessExpensesLoading,
+    setBusinessExpensesLoading,
+    businessCapitalData,
+    businessCapitalLoading,
+    setBusinessCapitalLoading,
   } = useContext(CalendarContext);
   const getBusinessData = useGetBusinessData();
   const getMonthlyExpenses = useBusinessExpenses();
@@ -49,9 +58,53 @@ const BusinessSummary = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  Chart.register(ChartDataLabels);
+
+  const overallProfit = sales - expenses - overallMonthlyExpenses - capital;
+
+  const monthlyProfit =
+    monthlySales - monthlyExpenses - monthlyCapital - monthExpenses;
+
+  // month identifier
   const thisMonth = dayjs().month(monthIndex).format("MMMM");
 
-  //getting overall data
+  //number of days per month using dayjs
+  const monthCount = dayjs().month(monthIndex).daysInMonth();
+
+  let dayCount = [];
+
+  for (let i = 0; i <= monthCount - 1; i++) {
+    dayCount.push(i + 1);
+  }
+
+  // getting businessIncome
+  // will re-trigger when businessIncomeLoading is set to true
+  useEffect(() => {
+    if (businessIncomeLoading) {
+      getBusinessData();
+      setBusinessIncomeLoading(false);
+    }
+  }, [businessIncomeLoading]);
+
+  // getting monthlyExpenses
+  // will re-trigger when businessExpensesLoading is set to true
+  useEffect(() => {
+    if (businessExpensesLoading) {
+      getMonthlyExpenses();
+      setBusinessExpensesLoading(false);
+    }
+  }, [businessExpensesLoading]);
+
+  // getting monthlyCapital
+  // will re-trigger when businessCapitalLoading is set to true
+  useEffect(() => {
+    if (businessCapitalLoading) {
+      getMonthlyCapital();
+      setBusinessCapitalLoading(false);
+    }
+  }, [businessCapitalLoading]);
+
+  // calculation for overall data
   useEffect(() => {
     let c = 0;
     let s = 0;
@@ -62,19 +115,15 @@ const BusinessSummary = () => {
     setIsLoading(true);
 
     const overallData = async () => {
-      const overallData = await getBusinessData();
-      const monthCapital = await getMonthlyCapital();
-      const overallMonthlyExpenses = await getMonthlyExpenses();
-
-      overallData.forEach((data) => {
+      businessIncomeData.forEach((data) => {
         return (c += data.capital), (s += data.sales), (e += data.expenses);
       });
 
-      monthCapital.forEach((data) => {
+      businessCapitalData.forEach((data) => {
         m_c += data.amount;
       });
 
-      overallMonthlyExpenses.forEach((data) => {
+      businessExpensesData.forEach((data) => {
         m_e += data.amount;
       });
 
@@ -86,22 +135,12 @@ const BusinessSummary = () => {
     };
 
     overallData();
-  }, []);
+  }, [businessIncomeData, businessCapitalData, businessExpensesData]);
 
-  //getting monthly data
-  const monthCount = dayjs().month(monthIndex).daysInMonth();
-
-  let dayCount = [];
-
-  for (let i = 0; i <= monthCount - 1; i++) {
-    dayCount.push(i + 1);
-  }
-
+  // calculation for line graph data
   useEffect(() => {
     const lineGraphData = async () => {
-      const monthData = await getBusinessData();
-
-      const filteredData = monthData.filter(
+      const filteredData = businessIncomeData.filter(
         (data) =>
           dayjs(data.day).format("MM-YY") ===
           dayjs().month(monthIndex).format("MM-YY")
@@ -175,8 +214,9 @@ const BusinessSummary = () => {
     };
 
     lineGraphData();
-  }, [monthIndex]);
+  }, [monthIndex, businessIncomeData]);
 
+  //calculation for monthly income
   useEffect(() => {
     let c = 0;
     let s = 0;
@@ -185,10 +225,7 @@ const BusinessSummary = () => {
     let m_c = 0;
 
     const monthlyIncomeData = async () => {
-      const monthData = await getBusinessData();
-      const monthCapital = await getMonthlyCapital();
-
-      const filteredData = monthData.filter(
+      const filteredData = businessIncomeData.filter(
         (data) =>
           dayjs(data.day).format("MM-YY") ===
           dayjs().month(monthIndex).format("MM-YY")
@@ -197,7 +234,7 @@ const BusinessSummary = () => {
         (c += data.capital), (s += data.sales), (e += data.expenses);
       });
 
-      monthCapital
+      businessCapitalData
         .filter(
           (data) =>
             dayjs(data.month).format("MMMM YYYY") ===
@@ -213,9 +250,7 @@ const BusinessSummary = () => {
     };
 
     const monthlyExpensesData = async () => {
-      const monthData = await getMonthlyExpenses();
-
-      monthData
+      businessExpensesData
         .filter(
           (data) => data.month === dayjs().month(monthIndex).format("MMMM YYYY")
         )
@@ -228,7 +263,12 @@ const BusinessSummary = () => {
 
     monthlyIncomeData();
     monthlyExpensesData();
-  }, [monthIndex]);
+  }, [
+    monthIndex,
+    businessIncomeData,
+    businessCapitalData,
+    businessExpensesData,
+  ]);
 
   function handlePrevMonth() {
     setMonthIndex(monthIndex - 1);
@@ -244,12 +284,6 @@ const BusinessSummary = () => {
   const prevYear = () => {
     setMonthIndex(monthIndex - 12);
   };
-
-  const overallProfit = sales - expenses - overallMonthlyExpenses - capital;
-  const monthlyProfit =
-    monthlySales - monthlyExpenses - monthlyCapital - monthExpenses;
-
-  Chart.register(ChartDataLabels);
 
   return (
     <>
