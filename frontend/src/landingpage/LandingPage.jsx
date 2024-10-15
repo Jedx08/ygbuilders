@@ -1,4 +1,4 @@
-import Footer from "./Footer.jsx";
+import Footer from "../components/Footer.jsx";
 import LandingNav from "./LandingNav";
 import girlSavingMoney from "../media/girl-saving-money.png";
 import boyTrackingMoney from "../media/boy-tracking-money.png";

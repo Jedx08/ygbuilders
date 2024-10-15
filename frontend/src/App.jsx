@@ -12,6 +12,8 @@ import { useEffect, useContext } from "react";
 import { CalendarContext } from "./context/CalendarContext";
 import Settings from "./pages/Settings";
 import LandingPage from "./landingpage/LandingPage";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermOfUse from "./pages/TermsOfUse";
 
 function App() {
   const { setInMobile } = useContext(CalendarContext);
@@ -33,19 +35,23 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Layout />}>
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-use" element={<TermOfUse />} />
+
           {/* Protected Routes */}
           <Route element={<PersistLogin />}>
             <Route path="/" element={<LandingPage />} />
             <Route path="login" element={<Auth />} />
-            <Route element={<RequireAuth />}>
-              <Route exact path="/home" element={<Home />} />
-              <Route path="personal" element={<Personal />} />
-              <Route path="business" element={<Business />} />
-              <Route path="summary" element={<Summary />} />
-              <Route path="settings" element={<Settings />} />
-            </Route>
-          </Route>
 
+            {/* uncomment RequireAuth after ads added */}
+            {/* <Route element={<RequireAuth />}> */}
+            <Route exact path="/home" element={<Home />} />
+            <Route path="personal" element={<Personal />} />
+            <Route path="business" element={<Business />} />
+            <Route path="summary" element={<Summary />} />
+            <Route path="settings" element={<Settings />} />
+            {/* </Route> */}
+          </Route>
           {/* Catch All */}
           <Route path="*" element={<NotFound />} />
         </Route>

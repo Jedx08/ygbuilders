@@ -1,18 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import BusinessHomeCard from "../components/business/BusinessHomeCard";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import PersonalHomeCard from "../components/personal/PersonalHomeCard";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
+import { CalendarContext } from "../context/CalendarContext";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 
 const Home = () => {
   const axiosPrivate = useAxiosPrivate();
-  const { userInfo } = useAuth();
+  const { userInfo, auth } = useAuth();
+  const { setLoggedIn } = useContext(CalendarContext);
 
   const [instructions, setInstructions] = useState(null);
+
+  useEffect(() => {
+    if (!auth.accessToken && !auth._id) {
+      setLoggedIn(false);
+    } else {
+      setLoggedIn(true);
+    }
+  }, []);
 
   useEffect(() => {
     const showInstructions = async () => {

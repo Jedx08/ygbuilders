@@ -10,6 +10,7 @@ import { MdOutlinePostAdd } from "react-icons/md";
 import { GoChecklist } from "react-icons/go";
 import { BsBackspace } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 const PersonalForm = () => {
   const axiosPrivate = useAxiosPrivate();
@@ -21,7 +22,10 @@ const PersonalForm = () => {
     dispatchPersonalIncomeData,
     setPersonalIncomeLoading,
     inMobile,
+    loggedIn,
   } = useContext(CalendarContext);
+
+  const navigate = useNavigate();
 
   const [isData, setIsData] = useState(true);
   const [editData, setEditData] = useState(false);
@@ -184,6 +188,43 @@ const PersonalForm = () => {
     }
   }
 
+  useEffect(() => {
+    setError("");
+    setErrorStyle(false);
+  }, [gross, expenses, newGross, newExpenses]);
+
+  // gross length validation
+  const grossInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 50) {
+      setGross(value);
+    }
+  };
+
+  // expenses length validation
+  const expensesInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 50) {
+      setExpenses(value);
+    }
+  };
+
+  // update gross length validation
+  const updateGrossInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 50) {
+      setNewGross(value);
+    }
+  };
+
+  // update expenses length validation
+  const updateExpensesInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 50) {
+      setNewExpenses(value);
+    }
+  };
+
   return (
     <div className="font-pops h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-70">
       <form
@@ -277,11 +318,7 @@ const PersonalForm = () => {
               <div>
                 <input
                   type="number"
-                  onChange={(e) => {
-                    setNewGross(e.target.value),
-                      setError(""),
-                      setErrorStyle(false);
-                  }}
+                  onChange={updateGrossInput}
                   value={newGross}
                   className={`focus:outline-none pl-3 py-2 w-full ${
                     inMobile ? "text-xl" : ""
@@ -309,11 +346,7 @@ const PersonalForm = () => {
               <div>
                 <input
                   type="number"
-                  onChange={(e) => {
-                    setGross(e.target.value),
-                      setError(""),
-                      setErrorStyle(false);
-                  }}
+                  onChange={grossInput}
                   value={gross}
                   className={`focus:outline-none pl-3 py-2 w-full ${
                     inMobile ? "text-xl" : ""
@@ -367,11 +400,7 @@ const PersonalForm = () => {
               <div>
                 <input
                   type="number"
-                  onChange={(e) => {
-                    setNewExpenses(e.target.value),
-                      setError(""),
-                      setErrorStyle(false);
-                  }}
+                  onChange={updateExpensesInput}
                   value={newExpenses}
                   className={`focus:outline-none pl-2 py-2 w-full ${
                     inMobile ? "text-xl" : ""
@@ -399,11 +428,7 @@ const PersonalForm = () => {
               <div>
                 <input
                   type="number"
-                  onChange={(e) => {
-                    setExpenses(e.target.value),
-                      setError(""),
-                      setErrorStyle(false);
-                  }}
+                  onChange={expensesInput}
                   value={expenses}
                   className={`focus:outline-none pl-2 py-2 w-full ${
                     inMobile ? "text-xl" : ""
@@ -534,7 +559,13 @@ const PersonalForm = () => {
           <div className="flex flex-col items-center mb-10">
             <div className="mb-2">
               <button
-                onClick={handleSubmit}
+                onClick={(e) => {
+                  if (!loggedIn) {
+                    navigate("/Login");
+                  } else {
+                    handleSubmit(e);
+                  }
+                }}
                 className="mx-auto py-1 rounded-md px-6 bg-greens font-bold text-white hover:bg-lgreens flex gap-2 items-center"
               >
                 <span className="text-3xl">

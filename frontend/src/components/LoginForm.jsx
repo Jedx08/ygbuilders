@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import logo from "../media/YG_LOGO.png";
 import useAuth from "../hooks/useAuth";
 import axios from "../api/axios";
@@ -45,8 +45,17 @@ const LoginForm = ({ next, inMobile }) => {
       const avatar = response?.data?.avatar;
       const instructions = response?.data?.instructions;
       const provider = response?.data?.provider;
+      const personal_title = response?.data?.personal_title;
+      const business_title = response?.data?.business_title;
       setAuth({ _id, accessToken });
-      setUserInfo({ avatar, instructions, email, provider });
+      setUserInfo({
+        avatar,
+        instructions,
+        email,
+        provider,
+        personal_title,
+        business_title,
+      });
       setUsername("");
       setPassword("");
       setSuccess("Success");
@@ -154,8 +163,17 @@ const LoginForm = ({ next, inMobile }) => {
                         const avatar = response?.data?.avatar;
                         const instructions = response?.data?.instructions;
                         const provider = response?.data?.provider;
+                        const personal_title = response?.data?.personal_title;
+                        const business_title = response?.data?.business_title;
                         setAuth({ _id, accessToken });
-                        setUserInfo({ email, avatar, instructions, provider });
+                        setUserInfo({
+                          email,
+                          avatar,
+                          instructions,
+                          provider,
+                          personal_title,
+                          business_title,
+                        });
                         setSuccess("Success");
                         navigate("/home");
                       }
@@ -287,7 +305,11 @@ const LoginForm = ({ next, inMobile }) => {
                     )}
                   </div>
                   <div>
-                    <p className="text-sm">Forgot Password?</p>
+                    <Link>
+                      <p className="text-sm underline text-[#399CB4]">
+                        Forgot Password?
+                      </p>
+                    </Link>
                   </div>
                 </div>
               </form>

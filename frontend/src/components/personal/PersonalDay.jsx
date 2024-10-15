@@ -52,9 +52,11 @@ const PersonalDay = ({ day }) => {
   }
 
   useEffect(() => {
-    setPersonalDataLoading(true);
-    getPersonalData();
-    setPersonalIncomeLoading(false);
+    if (personalIncomeLoading) {
+      setPersonalDataLoading(true);
+      getPersonalData();
+      setPersonalIncomeLoading(false);
+    }
   }, [dispatchPersonalIncomeData, personalIncomeLoading]);
 
   useEffect(() => {

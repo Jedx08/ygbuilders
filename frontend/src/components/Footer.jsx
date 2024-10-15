@@ -60,11 +60,30 @@ const Footer = () => {
       </footer> */}
 
       <footer className="bg-white font-pops">
-        <div className="text-center flex items-center justify-center font-medium text-base py-1 gap-1">
-          <div>&#169;</div>
-          <div>YourGross</div>
-          <div>2024</div>
+        <div className="mx-auto flex flex-wrap items-center justify-evenly font-medium text-base space-x-5 py-1 w-[70%]">
+          <div>
+            <div>&#169;YourGross 2024</div>
+          </div>
+          <div>
+            <Link
+              to="/privacy-policy"
+              target="_blank"
+              className="hover:text-lgreens"
+            >
+              Privacy policy
+            </Link>
+          </div>
+          <div>
+            <Link
+              to="/terms-of-use"
+              target="_blank"
+              className="hover:text-loranges"
+            >
+              Terms of use
+            </Link>
+          </div>
         </div>
+        {/* <div className="flex space-x-8 font-medium text-base justify-center"></div> */}
       </footer>
     </>
   );

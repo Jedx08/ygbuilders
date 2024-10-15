@@ -38,9 +38,10 @@ const BusinessMonth = ({ month }) => {
     setShowBusinessCapitalForm,
     isDataBusiness,
     inMobile,
+    setLoggedIn,
   } = useContext(CalendarContext);
 
-  const { userInfo } = useAuth();
+  const { userInfo, auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
 
   const getBusinessExpenses = useBusinessExpenses();
@@ -172,6 +173,14 @@ const BusinessMonth = ({ month }) => {
 
     setInstructions((prev) => ({ ...prev, calendarB: false }));
   };
+
+  useEffect(() => {
+    if (!auth.accessToken && !auth._id) {
+      setLoggedIn(false);
+    } else {
+      setLoggedIn(true);
+    }
+  }, []);
 
   return (
     <>

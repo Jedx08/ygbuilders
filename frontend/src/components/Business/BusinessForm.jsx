@@ -11,6 +11,7 @@ import { MdOutlinePostAdd } from "react-icons/md";
 import { GoChecklist } from "react-icons/go";
 import { BsBackspace } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 const BusinessForm = () => {
   const axiosPrivate = useAxiosPrivate();
@@ -22,12 +23,14 @@ const BusinessForm = () => {
     setBusinessIncomeLoading,
     dispatchBusinessIncomeData,
     inMobile,
+    loggedIn,
   } = useContext(CalendarContext);
 
   const [isData, setIsData] = useState(false);
   const [editData, setEditData] = useState(false);
   const [showDeleteMsg, setShowDeleteMsg] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (businessFormSelectedDate) {
@@ -210,6 +213,59 @@ const BusinessForm = () => {
     }
   }
 
+  useEffect(() => {
+    setError("");
+    setErrorStyle(false);
+  }, [capital, sales, expenses, newCapital, newSales, newExpenses]);
+
+  // capital length validation
+  const capitalInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 50) {
+      setCapital(value);
+    }
+  };
+
+  // sales length validation
+  const salesInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 50) {
+      setSales(value);
+    }
+  };
+
+  // expenses length validation
+  const expensesInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 50) {
+      setExpenses(value);
+    }
+  };
+
+  // update capital length validation
+  const updateCapitalInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 50) {
+      setNewCapital(value);
+    }
+  };
+
+  // update sales length validation
+  const updateSalesInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 50) {
+      setNewSales(value);
+    }
+  };
+
+  // update expenses length validation
+  const updateExpensesInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 50) {
+      setNewExpenses(value);
+    }
+  };
+
   return (
     <div className="font-pops h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-70">
       <form
@@ -290,11 +346,7 @@ const BusinessForm = () => {
                   <div>
                     <input
                       type="number"
-                      onChange={(e) => {
-                        setNewCapital(e.target.value),
-                          setError(""),
-                          setErrorStyle(false);
-                      }}
+                      onChange={updateCapitalInput}
                       value={newCapital}
                       className={`focus:outline-none pl-3 py-2 w-full ${
                         inMobile ? "text-xl" : ""
@@ -341,11 +393,7 @@ const BusinessForm = () => {
               <div>
                 <input
                   type="number"
-                  onChange={(e) => {
-                    setCapital(e.target.value),
-                      setError(""),
-                      setErrorStyle(false);
-                  }}
+                  onChange={capitalInput}
                   value={capital}
                   className={`focus:outline-none pl-3 py-2 w-full ${
                     inMobile ? "text-xl" : ""
@@ -382,11 +430,7 @@ const BusinessForm = () => {
                   <div>
                     <input
                       type="number"
-                      onChange={(e) => {
-                        setNewSales(e.target.value),
-                          setError(""),
-                          setErrorStyle(false);
-                      }}
+                      onChange={updateSalesInput}
                       value={newSales}
                       className={`focus:outline-none pl-3 py-2 w-full ${
                         inMobile ? "text-xl" : ""
@@ -433,11 +477,7 @@ const BusinessForm = () => {
               <div>
                 <input
                   type="number"
-                  onChange={(e) => {
-                    setSales(e.target.value),
-                      setError(""),
-                      setErrorStyle(false);
-                  }}
+                  onChange={salesInput}
                   value={sales}
                   className={`focus:outline-none pl-3 py-2 w-full ${
                     inMobile ? "text-xl" : ""
@@ -474,11 +514,7 @@ const BusinessForm = () => {
                   <div>
                     <input
                       type="number"
-                      onChange={(e) => {
-                        setNewExpenses(e.target.value),
-                          setError(""),
-                          setErrorStyle(false);
-                      }}
+                      onChange={updateExpensesInput}
                       value={newExpenses}
                       className={`focus:outline-none pl-3 py-2 w-full ${
                         inMobile ? "text-xl" : ""
@@ -525,11 +561,7 @@ const BusinessForm = () => {
               <div>
                 <input
                   type="number"
-                  onChange={(e) => {
-                    setExpenses(e.target.value),
-                      setError(""),
-                      setErrorStyle(false);
-                  }}
+                  onChange={expensesInput}
                   value={expenses}
                   className={`focus:outline-none pl-3 py-2 w-full ${
                     inMobile ? "text-xl" : ""
@@ -794,7 +826,13 @@ const BusinessForm = () => {
                     <div className="flex flex-col items-center mb-10">
                       <div className="mb-2">
                         <button
-                          onClick={handleSubmit}
+                          onClick={(e) => {
+                            if (!loggedIn) {
+                              navigate("/Login");
+                            } else {
+                              handleSubmit(e);
+                            }
+                          }}
                           className="mx-auto py-1 rounded-md px-6 bg-oranges font-bold text-white hover:bg-loranges flex gap-2 items-center"
                         >
                           <span className="text-3xl">

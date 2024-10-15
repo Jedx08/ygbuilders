@@ -3,7 +3,7 @@ import useGetBusinessData from "../../hooks/useGetBusinessData";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
 import Skeleton from "react-loading-skeleton";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ThreeDot, OrbitProgress } from "react-loading-indicators";
 import useBusinessCapital from "../../hooks/useBusinessCapital";
 import useBusinessExpenses from "../../hooks/useBusinessExpenses";
@@ -28,10 +28,12 @@ const BusinessHomeCard = () => {
     businessCapitalData,
     businessCapitalLoading,
     setBusinessCapitalLoading,
+    loggedIn,
   } = useContext(CalendarContext);
 
   const location = useLocation();
   const { userInfo } = useAuth();
+  const navigate = useNavigate();
 
   const axiosPrivate = useAxiosPrivate();
   const titleRef = useRef();
@@ -57,28 +59,22 @@ const BusinessHomeCard = () => {
   // getting businessIncome
   // will re-trigger when businessIncomeLoading is set to true
   useEffect(() => {
-    if (businessIncomeLoading) {
-      getBusinessData();
-      setBusinessIncomeLoading(false);
-    }
+    getBusinessData();
+    setBusinessIncomeLoading(false);
   }, [businessIncomeLoading]);
 
   // getting monthlyExpenses
   // will re-trigger when businessExpensesLoading is set to true
   useEffect(() => {
-    if (businessExpensesLoading) {
-      getMonthlyExpenses();
-      setBusinessExpensesLoading(false);
-    }
+    getMonthlyExpenses();
+    setBusinessExpensesLoading(false);
   }, [businessExpensesLoading]);
 
   // getting monthlyCapital
   // will re-trigger when businessCapitalLoading is set to true
   useEffect(() => {
-    if (businessCapitalLoading) {
-      getMonthlyCapital();
-      setBusinessCapitalLoading(false);
-    }
+    getMonthlyCapital();
+    setBusinessCapitalLoading(false);
   }, [businessCapitalLoading]);
 
   // calculating overall data displayed in homepage
@@ -91,27 +87,33 @@ const BusinessHomeCard = () => {
     let m_e = 0;
     let m_c = 0;
 
-    const overallData = async () => {
-      businessIncomeData.forEach((data) => {
-        return (c += data.capital), (s += data.sales), (e += data.expenses);
-      });
+    if (
+      !businessIncomeLoading &&
+      !businessExpensesLoading &&
+      !businessCapitalLoading
+    ) {
+      const overallData = async () => {
+        businessIncomeData.forEach((data) => {
+          return (c += data.capital), (s += data.sales), (e += data.expenses);
+        });
 
-      businessExpensesData.forEach((data) => {
-        m_e += data.amount;
-      });
+        businessExpensesData.forEach((data) => {
+          m_e += data.amount;
+        });
 
-      businessCapitalData.forEach((data) => {
-        m_c += data.amount;
-      });
+        businessCapitalData.forEach((data) => {
+          m_c += data.amount;
+        });
 
-      setCapital(c + m_c);
-      setSales(s);
-      setExpenses(e);
-      setOVerallMonthlyExpenses(m_e);
-      setDataLoading(false);
-    };
+        setCapital(c + m_c);
+        setSales(s);
+        setExpenses(e);
+        setOVerallMonthlyExpenses(m_e);
+        setDataLoading(false);
+      };
 
-    overallData();
+      overallData();
+    }
   }, [businessIncomeData, businessExpensesData, businessCapitalData]);
 
   // getting personal title from user info
@@ -180,6 +182,15 @@ const BusinessHomeCard = () => {
     }
   };
 
+  // no user login
+  useEffect(() => {
+    if (!loggedIn) {
+      setTitle("Sample");
+      setHasTitle(true);
+      setDataLoading(false);
+    }
+  }, [loggedIn]);
+
   return (
     <div
       id="businessHomeCard"
@@ -200,7 +211,11 @@ const BusinessHomeCard = () => {
             <div className="flex text-xs items-end justify-end font-semibold px-4">
               <div
                 onClick={() => {
-                  setBusinessEditButton(true);
+                  if (!loggedIn) {
+                    navigate("/Login");
+                  } else {
+                    setBusinessEditButton(true);
+                  }
                 }}
                 className="bg-loranges hover:bg-oranges flex rounded-md p-1 px-2 space-x-2 cursor-pointer items-center"
               >
@@ -395,7 +410,7 @@ const BusinessHomeCard = () => {
                     setPersonalSummaryView(false);
                   }}
                 >
-                  <Link to="/summary" state={{ from: location.pathname }}>
+                  <Link to="/summary" state={{ from: "/business" }}>
                     <div className="bg-loranges hover:bg-oranges text-center text-white text-[0.8vw] font-semibold px-5 py-2 rounded-md">
                       <span className="flex justify-center items-center gap-2">
                         <FcStatistics className="text-xl" />

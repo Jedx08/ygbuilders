@@ -14,6 +14,7 @@ const businessMonthlyCapital = require("./routes/businessMonthlyCapitalRoute");
 const corsOptions = require("./config/corsOptions");
 const credentials = require("./middleware/credentials");
 const userRoute = require("./routes/userRoute");
+const facebookLoginRoute = require("./routes/facebookLoginRoute");
 const registerRoute = require("./routes/registerRoute");
 const loginRoute = require("./routes/loginRoute");
 const logoutRoute = require("./routes/logoutRoute");
@@ -34,6 +35,8 @@ httpsOptions = {
 // express app
 const app = express();
 
+app.use(express.static("public"));
+
 // connect to MongoDB
 connectDB();
 
@@ -51,6 +54,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // user/auth routes
+app.use("/auth/facebook", facebookLoginRoute);
 app.use("/register", registerRoute);
 app.use("/login", loginRoute);
 app.use("/refresh", refreshTokenRoute);

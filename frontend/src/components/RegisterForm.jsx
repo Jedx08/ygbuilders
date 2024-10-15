@@ -102,8 +102,17 @@ const RegisterForm = ({ previous, inMobile }) => {
       const avatar = await response?.data?.avatar;
       const instructions = await response?.data?.instructions;
       const provider = await response?.data?.provider;
+      const personal_title = response?.data?.personal_title;
+      const business_title = response?.data?.business_title;
       setAuth({ _id, accessToken });
-      setUserInfo({ avatar, instructions, provider, email: getEmail });
+      setUserInfo({
+        avatar,
+        instructions,
+        provider,
+        email: getEmail,
+        personal_title,
+        business_title,
+      });
       setSuccess("Success");
       setUsername("");
       setEmail("");
@@ -160,8 +169,7 @@ const RegisterForm = ({ previous, inMobile }) => {
       <div className="mt-10">
         <h1 className={`font-bold text-4xl mb-5`}>Sign Up</h1>
         <section>
-          <form>
-            {/* onSubmit={handleSubmit} */}
+          <form onSubmit={handleSubmit}>
             {/* Username */}
             <div>
               <label
@@ -397,15 +405,15 @@ const RegisterForm = ({ previous, inMobile }) => {
                   <ThreeDot color="#ffffff" style={{ fontSize: "8px" }} />
                 </div>
               ) : (
-                // <button
-                //   type="submit"
-                //   className="mx-auto bg-oranges py-1 px-6 rounded-md font-bold text-white hover:bg-loranges"
-                // >
-                //   Register
-                // </button>
-                <div className="mx-auto bg-oranges py-1 px-6 rounded-md font-bold text-white hover:bg-loranges cursor-not-allowed">
+                <button
+                  type="submit"
+                  className="mx-auto bg-oranges py-1 px-6 rounded-md font-bold text-white hover:bg-loranges"
+                >
                   Register
-                </div>
+                </button>
+                // <div className="mx-auto bg-oranges py-1 px-6 rounded-md font-bold text-white hover:bg-loranges cursor-not-allowed">
+                //   Register
+                // </div>
               )}
             </div>
           </form>

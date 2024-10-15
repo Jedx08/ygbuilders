@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef, useContext } from "react";
 import useGetData from "../../hooks/useGetPersonalData";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
@@ -18,7 +18,8 @@ import pencil from "../../media/pen.png";
 const PersonalHomeCard = () => {
   const locations = useLocation();
   const axiosPrivate = useAxiosPrivate();
-  const { userInfo } = useAuth();
+  const { userInfo, auth } = useAuth();
+  const navigate = useNavigate();
 
   const {
     isAvatar,
@@ -30,6 +31,7 @@ const PersonalHomeCard = () => {
     personalExpensesLoading,
     setPersonalExpensesLoading,
     setPersonalSummaryView,
+    loggedIn,
   } = useContext(CalendarContext);
 
   const getPersonalData = useGetData();
@@ -52,24 +54,19 @@ const PersonalHomeCard = () => {
   const [errMsg, setErrMsg] = useState("");
 
   const titleRef = useRef();
-  console.log(userInfo.personal_title);
 
   // getting monthlyExpenses
   // will re-trigger when personalExpensesLoading is set to true
   useEffect(() => {
-    if (personalExpensesLoading) {
-      getMonthlyExpenses();
-      setPersonalExpensesLoading(false);
-    }
+    getMonthlyExpenses();
+    setPersonalExpensesLoading(false);
   }, [personalExpensesLoading]);
 
   // getting personalIncome
   // will re-trigger when personalIncomeLoading is set to true
   useEffect(() => {
-    if (personalIncomeLoading) {
-      getPersonalData();
-      setPersonalIncomeLoading(false);
-    }
+    getPersonalData();
+    setPersonalIncomeLoading(false);
   }, [personalIncomeLoading]);
 
   // calculating overall data displayed in homepage
@@ -81,10 +78,10 @@ const PersonalHomeCard = () => {
     let m_e = 0;
 
     //overall data
-    if (!personalIncomeLoading) {
+    if (!personalIncomeLoading && !personalExpensesLoading) {
       const overallData = async () => {
         personalIncomeData.forEach((data) => {
-          return (g += data.gross), (e += data.expenses);
+          (g += data.gross), (e += data.expenses);
         });
 
         personalExpensesData.forEach((data) => {
@@ -184,6 +181,15 @@ const PersonalHomeCard = () => {
     }
   }
 
+  // no user login
+  useEffect(() => {
+    if (!loggedIn) {
+      setTitle("Guest");
+      setHasTitle(true);
+      setDataLoading(false);
+    }
+  }, [loggedIn]);
+
   return (
     <div
       id="personalHomeCard"
@@ -202,7 +208,11 @@ const PersonalHomeCard = () => {
             <div className="flex text-xs items-center justify-end font-semibold px-4 gap-1">
               <div
                 onClick={() => {
-                  setIsAvatar(true);
+                  if (!loggedIn) {
+                    navigate("/Login");
+                  } else {
+                    setIsAvatar(true);
+                  }
                 }}
                 className="bg-lgreens hover:bg-greens flex rounded-md py-[6px] px-2 space-x-2 cursor-pointer items-center"
               >
@@ -210,7 +220,11 @@ const PersonalHomeCard = () => {
               </div>
               <div
                 onClick={() => {
-                  setPersonalEditButton(true);
+                  if (!loggedIn) {
+                    navigate("/Login");
+                  } else {
+                    setPersonalEditButton(true);
+                  }
                 }}
                 className="bg-lgreens hover:bg-greens flex rounded-md p-1 px-2 space-x-1 cursor-pointer items-center"
               >
@@ -265,11 +279,19 @@ const PersonalHomeCard = () => {
                 }}
                 className="items-center text-9xl col-span-1 xl:text-7x lg:text-8xl cursor-pointer"
               >
-                <img
-                  src={getAvatar(userInfo.avatar)}
-                  alt="avatar"
-                  className="w-[128px]"
-                />
+                {loggedIn ? (
+                  <img
+                    src={getAvatar(userInfo.avatar)}
+                    alt="avatar"
+                    className="w-[128px]"
+                  />
+                ) : (
+                  <img
+                    src={getAvatar("avatar1")}
+                    alt="avatar"
+                    className="w-[128px]"
+                  />
+                )}
               </div>
               <div className="w-[70%]">
                 {hasTitle ? (

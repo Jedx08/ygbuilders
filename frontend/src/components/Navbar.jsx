@@ -14,9 +14,10 @@ import useAuth from "../hooks/useAuth";
 import avatar1 from "../media/avatar1.png";
 import avatar2 from "../media/avatar2.png";
 import avatar3 from "../media/avatar3.png";
+import { BiLogIn } from "react-icons/bi";
 
 const Navbar = () => {
-  const { inMobile } = useContext(CalendarContext);
+  const { inMobile, loggedIn } = useContext(CalendarContext);
   const { userInfo } = useAuth();
 
   const logout = useLogout();
@@ -52,18 +53,29 @@ const Navbar = () => {
           <div className="font-pops overflow-auto">
             <div className="flex justify-between pl-1 pr-4 py-1 items-center">
               <div className="pl-2">
-                <Link to="/home">
+                <Link to="/">
                   <img src={logo} className="w-12" />
                 </Link>
               </div>
-              <div
-                onClick={() => {
-                  setIsBurger(true);
-                }}
-                className="flex justify-end cursor-pointer p-2 hover:border hover:border-light hover:bg-[#2222] hover:rounded-[50%]"
-              >
-                <GiHamburgerMenu className="text-3xl text-greens" />
-              </div>
+              {loggedIn ? (
+                <div
+                  onClick={() => {
+                    setIsBurger(true);
+                  }}
+                  className="flex justify-end cursor-pointer p-2 hover:border hover:border-light hover:bg-[#2222] hover:rounded-[50%]"
+                >
+                  <GiHamburgerMenu className="text-3xl text-greens" />
+                </div>
+              ) : (
+                <Link to="/Login">
+                  <div className="flex space-x-1 items-center hover:text-lgreens">
+                    <BiLogIn className="text-3xl text-greens hover:text-lgreens" />
+                    <p className="font-bold text-lg text-lgreens hover:text-greens">
+                      Login
+                    </p>
+                  </div>
+                </Link>
+              )}
             </div>
           </div>
         </>
@@ -72,7 +84,7 @@ const Navbar = () => {
           <div className="font-pops overflow-auto shadow-lg">
             <div className="flex justify-between px-2 py-1 pl-2">
               <div>
-                <Link to="/home">
+                <Link to="/">
                   <img src={logo} className="w-12" />
                 </Link>
               </div>
@@ -100,53 +112,66 @@ const Navbar = () => {
                   </li>
                   <li>
                     <div>
-                      <div
-                        onClick={() => {
-                          if (accountMenu) {
-                            setAccountMenu(false);
-                          } else {
-                            setAccountMenu(true);
-                          }
-                        }}
-                        className="cursor-pointer"
-                      >
-                        <div className="w-fit bg-[#c3c3c3] pt-[2px] rounded-full overflow-hidden">
-                          <img
-                            src={getAvatar(userInfo.avatar)}
-                            alt="logo"
-                            className="w-9"
-                          />
-                        </div>
-                        <div className="absolute w-fit right-1 top-8 border-2 border-white bg-oranges rounded-full">
-                          <FaAngleDown className="text-sm text-white" />
-                        </div>
-                      </div>
-                      {/* Dropdown */}
-                      {accountMenu && (
-                        <div className="absolute right-2 px-2 py-2 border border-[#2222] bg-white shadow-lg rounded-md mt-2 text-lg font-semibold space-y-2">
-                          <Link to="/settings">
-                            <div className="flex items-center space-x-2 cursor-pointer hover:text-[#399CB4]">
-                              <div className="border border-light bg-[#2222] p-2 rounded-[50%]">
-                                <FaGear className="text-xl text-[#399CB4]" />
-                              </div>
-
-                              <div className="text-base font-semibold">
-                                Settings
-                              </div>
-                            </div>
-                          </Link>
+                      {loggedIn ? (
+                        <>
                           <div
-                            onClick={signOut}
-                            className="flex items-center space-x-2 cursor-pointer hover:text-[red]"
+                            onClick={() => {
+                              if (accountMenu) {
+                                setAccountMenu(false);
+                              } else {
+                                setAccountMenu(true);
+                              }
+                            }}
+                            className="cursor-pointer"
                           >
-                            <div className="border border-light bg-[#2222] p-2 rounded-[50%]">
-                              <BiLogOut className="text-xl text-[red]" />
+                            <div className="w-fit bg-[#c3c3c3] pt-[2px] rounded-full overflow-hidden">
+                              <img
+                                src={getAvatar(userInfo.avatar)}
+                                alt="logo"
+                                className="w-9"
+                              />
                             </div>
-                            <div className="text-base font-semibold">
-                              logout
+                            <div className="absolute w-fit right-1 top-8 border-2 border-white bg-oranges rounded-full">
+                              <FaAngleDown className="text-sm text-white" />
                             </div>
                           </div>
-                        </div>
+                          {/* Dropdown */}
+                          {accountMenu && (
+                            <div className="absolute right-2 px-2 py-2 border border-[#2222] bg-white shadow-lg rounded-md mt-2 text-lg font-semibold space-y-2">
+                              <Link to="/settings">
+                                <div className="flex items-center space-x-2 cursor-pointer hover:text-[#399CB4]">
+                                  <div className="border border-light bg-[#2222] p-2 rounded-[50%]">
+                                    <FaGear className="text-xl text-[#399CB4]" />
+                                  </div>
+
+                                  <div className="text-base font-semibold">
+                                    Settings
+                                  </div>
+                                </div>
+                              </Link>
+                              <div
+                                onClick={signOut}
+                                className="flex items-center space-x-2 cursor-pointer hover:text-[red]"
+                              >
+                                <div className="border border-light bg-[#2222] p-2 rounded-[50%]">
+                                  <BiLogOut className="text-xl text-[red]" />
+                                </div>
+                                <div className="text-base font-semibold">
+                                  logout
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <Link to="/Login">
+                          <div className="flex space-x-1 items-center hover:text-lgreens">
+                            <BiLogIn className="text-3xl text-greens hover:text-lgreens" />
+                            <p className="font-bold text-lg text-lgreens hover:text-greens">
+                              Login
+                            </p>
+                          </div>
+                        </Link>
                       )}
                     </div>
                   </li>

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -11,6 +12,7 @@ import logo from "../media/YG_LOGO.png";
 import login_img from "../media/login_img.png";
 
 const Auth = () => {
+  const location = useLocation();
   const { auth } = useAuth();
 
   const [authToken, setAuthToken] = useState(false);
@@ -54,10 +56,22 @@ const Auth = () => {
     arrows: false,
     swipe: false,
   };
+
+  useEffect(() => {
+    try {
+      const { toReg } = location.state;
+      if (toReg === "register") {
+        next();
+      }
+    } catch (err) {
+      console.log("Please Login");
+    }
+  }, []);
+
   return (
     <>
       {authToken ? (
-        <Navigate to="/" />
+        <Navigate to="/home" />
       ) : (
         <>
           {inMobile ? (

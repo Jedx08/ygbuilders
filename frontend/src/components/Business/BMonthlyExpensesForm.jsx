@@ -8,6 +8,7 @@ import useBusinessExpenses from "../../hooks/useBusinessExpenses";
 import BMonthlyExpensesAdd from "./BMonthlyExpensesAdd";
 import BMonthlyExpensesData from "./BMonthlyExpensesData";
 import expensesIcon from "../../media/busmon_expenses.png";
+import { useNavigate } from "react-router-dom";
 
 const BMonthlyExpensesForm = ({ monthlyExpenses }) => {
   const {
@@ -17,11 +18,14 @@ const BMonthlyExpensesForm = ({ monthlyExpenses }) => {
     showBusinessExpenseInput,
     setShowBusinessExpensesInput,
     businessExpensesLoading,
+    setBusinessExpensesLoading,
     loadPage,
+    loggedIn,
   } = useContext(CalendarContext);
 
   const [expensesData, setExpensesData] = useState([]);
   const [expensesDataLoading, setExpensesDataLoading] = useState(true);
+  const navigate = useNavigate();
 
   const getBusinessExpenses = useBusinessExpenses();
 
@@ -30,7 +34,10 @@ const BMonthlyExpensesForm = ({ monthlyExpenses }) => {
   }
 
   useEffect(() => {
-    getBusinessExpenses();
+    if (businessExpensesLoading) {
+      getBusinessExpenses();
+      setBusinessExpensesLoading(false);
+    }
   }, [businessExpensesLoading]);
 
   useEffect(() => {
@@ -101,7 +108,13 @@ const BMonthlyExpensesForm = ({ monthlyExpenses }) => {
 
           <div className="flex justify-center">
             <div
-              onClick={addExpenses}
+              onClick={() => {
+                if (!loggedIn) {
+                  navigate("/Login");
+                } else {
+                  addExpenses();
+                }
+              }}
               className={`cursor-pointer w-fit px-2 h-2 rounded-md overflow-hidden py-1 text-white flex items-center gap-1 border border-loranges bg-loranges hover:bg-oranges font-semibold my-2 ${
                 showBusinessExpenseInput ? "hidden" : ""
               }`}

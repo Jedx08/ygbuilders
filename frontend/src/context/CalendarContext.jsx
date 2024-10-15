@@ -79,6 +79,7 @@ function businessCapitalDataReducer(state, { type, payload }) {
 }
 
 export const CalendarContextProvider = (props) => {
+  const [loggedIn, setLoggedIn] = useState(true); // user login ?
   const [personalSummaryView, setPersonalSummaryView] = useState(true);
   const [inMobile, setInMobile] = useState(false);
   const [loadPage, setLoadPage] = useState(false); // load current page
@@ -94,11 +95,11 @@ export const CalendarContextProvider = (props) => {
   const [isDataBusiness, setIsDataBusiness] = useState(true);
   const [exactDaySelected, setExactDaySelected] = useState(dayjs()); // selected date
   const [personalIncomeLoading, setPersonalIncomeLoading] = useState(true);
-  const [personalExpensesLoading, setPersonalExpensesLoading] = useState(false);
+  const [personalExpensesLoading, setPersonalExpensesLoading] = useState(true);
   const [showPersonalExpenseForm, setShowPersonalExpensesForm] =
     useState(false);
   const [businessIncomeLoading, setBusinessIncomeLoading] = useState(true);
-  const [businessExpensesLoading, setBusinessExpensesLoading] = useState(false);
+  const [businessExpensesLoading, setBusinessExpensesLoading] = useState(true);
   const [showBusinessExpenseForm, setShowBusinessExpensesForm] =
     useState(false);
   const [showBusinessCapitalForm, setShowBusinessCapitalForm] = useState(false);
@@ -203,6 +204,8 @@ export const CalendarContextProvider = (props) => {
         setAvatarLoading,
         personalSummaryView,
         setPersonalSummaryView,
+        loggedIn,
+        setLoggedIn,
       }}
     >
       {props.children}

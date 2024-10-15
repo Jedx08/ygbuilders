@@ -28,6 +28,11 @@ const BMonthlyExpensesAdd = () => {
     expensesRef.current.focus();
   }, []);
 
+  useEffect(() => {
+    setError("");
+    setErrorStyle(false);
+  }, [title, amount]);
+
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -73,6 +78,22 @@ const BMonthlyExpensesAdd = () => {
     }
   }
 
+  // expenses title length validation
+  const titleInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 100) {
+      setTitle(value);
+    }
+  };
+
+  // expenses amount length validation
+  const amountInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 50) {
+      setAmount(value);
+    }
+  };
+
   return (
     <>
       <div className="px-5 font-pops border border-loranges py-2 rounded-md">
@@ -87,9 +108,7 @@ const BMonthlyExpensesAdd = () => {
               type="text"
               placeholder="Add Title"
               ref={expensesRef}
-              onChange={(e) => {
-                setTitle(e.target.value), setError(""), setErrorStyle(false);
-              }}
+              onChange={titleInput}
               value={title}
               className="w-36 focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs"
             />
@@ -102,9 +121,7 @@ const BMonthlyExpensesAdd = () => {
             <input
               type="number"
               placeholder="Add Amount"
-              onChange={(e) => {
-                setAmount(e.target.value), setError(""), setErrorStyle(false);
-              }}
+              onChange={amountInput}
               value={amount}
               className="w-36 focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs"
             />

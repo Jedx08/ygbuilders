@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { CalendarContext } from "../../context/CalendarContext";
 import { FaRegPenToSquare, FaRegTrashCan } from "react-icons/fa6";
 import { GoChecklist } from "react-icons/go";
@@ -27,6 +27,11 @@ const BMonthlyCapitalData = ({ capitalData }) => {
   const [errorStyle, setErrorStyle] = useState(false);
 
   const axiosPrivate = useAxiosPrivate();
+
+  useEffect(() => {
+    setError("");
+    setErrorStyle(false);
+  }, [updateTitle, updateAmount]);
 
   async function handleDelete() {
     setDeleteLoading(true);
@@ -95,6 +100,22 @@ const BMonthlyCapitalData = ({ capitalData }) => {
     }
   }
 
+  // capital update title length validation
+  const updateTitleInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 100) {
+      setUpdateTitle(value);
+    }
+  };
+
+  // capital update anmount length validation
+  const updateAmountInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 50) {
+      setUpdateAmount(value);
+    }
+  };
+
   return (
     <div
       className={`px-5 mb-2 font-pops ${
@@ -133,11 +154,7 @@ const BMonthlyCapitalData = ({ capitalData }) => {
                 <input
                   type="text"
                   placeholder="Add Title"
-                  onChange={(e) => {
-                    setUpdateTitle(e.target.value),
-                      setError(""),
-                      setErrorStyle(false);
-                  }}
+                  onChange={updateTitleInput}
                   value={updateTitle}
                   className={`focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs ${
                     editButton ? "w-32" : ""
@@ -152,11 +169,7 @@ const BMonthlyCapitalData = ({ capitalData }) => {
                 <input
                   type="number"
                   placeholder="Add Amount"
-                  onChange={(e) => {
-                    setUpdateAmount(e.target.value),
-                      setError(""),
-                      setErrorStyle(false);
-                  }}
+                  onChange={updateAmountInput}
                   value={updateAmount}
                   className={`focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs text-center ${
                     editButton ? "w-32" : ""

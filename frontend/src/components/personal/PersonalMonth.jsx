@@ -30,10 +30,11 @@ const PersonalMonth = ({ month }) => {
     setPersonalExpensesLoading,
     isDataPersonal,
     inMobile,
+    setLoggedIn,
   } = useContext(CalendarContext);
 
   const getPersonalExpenses = usePersonalExpenses();
-  const { userInfo } = useAuth();
+  const { userInfo, auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
 
   const [monthlyExpenses, setMonthlyExpenses] = useState("");
@@ -139,6 +140,14 @@ const PersonalMonth = ({ month }) => {
 
     setInstructions((prev) => ({ ...prev, calendarP: false }));
   };
+
+  useEffect(() => {
+    if (!auth.accessToken && !auth._id) {
+      setLoggedIn(false);
+    } else {
+      setLoggedIn(true);
+    }
+  }, []);
 
   return (
     <>

@@ -13,9 +13,9 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      // required: function () {
-      //   return !this.facebookId; // Only required if not using Facebook login,
-      // },
+      required: function () {
+        return !this.facebookId; // Only required if not using Facebook login,
+      },
     },
     firstname: String,
     lastname: String,

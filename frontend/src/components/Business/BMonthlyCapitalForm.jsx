@@ -8,6 +8,7 @@ import BMonthlyCapitalData from "./BMonthlyCapitalData";
 import BMonthlyCapitalAdd from "./BMonthlyCapitalAdd";
 import useBusinessCapital from "../../hooks/useBusinessCapital";
 import profitIcon from "../../media/busmon_pouch.png";
+import { useNavigate } from "react-router-dom";
 
 const BMonthlyCapitalForm = ({ monthlyCapital }) => {
   const {
@@ -17,11 +18,14 @@ const BMonthlyCapitalForm = ({ monthlyCapital }) => {
     setShowBusinessCapitalInput,
     showBusinessCapitalInput,
     businessCapitalLoading,
+    setBusinessCapitalLoading,
     businessCapitalData,
+    loggedIn,
   } = useContext(CalendarContext);
 
   const [capitalData, setCapitalData] = useState([]);
   const [capitalDataLoading, setCapitalDataLoading] = useState(true);
+  const navigate = useNavigate();
 
   const getBusinessCapital = useBusinessCapital();
 
@@ -30,7 +34,10 @@ const BMonthlyCapitalForm = ({ monthlyCapital }) => {
   }
 
   useEffect(() => {
-    getBusinessCapital();
+    if (businessCapitalLoading) {
+      getBusinessCapital();
+      setBusinessCapitalLoading(false);
+    }
   }, [businessCapitalLoading]);
 
   useEffect(() => {
@@ -98,7 +105,13 @@ const BMonthlyCapitalForm = ({ monthlyCapital }) => {
 
         <div className="flex justify-center">
           <div
-            onClick={addCapital}
+            onClick={() => {
+              if (!loggedIn) {
+                navigate("/Login");
+              } else {
+                addCapital();
+              }
+            }}
             className={`cursor-pointer w-fit px-2 h-2 rounded-md overflow-hidden py-1 text-white flex items-center gap-1 border border-loranges bg-loranges hover:bg-oranges font-semibold my-2 ${
               showBusinessCapitalInput ? "hidden" : ""
             }`}

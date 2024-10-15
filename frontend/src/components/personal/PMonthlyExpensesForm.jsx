@@ -8,6 +8,7 @@ import PMonthlyExpensesData from "./PMonthlyExpensesData";
 import usePersonalExpenses from "../../hooks/usePersonalExpenses";
 import Skeleton from "react-loading-skeleton";
 import expensesIcon from "../../media/monexpenses.png";
+import { useNavigate } from "react-router-dom";
 
 const PMonthlyExpensesForm = ({ monthlyExpenses }) => {
   const {
@@ -17,11 +18,14 @@ const PMonthlyExpensesForm = ({ monthlyExpenses }) => {
     showPersonalExpenseInput,
     setShowPersonalExpensesInput,
     personalExpensesLoading,
+    setPersonalExpensesLoading,
     loadPage,
+    loggedIn,
   } = useContext(CalendarContext);
 
   const [expensesData, setExpensesData] = useState([]);
   const [expensesDataLoading, setExpensesDataLoading] = useState(true);
+  const navigate = useNavigate();
 
   const getPersonalExpenses = usePersonalExpenses();
 
@@ -30,7 +34,10 @@ const PMonthlyExpensesForm = ({ monthlyExpenses }) => {
   }
 
   useEffect(() => {
-    getPersonalExpenses();
+    if (personalExpensesLoading) {
+      getPersonalExpenses();
+      setPersonalExpensesLoading(false);
+    }
   }, [personalExpensesLoading]);
 
   useEffect(() => {
@@ -101,7 +108,13 @@ const PMonthlyExpensesForm = ({ monthlyExpenses }) => {
 
           <div className="flex justify-center">
             <div
-              onClick={addExpenses}
+              onClick={() => {
+                if (!loggedIn) {
+                  navigate("/Login");
+                } else {
+                  addExpenses();
+                }
+              }}
               className={`cursor-pointer w-fit px-2 h-2 rounded-md overflow-hidden py-1 text-white flex items-center gap-1 border border-greens bg-greens hover:bg-lgreens font-semibold my-2 ${
                 showPersonalExpenseInput ? "hidden" : ""
               }`}
