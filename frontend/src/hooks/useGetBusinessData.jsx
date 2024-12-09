@@ -4,7 +4,8 @@ import useAxiosPrivate from "./useAxiosPrivate";
 
 const useGetBusinessData = () => {
   const axiosPrivate = useAxiosPrivate();
-  const { dispatchBusinessIncomeData } = useContext(CalendarContext);
+  const { dispatchBusinessIncomeData, setBusinessIncomeLoading } =
+    useContext(CalendarContext);
 
   const getBusinessData = async () => {
     try {
@@ -12,6 +13,7 @@ const useGetBusinessData = () => {
       const result = await response.data;
       if (response.status === 200) {
         dispatchBusinessIncomeData({ type: "set", payload: result });
+        setBusinessIncomeLoading(false);
         return result;
       }
     } catch (err) {

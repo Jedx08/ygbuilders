@@ -4,7 +4,8 @@ import useAxiosPrivate from "./useAxiosPrivate";
 
 const useGetPersonalData = () => {
   const axiosPrivate = useAxiosPrivate();
-  const { dispatchPersonalIncomeData } = useContext(CalendarContext);
+  const { dispatchPersonalIncomeData, setPersonalIncomeLoading } =
+    useContext(CalendarContext);
 
   const getPersonalData = async () => {
     try {
@@ -13,6 +14,7 @@ const useGetPersonalData = () => {
 
       if (response.status === 200) {
         dispatchPersonalIncomeData({ type: "set", payload: result });
+        setPersonalIncomeLoading(false);
         return result;
       }
     } catch (err) {

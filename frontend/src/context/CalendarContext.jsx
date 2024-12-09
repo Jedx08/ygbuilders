@@ -87,15 +87,17 @@ export const CalendarContextProvider = (props) => {
   const [avatarLoading, setAvatarLoading] = useState(false);
   const [monthIndex, setMonthIndex] = useState(dayjs().month()); // to change month by index
   const [showPersonalForm, setShowPersonalForm] = useState(false); // show personal form
+  const [personalButton, setPersonalButton] = useState(false); // true show add, save and delete button, false loading
+  const [businessButton, setBusinessButton] = useState(false); // true show add, save and delete button, false loading
   const [showBusinessForm, setShowBusinessForm] = useState(false); // show business form
   const [formSelectedDate, setFormSelectedDate] = useState(null); // selected date for personal form with data
   const [businessFormSelectedDate, setBusinessFormSelectedDate] = // selected date for business form with data
     useState(null);
-  const [isDataPersonal, setIsDataPersonal] = useState(true);
-  const [isDataBusiness, setIsDataBusiness] = useState(true);
+  const [isDataPersonal, setIsDataPersonal] = useState(true); // to display data in personal income, false no data to show
+  const [isDataBusiness, setIsDataBusiness] = useState(true); // to display data in business income, false no data to show
   const [exactDaySelected, setExactDaySelected] = useState(dayjs()); // selected date
-  const [personalIncomeLoading, setPersonalIncomeLoading] = useState(true);
-  const [personalExpensesLoading, setPersonalExpensesLoading] = useState(true);
+  const [personalIncomeLoading, setPersonalIncomeLoading] = useState(true); // to get data from DB and save to local storage
+  const [personalExpensesLoading, setPersonalExpensesLoading] = useState(true); // to get data from DB and save to local storage
   const [showPersonalExpenseForm, setShowPersonalExpensesForm] =
     useState(false);
   const [businessIncomeLoading, setBusinessIncomeLoading] = useState(true);
@@ -131,17 +133,17 @@ export const CalendarContextProvider = (props) => {
     []
   );
 
-  useEffect(() => {
-    if (!showPersonalForm) {
-      setFormSelectedDate(null);
-    }
-  }, [showPersonalForm]);
+  // useEffect(() => {
+  //   if (!showPersonalForm) {
+  //     setFormSelectedDate(null);
+  //   }
+  // }, [showPersonalForm]);
 
-  useEffect(() => {
-    if (!showBusinessForm) {
-      setFormSelectedDate(null);
-    }
-  }, [showBusinessForm]);
+  // useEffect(() => {
+  //   if (!showBusinessForm) {
+  //     setFormSelectedDate(null);
+  //   }
+  // }, [showBusinessForm]);
 
   return (
     <CalendarContext.Provider
@@ -206,6 +208,10 @@ export const CalendarContextProvider = (props) => {
         setPersonalSummaryView,
         loggedIn,
         setLoggedIn,
+        personalButton,
+        setPersonalButton,
+        businessButton,
+        setBusinessButton,
       }}
     >
       {props.children}

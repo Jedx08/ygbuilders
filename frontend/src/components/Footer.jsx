@@ -70,7 +70,7 @@ const Footer = () => {
               target="_blank"
               className="hover:text-lgreens"
             >
-              Privacy policy
+              Privacy Policy
             </Link>
           </div>
           <div>
@@ -79,7 +79,7 @@ const Footer = () => {
               target="_blank"
               className="hover:text-loranges"
             >
-              Terms of use
+              Terms of Use
             </Link>
           </div>
         </div>

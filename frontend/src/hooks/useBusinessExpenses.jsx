@@ -4,7 +4,8 @@ import useAxiosPrivate from "./useAxiosPrivate";
 
 const useBusinessExpenses = () => {
   const axiosPrivate = useAxiosPrivate();
-  const { dispatchBusinessExpensesData } = useContext(CalendarContext);
+  const { dispatchBusinessExpensesData, setBusinessExpensesLoading } =
+    useContext(CalendarContext);
 
   const getMonthlyExpenses = async () => {
     try {
@@ -13,6 +14,7 @@ const useBusinessExpenses = () => {
 
       if (response.status === 200) {
         dispatchBusinessExpensesData({ type: "set", payload: json });
+        setBusinessExpensesLoading(false);
         return json;
       } else {
         throw new Error("Error getting data");

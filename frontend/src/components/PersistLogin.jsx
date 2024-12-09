@@ -30,7 +30,7 @@ const PersistLogin = () => {
     <>
       {isLoading ? (
         <div className="flex justify-center items-center bg-light bg-opacity-70  h-s100 w-full">
-          <></>
+          <>Loading...</>
         </div>
       ) : (
         <Outlet />

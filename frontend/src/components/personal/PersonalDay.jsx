@@ -21,8 +21,6 @@ const PersonalDay = ({ day }) => {
     inMobile,
   } = useContext(CalendarContext);
 
-  const getPersonalData = useGetData();
-
   const [dayData, setDayData] = useState([]);
   const [personalDataLoading, setPersonalDataLoading] = useState(true);
 
@@ -50,14 +48,6 @@ const PersonalDay = ({ day }) => {
       formData(day)
     );
   }
-
-  useEffect(() => {
-    if (personalIncomeLoading) {
-      setPersonalDataLoading(true);
-      getPersonalData();
-      setPersonalIncomeLoading(false);
-    }
-  }, [dispatchPersonalIncomeData, personalIncomeLoading]);
 
   useEffect(() => {
     if (!personalIncomeLoading) {

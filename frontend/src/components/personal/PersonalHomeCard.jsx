@@ -449,7 +449,7 @@ const PersonalHomeCard = () => {
           {hasTitle && (
             <div className="flex justify-end w-fulltext-xs mt-2 pr-4">
               <div className="w-fit">
-                <Link to="/personal" state={{ from: locations.pathname }}>
+                <Link to="/calendar" state={{ from: locations.pathname }}>
                   <div className="bg-lgreens hover:bg-greens text-center text-white text-[0.8vw] font-semibold px-5 py-2 rounded-md">
                     <span className="flex justify-center items-center gap-2">
                       <FcCalendar className="text-xl" />
