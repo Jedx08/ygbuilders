@@ -322,153 +322,227 @@ const BusinessYearlySummary = () => {
   }
 
   return (
-    <div>
-      <div className="flex flex-col w-[80%] mx-auto gap-3 content-center lg:w-[80%] md:w-[90%]">
-        <div className="text-center bg-white rounded-lg shadow-lg">
-          {isLoading ? (
-            <div className="w-full mx-auto bg-white p-5 rounded-lg flex items-center flex-col md:w-full">
-              <div className="w-[35%]">
-                <Skeleton />
-              </div>
-              <div className="w-[100%]">
-                <Skeleton height={500} />
-              </div>
+    <>
+      <div className="flex w-full gap-5 p-5">
+        {isLoading ? (
+          <div className="w-full  bg-white p-5 rounded-lg flex items-center flex-col md:w-full">
+            <div className="w-[35%]">
+              <Skeleton />
             </div>
-          ) : (
-            <>
-              <div>
-                <div className="w-full h-hfull bg-white py-4 rounded-lg shadow-lg">
-                  <div className="h-[770px] w-full md:h-[500px] lg:w-full">
-                    <Bar
-                      className="w-full h-hfull"
-                      data={{
-                        labels: newMonths,
-                        datasets: [
-                          {
-                            label: "Capital",
-                            data: capitalCount,
-                            borderColor: "#ff9f1c",
-                            backgroundColor: "#fdac3a",
-                          },
-                          {
-                            label: "Sales",
-                            data: salesCount,
-                            borderColor: "#399CB4",
-                            backgroundColor: "#41B8D5",
-                          },
-                          {
-                            label: "Expenses",
-                            data: expensesCount,
-                            borderColor: "#ff6384",
-                            backgroundColor: "#FA829C",
-                          },
-
-                          {
-                            label: "Profit",
-                            data: profitCount,
-                            borderColor: "#2ec4b6",
-                            backgroundColor: "#3cd5c5",
-                          },
-                        ],
-                      }}
-                      options={{
-                        plugins: {
-                          datalabels: {
-                            display: setGraphDataDisplay,
-                            anchor: "end",
-                            align: "start",
-                            color: "#000000",
-                            font: {
-                              weight: 550,
-                              size: 13,
-                            },
-                          },
-                          legend: {
-                            labels: {
-                              font: {
-                                size: 15,
-                              },
-                            },
-                          },
-                        },
-                        indexAxis: "y",
-                        maintainAspectRatio: false,
-                      }}
+            <div className="w-[100%]">
+              <Skeleton height={500} />
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="w-[30%] gap-5 flex flex-col">
+              <div className="w-full bg-white rounded-md h-hfull p-5">
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <div className="flex gap-2">
+                    <img
+                      src={yearlyCapitalIcon}
+                      alt="yearly capital"
+                      className="w-9 sm:w-7"
                     />
+                    <div className="text-md font-medium sm:text-sm">
+                      Capital
+                    </div>
+                  </div>
+
+                  <div className="text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
+                    {yearlyCapital.toLocaleString()}
                   </div>
                 </div>
               </div>
-            </>
-          )}
-        </div>
-        {isLoading ? (
-          <></>
-        ) : (
-          <div className="bg-white rounded-md shadow-lg p-5 text-center">
-            <div className="w-[80%] flex flex-wrap justify-between mx-auto sm:w-full xxs:justify-center xxs:gap-3">
-              <div className="flex flex-col justify-center items-center gap-2">
+              <div className="w-full bg-white rounded-md h-hfull p-5">
                 <div className="flex flex-col items-center justify-center gap-2">
-                  <img
-                    src={yearlyCapitalIcon}
-                    alt="yearly capital"
-                    className="w-9 sm:w-7"
-                  />
-                  <div className="text-md font-medium sm:text-sm">Capital</div>
-                </div>
-                <div className="text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
-                  {yearlyCapital.toLocaleString()}
+                  <div className="flex gap-2">
+                    <img
+                      src={yearlySalesIcon}
+                      alt="yearly capital"
+                      className="w-9 sm:w-7"
+                    />
+                    <div className="text-md font-medium sm:text-sm">Sales</div>
+                  </div>
+
+                  <div className="text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
+                    {yearlySales.toLocaleString()}
+                  </div>
                 </div>
               </div>
-              <div className="flex flex-col justify-center items-center gap-2">
+              <div className="w-full bg-white rounded-md h-hfull p-5">
                 <div className="flex flex-col items-center justify-center gap-2">
-                  <img
-                    src={yearlySalesIcon}
-                    alt="yearly capital"
-                    className="w-9 sm:w-7"
-                  />
-                  <div className="text-md font-medium sm:text-sm">Sales</div>
-                </div>
-                <div className="text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
-                  {yearlySales.toLocaleString()}
+                  <div className="flex gap-2">
+                    <img
+                      src={yearlyExpensesIcon}
+                      alt="yearly capital"
+                      className="w-9 sm:w-7"
+                    />
+                    <div className="text-md font-medium sm:text-sm">
+                      Expenses
+                    </div>
+                  </div>
+
+                  <div className="text-2xl text-[red] font-bold sm:text-xl ssm:font-semibold">
+                    {(
+                      yearlyExpenses + thisYearMonthlyExpenses
+                    ).toLocaleString()}
+                  </div>
                 </div>
               </div>
-              <div className="flex flex-col justify-center items-center gap-2">
+              <div className="w-full bg-white rounded-md h-hfull p-5">
                 <div className="flex flex-col items-center justify-center gap-2">
-                  <img
-                    src={yearlyExpensesIcon}
-                    alt="yearly expenses"
-                    className="w-9 sm:w-7"
-                  />
-                  <div className="text-md font-medium sm:text-sm">Expenses</div>
-                </div>
-                <div className="text-2xl text-[red] font-bold sm:text-xl ssm:font-semibold">
-                  {(yearlyExpenses + thisYearMonthlyExpenses).toLocaleString()}
-                </div>
-              </div>
-              <div className="flex flex-col justify-center items-center gap-2">
-                <div className="flex flex-col items-center justify-center gap-2">
-                  <img
-                    src={yearlyProfitIcon}
-                    alt="yearly net"
-                    className="w-9 sm:w-7"
-                  />
-                  <div className="text-md font-medium sm:text-sm">Profit</div>
-                </div>
-                <div
-                  className={
-                    yearlyProfit < 0
-                      ? "text-2xl font-bold text-[red] sm:text-xl ssm:font-semibold"
-                      : "text-2xl font-bold text-greens sm:text-xl ssm:font-semibold"
-                  }
-                >
-                  {yearlyProfit.toLocaleString()}
+                  <div className="flex gap-2">
+                    <img
+                      src={yearlyProfitIcon}
+                      alt="yearly capital"
+                      className="w-9 sm:w-7"
+                    />
+                    <div className="text-md font-medium sm:text-sm">Profit</div>
+                  </div>
+                  <div
+                    className={
+                      yearlyProfit < 0
+                        ? "text-2xl font-bold text-[red] sm:text-xl ssm:font-semibold"
+                        : "text-2xl font-bold text-greens sm:text-xl ssm:font-semibold"
+                    }
+                  >
+                    {yearlyProfit.toLocaleString()}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+
+            {/* <div className="w-[80%] flex flex-wrap justify-between mx-auto sm:w-full xxs:justify-center xxs:gap-3">
+                <div className="flex flex-col justify-center items-center gap-2">
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <img
+                      src={yearlyCapitalIcon}
+                      alt="yearly capital"
+                      className="w-9 sm:w-7"
+                    />
+                    <div className="text-md font-medium sm:text-sm">
+                      Capital
+                    </div>
+                  </div>
+                  <div className="text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
+                    {yearlyCapital.toLocaleString()}
+                  </div>
+                </div>
+                <div className="flex flex-col justify-center items-center gap-2">
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <img
+                      src={yearlySalesIcon}
+                      alt="yearly capital"
+                      className="w-9 sm:w-7"
+                    />
+                    <div className="text-md font-medium sm:text-sm">Sales</div>
+                  </div>
+                  <div className="text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
+                    {yearlySales.toLocaleString()}
+                  </div>
+                </div>
+                <div className="flex flex-col justify-center items-center gap-2">
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <img
+                      src={yearlyExpensesIcon}
+                      alt="yearly expenses"
+                      className="w-9 sm:w-7"
+                    />
+                    <div className="text-md font-medium sm:text-sm">
+                      Expenses
+                    </div>
+                  </div>
+                  <div className="text-2xl text-[red] font-bold sm:text-xl ssm:font-semibold">
+                    {(
+                      yearlyExpenses + thisYearMonthlyExpenses
+                    ).toLocaleString()}
+                  </div>
+                </div>
+                <div className="flex flex-col justify-center items-center gap-2">
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <img
+                      src={yearlyProfitIcon}
+                      alt="yearly net"
+                      className="w-9 sm:w-7"
+                    />
+                    <div className="text-md font-medium sm:text-sm">Profit</div>
+                  </div>
+                  <div
+                    className={
+                      yearlyProfit < 0
+                        ? "text-2xl font-bold text-[red] sm:text-xl ssm:font-semibold"
+                        : "text-2xl font-bold text-greens sm:text-xl ssm:font-semibold"
+                    }
+                  >
+                    {yearlyProfit.toLocaleString()}
+                  </div>
+                </div>
+              </div> */}
+            <div className="w-[70%] h-hfull bg-white py-4 rounded-lg shadow-lg">
+              <div className="h-[770px] w-full md:h-[500px] lg:w-full">
+                <Bar
+                  className="w-full h-hfull"
+                  data={{
+                    labels: newMonths,
+                    datasets: [
+                      {
+                        label: "Capital",
+                        data: capitalCount,
+                        borderColor: "#ff9f1c",
+                        backgroundColor: "#fdac3a",
+                      },
+                      {
+                        label: "Sales",
+                        data: salesCount,
+                        borderColor: "#399CB4",
+                        backgroundColor: "#41B8D5",
+                      },
+                      {
+                        label: "Expenses",
+                        data: expensesCount,
+                        borderColor: "#ff6384",
+                        backgroundColor: "#FA829C",
+                      },
+
+                      {
+                        label: "Profit",
+                        data: profitCount,
+                        borderColor: "#2ec4b6",
+                        backgroundColor: "#3cd5c5",
+                      },
+                    ],
+                  }}
+                  options={{
+                    plugins: {
+                      datalabels: {
+                        display: setGraphDataDisplay,
+                        anchor: "end",
+                        align: "start",
+                        color: "#000000",
+                        font: {
+                          weight: 550,
+                          size: 13,
+                        },
+                      },
+                      legend: {
+                        labels: {
+                          font: {
+                            size: 15,
+                          },
+                        },
+                      },
+                    },
+                    indexAxis: "y",
+                    maintainAspectRatio: false,
+                  }}
+                />
+              </div>
+            </div>
+          </>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

@@ -18,7 +18,7 @@ import pencil from "../../media/pen.png";
 const PersonalHomeCard = () => {
   const locations = useLocation();
   const axiosPrivate = useAxiosPrivate();
-  const { userInfo, auth } = useAuth();
+  const { userInfo } = useAuth();
   const navigate = useNavigate();
 
   const {

@@ -232,115 +232,52 @@ const BusinessYearlySummary = () => {
 
   return (
     <>
-      <div className="flex flex-col justify-center">
-        <span id="barGraph">
-          <div className="pt-5 grid grid-flow-col justify-center place-items-center gap-2 xs:pt-2 xxs:flex xxs:items-center xxs:justify-center xxs:gap-0">
-            <div className="font-bold text-3xl text-center items-center justify-center py-5 ssm:text-2xl">
-              Yearly Summary
-            </div>
-            <div className="flex items-center xxs:pr-5">
-              <div>
-                <FaAngleLeft
-                  className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-3xl"
-                  onClick={prevYear}
-                />
-              </div>
-              <div>
-                <h1 className="font-extrabold text-center text-4xl text-greens select-none ssm:text-3xl">
-                  {
-                    /* display current month and year */
-                    dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY")
-                  }
-                </h1>
-              </div>
-              <div>
-                <FaAngleRight
-                  className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-3xl"
-                  onClick={nextYear}
-                />
-              </div>
-            </div>
+      <div className="w-full pt-5 grid grid-flow-col justify-center place-items-center gap-2 xs:pt-2 xxs:flex xxs:items-center xxs:justify-center xxs:gap-0">
+        <div className="font-bold text-3xl text-center items-center justify-center py-5 ssm:text-2xl">
+          Yearly Summary
+        </div>
+        <div className="flex items-center xxs:pr-5">
+          <div>
+            <FaAngleLeft
+              className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-3xl"
+              onClick={prevYear}
+            />
           </div>
-          <div className="flex flex-col w-[80%] mx-auto gap-3 content-center lg:w-[80%] md:w-[90%]">
-            <div className="text-center bg-white rounded-lg shadow-lg">
-              {isLoading ? (
-                <div className="w-full mx-auto bg-white p-5 rounded-lg flex items-center flex-col md:w-full">
-                  <div className="w-[35%]">
-                    <Skeleton />
-                  </div>
-                  <div className="w-[100%]">
-                    <Skeleton height={500} />
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <div>
-                    <div className="w-full h-hfull bg-white py-4 rounded-lg shadow-lg">
-                      <div className="h-[600px] w-full lg:w-full">
-                        <Bar
-                          className="w-full h-hfull"
-                          data={{
-                            labels: newMonths,
-                            datasets: [
-                              {
-                                label: "Gross",
-                                data: grossCount,
-                                borderColor: "#ff9f1c",
-                                backgroundColor: "#fdac3a",
-                              },
-                              {
-                                label: "Expenses",
-                                data: expensesCount,
-                                borderColor: "#ff6384",
-                                backgroundColor: "#FA829C",
-                              },
-                              {
-                                label: "Net",
-                                data: netCount,
-                                borderColor: "#2ec4b6",
-                                backgroundColor: "#3cd5c5",
-                              },
-                            ],
-                          }}
-                          options={{
-                            plugins: {
-                              datalabels: {
-                                display: setGraphDataDisplay,
-                                anchor: "end",
-                                align: "start",
-                                color: "#000000",
-                                font: {
-                                  weight: 550,
-                                  size: 13,
-                                },
-                              },
-                              legend: {
-                                labels: {
-                                  font: {
-                                    size: 15,
-                                  },
-                                },
-                              },
-                            },
-                            indexAxis: "y",
-                            maintainAspectRatio: false,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
+          <div>
+            <h1 className="font-extrabold text-center text-4xl text-greens select-none ssm:text-3xl">
+              {
+                /* display current month and year */
+                dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY")
+              }
+            </h1>
           </div>
-        </span>
+          <div>
+            <FaAngleRight
+              className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-3xl"
+              onClick={nextYear}
+            />
+          </div>
+        </div>
+      </div>
 
-        <div className="w-full flex justify-center mt-5 text-center">
+      {/* bar graph and overview */}
+
+      {isLoading ? (
+        <div className="w-full bg-white p-5 rounded-lg flex items-center flex-col md:w-full">
+          <div className="w-[35%]">
+            <Skeleton />
+          </div>
+          <div className="w-[100%]">
+            <Skeleton height={500} />
+          </div>
+        </div>
+      ) : (
+        <div className="w-full flex px-5 pb-10">
           <div
             id="barGraphOverview"
-            className="w-[80%] flex flex-wrap rounded-md justify-center items-center gap-2 md:w-[90%] ssm:w-[100%]"
+            className="w-[30%] flex flex-col p-5 gap-5 rounded-md justify-center items-center"
           >
-            <div className="flex flex-col justify-center items-center gap-2 min-w-[25%] bg-white shadow-lg rounded-md px-5 py-3">
+            <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 bg-white shadow-lg rounded-md px-5 py-3">
               <div className="flex items-center justify-center gap-2">
                 <img
                   src={yearlyGrossIcon}
@@ -353,7 +290,7 @@ const BusinessYearlySummary = () => {
                 {yearlyGross.toLocaleString()}
               </div>
             </div>
-            <div className="flex flex-col justify-center items-center gap-2 min-w-[30%] bg-white shadow-lg rounded-md px-5 py-3">
+            <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 bg-white shadow-lg rounded-md px-5 py-3">
               <div className="flex items-center justify-center gap-2">
                 <img
                   src={yearlyExpensesIcon}
@@ -366,7 +303,7 @@ const BusinessYearlySummary = () => {
                 {(yearlyExpenses + thisYearMonthlyExpenses).toLocaleString()}
               </div>
             </div>
-            <div className="flex flex-col justify-center items-center gap-2 min-w-[30%] bg-white shadow-lg rounded-md px-5 py-3">
+            <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 bg-white shadow-lg rounded-md px-5 py-3">
               <div className="flex items-center justify-center gap-2">
                 <img
                   src={yearlyNetIcon}
@@ -386,8 +323,64 @@ const BusinessYearlySummary = () => {
               </div>
             </div>
           </div>
+
+          <div className="w-[60%]">
+            <div className="w-full bg-white p-5 rounded-lg shadow-lg">
+              <div className="h-[600px] w-full lg:w-full">
+                <Bar
+                  className="w-full h-hfull"
+                  data={{
+                    labels: newMonths,
+                    datasets: [
+                      {
+                        label: "Gross",
+                        data: grossCount,
+                        borderColor: "#ff9f1c",
+                        backgroundColor: "#fdac3a",
+                      },
+                      {
+                        label: "Expenses",
+                        data: expensesCount,
+                        borderColor: "#ff6384",
+                        backgroundColor: "#FA829C",
+                      },
+                      {
+                        label: "Net",
+                        data: netCount,
+                        borderColor: "#2ec4b6",
+                        backgroundColor: "#3cd5c5",
+                      },
+                    ],
+                  }}
+                  options={{
+                    plugins: {
+                      datalabels: {
+                        display: setGraphDataDisplay,
+                        anchor: "end",
+                        align: "start",
+                        color: "#000000",
+                        font: {
+                          weight: 550,
+                          size: 13,
+                        },
+                      },
+                      legend: {
+                        labels: {
+                          font: {
+                            size: 15,
+                          },
+                        },
+                      },
+                    },
+                    indexAxis: "y",
+                    maintainAspectRatio: false,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

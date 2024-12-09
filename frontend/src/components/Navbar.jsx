@@ -81,7 +81,7 @@ const Navbar = () => {
         </>
       ) : (
         <>
-          <div className="font-pops overflow-auto shadow-lg">
+          <div className="font-pops overflow-auto">
             <div className="flex justify-between px-2 py-1 pl-2">
               <div>
                 <Link to="/">

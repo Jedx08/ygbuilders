@@ -79,6 +79,8 @@ function businessCapitalDataReducer(state, { type, payload }) {
 }
 
 export const CalendarContextProvider = (props) => {
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [loggedIn, setLoggedIn] = useState(true); // user login ?
   const [personalSummaryView, setPersonalSummaryView] = useState(true);
   const [inMobile, setInMobile] = useState(false);
@@ -148,6 +150,10 @@ export const CalendarContextProvider = (props) => {
   return (
     <CalendarContext.Provider
       value={{
+        startDate,
+        setStartDate,
+        endDate,
+        setEndDate,
         monthIndex,
         setMonthIndex,
         showPersonalForm,

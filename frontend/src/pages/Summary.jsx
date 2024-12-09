@@ -1,11 +1,11 @@
 import { useContext, useEffect } from "react";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
+import Sidebar from "../components/Sidebar";
 import PersonalSummary from "../components/personal/PersonalSummary";
 import BusinessSummary from "../components/business/BusinessSummary";
 import { CalendarContext } from "../context/CalendarContext";
 import { useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import FooterNav from "../components/FooterNav";
 
 const Summary = () => {
   const { auth } = useAuth();
@@ -32,11 +32,17 @@ const Summary = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="bg-light font-pops">
-        {personalSummaryView ? <PersonalSummary /> : <BusinessSummary />}
+      <div className="flex lg:flex-col">
+        <div className="lg:hidden">
+          <Sidebar />
+        </div>
+        <div className="bg-light w-full font-pops px-20 xl:pl-40 lg:pl-20 lg:pb-20">
+          {personalSummaryView ? <PersonalSummary /> : <BusinessSummary />}
+        </div>
+        <div className="hidden lg:block">
+          <FooterNav />
+        </div>
       </div>
-      <Footer />
     </>
   );
 };

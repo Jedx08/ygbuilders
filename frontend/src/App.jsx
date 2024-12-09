@@ -15,6 +15,7 @@ import LandingPage from "./landingpage/LandingPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermOfUse from "./pages/TermsOfUse";
 import Calendar from "./pages/Calendar";
+import DateRange from "./pages/DateRange";
 
 function App() {
   const { setInMobile } = useContext(CalendarContext);
@@ -51,7 +52,7 @@ function App() {
             <Route path="business" element={<Business />} />
             <Route path="summary" element={<Summary />} />
             <Route path="settings" element={<Settings />} />
-            <Route path="calendar" element={<Calendar />} />
+            <Route path="filter" element={<DateRange />} />
             {/* </Route> */}
           </Route>
           {/* Catch All */}
