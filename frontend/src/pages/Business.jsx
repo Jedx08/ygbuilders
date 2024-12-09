@@ -1,7 +1,7 @@
 import { getMonth } from "../utilities/getMonth";
 import { useContext, useEffect, useState } from "react";
 import { CalendarContext } from "../context/CalendarContext";
-import BusinessMonth from "../components/Business/BusinessMonth";
+import BusinessMonth from "../components/business/BusinessMonth";
 // import { useLocation, useNavigate } from "react-router-dom";
 
 const Business = () => {

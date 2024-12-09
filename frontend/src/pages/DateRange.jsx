@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { CalendarContext } from "../context/CalendarContext";
 import Navbar from "../components/Navbar";
-import BusinessDateRange from "../components/Business/BusinessDateRange";
+import BusinessDateRange from "../components/business/BusinessDateRange";
 import PersonalDateRange from "../components/personal/PersonalDateRange";
 
 const DateRange = () => {

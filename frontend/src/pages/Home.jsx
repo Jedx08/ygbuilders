@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import BusinessHomeCard from "../components/Business/BusinessHomeCard";
+import BusinessHomeCard from "../components/business/BusinessHomeCard";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import PersonalHomeCard from "../components/personal/PersonalHomeCard";
