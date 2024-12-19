@@ -48,7 +48,7 @@ function App() {
             {/* uncomment RequireAuth after ads added */}
             {/* <Route element={<RequireAuth />}> */}
             <Route exact path="/home" element={<Home />} />
-            <Route path="personal" element={<Personal />} />
+            <Route path="calendar" element={<Calendar />} />
             <Route path="business" element={<Business />} />
             <Route path="summary" element={<Summary />} />
             <Route path="settings" element={<Settings />} />

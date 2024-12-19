@@ -5,6 +5,9 @@ import dayjs from "dayjs";
 import grossIcon from "../../../media/pouch.png";
 import expensesIcon from "../../../media/expenses.png";
 import netIcon from "../../../media/networth.png";
+import monGrossIcon from "../../../media/monpouch.png";
+import monExpensesIcon from "../../../media/monexpenses.png";
+import monNetIcon from "../../../media/monprofit.png";
 
 const PersonalData = () => {
   const {
@@ -79,17 +82,27 @@ const PersonalData = () => {
   }, [monthlyDataLoading, monthData]);
 
   return (
-    <div>
+    <div className="flex justify-center space-x-10">
+      {/* Income Data */}
       <div>
+        <div
+          className={`border border-light shadow-lg bg-white font-bold rounded-md `}
+        >
+          <div
+            className={`flex gap-3 justify-center items-center px-1 py-1 text-greens text-xl`}
+          >
+            Income
+          </div>
+        </div>
         {personalDataLoading && (
-          <div className="bg-white border border-light py-3 text-center rounded-md">
+          <div className="bg-white border border-light py-3 text-center rounded-md text-sm text-[#A6ACAF]">
             Getting Data...
           </div>
         )}
         {!personalDataLoading && (
           <>
             {monthData.length === 0 ? (
-              <div className="bg-white border border-light py-3 text-center rounded-md">
+              <div className="bg-white border border-light py-3 text-center rounded-md text-sm text-[#A6ACAF]">
                 No data to show
               </div>
             ) : (
@@ -165,9 +178,57 @@ const PersonalData = () => {
           </>
         )}
       </div>
-      <div>gross: {grossCount}</div>
-      <div>expenses: {expensesCount}</div>
-      <div>net: {grossCount - expensesCount}</div>
+
+      {/* Monthly Summary */}
+      <div>
+        <div
+          className={`border border-light shadow-lg bg-white font-bold rounded-md`}
+        >
+          <div
+            className={`flex gap-3 justify-center items-center px-1 py-1 text-greens text-xl`}
+          >
+            <p>Summary</p>
+          </div>
+        </div>
+        <div className="border border-light shadow-lg bg-white rounded-md">
+          <div className="flex items-center space-x-5 py-2">
+            {/* Monthly Gross */}
+            <div className="flex items-center font-semibold">
+              <div className={`flex space-x-1 items-center justify-center`}>
+                <img src={monGrossIcon} alt="mon_gross" className={`w-14`} />
+                <p className="ml-1 text-[#D0D0D0]">:</p>
+                <p className="text-oranges text-lg">
+                  {grossCount.toLocaleString()}
+                </p>
+              </div>
+            </div>
+            {/* Monthly Expenses */}
+            <div className="flex items-center font-semibold">
+              <div className={`flex space-x-1 items-center justify-center`}>
+                <img
+                  src={monExpensesIcon}
+                  alt="mon_expenses"
+                  className={`w-14`}
+                />
+                <p className="ml-1 text-[#D0D0D0]">:</p>
+                <p className="text-oranges text-lg">
+                  {expensesCount.toLocaleString()}
+                </p>
+              </div>
+            </div>
+            {/* Monthly Net */}
+            <div className="flex items-center font-semibold">
+              <div className={`flex space-x-1 items-center justify-center`}>
+                <img src={monNetIcon} alt="mon_net" className={`w-14`} />
+                <p className="ml-1 text-[#D0D0D0]">:</p>
+                <p className="text-oranges text-lg">
+                  {(grossCount - expensesCount).toLocaleString()}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

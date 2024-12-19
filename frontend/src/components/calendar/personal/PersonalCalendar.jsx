@@ -34,35 +34,24 @@ const PersonalCalendar = () => {
       </div>
 
       {/* Components */}
-      <div className="fle flex-wrap">
+      <div className="flex items-center justify-center space-x-7 mt-10">
         {/* Calendar */}
-        <div className="">
+        <div>
           <PersonalMonth month={currentMonth} />
         </div>
         {/* Data Form */}
-        <div className="">
+        <div>
           <PersonalForm />
         </div>
         {/* Monthly Expenses Form */}
-        <div className="">
+        <div>
           <PMonthlyExpensesForm />
         </div>
       </div>
 
       {/* Personal Data */}
-      <div className="shadow-lg ">
-        <div
-          className={`border border-light shadow-lg bg-white mt-3 font-medium rounded-md `}
-        >
-          <div
-            className={`flex gap-3 justify-center items-center px-1 py-1 text-greens text-xl`}
-          >
-            Income
-          </div>
-        </div>
-        <div>
-          <PersonalData />
-        </div>
+      <div className="mt-5">
+        <PersonalData />
       </div>
     </>
   );

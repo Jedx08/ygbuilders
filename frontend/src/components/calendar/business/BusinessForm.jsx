@@ -277,7 +277,7 @@ const BusinessForm = () => {
 
   return (
     <>
-      <div className="bg-white rounded-lg mt-5 py-5">
+      <div className="bg-white rounded-lg pt-8 max-w-[350px] h-[480px]">
         <div className="text-center">
           <div className="font-semibold">
             {exactDaySelected.format("MMMM D, YYYY")}
@@ -291,7 +291,7 @@ const BusinessForm = () => {
               </span>
             </div>
             <div
-              className={`border rounded-md overflow-hidden flex items-center mx-auto w-[60%] ${
+              className={`border rounded-md overflow-hidden flex items-center mx-auto w-[70%] ${
                 errStyleCapital ? "border-[red]" : "border-inputLight"
               }`}
             >
@@ -310,7 +310,7 @@ const BusinessForm = () => {
           <div className="px-10 justify-center mt-3">
             <div className="font-semibold">Sales:</div>
             <div
-              className={`border rounded-md overflow-hidden flex items-center mx-auto w-[60%] ${
+              className={`border rounded-md overflow-hidden flex items-center mx-auto w-[70%] ${
                 errStyleSales ? "border-[red]" : "border-inputLight"
               }`}
             >
@@ -329,7 +329,7 @@ const BusinessForm = () => {
           <div className="px-10 justify-center mt-3">
             <div className="font-semibold">Expenses:</div>
             <div
-              className={`border rounded-md overflow-hidden flex items-center mx-auto w-[60%] ${
+              className={`border rounded-md overflow-hidden flex items-center mx-auto w-[70%] ${
                 errStyleExpenses ? "border-[red]" : "border-inputLight"
               }`}
             >
@@ -347,7 +347,7 @@ const BusinessForm = () => {
           {/* Profit */}
           <div className="px-10 justify-center mt-3">
             <div className="font-semibold">Profit:</div>
-            <div className="bg-light flex items-center rounded-md mx-auto py-2 w-[60%]">
+            <div className="bg-light flex items-center rounded-md mx-auto py-2 w-[70%]">
               <div className="pl-2">
                 <img src={profitIcon} className="w-9" />
               </div>
@@ -365,9 +365,9 @@ const BusinessForm = () => {
           )}
 
           {!confirmDelete && (
-            <div className="flex flex-col items-center mt-5">
+            <div className="flex flex-col items-center">
               {showButton && (
-                <div className="mb-2">
+                <div className={`${errStyle ? "mt-2" : "mt-9"}`}>
                   {toggleSaveButton && (
                     <>
                       {/* Add data */}

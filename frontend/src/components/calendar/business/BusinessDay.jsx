@@ -45,14 +45,14 @@ const BusinessDay = ({ day }) => {
   return (
     <>
       <div
-        className={`border border-light bg-white flex flex-col overflow-hidden ${
+        className={`border border-light bg-white flex flex-col items-center justify-center overflow-hidden ${
           notThisMonth
             ? "cursor-default"
             : "hover:border-loranges cursor-pointer"
         }`}
         onClick={toggleForm}
       >
-        <header className="flex flex-col items-center">
+        <header className="flex flex-col">
           <p
             className={`font-bold pt-1 text-center ${
               inMobile ? "text-2xl ssm:text-lg" : "text-lg"

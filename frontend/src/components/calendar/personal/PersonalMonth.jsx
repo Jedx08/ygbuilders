@@ -14,8 +14,8 @@ const PersonalMonth = ({ month }) => {
   }
 
   return (
-    <div className="max-w-[600px]">
-      <div className={``}>
+    <div className="max-w-[500px]">
+      <div>
         {/* Month and Year */}
         <div className={`flex justify-between items-center text-3xl`}>
           <div className="flex">
@@ -50,7 +50,7 @@ const PersonalMonth = ({ month }) => {
       </div>
       <div
         id="calendar"
-        className={`flex-1 grid grid-cols-7 grid-rows-6 mt-1 overflow-auto rounded-lg shadow-lg h-s40`}
+        className={`flex-1 grid grid-cols-7 grid-rows-6 mt-1 overflow-auto rounded-lg shadow-lg h-[250px] min-w-[350px]`}
       >
         {month.map((row, i) => (
           <React.Fragment key={i}>

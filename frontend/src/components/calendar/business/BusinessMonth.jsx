@@ -17,10 +17,10 @@ const BusinessMonth = ({ month }) => {
 
   return (
     <>
-      <div className="mb-24">
-        <div className={``}>
+      <div className="max-w-[500px]">
+        <div>
           {/* Month and Year */}
-          <div className={`grid grid-flow-col items-center `}>
+          <div className={`flex justify-between items-center text-3xl`}>
             <div className="flex">
               <FaAngleLeft
                 className={`text-oranges hover:text-loranges cursor-pointer `}
@@ -33,7 +33,7 @@ const BusinessMonth = ({ month }) => {
             </div>
             <div>
               <h1
-                className={`font-extrabold text-center text-oranges select-none `}
+                className={`font-extrabold text-center text-oranges select-none`}
               >
                 {
                   /* display current month and year */
@@ -47,7 +47,7 @@ const BusinessMonth = ({ month }) => {
         </div>
 
         <div
-          className={`bg-white grid grid-flow-col text-center font-semibold rounded-md mt-3 `}
+          className={`bg-white grid grid-flow-col text-center font-semibold rounded-md mt-3`}
         >
           <div className="text-loranges">SUN</div>
           <div className="text-lgreens">MON</div>
@@ -59,7 +59,7 @@ const BusinessMonth = ({ month }) => {
         </div>
         <div
           id="calendar"
-          className={`flex-1 grid grid-cols-7 grid-rows-6 mt-1 overflow-auto rounded-lg shadow-lg`}
+          className={`flex-1 grid grid-cols-7 grid-rows-6 mt-1 overflow-auto rounded-lg shadow-lg h-[250px] min-w-[350px]`}
         >
           {month.map((row, i) => (
             <React.Fragment key={i}>

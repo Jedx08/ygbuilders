@@ -96,17 +96,20 @@ const BMonthlyExpensesAdd = () => {
 
   return (
     <>
-      <div className="px-5 font-pops border border-loranges py-2 rounded-md">
-        <div className="mb-2 flex space-x-2 justify-center">
+      <div className="px-5 pt-5 font-pops py-4 rounded-md bg-white shadow-md">
+        <div className="text-oranges text-center font-semibold">
+          Add monthly expenses
+        </div>
+        <div className="mb-2 flex space-x-2 justify-center pt-2">
           <div
             className={`flex border rounded-md overflow-hidden items-center pl-2 ${
               errorStyle ? "border-[red]" : "border-inputLight"
             }`}
           >
-            <img src={expensesIcon} className="w-8 mr-2" />
+            <img src={expensesIcon} className="w-8 mr-2 py-1" />
             <input
               type="text"
-              placeholder="Add Title"
+              placeholder="Title"
               ref={expensesRef}
               onChange={titleInput}
               value={title}
@@ -114,13 +117,13 @@ const BMonthlyExpensesAdd = () => {
             />
           </div>
           <div
-            className={`border rounded-md overflow-hidden items-center ${
+            className={`border rounded-md overflow-hidden flex items-center ${
               errorStyle ? "border-[red]" : "border-inputLight"
             }`}
           >
             <input
               type="number"
-              placeholder="Add Amount"
+              placeholder="Amount"
               onChange={amountInput}
               value={amount}
               className="w-36 focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs"
@@ -128,15 +131,20 @@ const BMonthlyExpensesAdd = () => {
           </div>
         </div>
 
-        <div className="flex items-center mx-auto gap-3 px-2 h-2 w-fit rounded-md overflow-hidden">
+        {/* Error Message */}
+        <div className="mt-2 text-xs text-center text-[red]">{error}</div>
+
+        <div className="flex items-center mx-auto gap-3 px-2 h-2 mt-4 w-fit rounded-md overflow-hidden">
           {addLoading ? (
-            <ThreeDot
-              style={{ fontSize: "7px" }}
-              variant="pulsate"
-              color="#ff9f1c"
-              text=""
-              textColor=""
-            />
+            <div className="mt-2">
+              <ThreeDot
+                style={{ fontSize: "7px" }}
+                variant="pulsate"
+                color="#ff9f1c"
+                text=""
+                textColor=""
+              />
+            </div>
           ) : (
             <>
               <div
@@ -160,7 +168,6 @@ const BMonthlyExpensesAdd = () => {
             </>
           )}
         </div>
-        <div className="mt-2 text-xs text-center text-[red]">{error}</div>
       </div>
     </>
   );

@@ -69,59 +69,78 @@ const BMonthlyCapitalForm = () => {
   }, [businessCapitalData, monthIndex]);
 
   return (
-    <div className="font-pops">
-      <form className="rounded-md bg-white overflow-hidden px-5 shadow-lg">
-        <div className="flex items-center justify-center relative w-full">
-          <div className="text-center mt-6">
-            <h1 className="font-bold text-xl text-loranges mb-2">
-              Monthly Capital
-            </h1>
-            <p className="text-md font-semibold mb-2">
-              {dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
-            </p>
+    <div className="font-pops bg-white shadow-lg rounded-lg py-5 min-w-[420px] h-[406px] relative">
+      <div className="flex items-center justify-center relative w-full">
+        <div className="text-center">
+          <h1 className="font-bold text-xl text-loranges mb-2">
+            Monthly Capital
+          </h1>
+          <p className="text-md font-semibold mb-2">
+            {dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
+          </p>
+        </div>
+      </div>
+
+      <div className="text-sm font-bold mb-3 text-center">
+        <span className="text-xs text-[#A6ACAF] font-normal">
+          (Cash, Assets etc...)
+        </span>
+      </div>
+
+      {/* Monthly Capital Data */}
+      <div
+        className={`h-[158px] ${
+          showBusinessCapitalInput ? "" : "overflow-auto"
+        }`}
+      >
+        {capitalDataLoading && (
+          <div className="text-center mt-3 text-sm text-[#A6ACAF]">
+            Getting data...
           </div>
-        </div>
+        )}
 
-        <div className="text-sm font-bold mb-3 text-center">
-          <span className="text-xs text-[#A6ACAF] font-normal">
-            (Cash, Assets etc...)
-          </span>
-        </div>
+        {!capitalDataLoading && capitalData.length === 0 && (
+          <div className="text-center mt-3 text-sm text-[#A6ACAF]">
+            No data to show
+          </div>
+        )}
 
-        {capitalData.map((d, i) => (
-          <React.Fragment key={i}>
-            {capitalDataLoading ? (
-              <div className="px-5">
-                <Skeleton height={28} />
-              </div>
-            ) : (
+        {capitalData.map((d, i) => {
+          return (
+            <React.Fragment key={i}>
               <BMonthlyCapitalData capitalData={d} />
-            )}
-          </React.Fragment>
-        ))}
+            </React.Fragment>
+          );
+        })}
+      </div>
 
-        <div className="flex justify-center">
-          <div
-            onClick={() => {
-              if (!loggedIn) {
-                navigate("/Login");
-              } else {
-                addCapital();
-              }
-            }}
-            className={`cursor-pointer w-fit px-2 h-2 rounded-md overflow-hidden py-1 text-white flex items-center gap-1 border border-loranges bg-loranges hover:bg-oranges font-semibold my-2 ${
-              showBusinessCapitalInput ? "hidden" : ""
-            }`}
-          >
-            <MdOutlinePostAdd className="text-3xl" /> Add
-          </div>
+      <div className="flex justify-center">
+        <div
+          onClick={() => {
+            if (!loggedIn) {
+              navigate("/Login");
+            } else {
+              addCapital();
+            }
+          }}
+          className={`cursor-pointer w-fit px-2 h-2 rounded-md overflow-hidden py-1 text-white flex items-center gap-1 border border-loranges bg-loranges hover:bg-oranges font-bold my-2 ${
+            showBusinessCapitalInput ? "hidden" : ""
+          }`}
+        >
+          <MdOutlinePostAdd className="text-3xl" /> Add
         </div>
+      </div>
 
-        {/* Add button for monthly expenses */}
-        <div>{showBusinessCapitalInput && <BMonthlyCapitalAdd />}</div>
+      {/* Add button for monthly expenses */}
+      {showBusinessCapitalInput && (
+        <div className="absolute top-0 pt-[25%] bg-light bg-opacity-70 h-hfull w-full">
+          <BMonthlyCapitalAdd />
+        </div>
+      )}
 
-        {/* Total Expenses */}
-        <div className="px-5 mb-5 flex items-center space-x-2 justify-center mt-2">
+      {/* Total Expenses */}
+      <div className="absolute bottom-2 w-full">
+        <div className="px-5 mb-2 flex items-center space-x-2 justify-center mt-2">
           <div>
             <p className="text-sm font-bold">Total:</p>
           </div>
@@ -138,7 +157,7 @@ const BMonthlyCapitalForm = () => {
             </div>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

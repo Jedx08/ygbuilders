@@ -70,75 +70,78 @@ const BMonthlyExpensesForm = () => {
 
   return (
     <>
-      <div className="font-pops">
-        <form className="rounded-md bg-white overflow-hidden px-5 shadow-lg">
-          <div className="flex items-center justify-center relative w-full">
-            <div className="text-center mt-6">
-              <h1 className="font-bold text-xl text-loranges mb-2">
-                Monthly Expenses
-              </h1>
-              <p className="text-md font-semibold mb-2">
-                {dayjs(new Date(dayjs().year(), monthIndex)).format(
-                  "MMMM YYYY"
-                )}
-              </p>
-            </div>
-            <div
-              onClick={(e) => {
-                if (loadPage) {
-                  location.reload();
-                }
-
-                e.preventDefault(),
-                  setShowBusinessExpensesForm(false),
-                  setShowBusinessExpensesInput(false);
-              }}
-              className="absolute right-0 mb-5 cursor-pointer hover:bg-light hover:rounded-full p-1"
-            >
-              <IoClose className="text-2xl text-loranges hover:text-oranges" />
-            </div>
+      <div className="font-pops bg-white shadow-lg rounded-lg py-5 min-w-[420px] h-[406px] relative">
+        <div className="flex items-center justify-center relative w-full">
+          <div className="text-center">
+            <h1 className="font-bold text-xl text-loranges mb-2">
+              Monthly Expenses
+            </h1>
+            <p className="text-md font-semibold mb-2">
+              {dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
+            </p>
           </div>
+        </div>
 
-          <div className="text-sm font-bold mb-3 text-center">
-            <span className="text-xs text-[#A6ACAF] font-normal">
-              (Bills, Loan, Insurance, Rent and etc...)
-            </span>
-          </div>
+        <div className="text-sm font-bold mb-3 text-center">
+          <span className="text-xs text-[#A6ACAF] font-normal">
+            (Bills, Loan, Insurance, Rent and etc...)
+          </span>
+        </div>
 
-          {expensesData.map((d, i) => (
-            <React.Fragment key={i}>
-              {expensesDataLoading ? (
-                <div className="px-5">
-                  <Skeleton height={28} />
-                </div>
-              ) : (
+        {/* Monthly Expenses Data */}
+        <div
+          className={`h-[158px] ${
+            showBusinessExpenseInput ? "" : "overflow-auto"
+          }`}
+        >
+          {expensesDataLoading && (
+            <div className="text-center mt-3 text-sm text-[#A6ACAF]">
+              Getting data...
+            </div>
+          )}
+
+          {!expensesDataLoading && expensesData.length === 0 && (
+            <div className="text-center mt-3 text-sm text-[#A6ACAF]">
+              No data to show
+            </div>
+          )}
+
+          {expensesData.map((d, i) => {
+            return (
+              <React.Fragment key={i}>
                 <BMonthlyExpensesData expensesData={d} />
-              )}
-            </React.Fragment>
-          ))}
+              </React.Fragment>
+            );
+          })}
+        </div>
 
-          <div className="flex justify-center">
-            <div
-              onClick={() => {
-                if (!loggedIn) {
-                  navigate("/Login");
-                } else {
-                  addExpenses();
-                }
-              }}
-              className={`cursor-pointer w-fit px-2 h-2 rounded-md overflow-hidden py-1 text-white flex items-center gap-1 border border-loranges bg-loranges hover:bg-oranges font-semibold my-2 ${
-                showBusinessExpenseInput ? "hidden" : ""
-              }`}
-            >
-              <MdOutlinePostAdd className="text-3xl" /> Add
-            </div>
+        <div className="flex justify-center">
+          <div
+            onClick={() => {
+              if (!loggedIn) {
+                navigate("/Login");
+              } else {
+                addExpenses();
+              }
+            }}
+            className={`cursor-pointer w-fit px-2 h-2 rounded-md overflow-hidden py-1 text-white flex items-center gap-1 border border-loranges bg-loranges hover:bg-oranges font-bold my-2 ${
+              showBusinessExpenseInput ? "hidden" : ""
+            }`}
+          >
+            <MdOutlinePostAdd className="text-3xl" /> Add
           </div>
+        </div>
 
-          {/* Add button for monthly expenses */}
-          <div>{showBusinessExpenseInput && <BMonthlyExpensesAdd />}</div>
+        {/* Add button for monthly expenses */}
+        {showBusinessExpenseInput && (
+          <div className="absolute top-0 pt-[25%] bg-light bg-opacity-70 h-hfull w-full">
+            <BMonthlyExpensesAdd />
+          </div>
+        )}
 
-          {/* Total Expenses */}
-          <div className="px-5 mb-5 flex items-center space-x-2 justify-center mt-2">
+        {/* Total Expenses */}
+        <div className="absolute bottom-2 w-full">
+          <div className="px-5 mb-2 flex items-center space-x-2 justify-center mt-2">
             <div>
               <p className="text-sm font-bold">Total:</p>
             </div>
@@ -155,7 +158,7 @@ const BMonthlyExpensesForm = () => {
               </div>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </>
   );

@@ -3,6 +3,8 @@ import useAuth from "../hooks/useAuth";
 import { CalendarContext } from "../context/CalendarContext";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import FooterNav from "../components/FooterNav";
+import Sidebar from "../components/Sidebar";
 import BusinessCalendar from "../components/calendar/business/BusinessCalendar";
 import PersonalCalendar from "../components/calendar/personal/PersonalCalendar";
 
@@ -21,45 +23,57 @@ const Calendar = () => {
   }, []);
 
   return (
-    <>
-      <Navbar />
-      <div className="bg-light font-pops">
-        {/* Calendar Switch View */}
-        <div className="flex justify-center space-x-5 pt-5">
-          <div
-            onClick={() => {
-              setCalendarView(false);
-            }}
-            className={`shadow-lg px-5 py-3 rounded-md font-bold
+    <div className="flex lg:flex-col">
+      <div className="lg:hidden">
+        <Sidebar />
+      </div>
+      <div className="w-full">
+        <div className="bg-light font-pops  min-h-[100vh]">
+          {/* Calendar Switch View */}
+          <div className="flex justify-center space-x-5 pt-5">
+            <div
+              onClick={() => {
+                setCalendarView(false);
+              }}
+              className={`shadow-lg px-5 py-3 rounded-md font-bold
               ${
                 !calendarView
                   ? "bg-lgreens text-white cursor-default"
                   : "bg-white cursor-pointer hover:text-lgreens"
               }
              `}
-          >
-            Personal
-          </div>
-          <div
-            onClick={() => {
-              setCalendarView(true);
-            }}
-            className={`shadow-lg px-5 py-3 rounded-md font-bold
+            >
+              Personal
+            </div>
+            <div
+              onClick={() => {
+                setCalendarView(true);
+              }}
+              className={`shadow-lg px-5 py-3 rounded-md font-bold
               ${
                 !calendarView
                   ? "bg-white cursor-pointer hover:text-loranges"
                   : "bg-loranges text-white cursor-default"
               }
             `}
-          >
-            Business
+            >
+              Business
+            </div>
+          </div>
+          {/* Calendar Display Personal/Business */}
+          <div>
+            {!calendarView ? <PersonalCalendar /> : <BusinessCalendar />}
           </div>
         </div>
-        {/* Calendar Display Personal/Business */}
-        <div>{!calendarView ? <PersonalCalendar /> : <BusinessCalendar />}</div>
+        <div>
+          <Footer />
+        </div>
       </div>
-      <Footer />
-    </>
+
+      <div className="hidden lg:block">
+        <FooterNav />
+      </div>
+    </div>
   );
 };
 

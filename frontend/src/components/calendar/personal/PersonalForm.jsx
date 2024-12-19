@@ -238,7 +238,7 @@ const PersonalForm = () => {
 
   return (
     <>
-      <div className="bg-white rounded-lg py-5">
+      <div className="bg-white rounded-lg pt-8 min-w-[350px] h-[406px]">
         <div className="text-center">
           <div className="font-semibold">
             {exactDaySelected.format("MMMM D, YYYY")}
@@ -247,7 +247,7 @@ const PersonalForm = () => {
           <div className="px-10 justify-center mt-5">
             <div className="font-semibold">Gross:</div>
             <div
-              className={`border rounded-md overflow-hidden flex items-center mx-auto w-[60%] ${
+              className={`border rounded-md overflow-hidden flex items-center mx-auto w-[70%] ${
                 errStyleGross ? "border-[red]" : "border-inputLight"
               }`}
             >
@@ -266,7 +266,7 @@ const PersonalForm = () => {
           <div className="px-10 justify-center mt-3">
             <div className="font-semibold">Expenses:</div>
             <div
-              className={`border rounded-md overflow-hidden flex items-center mx-auto w-[60%] ${
+              className={`border rounded-md overflow-hidden flex items-center mx-auto w-[70%] ${
                 errStyleExpenses ? "border-[red]" : "border-inputLight"
               }`}
             >
@@ -284,7 +284,7 @@ const PersonalForm = () => {
           {/* Net Pay */}
           <div className="px-10 justify-center mt-3">
             <div className="font-semibold">Net:</div>
-            <div className="bg-light flex items-center rounded-md mx-auto py-2 w-[60%]">
+            <div className="bg-light flex items-center rounded-md mx-auto py-2 w-[70%]">
               <div className="pl-2">
                 <img src={networthIcon} className="w-8" />
               </div>
@@ -296,13 +296,13 @@ const PersonalForm = () => {
 
           {/* Error Message */}
           {errStyle && (
-            <p className="text-center mt-2 text-[red] text-sm">{errMsg}</p>
+            <div className="text-center mt-2 text-[red] text-sm">{errMsg}</div>
           )}
 
           {!confirmDelete && (
-            <div className="flex flex-col items-center mt-5">
+            <div className="flex flex-col items-center">
               {showButton && (
-                <div className="mb-2">
+                <div className={`${errStyle ? "mt-2" : "mt-9"}`}>
                   {toggleSaveButton ? (
                     <>
                       {/* Add data */}

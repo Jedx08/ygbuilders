@@ -35,32 +35,27 @@ const BusinessCalendar = () => {
       </div>
 
       {/* Components */}
-      <div className="grid grid-rows-2 grid-flow-col gap-4">
-        <div className="row-span-2 col-span-2">
+      <div className="flex items-center justify-center space-x-7 mt-10">
+        {/* Calendar */}
+        <div>
           <BusinessMonth month={currentMonth} />
         </div>
-        <div className="row-span-2">
+        {/* Data Form */}
+        <div>
           <BusinessForm />
         </div>
-        <div className="row-span-1">
+        {/* Monthly Capital Form */}
+        <div>
           <BMonthlyCapitalForm />
         </div>
-        <div className="row-span-1">
+        {/* Monthly Expenses Form */}
+        <div>
           <BMonthlyExpensesForm />
         </div>
       </div>
 
       {/* Business Data */}
-      <div className="shadow-lg">
-        <div
-          className={`border border-light shadow-lg bg-white mt-3 font-bold rounded-md `}
-        >
-          <div
-            className={`flex gap-3 justify-center items-center px-1 py-1 text-oranges `}
-          >
-            <p>Income</p>
-          </div>
-        </div>
+      <div className="mt-5">
         <BusinessData />
       </div>
     </>

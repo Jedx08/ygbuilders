@@ -64,7 +64,7 @@ const PMonthlyExpensesForm = () => {
   }
 
   return (
-    <div className="bg-white rounded-lg py-5">
+    <div className="bg-white rounded-lg py-5 w-[420px] h-[406px] relative">
       <div className="text-center">
         <h1 className="font-bold text-xl text-greens mb-2">Monthly Expenses</h1>
         <p className="text-md font-semibold mb-2">
@@ -78,19 +78,32 @@ const PMonthlyExpensesForm = () => {
       </div>
 
       {/* Monthly Expenses Data */}
-      {expensesData.map((d, i) => {
-        return (
-          <React.Fragment key={i}>
-            {expensesDataLoading ? (
-              <div className="px-5">
-                <Skeleton height={28} />
-              </div>
-            ) : (
+      <div
+        className={`h-[158px] ${
+          showPersonalExpenseInput ? "" : "overflow-auto"
+        }`}
+      >
+        {expensesDataLoading && (
+          <div className="text-center mt-3 text-sm text-[#A6ACAF]">
+            Getting data...
+          </div>
+        )}
+
+        {!expensesDataLoading && expensesData.length === 0 && (
+          <div className="text-center mt-3 text-sm text-[#A6ACAF]">
+            No data to show
+          </div>
+        )}
+
+        {expensesData.map((d, i) => {
+          return (
+            <React.Fragment key={i}>
               <PMonthlyExpensesData expensesData={d} />
-            )}
-          </React.Fragment>
-        );
-      })}
+            </React.Fragment>
+          );
+        })}
+      </div>
+
       <div className="flex justify-center">
         <div
           onClick={() => {
@@ -100,7 +113,7 @@ const PMonthlyExpensesForm = () => {
               addExpenses();
             }
           }}
-          className={`cursor-pointer w-fit px-2 h-2 rounded-md overflow-hidden py-1 text-white flex items-center gap-1 border border-greens bg-greens hover:bg-lgreens font-semibold my-2 ${
+          className={`cursor-pointer w-fit px-2 h-2 rounded-md overflow-hidden py-1 text-white flex items-center gap-1 border border-greens bg-greens hover:bg-lgreens font-bold my-2 ${
             showPersonalExpenseInput ? "hidden" : ""
           }`}
         >
@@ -109,19 +122,25 @@ const PMonthlyExpensesForm = () => {
       </div>
 
       {/* Add button for monthly expenses */}
-      <div>{showPersonalExpenseInput && <PMonthlyExpensesAdd />}</div>
+      {showPersonalExpenseInput && (
+        <div className="absolute top-0 pt-[25%] bg-light bg-opacity-70 h-hfull w-full">
+          <PMonthlyExpensesAdd />
+        </div>
+      )}
 
       {/* Total Expenses */}
-      <div className="px-5 mb-2 flex items-center space-x-2 justify-center mt-5">
-        <div className="border border-inputLight rounded-md py-1 text-center w-fit">
-          <div className="grid grid-cols-3 items-center">
-            <div className="pl-2">
-              <img src={monthExpensesIcon} className="w-11 mr-2" />
-            </div>
-            <div className="mt-[0.15rem]">
-              <p className="text-[red] font-bold">
-                {monthlyExpenses.toLocaleString()}
-              </p>
+      <div className="absolute bottom-2 w-full">
+        <div className="px-5 mb-2 flex items-center space-x-2 justify-center">
+          <div className="border border-inputLight rounded-md py-1 text-center w-fit">
+            <div className="grid grid-cols-3 items-center">
+              <div className="pl-2">
+                <img src={monthExpensesIcon} className="w-11 mr-2" />
+              </div>
+              <div className="mt-[0.15rem]">
+                <p className="text-[red] font-bold">
+                  {monthlyExpenses.toLocaleString()}
+                </p>
+              </div>
             </div>
           </div>
         </div>
