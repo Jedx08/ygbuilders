@@ -323,7 +323,7 @@ const BusinessYearlySummary = () => {
 
   return (
     <>
-      <div className="flex w-full gap-5 p-5">
+      <div className="flex w-full gap-5 pb-10">
         {isLoading ? (
           <div className="w-full  bg-white p-5 rounded-lg flex items-center flex-col md:w-full">
             <div className="w-[35%]">
@@ -412,75 +412,8 @@ const BusinessYearlySummary = () => {
                 </div>
               </div>
             </div>
-
-            {/* <div className="w-[80%] flex flex-wrap justify-between mx-auto sm:w-full xxs:justify-center xxs:gap-3">
-                <div className="flex flex-col justify-center items-center gap-2">
-                  <div className="flex flex-col items-center justify-center gap-2">
-                    <img
-                      src={yearlyCapitalIcon}
-                      alt="yearly capital"
-                      className="w-9 sm:w-7"
-                    />
-                    <div className="text-md font-medium sm:text-sm">
-                      Capital
-                    </div>
-                  </div>
-                  <div className="text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
-                    {yearlyCapital.toLocaleString()}
-                  </div>
-                </div>
-                <div className="flex flex-col justify-center items-center gap-2">
-                  <div className="flex flex-col items-center justify-center gap-2">
-                    <img
-                      src={yearlySalesIcon}
-                      alt="yearly capital"
-                      className="w-9 sm:w-7"
-                    />
-                    <div className="text-md font-medium sm:text-sm">Sales</div>
-                  </div>
-                  <div className="text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
-                    {yearlySales.toLocaleString()}
-                  </div>
-                </div>
-                <div className="flex flex-col justify-center items-center gap-2">
-                  <div className="flex flex-col items-center justify-center gap-2">
-                    <img
-                      src={yearlyExpensesIcon}
-                      alt="yearly expenses"
-                      className="w-9 sm:w-7"
-                    />
-                    <div className="text-md font-medium sm:text-sm">
-                      Expenses
-                    </div>
-                  </div>
-                  <div className="text-2xl text-[red] font-bold sm:text-xl ssm:font-semibold">
-                    {(
-                      yearlyExpenses + thisYearMonthlyExpenses
-                    ).toLocaleString()}
-                  </div>
-                </div>
-                <div className="flex flex-col justify-center items-center gap-2">
-                  <div className="flex flex-col items-center justify-center gap-2">
-                    <img
-                      src={yearlyProfitIcon}
-                      alt="yearly net"
-                      className="w-9 sm:w-7"
-                    />
-                    <div className="text-md font-medium sm:text-sm">Profit</div>
-                  </div>
-                  <div
-                    className={
-                      yearlyProfit < 0
-                        ? "text-2xl font-bold text-[red] sm:text-xl ssm:font-semibold"
-                        : "text-2xl font-bold text-greens sm:text-xl ssm:font-semibold"
-                    }
-                  >
-                    {yearlyProfit.toLocaleString()}
-                  </div>
-                </div>
-              </div> */}
-            <div className="w-[70%] h-hfull bg-white py-4 rounded-lg shadow-lg">
-              <div className="h-[770px] w-full md:h-[500px] lg:w-full">
+            <div className="w-[70%] h-hfull bg-white py-4 rounded-lg shadow-lg overflow-y-auto">
+              <div className="h-[770px] w-full md:h-[500px] lg:w-[800px]">
                 <Bar
                   className="w-full h-hfull"
                   data={{
@@ -533,7 +466,7 @@ const BusinessYearlySummary = () => {
                         },
                       },
                     },
-                    indexAxis: "y",
+                    indexAxis: "x",
                     maintainAspectRatio: false,
                   }}
                 />

@@ -288,9 +288,9 @@ const BusinessSummary = () => {
   return (
     <>
       <div className="flex space-x-10 p-5">
-        <div className="flex py-5 space-x-5">
+        <div className="flex py-5 gap-5 xs:p-0 ssm:gap-3 xs:py-0">
           <div
-            className={`shadow-lg px-5 py-3 rounded-md font-bold
+            className={`shadow-lg px-5 py-3 rounded-md font-bold xl:text-sm xl:px-3 xl:py-2
              ${
                personalSummaryView
                  ? "bg-loranges text-white cursor-default"
@@ -304,7 +304,7 @@ const BusinessSummary = () => {
             Personal
           </div>
           <div
-            className={`shadow-lg px-5 py-3 rounded-md font-bold 
+            className={`shadow-lg px-5 py-3 rounded-md font-bold xl:text-sm xl:px-3 xl:py-2 
               ${
                 personalSummaryView
                   ? "bg-white cursor-pointer hover:text-loranges"
@@ -334,7 +334,7 @@ const BusinessSummary = () => {
             </div>
           </div>
           <div>
-            <h1 className="font-extrabold text-center text-4xl text-oranges ssm:text-3xl">
+            <h1 className="font-extrabold text-center text-4xl text-oranges xl:text-3xl ssm:hidden">
               {
                 /* display current month and year */
                 dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM")
@@ -343,64 +343,68 @@ const BusinessSummary = () => {
           </div>
         </div>
       </div>
-      <div className="w-full pb-10">
-        <div className="w-full px-5 gap-3 flex">
-          <div className="bg-loranges w-[40%] rounded-lg shadow-lg">
-            <div className="flex items-start justify-between gap-2 pt-5 px-10 xs:flex-col">
-              <div className="text-white text-xl">Overall Profit</div>
-              <p className="bg-white px-5 py-3 rounded-lg text-loranges font-semibold cursor-pointer">
+      <div className="w-full pb-10 ssm:pb-0">
+        <div className="w-full px-5 gap-3 flex mdd:flex-col">
+          <div className="bg-loranges w-[40%] rounded-lg shadow-lg p-5 space-y-3 mdd:w-full">
+            <div className="flex items-start justify-between gap-2 xs:flex-col">
+              <div className="text-white text-xl xl:text-lg">
+                Overall Profit
+              </div>
+              <p className="bg-white px-5 py-3 rounded-lg text-loranges font-semibold cursor-pointer xl:text-sm xl:px-3 xl:py-2">
                 Calendar
               </p>
             </div>
             <div
               className={
                 overallProfit < 0
-                  ? "text-5xl text-[red] font-bold px-10 lg:text-3xl md:text-2xl sm:text-xl"
-                  : "text-5xl text-white font-bold px-10 lg:text-3xl md:text-2xl sm:text-xl"
+                  ? "text-5xl text-[red] font-bold xl:text-4xl lg:text-3xl md:text-3xl sm:text-2xl"
+                  : "text-5xl text-white font-bold xl:text-4xl lg:text-3xl md:text-3xl sm:text-2xl"
               }
             >
               {overallProfit.toLocaleString()}
             </div>
           </div>
-          <div className="bg-white w-[20%] rounded-lg shadow-lg">
-            <div className="flex items-center justify-center gap-2 pt-5 xs:flex-col">
-              <img
-                src={capitalIcon}
-                alt="capital icon"
-                className="w-9 sm:w-7"
-              />
-              <div className="font-medium">Capital</div>
+          <div className="flex w-full space-x-3">
+            <div className="bg-white w-full rounded-lg shadow-lg">
+              <div className="flex items-center justify-center gap-2 pt-5 xs:flex-col">
+                <img
+                  src={capitalIcon}
+                  alt="capital icon"
+                  className="w-9 sm:w-7"
+                />
+                <div className="font-medium">Capital</div>
+              </div>
+              <div className="text-4xl text-oranges w-fit mx-auto font-bold px-2 py-4 lg:text-3xl md:text-2xl sm:text-xl">
+                {capital.toLocaleString()}
+              </div>
             </div>
-            <div className="text-4xl text-oranges w-fit mx-auto font-bold px-2 py-4 lg:text-3xl md:text-2xl sm:text-xl">
-              {capital.toLocaleString()}
+            <div className="bg-white w-full rounded-lg shadow-lg">
+              <div className="flex items-center justify-center gap-2 pt-5 xs:flex-col">
+                <img src={salesIcon} alt="sales icon" className="w-9 sm:w-7" />
+                <div className="font-medium">Sales</div>
+              </div>
+              <div className="text-4xl text-[#399CB4] w-fit mx-auto font-bold px-2 py-4 lg:text-3xl md:text-2xl sm:text-xl">
+                {sales.toLocaleString()}
+              </div>
             </div>
-          </div>
-          <div className="bg-white w-[20%] rounded-lg shadow-lg">
-            <div className="flex items-center justify-center gap-2 pt-5 xs:flex-col">
-              <img src={salesIcon} alt="sales icon" className="w-9 sm:w-7" />
-              <div className="font-medium">Sales</div>
-            </div>
-            <div className="text-4xl text-[#399CB4] w-fit mx-auto font-bold px-2 py-4 lg:text-3xl md:text-2xl sm:text-xl">
-              {sales.toLocaleString()}
-            </div>
-          </div>
-          <div className="bg-white w-[20%] rounded-lg shadow-lg">
-            <div className="flex items-center justify-center gap-2 pt-5 xs:flex-col">
-              <img
-                src={expensesIcon}
-                alt="expenses icon"
-                className="w-9 sm:w-7"
-              />
-              <div className="font-medium">Expenses</div>
-            </div>
-            <div className="text-4xl text-[red] w-fit mx-auto font-bold px-2 py-4 lg:text-3xl md:text-2xl sm:text-xl">
-              {(expenses + overallMonthlyExpenses).toLocaleString()}
+            <div className="bg-white w-full rounded-lg shadow-lg">
+              <div className="flex items-center justify-center gap-2 pt-5 xs:flex-col">
+                <img
+                  src={expensesIcon}
+                  alt="expenses icon"
+                  className="w-9 sm:w-7"
+                />
+                <div className="font-medium">Expenses</div>
+              </div>
+              <div className="text-4xl text-[red] w-fit mx-auto font-bold px-2 py-4 lg:text-3xl md:text-2xl sm:text-xl">
+                {(expenses + overallMonthlyExpenses).toLocaleString()}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex font-bold text-3xl items-center justify-center py-5">
+      <div className="flex font-bold text-3xl text-center items-center justify-center py-5 lg:text-2xl ssm:text-xl">
         Monthly Summary ({thisMonth})
       </div>
 
@@ -416,8 +420,8 @@ const BusinessSummary = () => {
           </div>
         ) : (
           <>
-            <div className="w-full flex px-5 gap-5">
-              <div className="bg-white w-[70%] p-4 rounded-lg shadow-lg overflow-y-auto">
+            <div className="w-full flex gap-5 xs:flex-col">
+              <div className="bg-white w-[70%]  xs:w-full p-4 rounded-lg shadow-lg overflow-y-auto">
                 <div className="h-[600px] w-full md:h-[400px] lg:w-[800px]">
                   <Line
                     className="w-full"
@@ -476,8 +480,8 @@ const BusinessSummary = () => {
                   />
                 </div>
               </div>
-              <div className="w-[30%]">
-                <div className="h-hfull w-full flex flex-col items-center justify-center gap-2 md:w-[90%] ssm:w-[100%]">
+              <div className="w-[30%]  xs:w-full">
+                <div className="h-hfull w-full flex flex-col items-center justify-center gap-2 md:w-[90%] ssm:w-[100%] xs:flex-row">
                   {/* Total Capital */}
                   <div className="bg-white h-hfull rounded-lg shadow-lg w-full min-w-[30%]">
                     <div className="flex items-center justify-center gap-2 pb-1 px-2 pt-3 xs:px-3">
@@ -486,7 +490,7 @@ const BusinessSummary = () => {
                         alt="puch"
                         className="w-9 sm:w-7"
                       />
-                      <p className="sm:text-sm font-medium">Total Capital</p>
+                      <p className="sm:text-sm font-medium">Capital</p>
                     </div>
                     <div className="text-2xl text-oranges font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
                       {monthlyCapital.toLocaleString()}
@@ -517,51 +521,10 @@ const BusinessSummary = () => {
                       <p className="sm:text-sm font-medium">Expenses</p>
                     </div>
                     <div className="text-2xl text-[red] font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
-                      {monthlyExpenses.toLocaleString()}
+                      {(monthlyExpenses + monthExpenses).toLocaleString()}
                     </div>
                   </div>
-                  {/* Profit - Month Expenses */}
-                  <div className="bg-white h-hfull rounded-lg shadow-lg w-full min-w-[30%]">
-                    <div className="flex items-center justify-center gap-2 pb-1 pt-3 px-3 font-medium xs:px-3">
-                      <div className="flex items-center gap-1 sm:text-sm">
-                        <img
-                          src={monthlyCapitalIcon}
-                          alt="month expenses"
-                          className="w-9 sm:w-7"
-                        />
-                        Monthly profit
-                      </div>
-                      -
-                      <div className="flex items-center gap-1 sm:text-sm">
-                        Monthly expenses
-                        <img
-                          src={monthlyExpensesIcon}
-                          alt=""
-                          className="w-9 sm:w-7"
-                        />
-                      </div>
-                    </div>
-                    <div className="text-2xl text-[red] font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
-                      <span
-                        className={`${
-                          monthlySales - monthlyExpenses - monthlyCapital < 0
-                            ? "text-[red]"
-                            : "text-greens"
-                        }`}
-                      >
-                        (
-                        {(
-                          monthlySales -
-                          monthlyExpenses -
-                          monthlyCapital
-                        ).toLocaleString()}
-                        )
-                      </span>{" "}
-                      <span className="text-[red]">
-                        - ({monthExpenses.toLocaleString()})
-                      </span>
-                    </div>
-                  </div>
+
                   {/* Total Profit */}
                   <div className="bg-white h-hfull rounded-lg shadow-lg w-full min-w-[30%]">
                     <div className="flex items-center justify-center gap-2 pb-1 pt-3 xs:px-3">
@@ -570,7 +533,7 @@ const BusinessSummary = () => {
                         alt="puch"
                         className="w-9 sm:w-7"
                       />
-                      <p className="sm:text-sm font-medium">Total Profit</p>
+                      <p className="sm:text-sm font-medium">Profit</p>
                     </div>
                     <div
                       className={

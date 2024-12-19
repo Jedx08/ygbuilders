@@ -9,7 +9,7 @@ const FooterNav = () => {
 
   return (
     <div className="fixed bottom-0 bg-white w-full pt-2">
-      <div className="flex justify-between gap-7 w-full px-20">
+      <div className="flex justify-between gap-7 w-full px-20 sm:px-10 xs:px-5">
         <Link to="/summary" className="w-full">
           <div
             className={`flex flex-col items-center p-2 gap-2 hover:bg-light rounded-md cursor-pointer ${
