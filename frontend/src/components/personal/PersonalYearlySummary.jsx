@@ -232,19 +232,19 @@ const BusinessYearlySummary = () => {
 
   return (
     <>
-      <div className="w-full pt-5 grid grid-flow-col justify-center place-items-center gap-2 xs:pt-2 xxs:flex xxs:items-center xxs:justify-center xxs:gap-0">
-        <div className="font-bold text-3xl text-center items-center justify-center py-5 ssm:text-2xl">
+      <div className="w-full pt-5 grid grid-flow-col justify-center place-items-center gap-2 xs:pt-2 xxs:flex xxs:flex-col xxs:items-center xxs:justify-center xxs:gap-0">
+        <div className="font-bold text-3xl text-center items-center justify-center py-5 sm:text-2xl xxs:py-2">
           Yearly Summary
         </div>
-        <div className="flex items-center xxs:pr-5">
+        <div className="flex items-center xxs:pb-3">
           <div>
             <FaAngleLeft
-              className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-3xl"
+              className="text-greens text-4xl hover:text-lgreens cursor-pointer sm:text-2xl"
               onClick={prevYear}
             />
           </div>
           <div>
-            <h1 className="font-extrabold text-center text-4xl text-greens select-none ssm:text-3xl">
+            <h1 className="font-extrabold text-center text-4xl text-greens select-none sm:text-2xl">
               {
                 /* display current month and year */
                 dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY")
@@ -253,7 +253,7 @@ const BusinessYearlySummary = () => {
           </div>
           <div>
             <FaAngleRight
-              className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-3xl"
+              className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-2xl"
               onClick={nextYear}
             />
           </div>
@@ -272,10 +272,10 @@ const BusinessYearlySummary = () => {
           </div>
         </div>
       ) : (
-        <div className="w-full flex px-5 pb-10">
+        <div className="w-full flex pb-10 xs:flex-col-reverse md:gap-3 xs:pb-5">
           <div
             id="barGraphOverview"
-            className="w-[30%] flex flex-col p-5 gap-5 rounded-md justify-center items-center"
+            className="w-[35%] flex flex-col p-5 gap-5 rounded-md justify-center items-center md:p-0 xs:w-full xs:flex-row"
           >
             <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 bg-white shadow-lg rounded-md px-5 py-3">
               <div className="flex items-center justify-center gap-2">
@@ -324,9 +324,9 @@ const BusinessYearlySummary = () => {
             </div>
           </div>
 
-          <div className="w-[60%]">
-            <div className="w-full bg-white p-5 rounded-lg shadow-lg">
-              <div className="h-[600px] w-full lg:w-full">
+          <div className="w-[65%] xs:w-full">
+            <div className="w-full bg-white p-5 rounded-lg overflow-y-auto shadow-lg">
+              <div className="h-[600px] w-full lg:h-[400px] lg:w-[800px]">
                 <Bar
                   className="w-full h-hfull"
                   data={{
@@ -372,7 +372,7 @@ const BusinessYearlySummary = () => {
                         },
                       },
                     },
-                    indexAxis: "y",
+                    indexAxis: "x",
                     maintainAspectRatio: false,
                   }}
                 />

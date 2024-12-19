@@ -36,7 +36,7 @@ const Summary = () => {
         <div className="lg:hidden">
           <Sidebar />
         </div>
-        <div className="bg-light w-full font-pops px-20 xl:pl-40 lg:pl-20 lg:pb-20">
+        <div className="bg-light w-full font-pops px-20 xl:pl-40 lg:px-10 lg:pl-15 lg:pb-20 mmd:px-5">
           {personalSummaryView ? <PersonalSummary /> : <BusinessSummary />}
         </div>
         <div className="hidden lg:block">
