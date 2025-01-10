@@ -8,6 +8,7 @@ import { MdOutlinePostAdd } from "react-icons/md";
 import { GoChecklist } from "react-icons/go";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { BsBackspace } from "react-icons/bs";
+import { IoClose } from "react-icons/io5";
 import { ThreeDot } from "react-loading-indicators";
 
 const PersonalForm = () => {
@@ -19,6 +20,8 @@ const PersonalForm = () => {
     dispatchPersonalIncomeData,
     personalButton,
     setPersonalButton,
+    showPersonalForm,
+    setShowPersonalForm,
   } = useContext(CalendarContext);
 
   const [showButton, setShowButton] = useState(false);
@@ -40,6 +43,8 @@ const PersonalForm = () => {
   const [errStyle, setErrStyle] = useState(false);
   const [errStyleGross, setErrStyleGross] = useState(false);
   const [errStyleExpenses, setErrStyleExpenses] = useState(false);
+
+  const [personalFormFloat, setPersonalFormFloat] = useState(false);
 
   useEffect(() => {
     if (formSelectedDate) {
@@ -120,6 +125,7 @@ const PersonalForm = () => {
       setPersonalButton(false);
       setPersonalIncomeLoading(true);
       setAddLoading(false);
+      setShowPersonalForm(false);
     } catch (err) {
       console.log(err);
     }
@@ -176,6 +182,7 @@ const PersonalForm = () => {
         setErrMsg(null);
         setPersonalIncomeLoading(true);
         setUpdateLoading(false);
+        setShowPersonalForm(false);
       }
     } catch (err) {
       console.log(err);
@@ -201,6 +208,7 @@ const PersonalForm = () => {
         setPersonalIncomeLoading(true);
         setConfirmDelete(false);
         setDeleteLoading(false);
+        setShowPersonalForm(false);
       }
     } catch (err) {
       if (err.response?.status === 400) {
@@ -236,11 +244,64 @@ const PersonalForm = () => {
     setErrStyleExpenses(false);
   };
 
+  useEffect(() => {
+    const personalFloat = () => {
+      if (window.innerWidth <= 658) {
+        setPersonalFormFloat(true);
+      } else {
+        setPersonalFormFloat(false);
+        setShowPersonalForm(false);
+      }
+    };
+    window.addEventListener("resize", personalFloat);
+    if (window.innerWidth <= 658) {
+      setPersonalFormFloat(true);
+    } else {
+      setPersonalFormFloat(false);
+      setShowPersonalForm(false);
+    }
+    return () => {
+      window.removeEventListener("resize", personalFloat);
+    };
+  }, []);
+
   return (
     <>
-      <div className="bg-white rounded-lg pt-8 min-w-[350px] h-[406px]">
-        <div className="text-center">
-          <div className="font-semibold">
+      <div
+        className={`mx-auto ${
+          personalFormFloat && showPersonalForm
+            ? "h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-50"
+            : ""
+        }`}
+      >
+        <div
+          className={`text-center ${
+            personalFormFloat && showPersonalForm
+              ? "rounded-md bg-white overflow-hidden shadow-lg w-80 px-2 py-5 relative"
+              : ""
+          }`}
+        >
+          {/* Close button */}
+          <div
+            onClick={(e) => {
+              if (addLoading) {
+                location.reload();
+              }
+              if (updateLoading) {
+                location.reload();
+              }
+              if (deleteLoading) {
+                location.reload();
+              }
+              e.preventDefault(), setShowPersonalForm(false);
+            }}
+            className={`cursor-pointer hover:bg-light hover:rounded-full font-bold absolute top-1 right-0 mb-5 p-1 text-2xl ${
+              personalFormFloat && showPersonalForm ? "" : "hidden"
+            }`}
+          >
+            <IoClose className="text-lgreens hover:text-greens" />
+          </div>
+          <div className="text-base font-semibold">
             {exactDaySelected.format("MMMM D, YYYY")}
           </div>
           {/* Add Gross */}
@@ -309,7 +370,7 @@ const PersonalForm = () => {
                       {!addLoading && (
                         <div
                           onClick={handleSubmit}
-                          className="mx-auto py-1 rounded-md px-6 bg-greens font-bold text-white hover:bg-lgreens flex gap-2 items-center cursor-pointer"
+                          className="mx-auto py-1 rounded-md px-6 bg-greens text-base font-semibold text-white hover:bg-lgreens flex gap-1 items-center cursor-pointer"
                         >
                           <span className="text-3xl">
                             <MdOutlinePostAdd />
@@ -342,7 +403,7 @@ const PersonalForm = () => {
                         <>
                           <div
                             onClick={handleUpdate}
-                            className="mx-auto py-1 rounded-md px-6 bg-greens font-bold text-white hover:bg-lgreens flex gap-2 items-center cursor-pointer"
+                            className="mx-auto py-1 rounded-md px-6 bg-greens text-base font-semibold text-white hover:bg-lgreens flex gap-2 items-center cursor-pointer"
                           >
                             <span className="text-3xl">
                               <GoChecklist />
@@ -353,7 +414,7 @@ const PersonalForm = () => {
                             onClick={() => {
                               setConfirmDelete(true);
                             }}
-                            className="flex gap-2 items-center border border-[#FF4242] hover:border-[red] cursor-pointer rounded-md py-1 px-4 text-[#FF4242] hover:text-[red] font-bold"
+                            className="flex gap-2 items-center border border-[#FF4242] hover:border-[red] cursor-pointer rounded-md py-1 px-4 text-[#FF4242] hover:text-[red] text-base font-semibold"
                           >
                             <span className="text-3xl">
                               <FaRegTrashCan />

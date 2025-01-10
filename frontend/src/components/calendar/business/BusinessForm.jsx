@@ -9,6 +9,7 @@ import { ThreeDot } from "react-loading-indicators";
 import { MdOutlinePostAdd } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { GoChecklist } from "react-icons/go";
+import { IoClose } from "react-icons/io5";
 import { BsBackspace } from "react-icons/bs";
 
 const BusinessForm = () => {
@@ -20,6 +21,8 @@ const BusinessForm = () => {
     dispatchBusinessIncomeData,
     businessButton,
     setBusinessButton,
+    showBusinessForm,
+    setShowBusinessForm,
   } = useContext(CalendarContext);
 
   const [showButton, setShowButton] = useState(false);
@@ -45,6 +48,8 @@ const BusinessForm = () => {
   const [errStyleCapital, setErrStyleCapital] = useState(false);
   const [errStyleSales, setErrStyleSales] = useState(false);
   const [errStyleExpenses, setErrStyleExpenses] = useState(false);
+
+  const [businessFormFloat, setBusinessFormFloat] = useState(false);
 
   useEffect(() => {
     if (businessFormSelectedDate) {
@@ -275,10 +280,63 @@ const BusinessForm = () => {
     setErrStyleExpenses(false);
   };
 
+  useEffect(() => {
+    const personalFloat = () => {
+      if (window.innerWidth <= 658) {
+        setBusinessFormFloat(true);
+      } else {
+        setBusinessFormFloat(false);
+        setShowBusinessForm(false);
+      }
+    };
+    window.addEventListener("resize", personalFloat);
+    if (window.innerWidth <= 658) {
+      setBusinessFormFloat(true);
+    } else {
+      setBusinessFormFloat(false);
+      setShowBusinessForm(false);
+    }
+    return () => {
+      window.removeEventListener("resize", personalFloat);
+    };
+  }, []);
+
   return (
     <>
-      <div className="bg-white rounded-lg pt-8 max-w-[350px] h-[480px]">
-        <div className="text-center">
+      <div
+        className={`mx-auto ${
+          businessFormFloat && showBusinessForm
+            ? "h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-50"
+            : ""
+        }`}
+      >
+        <div
+          className={`text-center ${
+            businessFormFloat && showBusinessForm
+              ? "rounded-md bg-white overflow-hidden shadow-lg w-80 px-2 py-5 relative"
+              : ""
+          }`}
+        >
+          {/* Close button */}
+          <div
+            onClick={(e) => {
+              if (addLoading) {
+                location.reload();
+              }
+              if (updateLoading) {
+                location.reload();
+              }
+              if (deleteLoading) {
+                location.reload();
+              }
+              e.preventDefault(), setShowBusinessForm(false);
+            }}
+            className={`cursor-pointer hover:bg-light hover:rounded-full font-bold absolute top-1 right-0 mb-5 p-1 text-2xl ${
+              businessFormFloat && showBusinessForm ? "" : "hidden"
+            }`}
+          >
+            <IoClose className="text-loranges hover:text-oranges" />
+          </div>
           <div className="font-semibold">
             {exactDaySelected.format("MMMM D, YYYY")}
           </div>
@@ -347,7 +405,7 @@ const BusinessForm = () => {
           {/* Profit */}
           <div className="px-10 justify-center mt-3">
             <div className="font-semibold">Profit:</div>
-            <div className="bg-light flex items-center rounded-md mx-auto py-2 w-[70%]">
+            <div className="bg-subCon flex items-center rounded-md mx-auto py-2 w-[70%]">
               <div className="pl-2">
                 <img src={profitIcon} className="w-9" />
               </div>

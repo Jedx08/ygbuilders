@@ -17,10 +17,10 @@ const BusinessMonth = ({ month }) => {
 
   return (
     <>
-      <div className="max-w-[500px]">
+      <div className="mx-auto">
         <div>
           {/* Month and Year */}
-          <div className={`flex justify-between items-center text-3xl`}>
+          <div className={`flex justify-between items-center text-3xl pr-2`}>
             <div className="flex">
               <FaAngleLeft
                 className={`text-oranges hover:text-loranges cursor-pointer `}
@@ -59,7 +59,7 @@ const BusinessMonth = ({ month }) => {
         </div>
         <div
           id="calendar"
-          className={`flex-1 grid grid-cols-7 grid-rows-6 mt-1 overflow-auto rounded-lg shadow-lg h-[250px] min-w-[350px]`}
+          className={`flex-1 grid grid-cols-7 grid-rows-6 mt-1 overflow-auto h-[250px] min-w-[350px] mmd:h-hfull`}
         >
           {month.map((row, i) => (
             <React.Fragment key={i}>

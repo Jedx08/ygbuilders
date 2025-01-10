@@ -4,85 +4,56 @@ import { MdOutlinePostAdd } from "react-icons/md";
 import { CalendarContext } from "../../../context/CalendarContext";
 import dayjs from "dayjs";
 import Skeleton from "react-loading-skeleton";
-import useBusinessExpenses from "../../../hooks/useBusinessExpenses";
 import BMonthlyExpensesAdd from "./BMonthlyExpensesAdd";
 import BMonthlyExpensesData from "./BMonthlyExpensesData";
 import expensesIcon from "../../../media/busmon_expenses.png";
 import { useNavigate } from "react-router-dom";
 
-const BMonthlyExpensesForm = () => {
+const BMonthlyExpensesForm = ({
+  expensesDataLoading,
+  expensesData,
+  monthlyExpenses,
+}) => {
   const {
     monthIndex,
     setShowBusinessExpensesForm,
-    businessExpensesData,
     showBusinessExpenseInput,
     setShowBusinessExpensesInput,
-    businessExpensesLoading,
-    setBusinessExpensesLoading,
     loadPage,
     loggedIn,
   } = useContext(CalendarContext);
 
-  const getBusinessExpenses = useBusinessExpenses();
   const navigate = useNavigate();
-
-  const [expensesData, setExpensesData] = useState([]);
-  const [expensesDataLoading, setExpensesDataLoading] = useState(true);
-  const [monthlyExpenses, setMonthlyExpenses] = useState("");
 
   function addExpenses() {
     setShowBusinessExpensesInput(true);
   }
 
-  useEffect(() => {
-    if (businessExpensesLoading) {
-      getBusinessExpenses();
-      setBusinessExpensesLoading(false);
-    }
-  }, [businessExpensesLoading]);
-
-  useEffect(() => {
-    let m_e = 0;
-    if (!businessExpensesLoading) {
-      const monthlyExpense = async () => {
-        const data = await businessExpensesData.filter(
-          (evnt) => evnt.month === dayjs().month(monthIndex).format("MMMM YYYY")
-        );
-
-        setExpensesData(data);
-        setExpensesDataLoading(false);
-      };
-      monthlyExpense();
-
-      const getData = () => {
-        businessExpensesData.forEach((data) => {
-          if (data.month === dayjs().month(monthIndex).format("MMMM YYYY"))
-            return (m_e += data.amount);
-        });
-      };
-
-      getData();
-      setMonthlyExpenses(m_e);
-    } else {
-      setExpensesDataLoading(true);
-    }
-  }, [businessExpensesData, monthIndex]);
-
   return (
-    <>
-      <div className="font-pops bg-white shadow-lg rounded-lg py-5 min-w-[420px] h-[406px] relative">
-        <div className="flex items-center justify-center relative w-full">
+    <div className="h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-50">
+      <div className="rounded-md bg-white overflow-hidden px-5 py-5 shadow-lg relative min-w-[441px]">
+        {/* close button */}
+        <div
+          onClick={() => {
+            setShowBusinessExpensesForm(false);
+          }}
+          className={`cursor-pointer hover:bg-light hover:rounded-full font-bold absolute top-1 right-1 mb-5 p-1 text-2xl`}
+        >
+          <IoClose className="text-loranges hover:text-oranges" />
+        </div>
+
+        <div className="flex items-center justify-center w-full">
           <div className="text-center">
-            <h1 className="font-bold text-xl text-loranges mb-2">
+            <h1 className="font-bold text-lg text-loranges mb-2">
               Monthly Expenses
             </h1>
-            <p className="text-md font-semibold mb-2">
+            <p className="text-sm font-normal mb-2">
               {dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
             </p>
           </div>
         </div>
 
-        <div className="text-sm font-bold mb-3 text-center">
+        <div className="text-center">
           <span className="text-xs text-[#A6ACAF] font-normal">
             (Bills, Loan, Insurance, Rent and etc...)
           </span>
@@ -90,7 +61,7 @@ const BMonthlyExpensesForm = () => {
 
         {/* Monthly Expenses Data */}
         <div
-          className={`h-[158px] ${
+          className={`h-[158px] mx-auto max-w-[608px] ${
             showBusinessExpenseInput ? "" : "overflow-auto"
           }`}
         >
@@ -109,13 +80,20 @@ const BMonthlyExpensesForm = () => {
           {expensesData.map((d, i) => {
             return (
               <React.Fragment key={i}>
-                <BMonthlyExpensesData expensesData={d} />
+                <BMonthlyExpensesData
+                  expensesData={d}
+                  expensesDataLoading={expensesDataLoading}
+                />
               </React.Fragment>
             );
           })}
         </div>
 
-        <div className="flex justify-center">
+        <div
+          className={`flex justify-center ${
+            showBusinessExpenseInput ? "h-[56px]" : ""
+          }`}
+        >
           <div
             onClick={() => {
               if (!loggedIn) {
@@ -124,34 +102,34 @@ const BMonthlyExpensesForm = () => {
                 addExpenses();
               }
             }}
-            className={`cursor-pointer w-fit px-2 h-2 rounded-md overflow-hidden py-1 text-white flex items-center gap-1 border border-loranges bg-loranges hover:bg-oranges font-bold my-2 ${
+            className={`mx-auto py-1 rounded-md px-6 text-base font-semibold text-white flex gap-1 items-center cursor-pointer my-2 border-loranges bg-loranges hover:bg-oranges ${
               showBusinessExpenseInput ? "hidden" : ""
             }`}
           >
-            <MdOutlinePostAdd className="text-3xl" /> Add
+            <span className="text-3xl">
+              <MdOutlinePostAdd />
+            </span>
+            Add
           </div>
         </div>
 
         {/* Add button for monthly expenses */}
         {showBusinessExpenseInput && (
-          <div className="absolute top-0 pt-[25%] bg-light bg-opacity-70 h-hfull w-full">
+          <div className="absolute top-0 left-0 pt-[25%] bg-light bg-opacity-70 h-hfull w-full">
             <BMonthlyExpensesAdd />
           </div>
         )}
 
         {/* Total Expenses */}
-        <div className="absolute bottom-2 w-full">
-          <div className="px-5 mb-2 flex items-center space-x-2 justify-center mt-2">
-            <div>
-              <p className="text-sm font-bold">Total:</p>
-            </div>
+        <div className="bottom-2 w-full">
+          <div className="px-5 mb-2 flex items-center space-x-2 justify-center">
             <div className="border border-inputLight rounded-md py-1 text-center w-fit">
               <div className="grid grid-cols-3 items-center">
                 <div className="pl-2">
                   <img src={expensesIcon} className="w-11 mr-2" />
                 </div>
                 <div className="mt-[0.15rem]">
-                  <p className="text-[red] font-bold">
+                  <p className="text-[red] font-bold text-xl/[24px]">
                     {monthlyExpenses.toLocaleString()}
                   </p>
                 </div>
@@ -160,7 +138,7 @@ const BMonthlyExpensesForm = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

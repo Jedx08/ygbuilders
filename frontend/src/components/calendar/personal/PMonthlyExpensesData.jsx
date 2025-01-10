@@ -105,6 +105,7 @@ const PMonthlyExpensesData = ({ expensesData }) => {
         setPersonalExpensesLoading(true);
         setConfirmDelete(false);
         setLoadPage(false);
+        setDeleteLoading(false);
       }
     } catch (err) {
       console.log(err);
@@ -142,14 +143,23 @@ const PMonthlyExpensesData = ({ expensesData }) => {
             {/* show current data */}
             <div className="rounded-md overflow-hidden py-1 items-center flex px-2 col-span-1 font-medium bg-light">
               <img src={expensesIcon} className="w-8 mr-2" />
-              {title}
+              <span
+                style={{
+                  WebkitLineClamp: 1,
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                  display: "-webkit-box",
+                }}
+              >
+                {title}
+              </span>
             </div>
-            <div className="text-[red] font-semibold rounded-md overflow-hidden py-1 items-center justify-center flex px-2 col-span-1 bg-light">
+            <div className="text-[red] font-semibold text-base rounded-md overflow-hidden py-1 items-center justify-center flex px-2 col-span-1 bg-light">
               {amount.toLocaleString()}
             </div>
           </>
         ) : (
-          <div className="absolute top-0 left-0 pt-[30%] bg-light bg-opacity-70 h-hfull w-full">
+          <div className="absolute top-0 left-0 pt-[7rem] bg-light bg-opacity-70 h-hfull w-full">
             {/* Show input for update data / updating data */}
             <div className="bg-white py-4 rounded-md shadow-md">
               <div className="text-greens text-center font-semibold">
@@ -260,15 +270,24 @@ const PMonthlyExpensesData = ({ expensesData }) => {
 
       {/* Delete Data */}
       {confirmDelete && (
-        <div className="absolute top-0 left-0 pt-[30%] bg-light bg-opacity-70 h-hfull w-full">
+        <div className="absolute top-0 left-0 pt-[7rem] bg-light bg-opacity-70 h-hfull w-full">
           <div className="bg-white rounded-md shadow-md py-4">
             <div className="text-[red] text-center font-semibold">
               Delete monthly expenses
             </div>
-            <div className="grid grid-cols-2 gap-2 grid-flow-col px-5 mt-2">
+            <div className="grid grid-cols-2 gap-2 grid-flow-col px-5 mt-2 clg:max-w-[608px] clg:mx-auto">
               <div className="border border-inputLight rounded-md overflow-hidden py-1 items-center flex px-2 col-span-1 font-medium space-x-3">
                 <img src={expensesIcon} className="w-8 mr-2" />
-                <div>{title}</div>
+                <div
+                  style={{
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                    display: "-webkit-box",
+                  }}
+                >
+                  {title}
+                </div>
               </div>
               <div className="border border-inputLight text-[red] font-semibold rounded-md overflow-hidden py-1 items-center justify-center flex px-2 col-span-1">
                 {amount.toLocaleString()}

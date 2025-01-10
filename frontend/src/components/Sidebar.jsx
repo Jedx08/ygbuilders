@@ -33,7 +33,7 @@ const Sidebar = () => {
           <Link to="/calendar">
             <div
               className={`flex pl-7 p-2 gap-2 hover:bg-light rounded-md cursor-pointer ${
-                location.pathname === "/personal" ? "bg-light" : ""
+                location.pathname === "/calendar" ? "bg-light" : ""
               }`}
             >
               <FaCalendarAlt className="text-2xl text-[#b8b8b8]" />

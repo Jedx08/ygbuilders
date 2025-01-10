@@ -6,153 +6,127 @@ import { MdOutlinePostAdd } from "react-icons/md";
 import Skeleton from "react-loading-skeleton";
 import BMonthlyCapitalData from "./BMonthlyCapitalData";
 import BMonthlyCapitalAdd from "./BMonthlyCapitalAdd";
-import useBusinessCapital from "../../../hooks/useBusinessCapital";
 import profitIcon from "../../../media/busmon_pouch.png";
 import { useNavigate } from "react-router-dom";
 
-const BMonthlyCapitalForm = () => {
+const BMonthlyCapitalForm = ({
+  capitalDataLoading,
+  capitalData,
+  monthlyCapital,
+}) => {
   const {
     monthIndex,
     loadPage,
     setShowBusinessCapitalForm,
     setShowBusinessCapitalInput,
     showBusinessCapitalInput,
-    businessCapitalLoading,
-    setBusinessCapitalLoading,
-    businessCapitalData,
     loggedIn,
   } = useContext(CalendarContext);
 
-  const getBusinessCapital = useBusinessCapital();
   const navigate = useNavigate();
-
-  const [capitalData, setCapitalData] = useState([]);
-  const [capitalDataLoading, setCapitalDataLoading] = useState(true);
-  const [monthlyCapital, setMonthlyCapital] = useState("");
 
   function addCapital() {
     setShowBusinessCapitalInput(true);
   }
 
-  useEffect(() => {
-    if (businessCapitalLoading) {
-      getBusinessCapital();
-      setBusinessCapitalLoading(false);
-    }
-  }, [businessCapitalLoading]);
-
-  useEffect(() => {
-    let mCapital = 0;
-    if (!businessCapitalLoading) {
-      const monthlyCapital = async () => {
-        const data = await businessCapitalData.filter(
-          (evnt) => evnt.month === dayjs().month(monthIndex).format("MMMM YYYY")
-        );
-
-        setCapitalData(data);
-        setCapitalDataLoading(false);
-      };
-      monthlyCapital();
-
-      const getData = () => {
-        businessCapitalData.forEach((data) => {
-          if (data.month === dayjs().month(monthIndex).format("MMMM YYYY"))
-            return (mCapital += data.amount);
-        });
-      };
-
-      getData();
-      setMonthlyCapital(mCapital);
-    } else {
-      setCapitalDataLoading(true);
-    }
-  }, [businessCapitalData, monthIndex]);
-
   return (
-    <div className="font-pops bg-white shadow-lg rounded-lg py-5 min-w-[420px] h-[406px] relative">
-      <div className="flex items-center justify-center relative w-full">
-        <div className="text-center">
-          <h1 className="font-bold text-xl text-loranges mb-2">
-            Monthly Capital
-          </h1>
-          <p className="text-md font-semibold mb-2">
-            {dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
-          </p>
-        </div>
-      </div>
-
-      <div className="text-sm font-bold mb-3 text-center">
-        <span className="text-xs text-[#A6ACAF] font-normal">
-          (Cash, Assets etc...)
-        </span>
-      </div>
-
-      {/* Monthly Capital Data */}
-      <div
-        className={`h-[158px] ${
-          showBusinessCapitalInput ? "" : "overflow-auto"
-        }`}
-      >
-        {capitalDataLoading && (
-          <div className="text-center mt-3 text-sm text-[#A6ACAF]">
-            Getting data...
-          </div>
-        )}
-
-        {!capitalDataLoading && capitalData.length === 0 && (
-          <div className="text-center mt-3 text-sm text-[#A6ACAF]">
-            No data to show
-          </div>
-        )}
-
-        {capitalData.map((d, i) => {
-          return (
-            <React.Fragment key={i}>
-              <BMonthlyCapitalData capitalData={d} />
-            </React.Fragment>
-          );
-        })}
-      </div>
-
-      <div className="flex justify-center">
+    <div className="h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-50">
+      <div className="rounded-md bg-white overflow-hidden px-5 py-5 shadow-lg relative min-w-[441px]">
+        {/* close button */}
         <div
           onClick={() => {
-            if (!loggedIn) {
-              navigate("/Login");
-            } else {
-              addCapital();
-            }
+            setShowBusinessCapitalForm(false);
           }}
-          className={`cursor-pointer w-fit px-2 h-2 rounded-md overflow-hidden py-1 text-white flex items-center gap-1 border border-loranges bg-loranges hover:bg-oranges font-bold my-2 ${
-            showBusinessCapitalInput ? "hidden" : ""
+          className={`cursor-pointer hover:bg-light hover:rounded-full font-bold absolute top-1 right-1 mb-5 p-1 text-2xl`}
+        >
+          <IoClose className="text-loranges hover:text-oranges" />
+        </div>
+
+        <div className="flex items-center justify-center w-full">
+          <div className="text-center">
+            <h1 className="font-bold text-lg text-loranges mb-2">
+              Monthly Capital
+            </h1>
+            <p className="text-sm font-normal mb-2">
+              {dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
+            </p>
+          </div>
+        </div>
+
+        <div className="text-center">
+          <span className="text-xs text-[#A6ACAF] font-normal">
+            (Cash, Assets etc...)
+          </span>
+        </div>
+
+        {/* Monthly Capital Data */}
+        <div
+          className={`h-[158px] mx-auto max-w-[608px] ${
+            showBusinessCapitalInput ? "" : "overflow-auto"
           }`}
         >
-          <MdOutlinePostAdd className="text-3xl" /> Add
-        </div>
-      </div>
+          {capitalDataLoading && (
+            <div className="text-center mt-3 text-sm text-[#A6ACAF]">
+              Getting data...
+            </div>
+          )}
 
-      {/* Add button for monthly expenses */}
-      {showBusinessCapitalInput && (
-        <div className="absolute top-0 pt-[25%] bg-light bg-opacity-70 h-hfull w-full">
-          <BMonthlyCapitalAdd />
-        </div>
-      )}
+          {!capitalDataLoading && capitalData.length === 0 && (
+            <div className="text-center mt-3 text-sm text-[#A6ACAF]">
+              No data to show
+            </div>
+          )}
 
-      {/* Total Expenses */}
-      <div className="absolute bottom-2 w-full">
-        <div className="px-5 mb-2 flex items-center space-x-2 justify-center mt-2">
-          <div>
-            <p className="text-sm font-bold">Total:</p>
+          {capitalData.map((d, i) => {
+            return (
+              <React.Fragment key={i}>
+                <BMonthlyCapitalData capitalData={d} />
+              </React.Fragment>
+            );
+          })}
+        </div>
+
+        <div
+          className={`flex justify-center ${
+            showBusinessCapitalInput ? "h-[56px]" : ""
+          }`}
+        >
+          <div
+            onClick={() => {
+              if (!loggedIn) {
+                navigate("/Login");
+              } else {
+                addCapital();
+              }
+            }}
+            className={`mx-auto py-1 rounded-md px-6 text-base font-semibold text-white flex gap-1 items-center cursor-pointer my-2 border-loranges bg-loranges hover:bg-oranges ${
+              showBusinessCapitalInput ? "hidden" : ""
+            }`}
+          >
+            <MdOutlinePostAdd className="text-3xl" /> Add
           </div>
-          <div className="border border-inputLight rounded-md py-1 text-center w-fit">
-            <div className="grid grid-cols-3 items-center">
-              <div className="pl-2">
-                <img src={profitIcon} className="w-11 mr-2" />
-              </div>
-              <div className="mt-[0.15rem]">
-                <p className="text-[red] font-bold">
-                  {monthlyCapital.toLocaleString()}
-                </p>
+        </div>
+
+        {/* Add button for monthly expenses */}
+        {showBusinessCapitalInput && (
+          <div className="absolute top-0 left-0 pt-[25%] bg-light bg-opacity-70 h-hfull w-full">
+            <BMonthlyCapitalAdd />
+          </div>
+        )}
+
+        {/* Total Expenses */}
+        <div className="bottom-2 w-full">
+          <div className="px-5 mb-2 flex items-center space-x-2 justify-center">
+            <div className="border border-inputLight rounded-md py-1 text-center w-fit">
+              <div className="grid grid-cols-3 items-center">
+                <div className="pl-2">
+                  <img src={profitIcon} className="w-11 mr-2" />
+                </div>
+                <div className="mt-[0.15rem]">
+                  <p className="text-[red] font-bold text-xl/[24px]">
+                    {monthlyCapital.toLocaleString()}
+                  </p>
+                </div>
               </div>
             </div>
           </div>

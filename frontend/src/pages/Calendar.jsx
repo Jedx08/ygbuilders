@@ -27,8 +27,8 @@ const Calendar = () => {
       <div className="lg:hidden">
         <Sidebar />
       </div>
-      <div className="w-full">
-        <div className="bg-light font-pops  min-h-[100vh]">
+      <div className="w-full bg-light">
+        <div className="font-pops  min-h-[100vh]">
           {/* Calendar Switch View */}
           <div className="flex justify-center space-x-5 pt-5">
             <div
@@ -65,7 +65,7 @@ const Calendar = () => {
             {!calendarView ? <PersonalCalendar /> : <BusinessCalendar />}
           </div>
         </div>
-        <div>
+        <div className="mt-5 lg:mb-[5rem]">
           <Footer />
         </div>
       </div>

@@ -96,7 +96,7 @@ const BMonthlyExpensesAdd = () => {
 
   return (
     <>
-      <div className="px-5 pt-5 font-pops py-4 rounded-md bg-white shadow-md">
+      <div className="px-5 pt-5 font-pops py-4 rounded-md bg-white shadow-md w-full absolute top-28">
         <div className="text-oranges text-center font-semibold">
           Add monthly expenses
         </div>

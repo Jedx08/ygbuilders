@@ -106,6 +106,7 @@ const BMonthlyCapitalData = ({ capitalData }) => {
         setBusinessCapitalLoading(true);
         setConfirmDelete(false);
         setLoadPage(false);
+        setDeleteLoading(false);
       }
     } catch (err) {
       console.log(err);
@@ -143,14 +144,23 @@ const BMonthlyCapitalData = ({ capitalData }) => {
             {/* show current data */}
             <div className="rounded-md overflow-hidden py-1 items-center bg-light flex px-2 col-span-1 font-medium">
               <img src={profitIcon} className="w-8 mr-2" />
-              {title.toUpperCase()}
+              <span
+                style={{
+                  WebkitLineClamp: 1,
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                  display: "-webkit-box",
+                }}
+              >
+                {title.toUpperCase()}
+              </span>
             </div>
             <div className="text-[red] font-semibold rounded-md overflow-hidden py-1 items-center justify-center bg-light flex px-2 col-span-1">
               {amount.toLocaleString()}
             </div>
           </>
         ) : (
-          <div className="absolute top-0 left-0 pt-[30%] bg-light bg-opacity-70 h-hfull w-full">
+          <div className="absolute top-0 left-0 pt-[7rem] bg-light bg-opacity-70 h-hfull w-full">
             <div className="bg-white py-4 rounded-md shadow-md">
               {/* Show input for update data */}
               <div className="text-oranges text-center font-semibold">
@@ -261,7 +271,7 @@ const BMonthlyCapitalData = ({ capitalData }) => {
 
       {/* Delete Data */}
       {confirmDelete && (
-        <div className="absolute top-0 left-0 pt-[30%] bg-light bg-opacity-70 h-hfull w-full">
+        <div className="absolute top-0 left-0 pt-[7rem] bg-light bg-opacity-70 h-hfull w-full">
           <div className="bg-white rounded-md shadow-md py-4">
             <div className="text-[red] text-center font-semibold">
               Delete monthly capital
@@ -269,7 +279,16 @@ const BMonthlyCapitalData = ({ capitalData }) => {
             <div className="grid grid-cols-2 gap-2 grid-flow-col px-5 mt-2">
               <div className="border border-inputLight rounded-md overflow-hidden py-1 items-center flex px-2 col-span-1 font-medium space-x-3">
                 <img src={profitIcon} className="w-8 mr-2" />
-                <div>{title}</div>
+                <div
+                  style={{
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                    display: "-webkit-box",
+                  }}
+                >
+                  {title}
+                </div>
               </div>
               <div className="border border-inputLight text-[red] font-semibold rounded-md overflow-hidden py-1 items-center justify-center flex px-2 col-span-1">
                 {amount.toLocaleString()}

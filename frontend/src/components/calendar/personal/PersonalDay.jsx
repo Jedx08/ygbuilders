@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { CalendarContext } from "../../../context/CalendarContext";
 import dayjs from "dayjs";
 import grossIcon from "../../../media/pouch.png";
@@ -41,10 +41,7 @@ const PersonalDay = ({ day }) => {
   }
 
   function toggleForm() {
-    return (
-      notThisMonth ? setShowPersonalForm(dayjs()) : setExactDaySelected(day),
-      formData(day)
-    );
+    return setExactDaySelected(day), formData(day);
   }
 
   return (
@@ -53,7 +50,14 @@ const PersonalDay = ({ day }) => {
         className={`border border-light bg-white flex flex-col items-center justify-center overflow-hidden ${
           notThisMonth ? "cursor-default" : "hover:border-greens cursor-pointer"
         }`}
-        onClick={toggleForm}
+        onClick={() => {
+          if (!notThisMonth) {
+            if (window.innerWidth <= 658) {
+              setShowPersonalForm(true);
+            }
+            toggleForm();
+          }
+        }}
       >
         <div className="flex flex-col">
           <p

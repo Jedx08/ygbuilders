@@ -37,7 +37,22 @@ export default {
 
       xxs: { max: "425px" },
       // => @media (max-width: 425px) { ... }
+
+      // @media for Calendar
+      clg: { max: "1181px" },
     },
+
+    // fontSize: {
+    //   textPar: [
+    //     "1.25rem",
+    //     {
+    //       fontSize: "14px",
+    //       fontWeigt: "400",
+    //       lineHeight: "20px",
+    //     },
+    //   ],
+    // },
+
     height: {
       s40: "40vh",
       s60: "60vh",
@@ -51,7 +66,8 @@ export default {
       hfit: "fit-content",
     },
     colors: {
-      light: "#f0f2f5",
+      light: "#f2f4f7",
+      subCon: "#f0f2f5",
       dark: "#1c1e21",
       white: "#fff",
       greens: "#2ec4b6",

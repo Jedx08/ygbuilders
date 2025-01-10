@@ -36,10 +36,7 @@ const BusinessDay = ({ day }) => {
   }
 
   function toggleForm() {
-    return (
-      notThisMonth ? setShowBusinessForm(false) : setExactDaySelected(day),
-      formData(day)
-    );
+    return setExactDaySelected(day), formData(day);
   }
 
   return (
@@ -50,7 +47,14 @@ const BusinessDay = ({ day }) => {
             ? "cursor-default"
             : "hover:border-loranges cursor-pointer"
         }`}
-        onClick={toggleForm}
+        onClick={() => {
+          if (!notThisMonth) {
+            if (window.innerWidth <= 658) {
+              setShowBusinessForm(true);
+            }
+            toggleForm();
+          }
+        }}
       >
         <header className="flex flex-col">
           <p

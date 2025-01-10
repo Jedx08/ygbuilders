@@ -22,10 +22,10 @@ const FooterNav = () => {
             <p className="text-sm">Dashboard</p>
           </div>
         </Link>
-        <Link to="/personal" className="w-full">
+        <Link to="/calendar" className="w-full">
           <div
             className={`flex flex-col items-center p-2 gap-2 hover:bg-light rounded-md cursor-pointer ${
-              location.pathname === "/personal" ? "bg-light" : ""
+              location.pathname === "/calendar" ? "bg-light" : ""
             }`}
           >
             <div className="flex justify-center">
