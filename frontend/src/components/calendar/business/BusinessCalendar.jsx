@@ -208,9 +208,9 @@ const BusinessCalendar = () => {
           // onClick={() => {
           //   showTour();
           // }}
-          className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-lg rounded-md mt-2 cursor-pointer border border-white hover:border-loranges text-sm md:py-1 mx-auto`}
+          className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-lg rounded-md mt-2 cursor-pointer border border-white hover:border-loranges text-sm mmd:text-xs md:py-1 mx-auto`}
         >
-          <BsInfoCircle className={`text-oranges text-2xl`} />
+          <BsInfoCircle className={`text-oranges text-2xl mmd:text-xl`} />
           <p>
             How to use? <span className="font-bold">Instructions</span>
           </p>
@@ -232,7 +232,11 @@ const BusinessCalendar = () => {
       <div className="grid grid-cols-3 gap-4 mt-2 px-5 overflow-hidden xl:pl-24 lg:pl-5 clg:grid-cols-2 clg:grid-rows-2">
         {/* Calendar */}
         <div className="bg-white rounded-lg pt-14 min-w-[350px] h-[480px] relative mmd:pt-2 mmd:col-span-2 mmd:h-hfull">
-          <BusinessMonth month={currentMonth} />
+          <BusinessMonth
+            month={currentMonth}
+            monthData={monthData}
+            businessDataLoading={businessDataLoading}
+          />
         </div>
         {/* Data Form */}
         <div className="bg-white rounded-lg pt-8 min-w-[350px] h-[480px] mmd:hidden">
@@ -242,11 +246,11 @@ const BusinessCalendar = () => {
         <div className="bg-white rounded-lg min-w-[350px] max-h-[480px] flex flex-col justify-evenly items-center px-8 clg:col-span-2 clg:row-span-full clg:h-hfit clg:flex-row clg:space-x-2">
           {/* Monthly Capital Form */}
           <div className=" w-full text-center py-3 rounded-lg clg:py-1">
-            <h1 className="text-lg text-loranges mb-2 font-bold clg:mb-0">
+            <h1 className="text-lg text-loranges mb-2 font-bold clg:mb-0 sm:text-base">
               Monthly Capital
             </h1>
             <div className="text-sm font-bold mb-3 text-center clg:mb-1">
-              <span className="text-xs text-[#A6ACAF] font-normal">
+              <span className="text-xs text-[#A6ACAF] font-normal sm:text-[10px]">
                 (Cash, Assets etc...)
               </span>
             </div>
@@ -255,10 +259,10 @@ const BusinessCalendar = () => {
                 <div className="rounded-md py-1 text-center w-fit clg:py-0">
                   <div className="flex justify-center items-center">
                     <div className="pl-2">
-                      <img src={profitIcon} className="w-11 mr-2 md:w-10" />
+                      <img src={profitIcon} className="w-11 mr-2 mdd:w-9" />
                     </div>
                     <div className="mt-[0.15rem]">
-                      <p className="text-[red] font-bold text-xl/[24px]">
+                      <p className="text-[red] font-bold text-xl/[24px] mdd:text-lg sm:text-base">
                         {monthlyCapital.toLocaleString()}
                       </p>
                     </div>
@@ -280,7 +284,7 @@ const BusinessCalendar = () => {
           </div>
           {/* Monthly Expenses Form */}
           <div className=" w-full text-center py-3 rounded-lg clg:py-1">
-            <h1 className="text-lg text-loranges mb-2 font-bold clg:mb-0">
+            <h1 className="text-lg text-loranges mb-2 font-bold clg:mb-0 sm:text-base">
               Monthly Expenses
             </h1>
             <div className="mb-3 text-center clg:mb-1">
@@ -291,7 +295,7 @@ const BusinessCalendar = () => {
                   overflow: "hidden",
                   display: "-webkit-box",
                 }}
-                className="text-xs text-[#A6ACAF] font-normal"
+                className="text-xs text-[#A6ACAF] font-normal sm:text-[10px]"
               >
                 (Bills, Loan, Insurance, Rent and etc...)
               </span>
@@ -301,10 +305,10 @@ const BusinessCalendar = () => {
                 <div className="rounded-md py-1 text-center w-fit clg:py-0">
                   <div className="flex justify-center items-center">
                     <div className="pl-2">
-                      <img src={expensesIcon} className="w-11 mr-2 md:w-10" />
+                      <img src={expensesIcon} className="w-11 mr-2 mdd:w-9" />
                     </div>
                     <div className="mt-[0.15rem]">
-                      <p className="text-[red] font-bold text-xl/[24px]">
+                      <p className="text-[red] font-bold text-xl/[24px] mdd:text-lg sm:text-base">
                         {monthlyExpenses.toLocaleString()}
                       </p>
                     </div>

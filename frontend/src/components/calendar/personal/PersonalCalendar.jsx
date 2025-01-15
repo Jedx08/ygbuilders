@@ -23,7 +23,6 @@ const PersonalCalendar = () => {
     exactDaySelected,
     showPersonalForm,
     showPersonalExpenseForm,
-
     personalExpensesLoading,
     personalExpensesData,
     setShowPersonalExpensesForm,
@@ -166,9 +165,9 @@ const PersonalCalendar = () => {
         // onClick={() => {
         //   showTour();
         // }}
-        className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-lg rounded-md mt-2 cursor-pointer border border-white hover:border-lgreens text-sm md:py-1 mx-auto`}
+        className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-lg rounded-md mt-2 cursor-pointer border border-white hover:border-lgreens text-sm mmd:text-xs md:py-1 mx-auto`}
       >
-        <BsInfoCircle className={`text-oranges text-2xl`} />
+        <BsInfoCircle className={`text-oranges text-2xl mmd:text-xl`} />
         <p>
           How to use? <span className="font-bold">Instructions</span>
         </p>
@@ -186,7 +185,11 @@ const PersonalCalendar = () => {
       {/* components */}
       <div className="grid grid-cols-3 gap-4 mt-2 px-5 overflow-hidden xl:pl-24 lg:pl-5 clg:grid-cols-2 clg:grid-rows-2">
         <div className="bg-white rounded-lg pt-8 min-w-[350px] h-[406px] relative mmd:pt-2 mmd:col-span-2 mmd:h-hfull">
-          <PersonalMonth month={currentMonth} />
+          <PersonalMonth
+            month={currentMonth}
+            monthData={monthData}
+            personalDataLoading={personalDataLoading}
+          />
         </div>
         <div className="bg-white rounded-lg pt-8 min-w-[350px] h-[406px] mmd:hidden">
           <PersonalForm />
@@ -203,11 +206,11 @@ const PersonalCalendar = () => {
           {personalExpensesFloat && (
             <>
               <div className="text-center py-1">
-                <h1 className="text-lg text-greens mb-2 font-bold clg:mb-0">
+                <h1 className="text-lg text-greens mb-2 font-bold clg:mb-0 sm:text-base">
                   Monthly Expenses
                 </h1>
                 <div className={`text-center`}>
-                  <span className="text-xs text-[#A6ACAF] font-normal">
+                  <span className="text-xs text-[#A6ACAF] font-normal sm:text-[10px]">
                     (Bills, Loan, Insurance, Tuition, Rent and etc...)
                   </span>
                 </div>
@@ -218,11 +221,11 @@ const PersonalCalendar = () => {
                         <div className="pl-2">
                           <img
                             src={monthExpensesIcon}
-                            className="w-11 mr-2 md:w-10"
+                            className="w-14 mr-2 mdd:w-10"
                           />
                         </div>
                         <div className="mt-[0.15rem]">
-                          <p className="text-[red] font-bold text-xl/[24px]">
+                          <p className="text-[red] font-bold text-xl/[24px] mdd:text-lg sm:text-base">
                             {monthlyExpenses.toLocaleString()}
                           </p>
                         </div>

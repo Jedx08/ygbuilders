@@ -17,11 +17,29 @@ const BusinessData = ({ businessDataLoading, monthData }) => {
     <div>
       {/* Income Data */}
       <div className="bg-white rounded-lg">
-        <div className={`border border-light font-bold rounded-md `}>
+        <div className={`border border-light font-bold rounded-md py-2`}>
           <div
-            className={`flex gap-3 justify-center items-center px-1 py-3 text-oranges font-bold text-xl/[24px]`}
+            className={`flex gap-3 justify-center items-center px-1 text-oranges font-bold text-xl/[24px] sm:text-lg`}
           >
             <p>Income</p>
+          </div>
+          <div className="flex items-center justify-evenly py-1">
+            <div className="flex space-x-1 items-center justify-center">
+              <img src={capitalIcon} alt="capital" className={`w-8 sm:w-6`} />
+              <p className="text-sm font-normal">Capital</p>
+            </div>
+            <div className="flex space-x-1 items-center justify-center">
+              <img src={salesIcon} alt="sales" className={`w-8 sm:w-6`} />
+              <p className="text-sm font-normal">Sales</p>
+            </div>
+            <div className="flex space-x-1 items-center justify-center">
+              <img src={expensesIcon} alt="expenses" className={`w-8 sm:w-6`} />
+              <p className="text-sm font-normal">Expenses</p>
+            </div>
+            <div className="flex space-x-1 items-center justify-center">
+              <img src={profitIcon} alt="profit" className={`w-8 sm:w-6`} />
+              <p className="text-sm font-normal">Profit</p>
+            </div>
           </div>
         </div>
         {businessDataLoading && (
@@ -58,7 +76,7 @@ const BusinessData = ({ businessDataLoading, monthData }) => {
                     className={`flex font-medium justify-center text-sm py-2`}
                   >
                     <div
-                      className={`flex items-center justify-evenly space-x-4 w-full`}
+                      className={`flex flex-wrap items-center justify-evenly gap-2 w-full`}
                     >
                       {/* capital */}
                       <div className="flex items-center font-semibold">
@@ -68,7 +86,7 @@ const BusinessData = ({ businessDataLoading, monthData }) => {
                           <img
                             src={capitalIcon}
                             alt="capital"
-                            className={`w-8`}
+                            className={`w-8 sm:w-6`}
                           />
                           <p className="ml-1 text-[#D0D0D0]">:</p>
                           <p className="text-oranges text-base font-semibold">
@@ -81,7 +99,11 @@ const BusinessData = ({ businessDataLoading, monthData }) => {
                         <div
                           className={`flex space-x-1 items-center justify-center`}
                         >
-                          <img src={salesIcon} alt="sales" className={`w-8`} />
+                          <img
+                            src={salesIcon}
+                            alt="sales"
+                            className={`w-8 sm:w-6`}
+                          />
                           <p className="ml-1 text-[#D0D0D0]">:</p>
                           <p className="text-greens text-base font-semibold">
                             {d.sales.toLocaleString()}
@@ -96,7 +118,7 @@ const BusinessData = ({ businessDataLoading, monthData }) => {
                           <img
                             src={expensesIcon}
                             alt="expenses"
-                            className={`w-8`}
+                            className={`w-8 sm:w-6`}
                           />
                           <p className="ml-1 text-[#D0D0D0]">:</p>
                           <p className="text-[red] text-base font-semibold">
@@ -112,7 +134,7 @@ const BusinessData = ({ businessDataLoading, monthData }) => {
                           <img
                             src={profitIcon}
                             alt="profit"
-                            className={`w-8`}
+                            className={`w-8 sm:w-6`}
                           />
                           <p className="ml-1 font-semibold text-[#D0D0D0]">:</p>
                           <p

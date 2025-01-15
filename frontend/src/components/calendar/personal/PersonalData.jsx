@@ -13,11 +13,25 @@ const PersonalData = ({ personalDataLoading, monthData }) => {
     <div>
       {/* Income Data */}
       <div className="bg-white rounded-lg">
-        <div className={`border border-light font-bold rounded-md `}>
+        <div className={`border border-light font-bold rounded-md py-2`}>
           <div
-            className={`flex gap-3 justify-center items-center px-1 py-3 text-greens font-bold text-xl/[24px]`}
+            className={`flex gap-3 justify-center items-center px-1 text-greens font-bold text-xl/[24px] sm:text-lg`}
           >
             Income
+          </div>
+          <div className="flex items-center justify-evenly py-1">
+            <div className="flex space-x-1 items-center justify-center">
+              <img src={grossIcon} alt="gross" className={`w-8 sm:w-6`} />
+              <p className="text-sm font-normal">Gross</p>
+            </div>
+            <div className="flex space-x-1 items-center justify-center">
+              <img src={expensesIcon} alt="expenses" className={`w-8 sm:w-6`} />
+              <p className="text-sm font-normal">Expenses</p>
+            </div>
+            <div className="flex space-x-1 items-center justify-center">
+              <img src={netIcon} alt="net" className={`w-8 sm:w-6`} />
+              <p className="text-sm font-normal">Net</p>
+            </div>
           </div>
         </div>
         {personalDataLoading && (
@@ -55,14 +69,18 @@ const PersonalData = ({ personalDataLoading, monthData }) => {
                     key={i}
                   >
                     <div
-                      className={`flex items-center justify-evenly space-x-4 w-full`}
+                      className={`flex flex-wrap items-center justify-evenly gap-2 w-full`}
                     >
                       {/* gross */}
                       <div className="flex items-center font-semibold">
                         <div
                           className={`flex space-x-1 items-center justify-center`}
                         >
-                          <img src={grossIcon} alt="gross" className={`w-8`} />
+                          <img
+                            src={grossIcon}
+                            alt="gross"
+                            className={`w-8 sm:w-6`}
+                          />
                           <p className="ml-1 text-[#D0D0D0]">:</p>
                           <p className="text-oranges text-base font-semibold">
                             {d.gross.toLocaleString()}
@@ -77,7 +95,7 @@ const PersonalData = ({ personalDataLoading, monthData }) => {
                           <img
                             src={expensesIcon}
                             alt="expenses"
-                            className={`w-8`}
+                            className={`w-8 sm:w-6`}
                           />
                           <p className="ml-1 text-[#D0D0D0]">:</p>
                           <p className="text-[red] text-base font-semibold">
@@ -90,7 +108,11 @@ const PersonalData = ({ personalDataLoading, monthData }) => {
                         <div
                           className={`flex space-x-1 items-center justify-center`}
                         >
-                          <img src={netIcon} alt="net" className={`w-8`} />
+                          <img
+                            src={netIcon}
+                            alt="net"
+                            className={`w-8 sm:w-6`}
+                          />
                           <p className="ml-1 font-semibold text-[#D0D0D0]">:</p>
                           <p
                             className={`text-base font-semibold ${

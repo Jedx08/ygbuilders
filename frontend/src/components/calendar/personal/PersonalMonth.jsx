@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { CalendarContext } from "../../../context/CalendarContext";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import PersonalDay from "./PersonalDay";
-const PersonalMonth = ({ month }) => {
+const PersonalMonth = ({ month, monthData, personalDataLoading }) => {
   const { monthIndex, setMonthIndex, inMobile } = useContext(CalendarContext);
 
   function handlePrevMonth() {
@@ -55,7 +55,13 @@ const PersonalMonth = ({ month }) => {
         {month.map((row, i) => (
           <React.Fragment key={i}>
             {row.map((day, idx) => (
-              <PersonalDay day={day} key={idx} rowIdx={i} />
+              <PersonalDay
+                day={day}
+                key={idx}
+                rowIdx={i}
+                monthData={monthData}
+                personalDataLoading={personalDataLoading}
+              />
             ))}
           </React.Fragment>
         ))}

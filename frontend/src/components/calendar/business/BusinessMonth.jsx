@@ -5,7 +5,7 @@ import { BsInfoCircle } from "react-icons/bs";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import BusinessDay from "./BusinessDay";
 
-const BusinessMonth = ({ month }) => {
+const BusinessMonth = ({ month, monthData, businessDataLoading }) => {
   const { monthIndex, inMobile, setMonthIndex } = useContext(CalendarContext);
 
   function handlePrevMonth() {
@@ -64,7 +64,13 @@ const BusinessMonth = ({ month }) => {
           {month.map((row, i) => (
             <React.Fragment key={i}>
               {row.map((day, idx) => (
-                <BusinessDay day={day} key={idx} rowIdx={i} />
+                <BusinessDay
+                  day={day}
+                  key={idx}
+                  rowIdx={i}
+                  monthData={monthData}
+                  businessDataLoading={businessDataLoading}
+                />
               ))}
             </React.Fragment>
           ))}

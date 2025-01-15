@@ -1,27 +1,20 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CalendarContext } from "../../../context/CalendarContext";
 import dayjs from "dayjs";
-import grossIcon from "../../../media/pouch.png";
-import expensesIcon from "../../../media/expenses.png";
-import netIcon from "../../../media/networth.png";
-import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import useGetData from "../../../hooks/useGetPersonalData";
+import { RxDotFilled } from "react-icons/rx";
 
-const PersonalDay = ({ day }) => {
+const PersonalDay = ({ day, monthData, personalDataLoading }) => {
   const {
     monthIndex,
     setShowPersonalForm,
-    exactDaySelected,
     setExactDaySelected,
-    formSelectedDate,
     setFormSelectedDate,
     personalIncomeData,
-    dispatchPersonalIncomeData,
-    personalIncomeLoading,
-    setPersonalIncomeLoading,
     inMobile,
   } = useContext(CalendarContext);
+
+  const [dayData, setDayData] = useState([]);
 
   const notThisMonth =
     day.format("MM") !==
@@ -44,10 +37,24 @@ const PersonalDay = ({ day }) => {
     return setExactDaySelected(day), formData(day);
   }
 
+  useEffect(() => {
+    if (!personalDataLoading) {
+      const checkDayData = () => {
+        const data = monthData.filter(
+          (evnt) =>
+            dayjs(evnt.day).format("DD-MM-YY") === day.format("DD-MM-YY")
+        );
+
+        setDayData(data);
+      };
+      checkDayData();
+    }
+  }, [monthIndex, monthData, day, personalDataLoading]);
+
   return (
     <>
       <div
-        className={`border border-light bg-white flex flex-col items-center justify-center overflow-hidden ${
+        className={`border border-light bg-white flex flex-col items-center justify-center overflow-hidden relative ${
           notThisMonth ? "cursor-default" : "hover:border-greens cursor-pointer"
         }`}
         onClick={() => {
@@ -59,6 +66,20 @@ const PersonalDay = ({ day }) => {
           }
         }}
       >
+        {dayData.length === 0 ? (
+          <></>
+        ) : (
+          <div
+            className={`absolute top-0 right-0 ${notThisMonth ? "hidden" : ""}`}
+          >
+            <RxDotFilled
+              className={`${
+                dayData[0].net < 0 ? "text-[#ff3a33]" : "text-[#32ca5b]"
+              }`}
+            />
+          </div>
+        )}
+
         <div className="flex flex-col">
           <p
             className={`font-bold pt-1 text-center ${

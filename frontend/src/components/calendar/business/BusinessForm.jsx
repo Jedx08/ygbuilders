@@ -143,6 +143,7 @@ const BusinessForm = () => {
         setBusinessButton(false),
         setBusinessIncomeLoading(true);
       setAddLoading(false);
+      setShowBusinessForm(false);
     } catch (err) {
       console.log(err);
     }
@@ -207,6 +208,7 @@ const BusinessForm = () => {
         setErrMsg(null);
         setBusinessIncomeLoading(true);
         setUpdateLoading(false);
+        setShowBusinessForm(false);
       }
     } catch (err) {
       console.log(err);
@@ -232,6 +234,7 @@ const BusinessForm = () => {
         setBusinessIncomeLoading(true);
         setConfirmDelete(false);
         setDeleteLoading(false);
+        setShowBusinessForm(false);
       }
     } catch (err) {
       if (err.response?.status === 400) {

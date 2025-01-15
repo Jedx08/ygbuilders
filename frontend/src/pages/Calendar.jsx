@@ -35,11 +35,11 @@ const Calendar = () => {
               onClick={() => {
                 setCalendarView(false);
               }}
-              className={`shadow-lg px-5 py-3 rounded-md font-bold
+              className={`px-5 py-3 rounded-md font-bold
               ${
                 !calendarView
                   ? "bg-lgreens text-white cursor-default"
-                  : "bg-white cursor-pointer hover:text-lgreens"
+                  : "bg-white cursor-pointer hover:text-lgreens shadow-lg"
               }
              `}
             >
@@ -49,10 +49,10 @@ const Calendar = () => {
               onClick={() => {
                 setCalendarView(true);
               }}
-              className={`shadow-lg px-5 py-3 rounded-md font-bold
+              className={`px-5 py-3 rounded-md font-bold
               ${
                 !calendarView
-                  ? "bg-white cursor-pointer hover:text-loranges"
+                  ? "bg-white cursor-pointer hover:text-loranges shadow-lg"
                   : "bg-loranges text-white cursor-default"
               }
             `}
