@@ -28,6 +28,7 @@ const Calendar = () => {
         <Sidebar />
       </div>
       <div className="w-full bg-light">
+        <Navbar />
         <div className="font-pops  min-h-[100vh]">
           {/* Calendar Switch View */}
           <div className="flex justify-center space-x-5 pt-5">
@@ -39,7 +40,7 @@ const Calendar = () => {
               ${
                 !calendarView
                   ? "bg-lgreens text-white cursor-default"
-                  : "bg-white cursor-pointer hover:text-lgreens shadow-lg"
+                  : "bg-white cursor-pointer hover:text-lgreens shadow-md"
               }
              `}
             >
@@ -52,7 +53,7 @@ const Calendar = () => {
               className={`px-5 py-3 rounded-md font-bold
               ${
                 !calendarView
-                  ? "bg-white cursor-pointer hover:text-loranges shadow-lg"
+                  ? "bg-white cursor-pointer hover:text-loranges shadow-md"
                   : "bg-loranges text-white cursor-default"
               }
             `}

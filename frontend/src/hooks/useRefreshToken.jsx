@@ -19,6 +19,7 @@ const useRefreshToken = () => {
       return {
         avatar: response.data.avatar,
         instructions: response.data.instructions,
+        foundUsername: response.data.foundUsername,
         email: response.data.email,
         provider: response.data.provider,
         personal_title: response.data.personal_title,

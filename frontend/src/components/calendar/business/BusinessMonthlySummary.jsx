@@ -15,7 +15,7 @@ const BusinessMonthlySummary = ({
   return (
     <div>
       {/* Monthly Summary */}
-      <div className="bg-white h-hfit rounded-lg">
+      <div className="bg-white h-hfit shadow-sm rounded-lg">
         <div>
           <div
             className={`flex gap-3 justify-center items-center px-1 pt-3 pb-1 text-oranges font-bold text-xl clg:py-1 sm:text-lg`}

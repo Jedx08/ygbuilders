@@ -16,10 +16,10 @@ const BusinessData = ({ businessDataLoading, monthData }) => {
   return (
     <div>
       {/* Income Data */}
-      <div className="bg-white rounded-lg">
+      <div className="bg-white shadow-sm rounded-lg">
         <div className={`border border-light font-bold rounded-md py-2`}>
           <div
-            className={`flex gap-3 justify-center items-center px-1 text-oranges font-bold text-xl/[24px] sm:text-lg`}
+            className={`flex gap-3 justify-center items-center px-1 py-1 text-oranges font-bold text-xl/[24px] sm:text-lg`}
           >
             <p>Income</p>
           </div>

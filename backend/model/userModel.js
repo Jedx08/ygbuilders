@@ -35,6 +35,10 @@ const userSchema = new Schema(
       type: String,
       default: "avatar1", // 'local' for email/password, 'facebook' for Facebook
     },
+    resetToken: {
+      type: String,
+      default: "",
+    },
     personal_title: String,
     business_title: String,
     refreshToken: String,

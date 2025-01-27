@@ -7,6 +7,7 @@ const BusinessDay = ({ day, monthData, businessDataLoading }) => {
   const {
     monthIndex,
     setShowBusinessForm,
+    exactDaySelected,
     setExactDaySelected,
     setBusinessFormSelectedDate,
     businessIncomeData,
@@ -57,6 +58,10 @@ const BusinessDay = ({ day, monthData, businessDataLoading }) => {
           notThisMonth
             ? "cursor-default"
             : "hover:border-loranges cursor-pointer"
+        } ${
+          exactDaySelected.format("MMMM D, YYYY") === day.format("MMMM D, YYYY")
+            ? "border-loranges border-2"
+            : "border-light"
         }`}
         onClick={() => {
           if (!notThisMonth) {

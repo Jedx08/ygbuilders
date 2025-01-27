@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useRefreshToken from "../hooks/useRefreshToken";
 import useAuth from "../hooks/useAuth";
+import logo from "../media/YG_LOGO.png";
 
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -30,7 +31,7 @@ const PersistLogin = () => {
     <>
       {isLoading ? (
         <div className="flex justify-center items-center bg-light bg-opacity-70  h-s100 w-full">
-          <>Loading...</>
+          <img src={logo} alt="YG" className="w-60 shadow-lg rounded-full" />
         </div>
       ) : (
         <Outlet />

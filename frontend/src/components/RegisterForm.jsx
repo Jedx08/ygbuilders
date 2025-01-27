@@ -98,6 +98,7 @@ const RegisterForm = ({ previous, inMobile }) => {
       );
       const accessToken = await response?.data?.accessToken;
       const _id = await response?.data?._id;
+      const foundUsername = await response?.data?.foundUsername;
       const getEmail = await response?.data?.email;
       const avatar = await response?.data?.avatar;
       const instructions = await response?.data?.instructions;
@@ -109,6 +110,7 @@ const RegisterForm = ({ previous, inMobile }) => {
         avatar,
         instructions,
         provider,
+        foundUsername,
         email: getEmail,
         personal_title,
         business_title,

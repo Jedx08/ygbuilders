@@ -8,6 +8,7 @@ const PersonalDay = ({ day, monthData, personalDataLoading }) => {
   const {
     monthIndex,
     setShowPersonalForm,
+    exactDaySelected,
     setExactDaySelected,
     setFormSelectedDate,
     personalIncomeData,
@@ -54,8 +55,12 @@ const PersonalDay = ({ day, monthData, personalDataLoading }) => {
   return (
     <>
       <div
-        className={`border border-light bg-white flex flex-col items-center justify-center overflow-hidden relative ${
+        className={`border  bg-white flex flex-col items-center justify-center overflow-hidden relative ${
           notThisMonth ? "cursor-default" : "hover:border-greens cursor-pointer"
+        } ${
+          exactDaySelected.format("MMMM D, YYYY") === day.format("MMMM D, YYYY")
+            ? "border-greens border-2"
+            : "border-light"
         }`}
         onClick={() => {
           if (!notThisMonth) {

@@ -17,6 +17,7 @@ const handleLogin = async (req, res) => {
       message: "Your login credentials don't match an account in our system.",
     });
   const _id = foundUser?._id;
+  const foundUsername = foundUser?.username;
   const email = foundUser?.email;
   const avatar = foundUser?.avatar;
   const provider = foundUser?.provider;
@@ -50,6 +51,7 @@ const handleLogin = async (req, res) => {
 
     res.json({
       accessToken,
+      foundUsername,
       email,
       avatar,
       _id: _id.toString(),

@@ -208,7 +208,7 @@ const BusinessCalendar = () => {
           // onClick={() => {
           //   showTour();
           // }}
-          className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-lg rounded-md mt-2 cursor-pointer border border-white hover:border-loranges text-sm mmd:text-xs md:py-1 mx-auto`}
+          className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white hover:border-loranges text-sm mmd:text-xs md:py-1 mx-auto`}
         >
           <BsInfoCircle className={`text-oranges text-2xl mmd:text-xl`} />
           <p>
@@ -229,9 +229,9 @@ const BusinessCalendar = () => {
       </div>
 
       {/* Components */}
-      <div className="grid grid-cols-3 gap-4 mt-2 px-5 overflow-hidden xl:pl-24 lg:pl-5 clg:grid-cols-2 clg:grid-rows-2">
+      <div className="grid grid-cols-3 gap-4 mt-2 py-1 px-5 overflow-hidden xl:pl-24 lg:pl-5 clg:grid-cols-2 clg:grid-rows-2">
         {/* Calendar */}
-        <div className="bg-white rounded-lg pt-14 min-w-[350px] h-[480px] relative mmd:pt-2 mmd:col-span-2 mmd:h-hfull">
+        <div className="bg-white shadow-sm rounded-lg pt-14 min-w-[350px] h-[480px] relative mmd:pt-2 mmd:col-span-2 mmd:h-hfull">
           <BusinessMonth
             month={currentMonth}
             monthData={monthData}
@@ -239,11 +239,11 @@ const BusinessCalendar = () => {
           />
         </div>
         {/* Data Form */}
-        <div className="bg-white rounded-lg pt-8 min-w-[350px] h-[480px] mmd:hidden">
+        <div className="bg-white shadow-sm rounded-lg pt-8 min-w-[350px] h-[480px] mmd:hidden">
           <BusinessForm />
         </div>
         {/* Monthly */}
-        <div className="bg-white rounded-lg min-w-[350px] max-h-[480px] flex flex-col justify-evenly items-center px-8 clg:col-span-2 clg:row-span-full clg:h-hfit clg:flex-row clg:space-x-2">
+        <div className="bg-white shadow-sm rounded-lg min-w-[350px] max-h-[480px] flex flex-col justify-evenly items-center px-8 clg:col-span-2 clg:row-span-full clg:h-hfit clg:flex-row clg:space-x-2">
           {/* Monthly Capital Form */}
           <div className=" w-full text-center py-3 rounded-lg clg:py-1">
             <h1 className="text-lg text-loranges mb-2 font-bold clg:mb-0 sm:text-base">

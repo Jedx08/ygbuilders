@@ -454,7 +454,6 @@ const PersonalForm = () => {
               )}
             </div>
           )}
-
           {/* Confirm Delete Data */}
           {confirmDelete && (
             <div className="px-4 mt-2">

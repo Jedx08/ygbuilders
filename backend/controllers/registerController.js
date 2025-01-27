@@ -37,6 +37,7 @@ const handleRegister = async (req, res) => {
         (await User.findOne({ username: username.toLowerCase() }).exec()) ||
         (await User.findOne({ email: email.toLowerCase() }).exec());
       const _id = foundUser?._id;
+      const foundUsername = foundUser.username;
       const email = foundUser?.email;
       const avatar = foundUser?.avatar;
       const provider = foundUser?.provider;
@@ -68,6 +69,7 @@ const handleRegister = async (req, res) => {
       console.log("New Account: ", email);
       res.json({
         accessToken,
+        foundUsername,
         email,
         avatar,
         _id: _id.toString(),

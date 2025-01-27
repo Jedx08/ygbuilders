@@ -34,59 +34,57 @@ const Summary = () => {
   // }, []);
 
   return (
-    <>
-      <div className="flex lg:flex-col">
-        <div className="lg:hidden">
-          <Sidebar />
-        </div>
-        <div className="w-full bg-light">
-          <div className="font-pops  min-h-[100vh]">
-            {/* Calendar Switch View */}
-            <div className="flex justify-center space-x-5 pt-5">
-              <div
-                onClick={() => {
-                  setPersonalSummaryView(true);
-                }}
-                className={`px-5 py-3 rounded-md font-bold
+    <div className="flex lg:flex-col">
+      <div className="lg:hidden">
+        <Sidebar />
+      </div>
+      <div className="w-full bg-light">
+        <div className="font-pops  min-h-[100vh]">
+          {/* Calendar Switch View */}
+          <div className="flex justify-center space-x-5 pt-5">
+            <div
+              onClick={() => {
+                setPersonalSummaryView(true);
+              }}
+              className={`px-5 py-3 rounded-md font-bold
               ${
                 personalSummaryView
                   ? "bg-lgreens text-white cursor-default"
-                  : "bg-white cursor-pointer hover:text-lgreens shadow-lg"
+                  : "bg-white cursor-pointer hover:text-lgreens shadow-md"
               }
              `}
-              >
-                Personal
-              </div>
-              <div
-                onClick={() => {
-                  setPersonalSummaryView(false);
-                }}
-                className={`px-5 py-3 rounded-md font-bold
+            >
+              Personal
+            </div>
+            <div
+              onClick={() => {
+                setPersonalSummaryView(false);
+              }}
+              className={`px-5 py-3 rounded-md font-bold
               ${
                 personalSummaryView
-                  ? "bg-white cursor-pointer hover:text-loranges shadow-lg"
+                  ? "bg-white cursor-pointer hover:text-loranges shadow-md"
                   : "bg-loranges text-white cursor-default"
               }
             `}
-              >
-                Business
-              </div>
-            </div>
-            {/* Calendar Display Personal/Business */}
-            <div>
-              {personalSummaryView ? <PersonalSummary /> : <BusinessSummary />}
+            >
+              Business
             </div>
           </div>
-          <div className="mt-5 lg:mb-[5rem]">
-            <Footer />
+          {/* Calendar Display Personal/Business */}
+          <div>
+            {personalSummaryView ? <PersonalSummary /> : <BusinessSummary />}
           </div>
         </div>
-
-        <div className="hidden lg:block">
-          <FooterNav />
+        <div className="mt-5 lg:mb-[5rem]">
+          <Footer />
         </div>
       </div>
-    </>
+
+      <div className="hidden lg:block">
+        <FooterNav />
+      </div>
+    </div>
   );
 };
 

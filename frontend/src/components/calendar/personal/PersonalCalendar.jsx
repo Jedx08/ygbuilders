@@ -165,7 +165,7 @@ const PersonalCalendar = () => {
         // onClick={() => {
         //   showTour();
         // }}
-        className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-lg rounded-md mt-2 cursor-pointer border border-white hover:border-lgreens text-sm mmd:text-xs md:py-1 mx-auto`}
+        className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white hover:border-lgreens text-sm mmd:text-xs md:py-1 mx-auto`}
       >
         <BsInfoCircle className={`text-oranges text-2xl mmd:text-xl`} />
         <p>
@@ -183,18 +183,18 @@ const PersonalCalendar = () => {
       </div>
 
       {/* components */}
-      <div className="grid grid-cols-3 gap-4 mt-2 px-5 overflow-hidden xl:pl-24 lg:pl-5 clg:grid-cols-2 clg:grid-rows-2">
-        <div className="bg-white rounded-lg pt-8 min-w-[350px] h-[406px] relative mmd:pt-2 mmd:col-span-2 mmd:h-hfull">
+      <div className="grid grid-cols-3 gap-4 mt-2 py-1 px-5 overflow-hidden xl:pl-24 lg:pl-5 clg:grid-cols-2 clg:grid-rows-2">
+        <div className="bg-white shadow-sm rounded-lg pt-8 min-w-[350px] h-[406px] relative mmd:pt-2 mmd:col-span-2 mmd:h-hfull">
           <PersonalMonth
             month={currentMonth}
             monthData={monthData}
             personalDataLoading={personalDataLoading}
           />
         </div>
-        <div className="bg-white rounded-lg pt-8 min-w-[350px] h-[406px] mmd:hidden">
+        <div className="bg-white shadow-sm rounded-lg pt-8 min-w-[350px] h-[406px] mmd:hidden">
           <PersonalForm />
         </div>
-        <div className="bg-white rounded-lg min-w-[350px] max-h-[406px] clg:col-span-2 clg:row-span-full clg:h-hfit">
+        <div className="bg-white shadow-sm rounded-lg min-w-[350px] max-h-[406px] clg:col-span-2 clg:row-span-full clg:h-hfit">
           {!personalExpensesFloat && (
             <PMonthlyExpensesForm
               expensesDataLoading={expensesDataLoading}

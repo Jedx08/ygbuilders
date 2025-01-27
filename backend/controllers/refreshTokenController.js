@@ -9,6 +9,7 @@ const handleRefreshToken = async (req, res) => {
   const foundUser = await User.findOne({ refreshToken }).exec();
   if (!foundUser) return res.sendStatus(403); //forbidden
   const _id = foundUser?._id;
+  const foundUsername = foundUser.username;
   const email = foundUser?.email;
   const avatar = foundUser?.avatar;
   const instructions = foundUser?.instructions;
@@ -38,6 +39,7 @@ const handleRefreshToken = async (req, res) => {
 
     res.json({
       accessToken,
+      foundUsername,
       email,
       avatar,
       _id: _id.toString(),

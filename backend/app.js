@@ -4,6 +4,7 @@ const http = require("http");
 const express = require("express");
 const fs = require("fs");
 const cors = require("cors");
+const path = require("path");
 const mongoose = require("mongoose");
 const connectDB = require("./config/dbConnect");
 const personalIncome = require("./routes/personalIncomeRoute");
@@ -18,6 +19,9 @@ const facebookLoginRoute = require("./routes/facebookLoginRoute");
 const registerRoute = require("./routes/registerRoute");
 const loginRoute = require("./routes/loginRoute");
 const logoutRoute = require("./routes/logoutRoute");
+const forgotPasswordRoute = require("./routes/forgotPasswordRoute");
+const verifyResetTokenRoute = require("./routes/verifyResetTokenRoute");
+const passwordResetRoute = require("./routes/passwordResetRoute");
 const cookieParser = require("cookie-parser");
 const refreshTokenRoute = require("./routes/refreshTokenRoute");
 const verifyJWT = require("./middleware/verifyJWT");
@@ -25,7 +29,7 @@ const verifyJWT = require("./middleware/verifyJWT");
 // express app
 const app = express();
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Handle options credentials check - before CORS!
 // and fetch cookies credentials requirement
@@ -49,6 +53,9 @@ app.use("/register", registerRoute);
 app.use("/login", loginRoute);
 app.use("/refresh", refreshTokenRoute);
 app.use("/logout", logoutRoute);
+app.use("/forgot-password", forgotPasswordRoute);
+app.use("/verify-resetToken", verifyResetTokenRoute);
+app.use("/reset-password", passwordResetRoute);
 
 // verify token to access user data
 app.use(verifyJWT);

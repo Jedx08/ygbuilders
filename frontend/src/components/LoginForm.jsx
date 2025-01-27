@@ -41,6 +41,7 @@ const LoginForm = ({ next, inMobile }) => {
       );
       const accessToken = response?.data?.accessToken;
       const _id = response?.data?._id;
+      const foundUsername = response?.data?.foundUsername;
       const email = response?.data?.email;
       const avatar = response?.data?.avatar;
       const instructions = response?.data?.instructions;
@@ -51,6 +52,7 @@ const LoginForm = ({ next, inMobile }) => {
       setUserInfo({
         avatar,
         instructions,
+        foundUsername,
         email,
         provider,
         personal_title,
@@ -305,9 +307,9 @@ const LoginForm = ({ next, inMobile }) => {
                     )}
                   </div>
                   <div>
-                    <Link>
-                      <p className="text-sm underline text-[#399CB4]">
-                        Forgot Password?
+                    <Link to="/forgot-password">
+                      <p className="text-sm hover:text-[#1877f2] hover:underline">
+                        Forgot password?
                       </p>
                     </Link>
                   </div>
