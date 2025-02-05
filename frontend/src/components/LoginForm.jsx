@@ -70,9 +70,7 @@ const LoginForm = ({ next, inMobile }) => {
         setErrMsg("Username and Password are required");
         setIsLoading(false);
       } else if (err.response?.status === 401) {
-        setErrMsg(
-          "Your login credentials don't match an account in our system"
-        );
+        setErrMsg("Incorrect Username or Password");
         setIsLoading(false);
       } else {
         setErrMsg("Login Failed");

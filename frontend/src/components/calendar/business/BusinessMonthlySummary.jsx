@@ -38,7 +38,7 @@ const BusinessMonthlySummary = ({
                     className={`w-14 mdd:w-10`}
                   />
                   <p className="ml-1 text-[#D0D0D0]">:</p>
-                  <p className="text-oranges font-bold text-xl/[24px] mdd:text-lg">
+                  <p className="text-[red] font-bold text-xl/[24px] mdd:text-lg">
                     {(capitalCount + monthlyCapital).toLocaleString()}
                   </p>
                 </div>

@@ -150,7 +150,7 @@ const SelectAvatar = () => {
           )}
 
           {isLoading ? (
-            <div className="mx-auto py-[2px] mt-5 rounded-md px-4 bg-[#1a849f] font-bold text-white w-fit">
+            <div className="mx-auto py-[2px] mt-5 rounded-md px-4 bg-[#3578E5] font-bold text-white w-fit">
               <ThreeDot
                 style={{ fontSize: "7px" }}
                 variant="pulsate"
@@ -162,7 +162,7 @@ const SelectAvatar = () => {
           ) : (
             <div
               onClick={handleUpdate}
-              className="rounded-md bg-[#399CB4] hover:bg-[#1a849f] text-white mx-auto w-fit px-3 py-[2px] mt-5 cursor-pointer font-medium"
+              className="rounded-md bg-[#1877f2] hover:bg-[#3578E5] text-white mx-auto w-fit px-3 py-[2px] mt-5 cursor-pointer font-medium"
             >
               Save
             </div>

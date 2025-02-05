@@ -1,4 +1,5 @@
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { CalendarContext } from "../context/CalendarContext";
 import Footer from "../components/Footer";
@@ -12,7 +13,10 @@ const Calendar = () => {
   const { auth } = useAuth();
   const { setLoggedIn } = useContext(CalendarContext);
 
-  const [calendarView, setCalendarView] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const params = new URLSearchParams(location.search);
+  const tab = params.get("tab");
 
   useEffect(() => {
     if (!auth.accessToken && !auth._id) {
@@ -21,6 +25,16 @@ const Calendar = () => {
       setLoggedIn(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (!tab) {
+      navigate("/calendar?tab=Personal", { replace: true });
+    }
+  }, [tab, navigate]);
+
+  const changeTab = (tabName) => {
+    navigate(`?tab=${tabName}`, { replace: true });
+  };
 
   return (
     <div className="flex lg:flex-col">
@@ -34,11 +48,11 @@ const Calendar = () => {
           <div className="flex justify-center space-x-5 pt-5">
             <div
               onClick={() => {
-                setCalendarView(false);
+                changeTab("Personal");
               }}
               className={`px-5 py-3 rounded-md font-bold
               ${
-                !calendarView
+                tab === "Personal" || !params.get("tab")
                   ? "bg-lgreens text-white cursor-default"
                   : "bg-white cursor-pointer hover:text-lgreens shadow-md"
               }
@@ -48,13 +62,13 @@ const Calendar = () => {
             </div>
             <div
               onClick={() => {
-                setCalendarView(true);
+                changeTab("Business");
               }}
               className={`px-5 py-3 rounded-md font-bold
               ${
-                !calendarView
-                  ? "bg-white cursor-pointer hover:text-loranges shadow-md"
-                  : "bg-loranges text-white cursor-default"
+                tab === "Business"
+                  ? "bg-loranges text-white cursor-default"
+                  : "bg-white cursor-pointer hover:text-loranges shadow-md"
               }
             `}
             >
@@ -63,7 +77,8 @@ const Calendar = () => {
           </div>
           {/* Calendar Display Personal/Business */}
           <div>
-            {!calendarView ? <PersonalCalendar /> : <BusinessCalendar />}
+            {tab === "Personal" && <PersonalCalendar />}
+            {tab === "Business" && <BusinessCalendar />}
           </div>
         </div>
         <div className="mt-5 lg:mb-[5rem]">

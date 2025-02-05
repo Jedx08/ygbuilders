@@ -168,16 +168,16 @@ const PasswordReset = () => {
             <div className="font-bold text-2xl">{pageInfo}</div>
             {tokenExpiredMsg && (
               <>
-                <div className="text-xs mt-3">
+                <div className="text-sm mt-3">
                   It looks like your password reset link has expired. For
                   security reasons, tokens are only valid for a limited time.
                 </div>
-                <div className="text-xs mt-3">
+                <div className="text-sm mt-3">
                   Please request a new password reset link.
                 </div>
                 <div className="w-fit">
                   <Link to="/forgot-password">
-                    <div className="py-1 rounded-md px-6 bg-[#1877f2] hover:bg-[#3578E5] font-semibold text-white cursor-pointer  w-fit mt-3">
+                    <div className="py-1 rounded-md px-6 bg-oranges hover:bg-loranges font-semibold text-white cursor-pointer  w-fit mt-3">
                       Request New Link
                     </div>
                   </Link>
@@ -195,14 +195,14 @@ const PasswordReset = () => {
                 <div className="font-bold text-2xl">
                   Password Reset Successful
                 </div>
-                <div className="text-xs mt-3">
+                <div className="text-sm mt-3">
                   Your password has been successfully reset. You can now log in
                   with your new password.
                 </div>
                 <div className="flex justify-end">
                   <div className="w-fit">
                     <Link to="/Login">
-                      <div className="py-1 mt-3 rounded-md px-6 bg-[#1877f2] hover:bg-[#3578E5] font-semibold text-white cursor-pointer w-fit">
+                      <div className="py-1 mt-3 rounded-md px-6 bg-oranges hover:bg-loranges font-semibold text-white cursor-pointer w-fit">
                         Login
                       </div>
                     </Link>
@@ -374,11 +374,8 @@ const PasswordReset = () => {
 
                 <div className="flex justify-end mt-3">
                   <div className="flex space-x-3">
-                    <div
-                      onClick={handleSubmit}
-                      className="py-2 rounded-md px-6 bg-[#1877f2] hover:bg-[#3578E5] font-semibold text-white cursor-pointer"
-                    >
-                      {isLoading && (
+                    {isLoading ? (
+                      <div className="py-2 rounded-md px-6 bg-loranges font-semibold text-white">
                         <ThreeDot
                           style={{ fontSize: "7px" }}
                           variant="pulsate"
@@ -386,10 +383,15 @@ const PasswordReset = () => {
                           text=""
                           textColor=""
                         />
-                      )}
-
-                      {!isLoading && <>Reset</>}
-                    </div>
+                      </div>
+                    ) : (
+                      <div
+                        onClick={handleSubmit}
+                        className="py-2 rounded-md px-6 bg-oranges hover:bg-loranges font-semibold text-white cursor-pointer"
+                      >
+                        Reset
+                      </div>
+                    )}
                   </div>
                 </div>
               </>

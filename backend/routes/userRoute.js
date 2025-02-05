@@ -5,6 +5,7 @@ const {
   updateUserPassword,
   updateAvatar,
   toggleInstructions,
+  deleteUser,
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -14,5 +15,6 @@ router.patch("/title", updateUserTitle);
 router.patch("/", updateUserPassword);
 router.patch("/avatar", updateAvatar);
 router.patch("/instructions", toggleInstructions);
+router.delete("/deleteUser", deleteUser);
 
 module.exports = router;

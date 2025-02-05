@@ -2,6 +2,10 @@ const User = require("../model/userModel");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 const handleForgotPassword = async (req, res) => {
   const { username, email } = req.body;
 
@@ -23,12 +27,6 @@ const handleForgotPassword = async (req, res) => {
       );
       foundUser.resetToken = resetToken;
       await foundUser.save();
-
-      //send email with reset link to user
-      // console.log(
-      //   "Reset link",
-      //   `http://localhost:5173/reset-password?resetToken=${resetToken}`
-      // );
 
       const transporter = nodemailer.createTransport({
         host: "mail.privateemail.com",
@@ -92,7 +90,9 @@ const handleForgotPassword = async (req, res) => {
         "
       >
         <p>
-          ${foundUser.username}, in order to reset your password at
+          ${capitalizeFirstLetter(
+            foundUser.username
+          )}, in order to reset your password at
           <span style="color: #181c32"
             ><a
               href="https://yourgross.ph/"
@@ -156,16 +156,11 @@ const handleForgotPassword = async (req, res) => {
         if (error) {
           console.log(error);
         } else {
-          console.log("Email sent: " + info.response);
+          res.status(200).json({ message: "Email sent" });
         }
       });
 
-      res
-        .status(200)
-        .json({
-          message:
-            "Check your email for instructions to reset your password. If you don't see the email, be sure to check your spam folder",
-        });
+      res.status(200);
     }
   } catch (error) {
     res.status(500).json({ message: err.message });

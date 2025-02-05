@@ -78,7 +78,10 @@ const Footer = () => {
             <div className="text-[#737373]">Services</div>
             <div className="cursor-pointer hover:text-loranges">Dashboard</div>
             <div className="cursor-pointer hover:text-loranges">Calendar</div>
-            <div className="cursor-pointer hover:text-loranges">Filter</div>
+            <div className="cursor-pointer hover:text-loranges">Savings</div>
+            <div className="cursor-pointer hover:text-loranges">
+              Filter Data
+            </div>
           </div>
           <div className="flex flex-col space-y-4">
             <div className="font-medium">
@@ -95,7 +98,10 @@ const Footer = () => {
             <div>
               <p className="font-medium text-[#737373]">Follow us:</p>
               <div className="flex space-x-4 py-1">
-                <Link to="https://www.facebook.com/undoxx" target="_blank">
+                <Link
+                  to="https://www.facebook.com/people/YourGross/61567060986135/"
+                  target="_blank"
+                >
                   <div className="rounded-full overflow-hidden bg-facebook text-white w-10 h-[2.5rem] text-center content-center">
                     <FaFacebookF className="text-3xl align-middle mx-auto mt-2" />
                   </div>

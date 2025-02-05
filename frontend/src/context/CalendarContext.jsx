@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { createContext, useEffect, useReducer, useState } from "react";
+import { createContext, useReducer, useState } from "react";
 
 export const CalendarContext = createContext();
 
@@ -78,6 +78,36 @@ function businessCapitalDataReducer(state, { type, payload }) {
   }
 }
 
+function savingsDataReducer(state, { type, payload }) {
+  switch (type) {
+    case "set":
+      return [...payload];
+    case "create":
+      return [...state, payload];
+    case "update":
+      return state.map((evnt) => (evnt.id === payload.id ? payload : evnt));
+    case "delete":
+      return state.filter((evnt) => evnt._id !== payload._id);
+    default:
+      throw new Error();
+  }
+}
+
+function goalDataReducer(state, { type, payload }) {
+  switch (type) {
+    case "set":
+      return [...payload];
+    case "create":
+      return [...state, payload];
+    case "update":
+      return state.map((evnt) => (evnt.id === payload.id ? payload : evnt));
+    case "delete":
+      return state.filter((evnt) => evnt._id !== payload._id);
+    default:
+      throw new Error();
+  }
+}
+
 export const CalendarContextProvider = (props) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -114,6 +144,13 @@ export const CalendarContextProvider = (props) => {
     useState(false);
   const [showBusinessExpenseInput, setShowBusinessExpensesInput] =
     useState(false);
+  const [showSavingsForm, setShowSavingsForm] = useState(false);
+  const [savingsFormSelectedData, setSavingsFormSelectedData] = useState(null);
+  const [savingsIncomeLoading, setSavingsIncomeLoading] = useState(true);
+  const [savingsButton, setSavingsButton] = useState(false);
+  const [showGoalForm, setShowGoalForm] = useState(false);
+  const [goalLoading, setGoalLoading] = useState(true); // to get data from DB and save to local storage
+
   const [personalIncomeData, dispatchPersonalIncomeData] = useReducer(
     personalIncomeDataReducer,
     []
@@ -134,18 +171,8 @@ export const CalendarContextProvider = (props) => {
     businessCapitalDataReducer,
     []
   );
-
-  // useEffect(() => {
-  //   if (!showPersonalForm) {
-  //     setFormSelectedDate(null);
-  //   }
-  // }, [showPersonalForm]);
-
-  // useEffect(() => {
-  //   if (!showBusinessForm) {
-  //     setFormSelectedDate(null);
-  //   }
-  // }, [showBusinessForm]);
+  const [savingsData, dispatchSavingsData] = useReducer(savingsDataReducer, []);
+  const [goalData, dispatchGoalData] = useReducer(goalDataReducer, []);
 
   return (
     <CalendarContext.Provider
@@ -218,6 +245,22 @@ export const CalendarContextProvider = (props) => {
         setPersonalButton,
         businessButton,
         setBusinessButton,
+        showSavingsForm,
+        setShowSavingsForm,
+        savingsFormSelectedData,
+        setSavingsFormSelectedData,
+        savingsData,
+        dispatchSavingsData,
+        savingsIncomeLoading,
+        setSavingsIncomeLoading,
+        savingsButton,
+        setSavingsButton,
+        showGoalForm,
+        setShowGoalForm,
+        goalLoading,
+        setGoalLoading,
+        goalData,
+        dispatchGoalData,
       }}
     >
       {props.children}

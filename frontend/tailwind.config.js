@@ -74,6 +74,8 @@ export default {
       lgreens: "#3cd5c5",
       oranges: "#ff9f1c",
       loranges: "#fdac3a",
+      yellows: "#ffb81f",
+      lyellows: "#ffcb5a",
       facebook: "#1877f2",
     },
     extend: {

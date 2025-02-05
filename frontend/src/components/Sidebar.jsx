@@ -1,8 +1,6 @@
 import logo from "../media/YG_LOGO.png";
-import { FaChartLine } from "react-icons/fa";
-import { FaGear } from "react-icons/fa6";
-import { FaCalendarAlt } from "react-icons/fa";
-import { FaFilter } from "react-icons/fa";
+import { FaGear, FaPiggyBank } from "react-icons/fa6";
+import { FaCalendarAlt, FaFilter, FaChartLine } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
@@ -38,6 +36,16 @@ const Sidebar = () => {
             >
               <FaCalendarAlt className="text-2xl text-[#b8b8b8]" />
               <p className="xl:hidden xl:group-hover:block">Calendar</p>
+            </div>
+          </Link>
+          <Link to="/savings">
+            <div
+              className={`flex items-center pl-7 p-2 gap-2 hover:bg-light rounded-md cursor-pointer ${
+                location.pathname === "/savings" ? "bg-light" : ""
+              }`}
+            >
+              <FaPiggyBank className="text-3xl text-[#b8b8b8]" />
+              <p className="xl:hidden xl:group-hover:block">Savings</p>
             </div>
           </Link>
           <Link to="/filter">

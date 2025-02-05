@@ -206,6 +206,7 @@ const BusinessForm = () => {
       if (response.status === 200) {
         dispatchBusinessIncomeData({ type: "update", payload: json });
         setErrMsg(null);
+        setBusinessButton(false);
         setBusinessIncomeLoading(true);
         setUpdateLoading(false);
         setShowBusinessForm(false);

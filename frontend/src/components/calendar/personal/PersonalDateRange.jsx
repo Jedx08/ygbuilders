@@ -37,6 +37,11 @@ const PersonalDateRange = () => {
     const start = dayjs(startDate);
     const end = dayjs(endDate);
 
+    if (startDate && endDate) {
+      const daysDiff = end.diff(start, "day");
+      console.log(daysDiff + 1);
+    }
+
     return data.filter((item) => {
       const itemDate = dayjs(item.day);
       return itemDate.isSameOrAfter(start) && itemDate.isSameOrBefore(end);

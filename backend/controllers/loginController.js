@@ -14,7 +14,7 @@ const handleLogin = async (req, res) => {
     (await User.findOne({ email: username.toLowerCase() }).exec());
   if (!foundUser)
     return res.status(401).json({
-      message: "Your login credentials don't match an account in our system.",
+      message: "Incorrect Username or Password",
     });
   const _id = foundUser?._id;
   const foundUsername = foundUser?.username;

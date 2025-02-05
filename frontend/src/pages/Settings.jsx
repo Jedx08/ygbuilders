@@ -1,13 +1,15 @@
 import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import { ThreeDot } from "react-loading-indicators";
+import { ThreeDot, OrbitProgress } from "react-loading-indicators";
 import { FaInfoCircle } from "react-icons/fa";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
 import SelectAvatar from "../components/SelectAvatar";
 import { CalendarContext } from "../context/CalendarContext";
+import { FaCheckCircle } from "react-icons/fa";
 import avatar1 from "../media/avatar1.png";
 import avatar2 from "../media/avatar2.png";
 import avatar3 from "../media/avatar3.png";
@@ -15,8 +17,10 @@ import avatar3 from "../media/avatar3.png";
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 const Settings = () => {
-  const { userInfo } = useAuth();
+  const { userInfo, setAuth, setUserInfo } = useAuth();
   const axiosPrivate = useAxiosPrivate();
+
+  const navigate = useNavigate();
 
   const { isAvatar, setIsAvatar } = useContext(CalendarContext);
 
@@ -36,6 +40,13 @@ const Settings = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+
+  const [confirmDelForm, setConfirmDelForm] = useState(false);
+  const [delMsg, setDelMsg] = useState("");
+  const [errMsgDelAcc, setErrMsgDelAcc] = useState("");
+
+  const [delAccLoading, setDelAccLoading] = useState(false);
+  const [delAccStatus, setDelAccStatus] = useState(false);
 
   function getAvatar(value) {
     if (value === "avatar1") {
@@ -114,6 +125,36 @@ const Settings = () => {
     }
   }
 
+  const handleDelete = async () => {
+    if (delMsg === "DELETE") {
+      setDelAccLoading(true);
+      try {
+        const response = await axiosPrivate.delete("/user/deleteUser", {
+          withCredentials: true,
+        });
+
+        if (response.status === 200) {
+          setAuth({});
+          setUserInfo({});
+          setDelAccStatus(true);
+          setTimeout(() => {
+            // navigate("/login");
+            location.reload();
+          }, 2000);
+        }
+      } catch (err) {
+        if (err) {
+          setErrMsgDelAcc(err.response?.data?.message);
+        } else {
+          setErrMsgDelAcc("Server timeout");
+        }
+      }
+    } else {
+      return setErrMsgDelAcc(
+        "Please type DELETE in all capital letters to confirm account deletion."
+      );
+    }
+  };
   return (
     <>
       <div className="bg-light h-s100 font-pops overflow-hidden">
@@ -169,7 +210,7 @@ const Settings = () => {
                 <></>
               ) : (
                 <>
-                  <div className="text-base flex items-end justify-center font-bold xs:font-semibold">
+                  <div className="text-lg flex items-end justify-center font-bold xs:font-semibold">
                     YourGross account
                   </div>
 
@@ -402,7 +443,7 @@ const Settings = () => {
                   {/* Update Button */}
                   <div className="mt-5 mx-auto">
                     {isLoading ? (
-                      <div className="w-fit rounded-md px-6 py-1 font-semibold text-white bg-[#1a849f]">
+                      <div className="w-fit rounded-md px-6 py-1 font-semibold text-white bg-[#3578E5]">
                         <div>
                           <ThreeDot
                             style={{ fontSize: "7px" }}
@@ -414,11 +455,21 @@ const Settings = () => {
                         </div>
                       </div>
                     ) : (
-                      <div
-                        onClick={handleUpdate}
-                        className="w-fit rounded-md px-3 py-[2px] font-semibold cursor-pointer text-white bg-[#399CB4] hover:bg-[#1a849f]"
-                      >
-                        Update
+                      <div className="flex space-x-6">
+                        <div
+                          onClick={handleUpdate}
+                          className="w-fit rounded-md px-3 py-2 font-semibold cursor-pointer text-white bg-[#1877f2] hover:bg-[#3578E5]"
+                        >
+                          Update
+                        </div>
+                        <div
+                          onClick={() => {
+                            setConfirmDelForm(true);
+                          }}
+                          className="w-fit rounded-md px-3 py-2 font-semibold cursor-pointer text-white bg-[#FF4242] hover:bg-[red]"
+                        >
+                          Delete account
+                        </div>
                       </div>
                     )}
                   </div>
@@ -430,6 +481,106 @@ const Settings = () => {
       </div>
 
       {isAvatar && <SelectAvatar />}
+
+      {confirmDelForm && (
+        <>
+          <div className="font-pops h-s100 w-full fixed left-0 top-0 flex bg-light bg-opacity-60">
+            <div className="bg-white rounded-md shadow-lg h-hfit max-w-[500px] mx-auto mt-36 z-10 px-10 py-5">
+              <div className="text-sm">
+                <div className="text-center font-bold text-2xl text-[red]">
+                  Confirm Account Deletion
+                </div>
+                <div className="bg-subCon py-1 px-3 mt-3 rounded-md">
+                  <div>
+                    Are you sure you want to delete your account? This action
+                    cannot be undone, and all your data will be permanently
+                    removed.
+                  </div>
+                  <div className="mt-3">
+                    To confirm, please type{" "}
+                    <span className="font-bold text-base text-[red]">
+                      DELETE
+                    </span>{" "}
+                    in the box below and click the &quot;Confirm&quot; button.
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div className="border border-inputLight rounded-md mt-3">
+                  <input
+                    type="text"
+                    onChange={(e) => {
+                      setDelMsg(e.target.value), setErrMsgDelAcc("");
+                    }}
+                    value={delMsg}
+                    className="w-full rounded-md focus:outline-none px-2 placeholder:text-xs py-1 text-center font-bold text-[red]"
+                  />
+                </div>
+              </div>
+              <div className="mt-3 text-xs text-center text-[red]">
+                {errMsgDelAcc}
+              </div>
+              <div className="flex justify-center items-center space-x-6 mt-5">
+                <div
+                  onClick={handleDelete}
+                  className="w-fit rounded-md px-3 py-2 font-semibold cursor-pointer text-white bg-[#FF4242] hover:bg-[red]"
+                >
+                  Confirm
+                </div>
+                <div
+                  onClick={() => {
+                    setConfirmDelForm(false);
+                    setErrMsgDelAcc("");
+                    setDelMsg("");
+                  }}
+                  className="w-fit rounded-md px-3 py-2 font-semibold cursor-pointer bg-[#e4e6eb]"
+                >
+                  Cancel
+                </div>
+              </div>
+              <div className="text-xs mt-3">
+                Note: Once you delete your account, there is no way to recover
+                your data.
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {delAccLoading && (
+        <>
+          <div className="font-pops h-s100 w-full fixed left-0 top-0 flex bg-light bg-opacity-80">
+            <div className="mx-auto mt-56 h-hfit flex flex-col justify-center">
+              {!delAccStatus && (
+                <>
+                  <div className="mx-auto w-fit">
+                    <OrbitProgress
+                      color="red"
+                      size="large"
+                      text=""
+                      textColor=""
+                      speedPlus="1"
+                    />
+                  </div>
+                  <div className="text-lg font-semibold mt-3">
+                    Deleting your account, please wait...
+                  </div>
+                </>
+              )}
+              {delAccStatus && (
+                <>
+                  <div className="mx-auto w-fit">
+                    <FaCheckCircle className="text-9xl text-[#32ca5b]" />
+                  </div>
+                  <div className="text-lg font-semibold mt-3">
+                    Account Successfully Deleted
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };

@@ -12,6 +12,8 @@ const personalMonthlyExpenses = require("./routes/personalMonthlyExpensesRoute")
 const businessIncome = require("./routes/businessIncomeRoute");
 const businessMonthlyExpenses = require("./routes/businessMonthlyExpensesRoute");
 const businessMonthlyCapital = require("./routes/businessMonthlyCapitalRoute");
+const savingsRoute = require("./routes/savingsRoute");
+const goalRoute = require("./routes/goalRoute");
 const corsOptions = require("./config/corsOptions");
 const credentials = require("./middleware/credentials");
 const userRoute = require("./routes/userRoute");
@@ -66,6 +68,8 @@ app.use("/api/personal-expenses", personalMonthlyExpenses);
 app.use("/api/business-income", businessIncome);
 app.use("/api/business-expenses", businessMonthlyExpenses);
 app.use("/api/business-capital", businessMonthlyCapital);
+app.use("/api/savings", savingsRoute);
+app.use("/api/goal", goalRoute);
 
 // user route
 app.use("/user", userRoute);

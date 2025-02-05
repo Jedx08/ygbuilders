@@ -180,6 +180,7 @@ const PersonalForm = () => {
       if (response.status === 200) {
         dispatchPersonalIncomeData({ type: "update", payload: json });
         setErrMsg(null);
+        setPersonalButton(false);
         setPersonalIncomeLoading(true);
         setUpdateLoading(false);
         setShowPersonalForm(false);

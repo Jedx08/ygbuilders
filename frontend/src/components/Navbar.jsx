@@ -46,6 +46,10 @@ const Navbar = () => {
     }
   }
 
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   return (
     <>
       <div className="font-pops z-0">
@@ -61,9 +65,11 @@ const Navbar = () => {
                       setAccountMenu(true);
                     }
                   }}
-                  className="cursor-pointer flex items-center space-x-3"
+                  className="cursor-pointer flex items-center space-x-1"
                 >
-                  <p>{userInfo.foundUsername}</p>
+                  <p className="font-medium">
+                    {capitalizeFirstLetter(userInfo.foundUsername)}
+                  </p>
                   <div className="w-fit bg-[#c3c3c3] pt-[2px] rounded-full overflow-hidden">
                     <img
                       src={getAvatar(userInfo.avatar)}
@@ -79,9 +85,9 @@ const Navbar = () => {
                 {accountMenu && (
                   <div className="absolute right-2 px-2 py-2 border border-[#2222] bg-white shadow-lg rounded-md mt-2 text-lg font-semibold space-y-2">
                     <Link to="/settings">
-                      <div className="flex items-center space-x-2 cursor-pointer hover:text-[#399CB4]">
+                      <div className="flex items-center space-x-2 cursor-pointer hover:text-[#1877f2]">
                         <div className="border border-light bg-[#2222] p-2 rounded-[50%]">
-                          <FaGear className="text-xl text-[#399CB4]" />
+                          <FaGear className="text-xl text-[#1877f2]" />
                         </div>
 
                         <div className="text-base font-semibold">Settings</div>
