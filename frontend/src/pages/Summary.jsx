@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 // import PersonalSummary from "../components/personal/PersonalSummary";
 import BusinessSummary from "../components/business/BusinessSummary";
-import PersonalSummary from "../components/calendar/personal/PersonalSummary";
+import PersonalSummary from "../components/personal/PersonalSummary";
 // import BusinessSummary from "../components/calendar/business/BusinessSummary";
 import { CalendarContext } from "../context/CalendarContext";
 import { useLocation } from "react-router-dom";
