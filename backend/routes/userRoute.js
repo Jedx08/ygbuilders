@@ -6,6 +6,7 @@ const {
   updateAvatar,
   toggleInstructions,
   deleteUser,
+  clearData,
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.patch("/", updateUserPassword);
 router.patch("/avatar", updateAvatar);
 router.patch("/instructions", toggleInstructions);
 router.delete("/deleteUser", deleteUser);
+router.delete("/clear-data/:data", clearData);
 
 module.exports = router;

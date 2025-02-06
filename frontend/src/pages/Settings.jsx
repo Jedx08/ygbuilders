@@ -22,7 +22,17 @@ const Settings = () => {
 
   const navigate = useNavigate();
 
-  const { isAvatar, setIsAvatar } = useContext(CalendarContext);
+  const {
+    isAvatar,
+    setIsAvatar,
+    setPersonalIncomeLoading,
+    setPersonalExpensesLoading,
+    setBusinessIncomeLoading,
+    setBusinessCapitalLoading,
+    setBusinessExpensesLoading,
+    setSavingsIncomeLoading,
+    setGoalLoading,
+  } = useContext(CalendarContext);
 
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -47,6 +57,12 @@ const Settings = () => {
 
   const [delAccLoading, setDelAccLoading] = useState(false);
   const [delAccStatus, setDelAccStatus] = useState(false);
+
+  const [clearDataErrMsg, setClearDataErrMsg] = useState("");
+  const [clearDataLoading, setClearDataLoading] = useState(false);
+  const [clearDataStatus, setClearDataStatus] = useState(false);
+  const [clearData, setClearData] = useState(false);
+  const [clearDataInput, setClearDataInput] = useState("");
 
   function getAvatar(value) {
     if (value === "avatar1") {
@@ -74,6 +90,7 @@ const Settings = () => {
     setValidConfirmPassword(match);
   }, [newPassword, confirmPassword]);
 
+  // update password
   async function handleUpdate(e) {
     e.preventDefault();
     setIsLoading(true);
@@ -125,6 +142,7 @@ const Settings = () => {
     }
   }
 
+  // delete account
   const handleDelete = async () => {
     if (delMsg === "DELETE") {
       setDelAccLoading(true);
@@ -155,6 +173,104 @@ const Settings = () => {
       );
     }
   };
+
+  // clear data
+  const handleClearData = async (e) => {
+    e.preventDefault();
+
+    const clearDataFnc = async () => {
+      try {
+        const response = await axiosPrivate.delete(
+          "/user/clear-data/" + clearDataInput,
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          }
+        );
+
+        if (response.status === 200) {
+          setClearDataStatus(true);
+          setPersonalIncomeLoading(true);
+          setPersonalExpensesLoading(true);
+          setBusinessIncomeLoading(true);
+          setBusinessCapitalLoading(true);
+          setBusinessExpensesLoading(true);
+          setSavingsIncomeLoading(true);
+          setGoalLoading(true);
+          setTimeout(() => {
+            setClearDataLoading(false);
+            setClearDataStatus(false);
+            setClearData(false);
+            setClearDataInput("");
+          }, 2000);
+        }
+      } catch (err) {
+        if (err) {
+          setClearDataErrMsg(err.response?.data?.message);
+          setClearDataLoading(false);
+        } else {
+          setClearDataErrMsg("Server timeout");
+          setClearDataLoading(false);
+        }
+      }
+    };
+
+    if (clearDataInput === "PERSONAL") {
+      setClearDataLoading(true);
+      clearDataFnc();
+    } else if (clearDataInput === "BUSINESS") {
+      setClearDataLoading(true);
+      clearDataFnc();
+    } else if (clearDataInput === "SAVINGS") {
+      setClearDataLoading(true);
+      clearDataFnc();
+    } else {
+      return (
+        setClearDataErrMsg(
+          "Invalid input. Please type one of the following: PERSONAL, BUSINESS or SAVINGS"
+        ),
+        setClearDataLoading(false)
+      );
+    }
+  };
+
+  const currentPassInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 24) {
+      setPassword(value);
+    }
+  };
+
+  const newPassInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 24) {
+      setNewPassword(value);
+    }
+  };
+
+  const confirmPassInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 24) {
+      setConfirmPassword(value);
+    }
+  };
+
+  const deleteAccInput = (event) => {
+    const value = event.target.value;
+    if (value.length <= 30) {
+      setDelMsg(value);
+    }
+    setErrMsgDelAcc("");
+  };
+
+  const clearDataInputVal = (event) => {
+    const value = event.target.value;
+    if (value.length <= 30) {
+      setClearDataInput(value);
+    }
+    setClearDataErrMsg("");
+  };
+
   return (
     <>
       <div className="bg-light h-s100 font-pops overflow-hidden">
@@ -224,9 +340,7 @@ const Settings = () => {
                         type={!showPassword ? "password" : "text"}
                         autoComplete="off"
                         placeholder="Current Password"
-                        onChange={(e) => {
-                          setPassword(e.target.value);
-                        }}
+                        onChange={currentPassInput}
                         onFocus={() => {
                           setErrMsg("");
                           setSuccessMsg("");
@@ -288,9 +402,7 @@ const Settings = () => {
                           placeholder="New Password"
                           aria-invalid={validNewPassword ? "false" : "true"}
                           aria-describedby="newpwd"
-                          onChange={(e) => {
-                            setNewPassword(e.target.value);
-                          }}
+                          onChange={newPassInput}
                           onFocus={() => {
                             setNewPasswordFocus(true);
                             setErrMsg("");
@@ -378,9 +490,7 @@ const Settings = () => {
                           placeholder="Confirm new password"
                           aria-invalid={validConfirmPassword ? "false" : "true"}
                           aria-describedby="confirmpwd"
-                          onChange={(e) => {
-                            setConfirmPassword(e.target.value);
-                          }}
+                          onChange={confirmPassInput}
                           onFocus={() => {
                             setConfirmPasswordFocus(true);
                             setErrMsg("");
@@ -462,19 +572,30 @@ const Settings = () => {
                         >
                           Update
                         </div>
-                        <div
-                          onClick={() => {
-                            setConfirmDelForm(true);
-                          }}
-                          className="w-fit rounded-md px-3 py-2 font-semibold cursor-pointer text-white bg-[#FF4242] hover:bg-[red]"
-                        >
-                          Delete account
-                        </div>
                       </div>
                     )}
                   </div>
                 </>
               )}
+              {/* Delete account & Clear data */}
+              <div className="flex space-x-6 justify-center mt-3">
+                <div
+                  onClick={() => {
+                    setConfirmDelForm(true);
+                  }}
+                  className="w-fit rounded-md px-3 py-2 font-semibold cursor-pointer text-white bg-[#FF4242] hover:bg-[red]"
+                >
+                  Delete account
+                </div>
+                <div
+                  onClick={() => {
+                    setClearData(true);
+                  }}
+                  className="w-fit rounded-md px-3 py-2 font-semibold cursor-pointer hover:bg-inputLight bg-[#e0e1e4]"
+                >
+                  Clear data
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -509,9 +630,7 @@ const Settings = () => {
                 <div className="border border-inputLight rounded-md mt-3">
                   <input
                     type="text"
-                    onChange={(e) => {
-                      setDelMsg(e.target.value), setErrMsgDelAcc("");
-                    }}
+                    onChange={deleteAccInput}
                     value={delMsg}
                     className="w-full rounded-md focus:outline-none px-2 placeholder:text-xs py-1 text-center font-bold text-[red]"
                   />
@@ -574,6 +693,130 @@ const Settings = () => {
                   </div>
                   <div className="text-lg font-semibold mt-3">
                     Account Successfully Deleted
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+
+      {clearData && (
+        <>
+          <div className="font-pops h-s100 w-full fixed left-0 top-0 flex bg-light bg-opacity-60">
+            <div className="bg-white rounded-md shadow-lg h-hfit max-w-[500px] mx-auto mt-36 z-10 px-10 py-5">
+              <div className="text-center font-bold text-2xl text-[red]">
+                Are you sure you want to clear your data?
+              </div>
+              <div className="bg-subCon py-1 px-3 mt-3 rounded-md">
+                <div>Please type the name of the data you want to delete:</div>
+                <div className="pl-6 py-1 mt-1">
+                  <ul className="list-disc">
+                    <li>
+                      <span className="font-bold text-[red]">PERSONAL</span>{" "}
+                      <span className="text-sm">
+                        (for personal income data included monthly expenses
+                        data)
+                      </span>
+                    </li>
+                    <li>
+                      <span className="font-bold text-[red]">BUSINESS</span>{" "}
+                      <span className="text-sm">
+                        (for business income data included monthly capital data
+                        and monthly expenses data)
+                      </span>
+                    </li>
+                    <li>
+                      <span className="font-bold text-[red]">SAVINGS</span>{" "}
+                      <span className="text-sm">
+                        (for savings data included target goal data)
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="mt-1">
+                  Type <span className="font-bold text-[red]">PERSONAL</span>,{" "}
+                  <span className="font-bold text-[red]">BUSINESS</span>, or{" "}
+                  <span className="font-bold text-[red]">SAVINGS</span> to
+                  confirm the deletion of that specific data.
+                </div>
+              </div>
+              <div className="border border-inputLight rounded-md mt-3">
+                <input
+                  value={clearDataInput}
+                  onChange={clearDataInputVal}
+                  type="text"
+                  className="w-full rounded-md focus:outline-none px-2 placeholder:text-xs py-1 text-center font-bold text-[red]"
+                />
+              </div>
+
+              <div className="mt-3 text-xs text-center text-[red]">
+                {clearDataErrMsg}
+              </div>
+
+              <div className="flex justify-center items-center space-x-6 mt-5">
+                <div
+                  onClick={handleClearData}
+                  className="w-fit rounded-md px-3 py-2 font-semibold cursor-pointer text-white bg-[#FF4242] hover:bg-[red]"
+                >
+                  Confirm
+                </div>
+                <div
+                  onClick={() => {
+                    setClearData(false);
+                    setClearDataErrMsg("");
+                    setClearDataInput("");
+                  }}
+                  className="w-fit rounded-md px-3 py-2 font-semibold cursor-pointer bg-[#e4e6eb]"
+                >
+                  Cancel
+                </div>
+              </div>
+              <div className="text-xs mt-3">
+                Note: Once you delete your data, there is no way to recover your
+                data.
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {clearDataLoading && (
+        <>
+          <div className="font-pops h-s100 w-full fixed left-0 top-0 flex bg-light bg-opacity-90">
+            <div className="mx-auto mt-56 h-hfit flex flex-col justify-center">
+              {!clearDataStatus && (
+                <>
+                  <div className="mx-auto w-fit">
+                    <OrbitProgress
+                      color="red"
+                      size="large"
+                      text=""
+                      textColor=""
+                      speedPlus="1"
+                    />
+                  </div>
+                  <div className="text-lg font-semibold mt-3">
+                    Please wait while we process your request. This may take a
+                    moment.
+                  </div>
+                </>
+              )}
+              {clearDataStatus && (
+                <>
+                  <div className="mx-auto w-fit">
+                    <FaCheckCircle className="text-9xl text-[#32ca5b]" />
+                  </div>
+                  <div className="text-lg font-semibold mt-3">
+                    {clearDataInput === "PERSONAL" && (
+                      <>PERSONAL income data has been successfully deleted.</>
+                    )}
+                    {clearDataInput === "BUSINESS" && (
+                      <>BUSINESS income data has been successfully deleted.</>
+                    )}
+                    {clearDataInput === "SAVINGS" && (
+                      <>SAVINGS data has been successfully deleted.</>
+                    )}
                   </div>
                 </>
               )}

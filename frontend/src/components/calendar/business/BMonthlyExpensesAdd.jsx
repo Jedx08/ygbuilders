@@ -81,7 +81,7 @@ const BMonthlyExpensesAdd = () => {
   // expenses title length validation
   const titleInput = (event) => {
     const value = event.target.value;
-    if (value.length <= 100) {
+    if (value.length <= 50) {
       setTitle(value);
     }
   };

@@ -6,6 +6,8 @@ const BusinessCapital = require("../model/businessMonthlyCapitalModel");
 const BusinessMonth = require("../model/businessMonthlyExpensesModel");
 const Personal = require("../model/personalModel");
 const PersonalMonth = require("../model/personalMonthlyExpensesModel");
+const Savings = require("../model/savingsModel");
+const Goal = require("../model/goalModel");
 const nodemailer = require("nodemailer");
 
 // const getAllUsers = async (req, res) => {
@@ -129,6 +131,69 @@ const toggleInstructions = async (req, res) => {
   }
 };
 
+const clearData = async (req, res) => {
+  const _id = req.user._id;
+  const { data } = req.params;
+
+  if (!data) {
+    return res.status(400).json({
+      message:
+        "Invalid input. Please type one of the following: PERSONAL, BUSINESS or SAVINGS",
+    });
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(_id)) {
+    return res.status(400).json({ message: "Invalid User ID" });
+  } else {
+    try {
+      // personal data
+      if (data === "PERSONAL") {
+        try {
+          await Personal.deleteMany({ user_id: _id });
+          await PersonalMonth.deleteMany({ user_id: _id });
+
+          return res.status(200).json({
+            message: "Personal income data has been successfully deleted.",
+          });
+        } catch (err) {
+          return res.status(400).json({ error: err.message });
+        }
+      }
+
+      // business data
+      if (data === "BUSINESS") {
+        try {
+          await Business.deleteMany({ user_id: _id });
+          await BusinessCapital.deleteMany({ user_id: _id });
+          await BusinessMonth.deleteMany({ user_id: _id });
+
+          return res.status(200).json({
+            message: "Business income data has been successfully deleted.",
+          });
+        } catch (err) {
+          return res.status(400).json({ error: err.message });
+        }
+      }
+
+      // savings data
+      if (data === "SAVINGS") {
+        try {
+          await Savings.deleteMany({ user_id: _id });
+          await Goal.deleteMany({ user_id: _id });
+
+          return res.status(200).json({
+            message: "Savings data has been successfully deleted.",
+          });
+        } catch (err) {
+          return res.status(400).json({ error: err.message });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
+
 const deleteUser = async (req, res) => {
   const _id = req.user._id;
 
@@ -143,6 +208,8 @@ const deleteUser = async (req, res) => {
       await BusinessMonth.deleteMany({ user_id: _id });
       await Personal.deleteMany({ user_id: _id });
       await PersonalMonth.deleteMany({ user_id: _id });
+      await Savings.deleteMany({ user_id: _id });
+      await Goal.deleteMany({ user_id: _id });
 
       const deleteUser = await User.findByIdAndDelete(_id);
       if (!deleteUser)
@@ -269,4 +336,5 @@ module.exports = {
   updateAvatar,
   toggleInstructions,
   deleteUser,
+  clearData,
 };

@@ -159,7 +159,7 @@ const SavingsGoalData = ({ goals, savingsCurrentAmount }) => {
   // goal title length validation
   const titleInput = (event) => {
     const value = event.target.value;
-    if (value.length <= 100) {
+    if (value.length <= 50) {
       setUpdateTitle(value);
     }
 
@@ -182,12 +182,23 @@ const SavingsGoalData = ({ goals, savingsCurrentAmount }) => {
       <div>
         {!updateConfirm && (
           <div className="bg-subCon py-2 rounded-md">
-            <div className="flex items-center justify-center space-y-2 space-x-4">
-              <div className="pl-3 flex justify-start">
+            <div className="flex justify-center space-y-2 space-x-4">
+              <div className="pl-3 flex justify-start items-center">
                 <img src={target} alt="goal" className="w-11" />
               </div>
               <div>
-                <div className="text-lg font-semibold">{goals.title}</div>
+                <div className="text-lg font-semibold">
+                  <span
+                    style={{
+                      WebkitLineClamp: 1,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                      display: "-webkit-box",
+                    }}
+                  >
+                    {goals.title}
+                  </span>
+                </div>
                 <div className="font-bold text-greens text-xl/[24px] mdd:text-lg">
                   {goals.amount.toLocaleString("en-US", {
                     minimumFractionDigits: 0,

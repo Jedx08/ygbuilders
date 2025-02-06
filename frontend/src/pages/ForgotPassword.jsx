@@ -77,7 +77,7 @@ const ForgotPassword = () => {
   // email length validation
   const emailInput = (event) => {
     const value = event.target.value;
-    if (value.length <= 100) {
+    if (value.length <= 50) {
       setEmail(value);
     }
 

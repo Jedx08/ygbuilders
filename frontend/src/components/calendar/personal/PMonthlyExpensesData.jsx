@@ -115,7 +115,7 @@ const PMonthlyExpensesData = ({ expensesData }) => {
   // update title length validation
   const updateTitleInput = (event) => {
     const value = event.target.value;
-    if (value.length <= 100) {
+    if (value.length <= 50) {
       setUpdateTitle(value);
     }
   };
