@@ -12,6 +12,8 @@ import yearlyCapitalIcon from "../../media/busyear_pouch.png";
 import yearlySalesIcon from "../../media/busyear_sales.png";
 import yearlyExpensesIcon from "../../media/busyear_expenses.png";
 import yearlyProfitIcon from "../../media/busyear_net.png";
+import NumberFlow from "@number-flow/react";
+
 const BusinessYearlySummary = () => {
   const getBusinessData = useGetBusinessData();
   const getMonthlyExpenses = useBusinessExpenses();
@@ -93,8 +95,8 @@ const BusinessYearlySummary = () => {
       businessIncomeData
         .filter(
           (data) =>
-            dayjs(data.day).format("YY") ===
-            dayjs().month(monthIndex).format("YY")
+            dayjs(data.day).format("YYYY") ===
+            dayjs().month(monthIndex).format("YYYY")
         )
         .forEach((data) => {
           (c += data.capital), (s += data.sales), (e += data.expenses);
@@ -146,19 +148,19 @@ const BusinessYearlySummary = () => {
 
       const filteredData = businessIncomeData.filter(
         (data) =>
-          dayjs(data.day).format("YY") ===
-          dayjs().month(monthIndex).format("YY")
+          dayjs(data.day).format("YYYY") ===
+          dayjs().month(monthIndex).format("YYYY")
       );
 
       const filteredMonthlyCapital = businessCapitalData.filter(
         (data) =>
-          dayjs(data.moth).format("YYYY") ===
+          dayjs(data.month).format("YYYY") ===
           dayjs().month(monthIndex).format("YYYY")
       );
 
       const filteredMonthlyExpenses = businessExpensesData.filter(
         (data) =>
-          dayjs(data.moth).format("YYYY") ===
+          dayjs(data.month).format("YYYY") ===
           dayjs().month(monthIndex).format("YYYY")
       );
 
@@ -175,21 +177,24 @@ const BusinessYearlySummary = () => {
 
         filteredMonthlyCapital
           .filter(
-            (month) => dayjs(month.month).format("M") === index.toString()
+            (month) => dayjs(month.month).format("M") === (index + 1).toString()
           )
           .forEach((data) => {
             mc += data.amount;
           });
 
         filteredData
-          .filter((month) => dayjs(month.day).format("M") === index.toString())
+          .filter(
+            (month) => dayjs(month.day).format("M") === (index + 1).toString()
+          )
           .forEach((data) => {
             c += data.capital;
           });
 
-        capitalPerDate[index - 1] = c + mc;
+        capitalPerDate[index] = c + mc;
       });
 
+      console.log(capitalPerDate);
       setCapitalCount(capitalPerDate);
 
       //calculate yearly sales
@@ -203,12 +208,14 @@ const BusinessYearlySummary = () => {
         let c = 0;
 
         filteredData
-          .filter((month) => dayjs(month.day).format("M") === index.toString())
+          .filter(
+            (month) => dayjs(month.day).format("M") === (index + 1).toString()
+          )
           .forEach((data) => {
             c += data.sales;
           });
 
-        salesPerDate[index - 1] = c;
+        salesPerDate[index] = c;
       });
 
       setSalesCount(salesPerDate);
@@ -226,19 +233,21 @@ const BusinessYearlySummary = () => {
 
         filteredMonthlyExpenses
           .filter(
-            (month) => dayjs(month.month).format("M") === index.toString()
+            (month) => dayjs(month.month).format("M") === (index + 1).toString()
           )
           .forEach((data) => {
             me += data.amount;
           });
 
         filteredData
-          .filter((month) => dayjs(month.day).format("M") === index.toString())
+          .filter(
+            (month) => dayjs(month.day).format("M") === (index + 1).toString()
+          )
           .forEach((data) => {
             e += data.expenses;
           });
 
-        expensesPerDate[index - 1] = e + me;
+        expensesPerDate[index] = e + me;
       });
 
       setExpensesCount(expensesPerDate);
@@ -258,26 +267,32 @@ const BusinessYearlySummary = () => {
         let m_e = 0;
 
         filteredData
-          .filter((month) => dayjs(month.day).format("M") === index.toString())
+          .filter(
+            (month) => dayjs(month.day).format("M") === (index + 1).toString()
+          )
           .forEach((data) => {
             e += data.expenses;
           });
 
         filteredData
-          .filter((month) => dayjs(month.day).format("M") === index.toString())
+          .filter(
+            (month) => dayjs(month.day).format("M") === (index + 1).toString()
+          )
           .forEach((data) => {
             s += data.sales;
           });
 
         filteredData
-          .filter((month) => dayjs(month.day).format("M") === index.toString())
+          .filter(
+            (month) => dayjs(month.day).format("M") === (index + 1).toString()
+          )
           .forEach((data) => {
             c += data.capital;
           });
 
         filteredMonthlyCapital
           .filter(
-            (month) => dayjs(month.month).format("M") === index.toString()
+            (month) => dayjs(month.month).format("M") === (index + 1).toString()
           )
           .forEach((data) => {
             m_c += data.amount;
@@ -285,13 +300,13 @@ const BusinessYearlySummary = () => {
 
         filteredMonthlyExpenses
           .filter(
-            (month) => dayjs(month.month).format("M") === index.toString()
+            (month) => dayjs(month.month).format("M") === (index + 1).toString()
           )
           .forEach((data) => {
             m_e += data.amount;
           });
 
-        profitPerDate[index - 1] = s - e - m_e - m_c - c;
+        profitPerDate[index] = s - e - m_e - m_c - c;
       });
 
       setProfitCount(profitPerDate);
@@ -323,7 +338,7 @@ const BusinessYearlySummary = () => {
 
   return (
     <>
-      <div className="flex w-full gap-5 pb-10">
+      <div className="w-full gap-5 pb-5 px-5">
         {isLoading ? (
           <div className="w-full  bg-white p-5 rounded-lg flex items-center flex-col md:w-full">
             <div className="w-[35%]">
@@ -335,69 +350,81 @@ const BusinessYearlySummary = () => {
           </div>
         ) : (
           <>
-            <div className="w-[30%] gap-5 flex flex-col">
-              <div className="w-full bg-white rounded-md h-hfull p-5">
+            <div className="w-full gap-5 mb-5 flex">
+              <div className="border border-light shadow-sm w-full bg-white rounded-md h-hfull p-5">
                 <div className="flex flex-col items-center justify-center gap-2">
                   <div className="flex gap-2">
-                    <img
-                      src={yearlyCapitalIcon}
-                      alt="yearly capital"
-                      className="w-9 sm:w-7"
-                    />
                     <div className="text-md font-medium sm:text-sm">
                       Capital
                     </div>
                   </div>
-
                   <div className="text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
-                    {yearlyCapital.toLocaleString()}
+                    <div className="flex gap-3">
+                      <img
+                        src={yearlyCapitalIcon}
+                        alt="yearly capital"
+                        className="w-9 sm:w-7"
+                      />
+                      <NumberFlow
+                        value={yearlyCapital}
+                        trend={5}
+                        spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="w-full bg-white rounded-md h-hfull p-5">
+              <div className="border border-light shadow-sm w-full bg-white rounded-md h-hfull p-5">
                 <div className="flex flex-col items-center justify-center gap-2">
                   <div className="flex gap-2">
-                    <img
-                      src={yearlySalesIcon}
-                      alt="yearly capital"
-                      className="w-9 sm:w-7"
-                    />
                     <div className="text-md font-medium sm:text-sm">Sales</div>
                   </div>
-
                   <div className="text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
-                    {yearlySales.toLocaleString()}
+                    <div className="flex gap-3">
+                      <img
+                        src={yearlySalesIcon}
+                        alt="yearly capital"
+                        className="w-9 sm:w-7"
+                      />
+                      <NumberFlow
+                        value={yearlySales}
+                        trend={5}
+                        spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="w-full bg-white rounded-md h-hfull p-5">
+              <div className="border border-light shadow-sm w-full bg-white rounded-md h-hfull p-5">
                 <div className="flex flex-col items-center justify-center gap-2">
                   <div className="flex gap-2">
-                    <img
-                      src={yearlyExpensesIcon}
-                      alt="yearly capital"
-                      className="w-9 sm:w-7"
-                    />
                     <div className="text-md font-medium sm:text-sm">
                       Expenses
                     </div>
                   </div>
 
                   <div className="text-2xl text-[red] font-bold sm:text-xl ssm:font-semibold">
-                    {(
-                      yearlyExpenses + thisYearMonthlyExpenses
-                    ).toLocaleString()}
+                    <div className="flex gap-3">
+                      <img
+                        src={yearlyExpensesIcon}
+                        alt="yearly capital"
+                        className="w-9 sm:w-7"
+                      />
+                      {/* {(
+                        yearlyExpenses + thisYearMonthlyExpenses
+                      ).toLocaleString()} */}
+                      <NumberFlow
+                        value={yearlyExpenses + thisYearMonthlyExpenses}
+                        trend={5}
+                        spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="w-full bg-white rounded-md h-hfull p-5">
+              <div className="border border-light shadow-sm w-full bg-white rounded-md h-hfull p-5">
                 <div className="flex flex-col items-center justify-center gap-2">
                   <div className="flex gap-2">
-                    <img
-                      src={yearlyProfitIcon}
-                      alt="yearly capital"
-                      className="w-9 sm:w-7"
-                    />
                     <div className="text-md font-medium sm:text-sm">Profit</div>
                   </div>
                   <div
@@ -407,15 +434,26 @@ const BusinessYearlySummary = () => {
                         : "text-2xl font-bold text-greens sm:text-xl ssm:font-semibold"
                     }
                   >
-                    {yearlyProfit.toLocaleString()}
+                    <div className="flex gap-3">
+                      <img
+                        src={yearlyProfitIcon}
+                        alt="yearly capital"
+                        className="w-9 sm:w-7"
+                      />
+                      <NumberFlow
+                        value={yearlyProfit}
+                        trend={5}
+                        spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="w-[70%] h-hfull bg-white py-4 rounded-lg shadow-lg overflow-y-auto">
-              <div className="h-[770px] w-full md:h-[500px] lg:w-[800px]">
+            <div className="border border-light w-full h-hfull bg-white p-4 rounded-lg shadow-sm overflow-y-auto">
+              <div className="h-[400px] w-full">
                 <Bar
-                  className="w-full h-hfull"
+                  className="h-hfull"
                   data={{
                     labels: newMonths,
                     datasets: [

@@ -11,6 +11,7 @@ import usePersonalExpenses from "../../hooks/usePersonalExpenses";
 import yearlyGrossIcon from "../../media/yearpouch.png";
 import yearlyExpensesIcon from "../../media/yearexpenses.png";
 import yearlyNetIcon from "../../media/yearprofit.png";
+import NumberFlow from "@number-flow/react";
 
 const BusinessYearlySummary = () => {
   const getPersonalData = useGetPersonalData();
@@ -78,8 +79,8 @@ const BusinessYearlySummary = () => {
       personalIncomeData
         .filter(
           (data) =>
-            dayjs(data.day).format("YY") ===
-            dayjs().month(monthIndex).format("YY")
+            dayjs(data.day).format("YYYY") ===
+            dayjs().month(monthIndex).format("YYYY")
         )
         .forEach((data) => {
           (g += data.gross), (e += data.expenses);
@@ -114,13 +115,13 @@ const BusinessYearlySummary = () => {
 
       const filteredData = personalIncomeData.filter(
         (data) =>
-          dayjs(data.day).format("YY") ===
-          dayjs().month(monthIndex).format("YY")
+          dayjs(data.day).format("YYYY") ===
+          dayjs().month(monthIndex).format("YYYY")
       );
 
       const filteredMonthlyExpenses = personalExpensesData.filter(
         (data) =>
-          dayjs(data.moth).format("YYYY") ===
+          dayjs(data.month).format("YYYY") ===
           dayjs().month(monthIndex).format("YYYY")
       );
 
@@ -135,12 +136,14 @@ const BusinessYearlySummary = () => {
         let g = 0;
 
         filteredData
-          .filter((month) => dayjs(month.day).format("M") === index.toString())
+          .filter(
+            (month) => dayjs(month.day).format("M") === (index + 1).toString()
+          )
           .forEach((data) => {
             g += data.gross;
           });
 
-        grossPerDate[index - 1] = g;
+        grossPerDate[index] = g;
       });
 
       setGrossCount(grossPerDate);
@@ -158,19 +161,21 @@ const BusinessYearlySummary = () => {
 
         filteredMonthlyExpenses
           .filter(
-            (month) => dayjs(month.month).format("M") === index.toString()
+            (month) => dayjs(month.month).format("M") === (index + 1).toString()
           )
           .forEach((data) => {
             me += data.amount;
           });
 
         filteredData
-          .filter((month) => dayjs(month.day).format("M") === index.toString())
+          .filter(
+            (month) => dayjs(month.day).format("M") === (index + 1).toString()
+          )
           .forEach((data) => {
             e += data.expenses;
           });
 
-        expensesPerDate[index - 1] = e + me;
+        expensesPerDate[index] = e + me;
       });
 
       setExpensesCount(expensesPerDate);
@@ -188,19 +193,21 @@ const BusinessYearlySummary = () => {
 
         filteredMonthlyExpenses
           .filter(
-            (month) => dayjs(month.month).format("M") === index.toString()
+            (month) => dayjs(month.month).format("M") === (index + 1).toString()
           )
           .forEach((data) => {
             m_e += data.amount;
           });
 
         filteredData
-          .filter((month) => dayjs(month.day).format("M") === index.toString())
+          .filter(
+            (month) => dayjs(month.day).format("M") === (index + 1).toString()
+          )
           .forEach((data) => {
             n += data.net;
           });
 
-        netPerDate[index - 1] = n - m_e;
+        netPerDate[index] = n - m_e;
       });
 
       setNetCount(netPerDate);
@@ -232,155 +239,169 @@ const BusinessYearlySummary = () => {
 
   return (
     <>
-      <div className="w-full pt-5 grid grid-flow-col justify-center place-items-center gap-2 xs:pt-2 xxs:flex xxs:flex-col xxs:items-center xxs:justify-center xxs:gap-0">
-        <div className="font-bold text-3xl text-center items-center justify-center py-5 sm:text-2xl xxs:py-2">
-          Yearly Summary
-        </div>
-        <div className="flex items-center xxs:pb-3">
-          <div>
-            <FaAngleLeft
-              className="text-greens text-4xl hover:text-lgreens cursor-pointer sm:text-2xl"
-              onClick={prevYear}
-            />
+      <div className="bg-white mx-5 px-5 rounded-lg shadow-sm">
+        <div className="w-full grid grid-flow-col justify-center place-items-center gap-2 xs:pt-2 xxs:flex xxs:flex-col xxs:items-center xxs:justify-center xxs:gap-0">
+          <div className="font-bold text-2xl text-center items-center justify-center py-5 sm:text-2xl xxs:py-2">
+            Yearly Summary
           </div>
-          <div>
-            <h1 className="font-extrabold text-center text-4xl text-greens select-none sm:text-2xl">
-              {
-                /* display current month and year */
-                dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY")
-              }
-            </h1>
-          </div>
-          <div>
-            <FaAngleRight
-              className="text-greens text-4xl hover:text-lgreens cursor-pointer ssm:text-2xl"
-              onClick={nextYear}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* bar graph and overview */}
-
-      {isLoading ? (
-        <div className="w-full bg-white p-5 rounded-lg flex items-center flex-col md:w-full">
-          <div className="w-[35%]">
-            <Skeleton />
-          </div>
-          <div className="w-[100%]">
-            <Skeleton height={500} />
-          </div>
-        </div>
-      ) : (
-        <div className="w-full flex pb-10 xs:flex-col-reverse md:gap-3 xs:pb-5">
-          <div
-            id="barGraphOverview"
-            className="w-[35%] flex flex-col p-5 gap-5 rounded-md justify-center items-center md:p-0 xs:w-full xs:flex-row"
-          >
-            <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 bg-white shadow-lg rounded-md px-5 py-3">
-              <div className="flex items-center justify-center gap-2">
-                <img
-                  src={yearlyGrossIcon}
-                  alt="yearly capital"
-                  className="w-9 sm:w-7"
-                />
-                <div className="text-md font-medium sm:text-sm">Gross</div>
-              </div>
-              <div className="text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
-                {yearlyGross.toLocaleString()}
-              </div>
+          <div className="flex items-center justify-center xxs:pb-3">
+            <div>
+              <FaAngleLeft
+                className="text-greens text-2xl hover:text-lgreens cursor-pointer sm:text-2xl"
+                onClick={prevYear}
+              />
             </div>
-            <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 bg-white shadow-lg rounded-md px-5 py-3">
-              <div className="flex items-center justify-center gap-2">
-                <img
-                  src={yearlyExpensesIcon}
-                  alt="yearly expenses"
-                  className="w-9 sm:w-7"
-                />
-                <div className="text-md font-medium sm:text-sm">Expenses</div>
-              </div>
-              <div className="text-2xl text-[red] font-bold sm:text-xl ssm:font-semibold">
-                {(yearlyExpenses + thisYearMonthlyExpenses).toLocaleString()}
-              </div>
-            </div>
-            <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 bg-white shadow-lg rounded-md px-5 py-3">
-              <div className="flex items-center justify-center gap-2">
-                <img
-                  src={yearlyNetIcon}
-                  alt="yearly net"
-                  className="w-9 sm:w-7"
-                />
-                <div className="text-md font-medium sm:text-sm">Net</div>
-              </div>
-              <div
-                className={
-                  yearlyNet < 0
-                    ? "text-2xl font-bold text-[red] sm:text-xl ssm:font-semibold"
-                    : "text-2xl font-bold text-greens sm:text-xl ssm:font-semibold"
+            <div>
+              <h1 className="font-extrabold text-center text-2xl text-greens select-none sm:text-2xl">
+                {
+                  /* display current month and year */
+                  dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY")
                 }
-              >
-                {yearlyNet.toLocaleString()}
-              </div>
+              </h1>
+            </div>
+            <div>
+              <FaAngleRight
+                className="text-greens text-2xl hover:text-lgreens cursor-pointer ssm:text-2xl"
+                onClick={nextYear}
+              />
             </div>
           </div>
+        </div>
 
-          <div className="w-[65%] xs:w-full">
-            <div className="w-full bg-white p-5 rounded-lg overflow-y-auto shadow-lg">
-              <div className="h-[600px] w-full lg:h-[400px] lg:w-[800px]">
-                <Bar
-                  className="w-full h-hfull"
-                  data={{
-                    labels: newMonths,
-                    datasets: [
-                      {
-                        label: "Gross",
-                        data: grossCount,
-                        borderColor: "#ff9f1c",
-                        backgroundColor: "#fdac3a",
-                      },
-                      {
-                        label: "Expenses",
-                        data: expensesCount,
-                        borderColor: "#ff6384",
-                        backgroundColor: "#FA829C",
-                      },
-                      {
-                        label: "Net",
-                        data: netCount,
-                        borderColor: "#2ec4b6",
-                        backgroundColor: "#3cd5c5",
-                      },
-                    ],
-                  }}
-                  options={{
-                    plugins: {
-                      datalabels: {
-                        display: setGraphDataDisplay,
-                        anchor: "end",
-                        align: "start",
-                        color: "#000000",
-                        font: {
-                          weight: 550,
-                          size: 13,
+        {/* bar graph and overview */}
+        {isLoading ? (
+          <div className="w-full bg-white p-5 rounded-lg flex items-center flex-col md:w-full">
+            <div className="w-[35%]">
+              <Skeleton />
+            </div>
+            <div className="w-[100%]">
+              <Skeleton height={500} />
+            </div>
+          </div>
+        ) : (
+          <div className="w-full flex pb-5 xs:flex-col-reverse gap-5 xs:pb-5">
+            <div
+              id="barGraphOverview"
+              className="w-[35%] flex flex-col gap-5 rounded-md justify-center items-center md:p-0 xs:w-full xs:flex-row"
+            >
+              <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 border border-light bg-white shadow-sm rounded-md px-5 py-3">
+                <div className="flex items-center justify-center gap-2">
+                  <div className="text-md font-medium sm:text-sm">Gross</div>
+                </div>
+                <div className="bg-subCon px-4 rounded-md py-2 flex justify-center gap-3 text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
+                  <img
+                    src={yearlyGrossIcon}
+                    alt="yearly capital"
+                    className="w-9 sm:w-7"
+                  />
+                  <NumberFlow
+                    value={yearlyGross}
+                    trend={5}
+                    spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 border border-light bg-white shadow-sm rounded-md px-5 py-3">
+                <div className="flex items-center justify-center gap-2">
+                  <div className="text-md font-medium sm:text-sm">Expenses</div>
+                </div>
+                <div className="bg-subCon px-4 rounded-md py-2 flex justify-center gap-3 text-2xl text-[red] font-bold sm:text-xl ssm:font-semibold">
+                  <img
+                    src={yearlyExpensesIcon}
+                    alt="yearly expenses"
+                    className="w-9 sm:w-7"
+                  />
+                  {/* {(yearlyExpenses + thisYearMonthlyExpenses).toLocaleString()} */}
+                  <NumberFlow
+                    value={yearlyExpenses + thisYearMonthlyExpenses}
+                    trend={5}
+                    spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 border border-light bg-white shadow-sm rounded-md px-5 py-3">
+                <div className="flex items-center justify-center gap-2">
+                  <div className="text-md font-medium sm:text-sm">Net</div>
+                </div>
+                <div
+                  className={
+                    yearlyNet < 0
+                      ? "bg-subCon px-4 rounded-md py-2 flex justify-center gap-3 text-2xl font-bold text-[red] sm:text-xl ssm:font-semibold"
+                      : "bg-subCon px-4 rounded-md py-2 flex justify-center gap-3 text-2xl font-bold text-greens sm:text-xl ssm:font-semibold"
+                  }
+                >
+                  <img
+                    src={yearlyNetIcon}
+                    alt="yearly net"
+                    className="w-9 sm:w-7"
+                  />
+                  <NumberFlow
+                    value={yearlyNet}
+                    trend={5}
+                    spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="w-[65%] xs:w-full">
+              <div className="w-full bg-white p-5 rounded-lg border border-light overflow-y-auto shadow-sm">
+                <div className="h-[400px] w-full lg:w-[800px]">
+                  <Bar
+                    className="w-full h-hfull"
+                    data={{
+                      labels: newMonths,
+                      datasets: [
+                        {
+                          label: "Gross",
+                          data: grossCount,
+                          borderColor: "#ff9f1c",
+                          backgroundColor: "#fdac3a",
                         },
-                      },
-                      legend: {
-                        labels: {
+                        {
+                          label: "Expenses",
+                          data: expensesCount,
+                          borderColor: "#ff6384",
+                          backgroundColor: "#FA829C",
+                        },
+                        {
+                          label: "Net",
+                          data: netCount,
+                          borderColor: "#2ec4b6",
+                          backgroundColor: "#3cd5c5",
+                        },
+                      ],
+                    }}
+                    options={{
+                      plugins: {
+                        datalabels: {
+                          display: setGraphDataDisplay,
+                          anchor: "end",
+                          align: "start",
+                          color: "#000000",
                           font: {
-                            size: 15,
+                            weight: 550,
+                            size: 13,
+                          },
+                        },
+                        legend: {
+                          labels: {
+                            font: {
+                              size: 15,
+                            },
                           },
                         },
                       },
-                    },
-                    indexAxis: "x",
-                    maintainAspectRatio: false,
-                  }}
-                />
+                      indexAxis: "x",
+                      maintainAspectRatio: false,
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 };
