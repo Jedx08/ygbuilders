@@ -4,7 +4,7 @@ const PrivacyPolicy = () => {
   return (
     <div className="bg-light w-full h-hfull flex flex-col items-center justify-center pt-5 font-pops">
       <div className=" font-bold text-greens text-5xl pb-5">PRIVACY POLICY</div>
-      <div className="bg-white w-[80%] rounded-md p-5 text-lg">
+      <div className="bg-white w-[80%] rounded-md p-5 text-lg px-10">
         <p>
           <span className="font-semibold">Effective Date</span>: October 1st,
           2024 <br /> <br /> YourGross, from the name itself, it is a website
@@ -12,42 +12,49 @@ const PrivacyPolicy = () => {
           business income. This Privacy Policy outlines how YourGross collects,
           uses, and protects your personal information when you visit our
           website yourgross.ph. <br /> <br />{" "}
-          <span className="flex justify-center font-semibold text-xl">
+          <span className="flex justify-center font-semibold text-xl py-1">
             Information Collection
           </span>{" "}
-          <br /> We collect personal information, including your name, email
-          address, and financial data, when you register for and use our
-          services. Additionally, with your consent, we obtain this information
-          from trusted sources such as Facebook if you choose to log in using
-          those accounts. <br /> <br />{" "}
-          <span className="font-semibold">Use of Information</span> <br />{" "}
-          <br />
+          <div className="px-10 py-3 bg-subCon rounded-lg">
+            We collect personal information, including your name, email address,
+            and financial data, when you register for and use our services.
+            Additionally, with your consent, we obtain this information from
+            trusted sources such as Facebook if you choose to log in using those
+            accounts.
+          </div>{" "}
+          <br /> <span className="font-semibold">Use of Information</span>{" "}
+          <br /> <br />
           Your information may be used to: <br /> • Provide our services <br />{" "}
           • Notify users when needed <br /> • Deliver customer support <br /> •
           Identify, prevent, and resolve technical issues <br /> • Improve our
           service <br /> <br />{" "}
-          <span className="flex justify-center font-semibold text-xl">
+          <span className="flex justify-center font-semibold text-xl py-1">
             Data Sharing and Security
           </span>{" "}
-          <br /> We are committed to ensuring the security of your personal
-          information in compliance with the Data Privacy Act of 2012 (RA
-          10173). To protect your data from unauthorized access, alteration, or
-          disclosure, we implement comprehensive security measures, including
-          encryption, secure server environments, and regular security
-          assessments. <br /> <br /> We adhere to industry-standard protocols to
-          safeguard your information during transmission and storage. Our team
-          conducts periodic reviews and updates of our security practices to
-          address emerging threats and ensure the continued protection of your
-          data. <br /> <br /> As part of our services, we utilize Google AdSense
-          for advertising purposes. We want to inform you that Google may
-          collect and use certain information about your browsing behavior for
-          ad personalization. We encourage you to review Google’s privacy
-          policies and settings to manage your preferences. <br /> <br /> Your
-          privacy is our priority. We assure you that your personal information
-          will be handled with the utmost care and will only be shared with
-          authorized third parties when necessary, and with your explicit
-          consent. We are committed to maintaining transparency about how your
-          data is used and stored. <br /> <br />{" "}
+          <div className="px-10 py-3 bg-subCon rounded-lg">
+            {" "}
+            We are committed to ensuring the security of your personal
+            information in compliance with the Data Privacy Act of 2012 (RA
+            10173). To protect your data from unauthorized access, alteration,
+            or disclosure, we implement comprehensive security measures,
+            including encryption, secure server environments, and regular
+            security assessments. <br /> <br /> We adhere to industry-standard
+            protocols to safeguard your information during transmission and
+            storage. Our team conducts periodic reviews and updates of our
+            security practices to address emerging threats and ensure the
+            continued protection of your data. <br /> <br /> As part of our
+            services, we utilize Google AdSense for advertising purposes. We
+            want to inform you that Google may collect and use certain
+            information about your browsing behavior for ad personalization. We
+            encourage you to review Google’s privacy policies and settings to
+            manage your preferences. <br /> <br /> Your privacy is our priority.
+            We assure you that your personal information will be handled with
+            the utmost care and will only be shared with authorized third
+            parties when necessary, and with your explicit consent. We are
+            committed to maintaining transparency about how your data is used
+            and stored.
+          </div>{" "}
+          <br /> <br />{" "}
           <span className="flex justify-center font-semibold text-xl">
             User Rights
           </span>{" "}
@@ -88,29 +95,19 @@ const PrivacyPolicy = () => {
           your request within a reasonable timeframe and in accordance with
           applicable laws. Your rights are important to us, and we are committed
           to ensuring that they are respected and upheld. <br /> <br />
-          <span className="flex justify-center font-semibold text-xl">
+          <span className="flex justify-center font-semibold text-xl py-1">
             Contact Us
           </span>{" "}
+          <div className="px-10 py-3 bg-subCon rounded-lg">
+            If you have any questions, concerns, or if you would like to know
+            what kind of information we are storing regarding your user, about
+            this Privacy Policy, please contact us at: <br />
+            <span className="font-semibold">Email</span>:{" "}
+            <a href="mailto:admin@yourgross.ph" className="text-[#399CB4]">
+              support@yourgross.ph
+            </a>
+          </div>
           <br />
-          If you have any questions about this Privacy Policy, please contact
-          us: <br />
-          <span className="font-semibold">Email</span>:{" "}
-          <a href="mailto:admin@yourgross.ph" className="text-[#399CB4]">
-            admin@yourgross.ph
-          </a>
-          <br />
-          <br />
-          If you would like to know what kind of information we are storing
-          regarding your user, please email{" "}
-          <a href="mailto:gdpr@yourgross.ph" className="text-[#399CB4]">
-            GDPR@yourgross.ph
-          </a>{" "}
-          and use the subject “SAR:User” <br /> <br />
-          If you would like your personal data deleted, please email{" "}
-          <a href="mailto:gdpr@yourgross.ph" className="text-[#399CB4]">
-            GDPR@yourgross.ph
-          </a>{" "}
-          and use the subject: “Delete:User”
         </p>
       </div>
       <div className="w-full mt-10">

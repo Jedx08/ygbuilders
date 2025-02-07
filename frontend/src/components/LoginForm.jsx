@@ -5,12 +5,10 @@ import useAuth from "../hooks/useAuth";
 import axios from "../api/axios";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
 import { ThreeDot, OrbitProgress } from "react-loading-indicators";
-import { LoginSocialFacebook } from "reactjs-social-login";
-import { FacebookLoginButton } from "react-social-login-buttons";
 
 const LOGIN_URL = "/login";
 
-const LoginForm = ({ next, inMobile }) => {
+const LoginForm = ({ next, inMobile, changeTab }) => {
   const { setAuth, setUserInfo } = useAuth();
 
   const [username, setUsername] = useState("");
@@ -123,94 +121,6 @@ const LoginForm = ({ next, inMobile }) => {
           ) : (
             <section>
               <form onSubmit={handleSubmit}>
-                <LoginSocialFacebook
-                  appId="1272021290875971"
-                  onResolve={async (fbresponse) => {
-                    setIsLoading(true);
-
-                    const result = await fbresponse.data;
-
-                    if (!result) {
-                      return setErrMsg("Login failed"), setIsLoading(false);
-                    }
-
-                    try {
-                      const response = await axios.post(
-                        "/auth/facebook",
-                        JSON.stringify({
-                          username: result.email,
-                          email: result.email,
-                          facebookId: result.id,
-                          firstname: result.first_name,
-                          lastname: result.last_name,
-                          instructions: {
-                            home: true,
-                            calendarP: true,
-                            calendarB: true,
-                            summary: true,
-                            savings: true,
-                          },
-                        }),
-                        {
-                          headers: { "Content-Type": "application/json" },
-                          withCredentials: true,
-                        }
-                      );
-                      if (response.status === 200) {
-                        const accessToken = response?.data?.accessToken;
-                        const _id = response?.data?._id;
-                        const email = response?.data?.email;
-                        const avatar = response?.data?.avatar;
-                        const instructions = response?.data?.instructions;
-                        const provider = response?.data?.provider;
-                        const personal_title = response?.data?.personal_title;
-                        const business_title = response?.data?.business_title;
-                        setAuth({ _id, accessToken });
-                        setUserInfo({
-                          email,
-                          avatar,
-                          instructions,
-                          provider,
-                          personal_title,
-                          business_title,
-                        });
-                        setSuccess("Success");
-                        navigate("/home");
-                      }
-                    } catch (error) {
-                      if (!error?.response) {
-                        setErrMsg("Can't connect to the Server");
-                        setIsLoading(false);
-                      }
-                      if (error.response?.status === 400) {
-                        setErrMsg(error.response?.data.message);
-                        setIsLoading(false);
-                      } else if (error.response?.status === 401) {
-                        setErrMsg(error.response?.data.message);
-                        setIsLoading(false);
-                      } else {
-                        setErrMsg("Login Failed");
-                        setIsLoading(false);
-                      }
-                    }
-                  }}
-                  onReject={(error) => {
-                    if (error) {
-                      setErrMsg("Login Failed");
-                      setIsLoading(false);
-                    }
-                  }}
-                >
-                  <FacebookLoginButton
-                    className="text-sm h-hfit py-1 mb-2 shadow-none"
-                    iconSize={"20px"}
-                  />
-                </LoginSocialFacebook>
-
-                <div className="text-sm font-medium text-center text-[#bbbbbb] py-1">
-                  or
-                </div>
-
                 {/* Username Email */}
                 <div>
                   <label htmlFor="username" className="text-sm">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 import { FaInfoCircle } from "react-icons/fa";
 import axios from "../api/axios";
@@ -14,6 +14,7 @@ const REGISTER_URL = "/register";
 
 const RegisterForm = ({ previous, inMobile }) => {
   const navigate = useNavigate();
+
   const { setAuth, setUserInfo } = useAuth();
 
   const [username, setUsername] = useState("");
@@ -36,6 +37,8 @@ const RegisterForm = ({ previous, inMobile }) => {
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
     const result = USER_REGEX.test(username);
@@ -407,12 +410,42 @@ const RegisterForm = ({ previous, inMobile }) => {
                   <ThreeDot color="#ffffff" style={{ fontSize: "8px" }} />
                 </div>
               ) : (
-                <button
-                  type="submit"
-                  className="mx-auto bg-oranges py-1 px-6 rounded-md font-bold text-white hover:bg-loranges"
-                >
-                  Register
-                </button>
+                <>
+                  <div className="w-full flex justify-center items-start text-xs gap-2 mb-2">
+                    <span className="pt-1">
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={(e) => {
+                          setIsChecked(e.target.checked);
+                        }}
+                      />
+                    </span>
+                    <p>
+                      By checking this button, you agree to our{" "}
+                      <Link to={"/privacy-policy"}>
+                        <span className="text-greens underline">
+                          Terms and Privacy Policy
+                        </span>
+                      </Link>
+                    </p>
+                  </div>
+                  {isChecked ? (
+                    <button
+                      type="submit"
+                      className="mx-auto bg-oranges py-1 px-6 rounded-md font-bold text-white hover:bg-loranges"
+                    >
+                      Register
+                    </button>
+                  ) : (
+                    <button
+                      disabled={!isChecked}
+                      className="mx-auto bg-[#d1d1d1] py-1 px-6 rounded-md font-bold text-white"
+                    >
+                      Register
+                    </button>
+                  )}
+                </>
                 // <div className="mx-auto bg-oranges py-1 px-6 rounded-md font-bold text-white hover:bg-loranges cursor-not-allowed">
                 //   Register
                 // </div>

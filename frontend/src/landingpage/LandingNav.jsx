@@ -32,7 +32,7 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link to="Login" state={{ toReg: "register" }}>
+                <Link to="login" state={{ toReg: "register" }}>
                   <div className="flex space-x-1 items-center text-white hover:text-lgreens">
                     <FaAddressBook className="text-2xl" />
                     <p className="font-bold text-lg">Register</p>
@@ -40,7 +40,7 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link to="Login" state={{ toReg: "login" }}>
+                <Link to="login" state={{ toReg: "login" }}>
                   <div className="flex space-x-1 items-center text-white hover:text-lgreens">
                     <BiLogIn className="text-3xl" />
                     <p className="font-bold text-lg">Login</p>
