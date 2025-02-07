@@ -317,6 +317,10 @@ const BusinessSummary = () => {
                   value={overallProfit}
                   trend={5}
                   spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                  format={{
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  }}
                 />
               </div>
               <div>
@@ -345,6 +349,10 @@ const BusinessSummary = () => {
                   value={capital}
                   trend={5}
                   spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                  format={{
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  }}
                 />
               </div>
             </div>
@@ -366,6 +374,10 @@ const BusinessSummary = () => {
                   value={sales}
                   trend={5}
                   spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                  format={{
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  }}
                 />
               </div>
             </div>
@@ -388,6 +400,10 @@ const BusinessSummary = () => {
                   value={expenses + overallMonthlyExpenses}
                   trend={5}
                   spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                  format={{
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  }}
                 />
               </div>
             </div>
@@ -513,6 +529,10 @@ const BusinessSummary = () => {
                               duration: 1500,
                               easing: "ease-in-out",
                             }}
+                            format={{
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }}
                           />
                         </div>
                       </div>
@@ -537,6 +557,10 @@ const BusinessSummary = () => {
                             spinTiming={{
                               duration: 1500,
                               easing: "ease-in-out",
+                            }}
+                            format={{
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
                             }}
                           />
                         </div>
@@ -563,6 +587,10 @@ const BusinessSummary = () => {
                             spinTiming={{
                               duration: 1500,
                               easing: "ease-in-out",
+                            }}
+                            format={{
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
                             }}
                           />
                         </div>
@@ -595,6 +623,10 @@ const BusinessSummary = () => {
                             spinTiming={{
                               duration: 1500,
                               easing: "ease-in-out",
+                            }}
+                            format={{
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
                             }}
                           />
                         </div>

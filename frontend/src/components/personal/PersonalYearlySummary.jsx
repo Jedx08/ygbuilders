@@ -300,6 +300,10 @@ const BusinessYearlySummary = () => {
                     value={yearlyGross}
                     trend={5}
                     spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                    format={{
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    }}
                   />
                 </div>
               </div>
@@ -320,6 +324,10 @@ const BusinessYearlySummary = () => {
                     value={yearlyExpenses + thisYearMonthlyExpenses}
                     trend={5}
                     spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                    format={{
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    }}
                   />
                 </div>
               </div>
@@ -343,6 +351,10 @@ const BusinessYearlySummary = () => {
                     value={yearlyNet}
                     trend={5}
                     spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                    format={{
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    }}
                   />
                 </div>
               </div>

@@ -1,5 +1,5 @@
 import logo from "../media/YG_LOGO.png";
-import { FaGear, FaPiggyBank } from "react-icons/fa6";
+import { FaPiggyBank } from "react-icons/fa6";
 import { FaCalendarAlt, FaFilter, FaChartLine } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 

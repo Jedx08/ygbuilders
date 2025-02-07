@@ -5,6 +5,7 @@ import monGrossIcon from "../../../media/monpouch.png";
 import monExpensesIcon from "../../../media/monexpenses.png";
 import monNetIcon from "../../../media/monprofit.png";
 import { PiChartLineUp, PiChartLineDown } from "react-icons/pi";
+import NumberFlow from "@number-flow/react";
 
 const PersonalMonthlySummary = ({
   grossCount,
@@ -12,6 +13,10 @@ const PersonalMonthlySummary = ({
   monthlyExpenses,
 }) => {
   const { monthIndex } = useContext(CalendarContext);
+
+  const formatNumber = (num) => {
+    return (Math.floor(num * 100) / 100).toFixed(2);
+  };
 
   return (
     <div>
@@ -43,7 +48,15 @@ const PersonalMonthlySummary = ({
                   />
                   <p className="ml-1 text-[#D0D0D0]">:</p>
                   <p className="text-oranges font-bold text-xl/[24px] mdd:text-lg">
-                    {grossCount.toLocaleString()}
+                    <NumberFlow
+                      value={grossCount}
+                      trend={5}
+                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
                   </p>
                 </div>
               </div>
@@ -62,7 +75,16 @@ const PersonalMonthlySummary = ({
                   />
                   <p className="ml-1 text-[#D0D0D0]">:</p>
                   <p className="text-[red] font-bold text-xl/[24px] mdd:text-lg">
-                    {(expensesCount + monthlyExpenses).toLocaleString()}
+                    {/* {(expensesCount + monthlyExpenses).toLocaleString()} */}
+                    <NumberFlow
+                      value={expensesCount + monthlyExpenses}
+                      trend={5}
+                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
                   </p>
                 </div>
               </div>
@@ -87,10 +109,19 @@ const PersonalMonthlySummary = ({
                         : "text-greens"
                     }`}
                   >
-                    {(
+                    {/* {(
                       grossCount -
                       (expensesCount + monthlyExpenses)
-                    ).toLocaleString()}
+                    ).toLocaleString()} */}
+                    <NumberFlow
+                      value={grossCount - (expensesCount + monthlyExpenses)}
+                      trend={5}
+                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
                   </p>
                   {grossCount - (expensesCount + monthlyExpenses) < 0 ? (
                     <PiChartLineDown className="text-2xl text-[#ff3a33] mdd:text-lg" />

@@ -1,5 +1,5 @@
 import { FaChartLine } from "react-icons/fa";
-import { FaGear } from "react-icons/fa6";
+import { FaPiggyBank } from "react-icons/fa6";
 import { FaCalendarAlt } from "react-icons/fa";
 import { FaFilter } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
@@ -32,6 +32,18 @@ const FooterNav = () => {
               <FaCalendarAlt className="text-xl text-[#b8b8b8]" />
             </div>
             <p className="text-sm">Calendar</p>
+          </div>
+        </Link>
+        <Link to="/savings" className="w-full">
+          <div
+            className={`flex flex-col items-center p-2 gap-2 hover:bg-light rounded-md cursor-pointer ${
+              location.pathname === "/savings" ? "bg-light" : ""
+            }`}
+          >
+            <div className="flex justify-center">
+              <FaPiggyBank className="text-xl text-[#b8b8b8]" />
+            </div>
+            <p className="text-sm">Savings</p>
           </div>
         </Link>
         <Link to="/filter" className="w-full">

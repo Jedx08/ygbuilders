@@ -64,6 +64,10 @@ function App() {
               <Route path="filter" element={<Filter />} />
               <Route path="business" element={<Business />} />
               <Route path="summary" element={<Summary />} />
+              <Route
+                path="summary"
+                element={<Navigate to="/summary?tab=Personal" replace />}
+              />
               <Route path="settings" element={<Settings />} />
             </Route>
           </Route>

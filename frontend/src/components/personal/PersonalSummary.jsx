@@ -33,8 +33,6 @@ const PersonalSummary = () => {
     personalExpensesData,
     personalExpensesLoading,
     setPersonalExpensesLoading,
-    personalSummaryView,
-    setPersonalSummaryView,
   } = useContext(CalendarContext);
 
   const { userInfo } = useAuth();
@@ -350,6 +348,10 @@ const PersonalSummary = () => {
                   value={overallNet}
                   trend={5}
                   spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                  format={{
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  }}
                 />
               </div>
               <div>
@@ -376,6 +378,10 @@ const PersonalSummary = () => {
                     value={gross}
                     trend={5}
                     spinTiming={{ duration: 1500, easing: "linear" }}
+                    format={{
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    }}
                   />
                 }
               </div>
@@ -398,6 +404,10 @@ const PersonalSummary = () => {
                   value={expenses}
                   trend={5}
                   spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                  format={{
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  }}
                 />
               </div>
             </div>
@@ -516,6 +526,10 @@ const PersonalSummary = () => {
                       value={monthlyGross}
                       trend={5}
                       spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
                     />
                   </div>
                 </div>
@@ -535,6 +549,10 @@ const PersonalSummary = () => {
                       value={monthExpenses + monthlyExpenses}
                       trend={5}
                       spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
                     />
                   </div>
                 </div>
@@ -560,6 +578,10 @@ const PersonalSummary = () => {
                       value={monthlyNet}
                       trend={5}
                       spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
                     />
                   </div>
                 </div>
