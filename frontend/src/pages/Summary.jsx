@@ -1,20 +1,32 @@
 import { useContext, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
-// import PersonalSummary from "../components/personal/PersonalSummary";
-import BusinessSummary from "../components/business/BusinessSummary";
-import PersonalSummary from "../components/personal/PersonalSummary";
-// import BusinessSummary from "../components/calendar/business/BusinessSummary";
+import PersonalSummary from "../components/calendar/personal/PersonalSummary";
+import BusinessSummary from "../components/calendar/business/BusinessSummary";
 import Navbar from "../components/Navbar";
 import { CalendarContext } from "../context/CalendarContext";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import Footer from "../components/Footer";
 import FooterNav from "../components/FooterNav";
 
 const Summary = () => {
   const { auth } = useAuth();
-  const { personalSummaryView, setPersonalSummaryView, setLoggedIn } =
-    useContext(CalendarContext);
+  const { setLoggedIn } = useContext(CalendarContext);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const params = new URLSearchParams(location.search);
+  const tab = params.get("tab");
+
+  useEffect(() => {
+    if (!tab) {
+      navigate("/dashboard?tab=Personal", { replace: true });
+    }
+  }, [tab, navigate]);
+
+  const changeTab = (tabName) => {
+    navigate(`?tab=${tabName}`, { replace: true });
+  };
 
   // let { state } = useLocation();
 
@@ -46,36 +58,37 @@ const Summary = () => {
           <div className="flex justify-center space-x-5 pt-5">
             <div
               onClick={() => {
-                setPersonalSummaryView(true);
+                changeTab("Personal");
               }}
               className={`px-5 py-3 rounded-md font-bold
-              ${
-                personalSummaryView
-                  ? "bg-lgreens text-white cursor-default"
-                  : "bg-white cursor-pointer hover:text-lgreens shadow-md"
-              }
-             `}
+                ${
+                  tab === "Personal" || !params.get("tab")
+                    ? "bg-lgreens text-white cursor-default"
+                    : "bg-white cursor-pointer hover:text-lgreens shadow-md"
+                }
+               `}
             >
               Personal
             </div>
             <div
               onClick={() => {
-                setPersonalSummaryView(false);
+                changeTab("Business");
               }}
               className={`px-5 py-3 rounded-md font-bold
-              ${
-                personalSummaryView
-                  ? "bg-white cursor-pointer hover:text-loranges shadow-md"
-                  : "bg-loranges text-white cursor-default"
-              }
-            `}
+                ${
+                  tab === "Business"
+                    ? "bg-loranges text-white cursor-default"
+                    : "bg-white cursor-pointer hover:text-loranges shadow-md"
+                }
+              `}
             >
               Business
             </div>
           </div>
           {/* Calendar Display Personal/Business */}
           <div>
-            {personalSummaryView ? <PersonalSummary /> : <BusinessSummary />}
+            {tab === "Personal" && <PersonalSummary />}
+            {tab === "Business" && <BusinessSummary />}
           </div>
         </div>
         <div className="mt-20 lg:mb-[5rem]">

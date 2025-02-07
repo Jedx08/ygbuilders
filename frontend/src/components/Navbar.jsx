@@ -1,11 +1,6 @@
-import logo from "../media/YG_LOGO.png";
 import { useNavigate, Link } from "react-router-dom";
-import { IoClose } from "react-icons/io5";
 import { FaGear } from "react-icons/fa6";
 import { BiLogOut } from "react-icons/bi";
-import { FaChartLine } from "react-icons/fa";
-import { GoHomeFill } from "react-icons/go";
-import { GiHamburgerMenu } from "react-icons/gi";
 import { FaAngleDown } from "react-icons/fa";
 import useLogout from "../hooks/useLogout";
 import { useContext, useState } from "react";
@@ -17,19 +12,19 @@ import avatar3 from "../media/avatar3.png";
 import { BiLogIn } from "react-icons/bi";
 
 const Navbar = () => {
-  const { inMobile, loggedIn } = useContext(CalendarContext);
+  const { loggedIn } = useContext(CalendarContext);
   const { userInfo } = useAuth();
 
   const logout = useLogout();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const signOut = async () => {
     await logout();
-    navigate("/login");
+    location.reload();
+    // navigate("/login") uncomment after ads added
   };
 
-  const [isBurger, setIsBurger] = useState(false);
   const [accountMenu, setAccountMenu] = useState(false);
 
   function getAvatar(value) {
@@ -106,7 +101,7 @@ const Navbar = () => {
                 )}
               </>
             ) : (
-              <Link to="/Login">
+              <Link to="/login">
                 <div className="flex space-x-1 items-center hover:text-lgreens">
                   <BiLogIn className="text-3xl text-greens hover:text-lgreens" />
                   <p className="font-bold text-lg text-lgreens hover:text-greens">

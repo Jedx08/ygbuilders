@@ -107,7 +107,7 @@ const PMonthlyExpensesForm = ({
           <div
             onClick={() => {
               if (!loggedIn) {
-                navigate("/Login");
+                navigate("/login");
               } else {
                 addExpenses();
               }
@@ -140,7 +140,10 @@ const PMonthlyExpensesForm = ({
                 </div>
                 <div className="mt-[0.15rem]">
                   <p className="text-[red] font-bold text-xl/[24px]">
-                    {monthlyExpenses.toLocaleString()}
+                    {monthlyExpenses.toLocaleString("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
                   </p>
                 </div>
               </div>

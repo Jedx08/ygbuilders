@@ -10,7 +10,6 @@ import { Chart } from "chart.js/auto"; // core data for chart, do not remove
 import { Line } from "react-chartjs-2";
 import { CalendarContext } from "../../../context/CalendarContext";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-import { PiChartLineUp, PiChartLineDown } from "react-icons/pi";
 import Skeleton from "react-loading-skeleton";
 import pouch from "../../../media/pouch.png";
 import expensesIcon from "../../../media/expenses.png";
@@ -18,9 +17,11 @@ import networth from "../../../media/networth.png";
 import monthlyGrossIcon from "../../../media/monpouch.png";
 import monthlyExpensesIcon from "../../../media/monexpenses.png";
 import monthlyNetIcon from "../../../media/monprofit.png";
-// import PersonalYearlySummary from "./PersonalYearlySummary";
+import PersonalYearlySummary from "./PersonalYearlySummary";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
+import { PiChartLineUp, PiChartLineDown } from "react-icons/pi";
+import NumberFlow from "@number-flow/react";
 
 const PersonalSummary = () => {
   const {
@@ -32,8 +33,6 @@ const PersonalSummary = () => {
     personalExpensesData,
     personalExpensesLoading,
     setPersonalExpensesLoading,
-    personalSummaryView,
-    setPersonalSummaryView,
   } = useContext(CalendarContext);
 
   const { userInfo } = useAuth();
@@ -63,8 +62,6 @@ const PersonalSummary = () => {
   const overallNet = gross - expenses;
 
   const monthlyNet = monthlyGross - monthlyExpenses;
-
-  Chart.register(ChartDataLabels);
 
   Chart.register(ChartDataLabels);
 
@@ -322,20 +319,19 @@ const PersonalSummary = () => {
   };
 
   return (
-    <>
-      {/* Overall data */}
-      <div className="bg-white rounded-lg py-3 mt-5 mx-5 xl:ml-24 lg:ml-5">
+    <div className="">
+      <div className="bg-white shadow-sm rounded-lg mb-5 py-5 mt-5 mx-5 xl:ml-24 lg:ml-5">
         <div
-          className={`flex justify-center items-center text-greens font-bold text-2xl sm:text-xl`}
+          className={`flex justify-center items-center text-greens font-bold pb-2 text-2xl sm:text-xl`}
         >
           Overall Income
         </div>
         <div className="flex items-center justify-evenly flex-wrap gap-2 mt-1 xl:px-3">
-          <div>
+          <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
             <div className="text-base font-semibold text-center mdd:text-sm">
               Net
             </div>
-            <div className="bg-subCon px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+            <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
               <div>
                 <img
                   src={networth}
@@ -348,7 +344,15 @@ const PersonalSummary = () => {
                   overallNet < 0 ? "text-[red]" : "text-greens"
                 }`}
               >
-                {overallNet.toLocaleString()}
+                <NumberFlow
+                  value={overallNet}
+                  trend={5}
+                  spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                  format={{
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  }}
+                />
               </div>
               <div>
                 {overallNet < 0 ? (
@@ -359,24 +363,35 @@ const PersonalSummary = () => {
               </div>
             </div>
           </div>
-          <div>
+          <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
             <div className="text-base font-semibold text-center mdd:text-sm">
               Gross
             </div>
-            <div className="bg-subCon px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+            <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
               <div>
                 <img src={pouch} alt="gross" className="w-14 mdd:w-11 sm:w-9" />
               </div>
               <div className="text-oranges font-bold text-2xl mdd:text-xl sm:text-lg">
-                {gross.toLocaleString()}
+                {/* {gross.toLocaleString()} */}
+                {
+                  <NumberFlow
+                    value={gross}
+                    trend={5}
+                    spinTiming={{ duration: 1500, easing: "linear" }}
+                    format={{
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    }}
+                  />
+                }
               </div>
             </div>
           </div>
-          <div>
+          <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
             <div className="text-base font-semibold text-center mdd:text-sm">
               Expenses
             </div>
-            <div className="bg-subCon px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+            <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
               <div>
                 <img
                   src={expensesIcon}
@@ -385,21 +400,198 @@ const PersonalSummary = () => {
                 />
               </div>
               <div className="text-[red] font-bold text-2xl mdd:text-xl sm:text-lg">
-                {expenses.toLocaleString()}
+                <NumberFlow
+                  value={expenses}
+                  trend={5}
+                  spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                  format={{
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  }}
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Monthly data */}
-      {/* <div className="grid grid-cols-2 grid-rows-4">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div> */}
-    </>
+      <div className="bg-white mb-5 py-5 mx-5 rounded-lg shadow-sm">
+        <div className="bg-light font-pops">
+          {isLoading ? (
+            <div className="w-[60%] bg-white p-5 rounded-lg flex items-center flex-col md:w-[90%] ">
+              <div className="w-[35%]">
+                <Skeleton />
+              </div>
+              <div className="w-[100%]">
+                <Skeleton height={500} />
+              </div>
+            </div>
+          ) : (
+            <div className="bg-white w-full flex gap-5 px-5 xs:flex-col">
+              <div className="w-[65%] xs:w-full">
+                <span id="lineGraph">
+                  <div className="bg-white border border-light py-4 rounded-md shadow-sm overflow-y-auto px-3">
+                    <div className="w-full flex justify-center text-xl text-greens font-pops font-bold py-3">
+                      <div className="flex w-[20%] gap-2 items-center">
+                        <div className="flex justify-start">
+                          <div>
+                            <FaAngleLeft
+                              className="text-greens text-2xl hover:text-lgreens cursor-pointer ssm:text-3xl"
+                              onClick={handlePrevMonth}
+                            />
+                          </div>
+                          <div>
+                            <FaAngleRight
+                              className="text-greens text-2xl hover:text-lgreens cursor-pointer ssm:text-3xl"
+                              onClick={handleNextMonth}
+                            />
+                          </div>
+                        </div>{" "}
+                        {thisMonth}
+                      </div>
+                    </div>
+                    <div className="h-[400px] w-full lg:w-[800px]">
+                      <Line
+                        className="w-full"
+                        data={{
+                          labels: dayCount,
+                          datasets: [
+                            {
+                              label: "Gross",
+                              data: grossCount,
+                              borderColor: "#ff9f1c",
+                              backgroundColor: "#fdac3a",
+                              tension: 0.5,
+                            },
+                            {
+                              label: "Expenses",
+                              data: expensesCount,
+                              borderColor: "#ff6384",
+                              backgroundColor: "#FA829C",
+                              tension: 0.5,
+                            },
+                            {
+                              label: "Net",
+                              data: netCount,
+                              borderColor: "#2ec4b6",
+                              backgroundColor: "#3cd5c5",
+                              tension: 0.5,
+                            },
+                          ],
+                        }}
+                        options={{
+                          plugins: {
+                            datalabels: {
+                              font: {
+                                weight: 550,
+                              },
+                            },
+                            legend: {
+                              align: "center",
+                              labels: {
+                                font: {
+                                  size: 14,
+                                },
+                              },
+                            },
+                            ChartDataLabels,
+                          },
+                          maintainAspectRatio: false,
+                        }}
+                      />
+                    </div>
+                  </div>
+                </span>
+              </div>
+              <div
+                id="barGraphOverview"
+                className="w-[35%] flex flex-col gap-5 rounded-md justify-center items-center md:p-0 xs:w-full xs:flex-row"
+              >
+                <div className="font-bold text-greens text-2xl text-center items-center justify-center lg:text-2xl ssm:text-xl">
+                  Monthly Summary{" "}
+                </div>
+                <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 border border-light bg-white shadow-sm rounded-md px-5 py-3">
+                  <div className="flex items-center justify-center gap-2 xs:flex-col">
+                    <div className="text-base font-semibold sm:text-sm">
+                      Gross
+                    </div>
+                  </div>
+                  <div className=" px-4 rounded-md py-2 flex gap-3 text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
+                    <img
+                      src={monthlyGrossIcon}
+                      alt="yearly capital"
+                      className="w-11 sm:w-9"
+                    />
+                    <NumberFlow
+                      value={monthlyGross}
+                      trend={5}
+                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 border border-light bg-white shadow-sm rounded-md px-5 py-3">
+                  <div className="flex items-center justify-center gap-2 xs:flex-col">
+                    <div className="text-base font-semibold sm:text-sm">
+                      Expenses
+                    </div>
+                  </div>
+                  <div className=" px-4 rounded-md py-2 flex gap-3 text-2xl text-[red] font-bold sm:text-xl ssm:font-semibold">
+                    <img
+                      src={monthlyExpensesIcon}
+                      alt="yearly expenses"
+                      className="w-11 sm:w-9"
+                    />
+                    <NumberFlow
+                      value={monthExpenses + monthlyExpenses}
+                      trend={5}
+                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 border border-light bg-white shadow-sm rounded-md px-5 py-3">
+                  <div className="flex items-center justify-center gap-2 xs:flex-col">
+                    <div className="text-base font-semibold sm:text-sm">
+                      Net
+                    </div>
+                  </div>
+                  <div
+                    className={
+                      monthlyNet < 0
+                        ? " px-4 rounded-md py-2 flex gap-3 text-2xl font-bold text-[red] sm:text-xl ssm:font-semibold"
+                        : " px-4 rounded-md py-2 flex gap-3 text-2xl font-bold text-greens sm:text-xl ssm:font-semibold"
+                    }
+                  >
+                    <img
+                      src={monthlyNetIcon}
+                      alt="yearly net"
+                      className="w-11 sm:w-9"
+                    />
+                    <NumberFlow
+                      value={monthlyNet}
+                      trend={5}
+                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      <PersonalYearlySummary />
+    </div>
   );
 };
 

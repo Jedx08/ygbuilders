@@ -83,7 +83,10 @@ const PersonalData = ({ personalDataLoading, monthData }) => {
                           />
                           <p className="ml-1 text-[#D0D0D0]">:</p>
                           <p className="text-oranges text-base font-semibold">
-                            {d.gross.toLocaleString()}
+                            {d.gross.toLocaleString("en-US", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            })}
                           </p>
                         </div>
                       </div>
@@ -99,7 +102,10 @@ const PersonalData = ({ personalDataLoading, monthData }) => {
                           />
                           <p className="ml-1 text-[#D0D0D0]">:</p>
                           <p className="text-[red] text-base font-semibold">
-                            {d.expenses.toLocaleString()}
+                            {d.expenses.toLocaleString("en-US", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            })}
                           </p>
                         </div>
                       </div>
@@ -119,7 +125,10 @@ const PersonalData = ({ personalDataLoading, monthData }) => {
                               d.net < 0 ? "text-[red]" : "text-greens"
                             }`}
                           >
-                            {d.net.toLocaleString()}
+                            {d.net.toLocaleString("en-US", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            })}
                           </p>
                         </div>
                       </div>

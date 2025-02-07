@@ -70,7 +70,10 @@ const SavingsData = ({ savingsDataLoading, monthData }) => {
                           />
                           <p className="ml-1 text-[#D0D0D0]">:</p>
                           <p className="text-oranges text-base font-semibold">
-                            {d.amount.toLocaleString()}
+                            {d.amount.toLocaleString("en-US", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            })}
                           </p>
                         </div>
                       </div>

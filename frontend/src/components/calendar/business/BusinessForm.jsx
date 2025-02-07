@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CalendarContext } from "../../../context/CalendarContext";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import capitalIcon from "../../../media/bus_pouch.png";
@@ -24,7 +25,10 @@ const BusinessForm = () => {
     setBusinessButton,
     showBusinessForm,
     setShowBusinessForm,
+    loggedIn,
   } = useContext(CalendarContext);
+
+  const navigate = useNavigate();
 
   const [showButton, setShowButton] = useState(false);
   const [toggleSaveButton, setToggleSaveButton] = useState(true);
@@ -416,7 +420,10 @@ const BusinessForm = () => {
               </div>
               <div className="">
                 <p className="pl-3">
-                  {(sales - expenses - capital).toLocaleString()}
+                  {(sales - expenses - capital).toLocaleString("en-US", {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  })}
                 </p>
               </div>
             </div>
@@ -441,7 +448,15 @@ const BusinessForm = () => {
                       {/* Add data */}
                       {!addLoading && (
                         <div className="flex flex-col items-center ">
-                          <div onClick={handleSubmit}>
+                          <div
+                            onClick={() => {
+                              if (!loggedIn) {
+                                navigate("/login");
+                              } else {
+                                handleSubmit();
+                              }
+                            }}
+                          >
                             <button className="mx-auto py-1 rounded-md px-6 bg-oranges font-bold text-white hover:bg-loranges flex gap-2 items-center">
                               <span className="text-3xl">
                                 <MdOutlinePostAdd />

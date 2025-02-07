@@ -88,7 +88,7 @@ const ForgotPassword = () => {
     <>
       {authToken ? (
         <>
-          <Navigate to="/home" />
+          <Navigate to="/dashboard" />
         </>
       ) : (
         <>

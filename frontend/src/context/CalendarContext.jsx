@@ -109,7 +109,7 @@ function goalDataReducer(state, { type, payload }) {
 }
 
 export const CalendarContextProvider = (props) => {
-  const [loggedIn, setLoggedIn] = useState(true); // user login ?
+  const [loggedIn, setLoggedIn] = useState(false); // user login ?
   const [personalSummaryView, setPersonalSummaryView] = useState(true);
   const [inMobile, setInMobile] = useState(false);
   const [loadPage, setLoadPage] = useState(false); // load current page

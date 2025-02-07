@@ -13,7 +13,7 @@ function LandingPage() {
 
   useEffect(() => {
     if (auth?.accessToken) {
-      navigate("/home");
+      navigate("/dashboard");
     }
   }, []);
 
@@ -71,7 +71,7 @@ function LandingPage() {
           </div>
         </div>
       </div>
-      <div className="h-[550px] flex justify-center items-center mmd:h-[600px]">
+      <div className="h-[550px] flex justify-center items-center mmd:h-[600px] bg-white">
         <div className="flex items-center gap-[10%] lg:gap-[5%] mmd:flex-col mmd:space-y-3">
           <div className="flex flex-col text-center w-[35rem] lg:w-[30rem] md:w-[20rem]">
             <p className="text-5xl mb-2 font-semibold text-greens lg:text-4xl mmd:text-3xl mmd:mb-0">
@@ -109,7 +109,9 @@ function LandingPage() {
         </div>
       </div>
 
-      <Footer />
+      <div className="bg-light pt-20">
+        <Footer />
+      </div>
     </div>
   );
 }

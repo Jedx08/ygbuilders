@@ -4,7 +4,7 @@ import piggyYear from "../../media/savings_year.png";
 import piggyTotal from "../../media/savings_total.png";
 import { CalendarContext } from "../../context/CalendarContext";
 import dayjs from "dayjs";
-import { PiChartLineUp, PiChartLineDown } from "react-icons/pi";
+import NumberFlow from "@number-flow/react";
 
 const SavingsSummary = ({
   savingsCurrentAmount,
@@ -26,11 +26,11 @@ const SavingsSummary = ({
         </div>
         <div>
           <div className="flex flex-wrap items-center justify-evenly py-5 px-5 gap-2 lg:px-2">
-            <div>
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
               <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
                 {dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM")}
               </div>
-              <div className="flex items-center font-semibold px-5 py-2 rounded-md bg-subCon">
+              <div className="flex items-center font-semibold px-5 py-2">
                 <div className={`flex space-x-1 items-center justify-center`}>
                   <img
                     src={piggyMonth}
@@ -39,20 +39,25 @@ const SavingsSummary = ({
                   />
                   <p className="ml-1 text-[#D0D0D0]">:</p>
                   <p className="text-greens font-bold text-xl/[24px] mdd:text-lg">
-                    {savingsAmountMonth.toLocaleString("en-US", {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 2,
-                    })}
+                    <NumberFlow
+                      value={savingsAmountMonth}
+                      trend={5}
+                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
                   </p>
                 </div>
               </div>
             </div>
 
-            <div>
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
               <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
                 {dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY")}
               </div>
-              <div className="flex items-center font-semibold px-5 py-2 rounded-md bg-subCon">
+              <div className="flex items-center font-semibold px-5 py-2">
                 <div className={`flex space-x-1 items-center justify-center`}>
                   <img
                     src={piggyYear}
@@ -61,20 +66,25 @@ const SavingsSummary = ({
                   />
                   <p className="ml-1 text-[#D0D0D0]">:</p>
                   <p className="text-greens font-bold text-xl/[24px] mdd:text-lg">
-                    {savingsAmountYear.toLocaleString("en-US", {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 2,
-                    })}
+                    <NumberFlow
+                      value={savingsAmountYear}
+                      trend={5}
+                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
                   </p>
                 </div>
               </div>
             </div>
 
-            <div>
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
               <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
                 Total
               </div>
-              <div className="flex items-center font-semibold px-5 py-2 rounded-md bg-subCon">
+              <div className="flex items-center font-semibold px-5 py-2">
                 <div className={`flex space-x-1 items-center justify-center`}>
                   <img
                     src={piggyTotal}
@@ -85,10 +95,15 @@ const SavingsSummary = ({
                   <p
                     className={`font-bold text-greens text-xl/[24px] mdd:text-lg`}
                   >
-                    {savingsCurrentAmount.toLocaleString("en-US", {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 2,
-                    })}
+                    <NumberFlow
+                      value={savingsCurrentAmount}
+                      trend={5}
+                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
                   </p>
                 </div>
               </div>

@@ -4,7 +4,7 @@ import { CalendarContext } from "../../../context/CalendarContext";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import PersonalDay from "./PersonalDay";
 const PersonalMonth = ({ month, monthData, personalDataLoading }) => {
-  const { monthIndex, setMonthIndex, inMobile } = useContext(CalendarContext);
+  const { monthIndex, setMonthIndex } = useContext(CalendarContext);
 
   function handlePrevMonth() {
     setMonthIndex(monthIndex - 1);

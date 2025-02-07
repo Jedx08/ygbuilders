@@ -12,7 +12,7 @@ const NavbarDefault = () => {
           </Link>
         </div>
         <div className="pr-3">
-          <Link to="/Login">
+          <Link to="/login">
             <div className="flex space-x-1 items-center hover:text-lgreens">
               <BiLogIn className="text-3xl text-greens hover:text-lgreens" />
               <p className="font-bold text-lg text-lgreens hover:text-greens">

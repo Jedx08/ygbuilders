@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState } from "react";
+import { useContext } from "react";
 import { CalendarContext } from "../../../context/CalendarContext";
 import dayjs from "dayjs";
 import capitalIcon from "../../../media/bus_pouch.png";
@@ -90,7 +90,10 @@ const BusinessData = ({ businessDataLoading, monthData }) => {
                           />
                           <p className="ml-1 text-[#D0D0D0]">:</p>
                           <p className="text-oranges text-base font-semibold">
-                            {d.capital.toLocaleString()}
+                            {d.capital.toLocaleString("en-US", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            })}
                           </p>
                         </div>
                       </div>
@@ -106,7 +109,10 @@ const BusinessData = ({ businessDataLoading, monthData }) => {
                           />
                           <p className="ml-1 text-[#D0D0D0]">:</p>
                           <p className="text-[#399CB4] text-base font-semibold">
-                            {d.sales.toLocaleString()}
+                            {d.sales.toLocaleString("en-US", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            })}
                           </p>
                         </div>
                       </div>
@@ -122,7 +128,10 @@ const BusinessData = ({ businessDataLoading, monthData }) => {
                           />
                           <p className="ml-1 text-[#D0D0D0]">:</p>
                           <p className="text-[red] text-base font-semibold">
-                            {d.expenses.toLocaleString()}
+                            {d.expenses.toLocaleString("en-US", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            })}
                           </p>
                         </div>
                       </div>
@@ -142,7 +151,10 @@ const BusinessData = ({ businessDataLoading, monthData }) => {
                               d.profit < 0 ? "text-[red]" : "text-greens"
                             }`}
                           >
-                            {d.profit.toLocaleString()}
+                            {d.profit.toLocaleString("en-US", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            })}
                           </p>
                         </div>
                       </div>

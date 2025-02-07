@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { CalendarContext } from "../../../context/CalendarContext";
 import { FaRegPenToSquare, FaRegTrashCan } from "react-icons/fa6";
 import { GoChecklist } from "react-icons/go";
@@ -299,7 +299,10 @@ const PMonthlyExpensesData = ({ expensesData }) => {
                 </div>
               </div>
               <div className="border border-inputLight text-[red] font-semibold rounded-md overflow-hidden py-1 items-center justify-center flex px-2 col-span-1">
-                {amount.toLocaleString()}
+                {amount.toLocaleString("en-US", {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2,
+                })}
               </div>
             </div>
             <div className="mt-2 pt-1">

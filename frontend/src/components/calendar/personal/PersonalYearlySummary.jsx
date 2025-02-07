@@ -1,4 +1,4 @@
-import { CalendarContext } from "../../context/CalendarContext";
+import { CalendarContext } from "../../../context/CalendarContext";
 import { useContext, useEffect, useState } from "react";
 import localeData from "dayjs/plugin/localeData";
 import dayjs from "dayjs";
@@ -6,11 +6,11 @@ import { Chart } from "chart.js/auto"; // core data for chartjs, do not remove
 import { Bar } from "react-chartjs-2";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
-import useGetPersonalData from "../../hooks/useGetPersonalData";
-import usePersonalExpenses from "../../hooks/usePersonalExpenses";
-import yearlyGrossIcon from "../../media/yearpouch.png";
-import yearlyExpensesIcon from "../../media/yearexpenses.png";
-import yearlyNetIcon from "../../media/yearprofit.png";
+import useGetPersonalData from "../../../hooks/useGetPersonalData";
+import usePersonalExpenses from "../../../hooks/usePersonalExpenses";
+import yearlyGrossIcon from "../../../media/yearpouch.png";
+import yearlyExpensesIcon from "../../../media/yearexpenses.png";
+import yearlyNetIcon from "../../../media/yearprofit.png";
 import NumberFlow from "@number-flow/react";
 
 const BusinessYearlySummary = () => {
@@ -300,6 +300,10 @@ const BusinessYearlySummary = () => {
                     value={yearlyGross}
                     trend={5}
                     spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                    format={{
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    }}
                   />
                 </div>
               </div>
@@ -320,6 +324,10 @@ const BusinessYearlySummary = () => {
                     value={yearlyExpenses + thisYearMonthlyExpenses}
                     trend={5}
                     spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                    format={{
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    }}
                   />
                 </div>
               </div>
@@ -343,6 +351,10 @@ const BusinessYearlySummary = () => {
                     value={yearlyNet}
                     trend={5}
                     spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                    format={{
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    }}
                   />
                 </div>
               </div>

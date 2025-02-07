@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CalendarContext } from "../../../context/CalendarContext";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import pouchIcon from "../../../media/pouch.png";
@@ -23,7 +24,10 @@ const PersonalForm = () => {
     setPersonalButton,
     showPersonalForm,
     setShowPersonalForm,
+    loggedIn,
   } = useContext(CalendarContext);
+
+  const navigate = useNavigate();
 
   const [showButton, setShowButton] = useState(false);
   const [toggleSaveButton, setToggleSaveButton] = useState(true);
@@ -352,7 +356,12 @@ const PersonalForm = () => {
                 <img src={networthIcon} className="w-8" />
               </div>
               <div className="">
-                <p className="pl-3">{(gross - expenses).toLocaleString()}</p>
+                <p className="pl-3">
+                  {(gross - expenses).toLocaleString("en-US", {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  })}
+                </p>
               </div>
             </div>
           </div>
@@ -376,7 +385,13 @@ const PersonalForm = () => {
                       {/* Add data */}
                       {!addLoading && (
                         <div
-                          onClick={handleSubmit}
+                          onClick={() => {
+                            if (!loggedIn) {
+                              navigate("/login");
+                            } else {
+                              handleSubmit();
+                            }
+                          }}
                           className="mx-auto py-1 rounded-md px-6 bg-greens text-base font-semibold text-white hover:bg-lgreens flex gap-1 items-center cursor-pointer"
                         >
                           <span className="text-3xl">

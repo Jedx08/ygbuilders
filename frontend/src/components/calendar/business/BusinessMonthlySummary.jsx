@@ -6,6 +6,7 @@ import monthSalesIcon from "../../../media/busmon_sales.png";
 import monthExpensesIcon from "../../../media/busmon_expenses.png";
 import monthProfitIcon from "../../../media/busmon_net.png";
 import { PiChartLineUp, PiChartLineDown } from "react-icons/pi";
+import NumberFlow from "@number-flow/react";
 
 const BusinessMonthlySummary = ({
   capitalCount,
@@ -47,7 +48,16 @@ const BusinessMonthlySummary = ({
                   />
                   <p className="ml-1 text-[#D0D0D0]">:</p>
                   <p className="text-oranges font-bold text-xl/[24px] mdd:text-lg">
-                    {(capitalCount + monthlyCapital).toLocaleString()}
+                    {/* {(capitalCount + monthlyCapital).toLocaleString()} */}
+                    <NumberFlow
+                      value={capitalCount + monthlyCapital}
+                      trend={5}
+                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
                   </p>
                 </div>
               </div>
@@ -66,7 +76,15 @@ const BusinessMonthlySummary = ({
                   />
                   <p className="ml-1 text-[#D0D0D0]">:</p>
                   <p className="text-[#399CB4] font-bold text-xl/[24px] mdd:text-lg">
-                    {salesCount.toLocaleString()}
+                    <NumberFlow
+                      value={salesCount}
+                      trend={5}
+                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
                   </p>
                 </div>
               </div>
@@ -85,7 +103,16 @@ const BusinessMonthlySummary = ({
                   />
                   <p className="ml-1 text-[#D0D0D0]">:</p>
                   <p className="text-[red] font-bold text-xl/[24px] mdd:text-lg">
-                    {(expensesCount + monthlyExpenses).toLocaleString()}
+                    {/* {(expensesCount + monthlyExpenses).toLocaleString()} */}
+                    <NumberFlow
+                      value={expensesCount + monthlyExpenses}
+                      trend={5}
+                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
                   </p>
                 </div>
               </div>
@@ -110,10 +137,19 @@ const BusinessMonthlySummary = ({
                         : "text-greens"
                     }`}
                   >
-                    {(
+                    {/* {(
                       profitCount -
                       (monthlyCapital + monthlyExpenses)
-                    ).toLocaleString()}
+                    ).toLocaleString()} */}
+                    <NumberFlow
+                      value={profitCount - (monthlyCapital + monthlyExpenses)}
+                      trend={5}
+                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
                   </p>
                   {profitCount - (monthlyCapital + monthlyExpenses) < 0 ? (
                     <PiChartLineDown className="text-2xl text-[#ff3a33] mdd:text-lg" />

@@ -26,7 +26,7 @@ const Settings = () => {
   const { userInfo, setAuth, setUserInfo } = useAuth();
   const axiosPrivate = useAxiosPrivate();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const {
     isAvatar,
@@ -286,7 +286,7 @@ const Settings = () => {
             <h1 className="font-bold text-2xl">Account Settings</h1>
           </div>
           <div className="bg-white mt-5 px-10 py-5 overflow-hidden w-fit h-hfit mx-auto shadow-lg rounded-md xs:px-0">
-            <Link to="/summary">
+            <Link to="/dashboard">
               <div className="ml-[-30px] mb-3 flex items-center space-x-2 text-oranges font-medium underline cursor-pointer xs:ml-0">
                 <div className="text-2xl">
                   <PiArrowFatLeftFill />

@@ -68,10 +68,10 @@ const Footer = () => {
         <div className="flex flex-wrap space-x-4 justify-between items-center pt-5 pb-2 px-32 text-sm">
           <div className="w-96">
             <img src={Logo} alt="Logo" className="w-28 mx-auto" />
-            <div className="text-sm py-4">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Reiciendis doloribus soluta eaque! Porro, quos. Vitae illo aperiam
-              tempore obcaecati doloribus esse magnam illum dolor asperiores!
+            <div className="text-sm py-4 text-center">
+              Take control of your earnings with YourGross PH! Track your income
+              effortlessly, gain insights into your finances, and stay on top of
+              your financial goals—all in one place.
             </div>
           </div>
           <div className="flex flex-col space-y-4 font-medium">

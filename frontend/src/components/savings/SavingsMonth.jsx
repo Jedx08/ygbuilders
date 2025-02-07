@@ -5,7 +5,7 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import SavingsDay from "./SavingsDay";
 
 const SavingsMonth = ({ monthData, month, savingsDataLoading }) => {
-  const { monthIndex, setMonthIndex, inMobile } = useContext(CalendarContext);
+  const { monthIndex, setMonthIndex } = useContext(CalendarContext);
 
   function handlePrevMonth() {
     setMonthIndex(monthIndex - 1);

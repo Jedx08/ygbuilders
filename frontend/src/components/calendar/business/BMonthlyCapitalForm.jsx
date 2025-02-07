@@ -1,9 +1,8 @@
 import dayjs from "dayjs";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { CalendarContext } from "../../../context/CalendarContext";
 import { IoClose } from "react-icons/io5";
 import { MdOutlinePostAdd } from "react-icons/md";
-import Skeleton from "react-loading-skeleton";
 import BMonthlyCapitalData from "./BMonthlyCapitalData";
 import BMonthlyCapitalAdd from "./BMonthlyCapitalAdd";
 import profitIcon from "../../../media/busmon_pouch.png";
@@ -16,7 +15,6 @@ const BMonthlyCapitalForm = ({
 }) => {
   const {
     monthIndex,
-    loadPage,
     setShowBusinessCapitalForm,
     setShowBusinessCapitalInput,
     showBusinessCapitalInput,
@@ -124,7 +122,10 @@ const BMonthlyCapitalForm = ({
                 </div>
                 <div className="mt-[0.15rem]">
                   <p className="text-[red] font-bold text-xl/[24px]">
-                    {monthlyCapital.toLocaleString()}
+                    {monthlyCapital.toLocaleString("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
                   </p>
                 </div>
               </div>

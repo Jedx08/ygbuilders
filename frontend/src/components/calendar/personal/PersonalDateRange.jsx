@@ -84,7 +84,10 @@ const PersonalDateRange = ({ startDate, endDate }) => {
                     className={`w-14 mdd:w-11 sm:w-9`}
                   />
                   <p className="text-oranges font-bold text-2xl mdd:text-xl sm:text-lg">
-                    {grossRange.toLocaleString()}
+                    {grossRange.toLocaleString("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
                   </p>
                 </div>
               </div>
@@ -102,7 +105,10 @@ const PersonalDateRange = ({ startDate, endDate }) => {
                     className={`w-14 mdd:w-11 sm:w-9`}
                   />
                   <p className="text-[red] font-bold text-2xl mdd:text-xl sm:text-lg">
-                    {expensesRange.toLocaleString()}
+                    {expensesRange.toLocaleString("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
                   </p>
                 </div>
               </div>
@@ -125,7 +131,10 @@ const PersonalDateRange = ({ startDate, endDate }) => {
                     netRange < 0 ? "text-[red]" : "text-greens"
                   }`}
                 >
-                  {netRange.toLocaleString()}
+                  {netRange.toLocaleString("en-US", {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  })}
                 </div>
                 <div>
                   {netRange < 0 ? (
@@ -157,7 +166,10 @@ const PersonalDateRange = ({ startDate, endDate }) => {
                       <img src={pouch} alt="pouch" className="w-8 sm:w-6" />
                       {/* <p className="text-sm">Gross</p> */}
                       <span className="text-oranges text-base font-semibold">
-                        {data.gross.toLocaleString()}
+                        {data.gross.toLocaleString("en-US", {
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
                     </div>
                     <div className="flex items-center space-x-3">
@@ -168,7 +180,10 @@ const PersonalDateRange = ({ startDate, endDate }) => {
                       />
                       {/* <p className="text-sm">Expenses</p> */}
                       <span className="text-[red] text-base font-semibold">
-                        {data.expenses.toLocaleString()}
+                        {data.expenses.toLocaleString("en-US", {
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
                     </div>
                     <div className="flex items-center space-x-3">
@@ -179,7 +194,10 @@ const PersonalDateRange = ({ startDate, endDate }) => {
                           data.net < 0 ? "text-[red]" : "text-greens"
                         }`}
                       >
-                        {data.net.toLocaleString()}
+                        {data.net.toLocaleString("en-US", {
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
                     </div>
                   </div>

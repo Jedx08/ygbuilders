@@ -1,9 +1,8 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { IoClose } from "react-icons/io5";
 import { MdOutlinePostAdd } from "react-icons/md";
 import { CalendarContext } from "../../../context/CalendarContext";
 import dayjs from "dayjs";
-import Skeleton from "react-loading-skeleton";
 import BMonthlyExpensesAdd from "./BMonthlyExpensesAdd";
 import BMonthlyExpensesData from "./BMonthlyExpensesData";
 import expensesIcon from "../../../media/busmon_expenses.png";
@@ -19,7 +18,6 @@ const BMonthlyExpensesForm = ({
     setShowBusinessExpensesForm,
     showBusinessExpenseInput,
     setShowBusinessExpensesInput,
-    loadPage,
     loggedIn,
   } = useContext(CalendarContext);
 
@@ -130,7 +128,10 @@ const BMonthlyExpensesForm = ({
                 </div>
                 <div className="mt-[0.15rem]">
                   <p className="text-[red] font-bold text-xl/[24px]">
-                    {monthlyExpenses.toLocaleString()}
+                    {monthlyExpenses.toLocaleString("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
                   </p>
                 </div>
               </div>

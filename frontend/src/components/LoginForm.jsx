@@ -8,7 +8,7 @@ import { ThreeDot, OrbitProgress } from "react-loading-indicators";
 
 const LOGIN_URL = "/login";
 
-const LoginForm = ({ next, inMobile, changeTab }) => {
+const LoginForm = ({ next, inMobile }) => {
   const { setAuth, setUserInfo } = useAuth();
 
   const [username, setUsername] = useState("");
@@ -59,7 +59,7 @@ const LoginForm = ({ next, inMobile, changeTab }) => {
       setUsername("");
       setPassword("");
       setSuccess("Success");
-      navigate("/home");
+      navigate("/dashboard");
     } catch (err) {
       if (!err?.response) {
         setErrMsg("Can't connect to the Server");

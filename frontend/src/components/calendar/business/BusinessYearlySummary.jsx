@@ -1,17 +1,17 @@
-import { CalendarContext } from "../../context/CalendarContext";
+import { CalendarContext } from "../../../context/CalendarContext";
 import { useContext, useEffect, useState } from "react";
 import localeData from "dayjs/plugin/localeData";
 import dayjs from "dayjs";
 import { Chart } from "chart.js/auto"; // core data for chart, do not remove
 import { Bar } from "react-chartjs-2";
 import Skeleton from "react-loading-skeleton";
-import useGetBusinessData from "../../hooks/useGetBusinessData";
-import useBusinessExpenses from "../../hooks/useBusinessExpenses";
-import useBusinessCapital from "../../hooks/useBusinessCapital";
-import yearlyCapitalIcon from "../../media/busyear_pouch.png";
-import yearlySalesIcon from "../../media/busyear_sales.png";
-import yearlyExpensesIcon from "../../media/busyear_expenses.png";
-import yearlyProfitIcon from "../../media/busyear_net.png";
+import useGetBusinessData from "../../../hooks/useGetBusinessData";
+import useBusinessExpenses from "../../../hooks/useBusinessExpenses";
+import useBusinessCapital from "../../../hooks/useBusinessCapital";
+import yearlyCapitalIcon from "../../../media/busyear_pouch.png";
+import yearlySalesIcon from "../../../media/busyear_sales.png";
+import yearlyExpensesIcon from "../../../media/busyear_expenses.png";
+import yearlyProfitIcon from "../../../media/busyear_net.png";
 import NumberFlow from "@number-flow/react";
 
 const BusinessYearlySummary = () => {
@@ -194,7 +194,6 @@ const BusinessYearlySummary = () => {
         capitalPerDate[index] = c + mc;
       });
 
-      console.log(capitalPerDate);
       setCapitalCount(capitalPerDate);
 
       //calculate yearly sales
@@ -369,6 +368,10 @@ const BusinessYearlySummary = () => {
                         value={yearlyCapital}
                         trend={5}
                         spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                        format={{
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2,
+                        }}
                       />
                     </div>
                   </div>
@@ -392,6 +395,10 @@ const BusinessYearlySummary = () => {
                         value={yearlySales}
                         trend={5}
                         spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                        format={{
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2,
+                        }}
                       />
                     </div>
                   </div>
@@ -419,6 +426,10 @@ const BusinessYearlySummary = () => {
                         value={yearlyExpenses + thisYearMonthlyExpenses}
                         trend={5}
                         spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                        format={{
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2,
+                        }}
                       />
                     </div>
                   </div>
@@ -448,6 +459,10 @@ const BusinessYearlySummary = () => {
                         value={yearlyProfit}
                         trend={5}
                         spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                        format={{
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2,
+                        }}
                       />
                     </div>
                   </div>

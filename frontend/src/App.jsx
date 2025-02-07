@@ -1,12 +1,9 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Auth from "./pages/Auth";
-import Personal from "./pages/Personal";
-import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import NotFound from "./pages/NotFound";
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
-import Business from "./pages/Business";
 import Summary from "./pages/Summary";
 import { useEffect, useContext } from "react";
 import { CalendarContext } from "./context/CalendarContext";
@@ -51,21 +48,26 @@ function App() {
             <Route path="forgot-password" element={<ForgotPassword />} />
 
             {/* uncomment RequireAuth after ads added */}
-            <Route element={<RequireAuth />}>
-              <Route exact path="/home" element={<Home />} />
-              {/* Calendar Page start */}
-              <Route path="calendar" element={<Calendar />} />
-              <Route
-                path="calendar"
-                element={<Navigate to="/calendar?tab=Personal" replace />}
-              />
-              {/* Calendar Page end */}
-              <Route path="savings" element={<Savings />} />
-              <Route path="filter" element={<Filter />} />
-              <Route path="business" element={<Business />} />
-              <Route path="summary" element={<Summary />} />
-              <Route path="settings" element={<Settings />} />
-            </Route>
+            {/* <Route element={<RequireAuth />}> */}
+            {/* Dashboard Page start */}
+            <Route path="dashboard" element={<Summary />} />
+            <Route
+              path="dashboard"
+              element={<Navigate to="/dashboard?tab=Personal" replace />}
+            />
+            {/* Dashboard Page start */}
+
+            {/* Calendar Page start */}
+            <Route path="calendar" element={<Calendar />} />
+            <Route
+              path="calendar"
+              element={<Navigate to="/calendar?tab=Personal" replace />}
+            />
+            {/* Calendar Page end */}
+            <Route path="savings" element={<Savings />} />
+            <Route path="filter" element={<Filter />} />
+            <Route path="settings" element={<Settings />} />
+            {/* </Route> */}
           </Route>
           {/* Catch All */}
           <Route path="*" element={<NotFound />} />

@@ -157,7 +157,10 @@ const BMonthlyExpensesData = ({ expensesData }) => {
               </span>
             </div>
             <div className="text-[red] font-semibold rounded-md overflow-hidden py-1 items-center justify-center bg-light flex px-2 col-span-1">
-              {amount.toLocaleString()}
+              {amount.toLocaleString("en-US", {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })}
             </div>
           </>
         ) : (

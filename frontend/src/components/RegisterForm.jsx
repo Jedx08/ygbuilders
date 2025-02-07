@@ -125,7 +125,7 @@ const RegisterForm = ({ previous, inMobile }) => {
       setMatchPassword("");
       setSuccess(false);
       setIsLoading(false);
-      navigate("/home");
+      navigate("/dashboard");
     } catch (err) {
       if (!err?.response) {
         setErrMsg("Can't connect to the Server");

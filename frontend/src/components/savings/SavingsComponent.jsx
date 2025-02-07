@@ -201,7 +201,7 @@ const SavingsComponent = () => {
           <SavingsForm />
         </div>
         {/* goal */}
-        <div className="bg-white shadow-sm rounded-lg min-w-[350px] max-h-[360px] clg:col-span-2 clg:row-span-full clg:h-hfit">
+        <div className="bg-white shadow-sm rounded-lg min-w-[350px] max-h-[360px] clg:col-span-2 clg:row-span-full clg:h-[400px]">
           <SavingsGoal
             goalGetData={goalGetData}
             savingsCurrentAmount={savingsCurrentAmount}

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { BiLogIn } from "react-icons/bi";
 import { GoHomeFill } from "react-icons/go";
 import { FaAddressBook } from "react-icons/fa6";
+import { FaChartLine } from "react-icons/fa";
 
 const Navbar = () => {
   return (
@@ -24,29 +25,29 @@ const Navbar = () => {
           <div className="grid place-items-center">
             <ul className="flex space-x-4 items-center">
               <li>
-                <Link to="/home">
-                  <div className="flex space-x-1 items-center text-white hover:text-lgreens">
-                    <GoHomeFill className="text-3xl" />
-                    <p className="font-bold text-lg">Home</p>
+                <Link to="/dashboard">
+                  <div className="flex space-x-2 items-center text-white hover:text-loranges">
+                    <FaChartLine className="text-3xl" />
+                    <p className="font-bold text-lg">Dashboard</p>
                   </div>
                 </Link>
               </li>
               <li>
                 <Link to="login" state={{ toReg: "register" }}>
-                  <div className="flex space-x-1 items-center text-white hover:text-lgreens">
+                  <div className="flex space-x-2 items-center text-white hover:text-loranges">
                     <FaAddressBook className="text-2xl" />
-                    <p className="font-bold text-lg">Register</p>
+                    <p className="font-bold text-lg">Sign up</p>
                   </div>
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to="login" state={{ toReg: "login" }}>
                   <div className="flex space-x-1 items-center text-white hover:text-lgreens">
                     <BiLogIn className="text-3xl" />
                     <p className="font-bold text-lg">Login</p>
                   </div>
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

@@ -1,12 +1,11 @@
 import React, { useContext } from "react";
 import dayjs from "dayjs";
 import { CalendarContext } from "../../../context/CalendarContext";
-import { BsInfoCircle } from "react-icons/bs";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import BusinessDay from "./BusinessDay";
 
 const BusinessMonth = ({ month, monthData, businessDataLoading }) => {
-  const { monthIndex, inMobile, setMonthIndex } = useContext(CalendarContext);
+  const { monthIndex, setMonthIndex } = useContext(CalendarContext);
 
   function handlePrevMonth() {
     setMonthIndex(monthIndex - 1);

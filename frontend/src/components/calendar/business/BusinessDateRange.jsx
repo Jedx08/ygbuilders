@@ -87,7 +87,10 @@ const BusinessDateRange = ({ startDate, endDate }) => {
                     className={`w-14 mdd:w-11 sm:w-9`}
                   />
                   <p className="text-oranges font-bold text-2xl mdd:text-xl sm:text-lg">
-                    {capitalRange.toLocaleString()}
+                    {capitalRange.toLocaleString("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
                   </p>
                 </div>
               </div>
@@ -105,7 +108,10 @@ const BusinessDateRange = ({ startDate, endDate }) => {
                     className={`w-14 mdd:w-11 sm:w-9`}
                   />
                   <p className="text-[#399CB4] font-bold text-2xl mdd:text-xl sm:text-lg">
-                    {salesRange.toLocaleString()}
+                    {salesRange.toLocaleString("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
                   </p>
                 </div>
               </div>
@@ -123,7 +129,10 @@ const BusinessDateRange = ({ startDate, endDate }) => {
                     className={`w-14 mdd:w-11 sm:w-9`}
                   />
                   <p className="text-[red] font-bold text-2xl mdd:text-xl sm:text-lg">
-                    {expensesRange.toLocaleString()}
+                    {expensesRange.toLocaleString("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
                   </p>
                 </div>
               </div>
@@ -146,7 +155,10 @@ const BusinessDateRange = ({ startDate, endDate }) => {
                     profitRange < 0 ? "text-[red]" : "text-greens"
                   }`}
                 >
-                  {profitRange.toLocaleString()}
+                  {profitRange.toLocaleString("en-US", {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  })}
                 </div>
                 <div>
                   {profitRange < 0 ? (
@@ -182,7 +194,10 @@ const BusinessDateRange = ({ startDate, endDate }) => {
                       />
                       {/* <p className="text-sm">Gross</p> */}
                       <span className="text-oranges text-base font-semibold">
-                        {data.capital.toLocaleString()}
+                        {data.capital.toLocaleString("en-US", {
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
                     </div>
                     <div className="flex items-center space-x-3">
@@ -193,7 +208,10 @@ const BusinessDateRange = ({ startDate, endDate }) => {
                       />
                       {/* <p className="text-sm">Gross</p> */}
                       <span className="text-[#399CB4] text-base font-semibold">
-                        {data.sales.toLocaleString()}
+                        {data.sales.toLocaleString("en-US", {
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
                     </div>
                     <div className="flex items-center space-x-3">
@@ -204,7 +222,10 @@ const BusinessDateRange = ({ startDate, endDate }) => {
                       />
                       {/* <p className="text-sm">Expenses</p> */}
                       <span className="text-[red] text-base font-semibold">
-                        {data.expenses.toLocaleString()}
+                        {data.expenses.toLocaleString("en-US", {
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
                     </div>
                     <div className="flex items-center space-x-3">
@@ -219,7 +240,10 @@ const BusinessDateRange = ({ startDate, endDate }) => {
                           data.profit < 0 ? "text-[red]" : "text-greens"
                         }`}
                       >
-                        {data.profit.toLocaleString()}
+                        {data.profit.toLocaleString("en-US", {
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
                     </div>
                   </div>

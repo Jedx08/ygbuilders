@@ -122,16 +122,6 @@ const SavingsGoal = ({
     setErrMsg("");
   };
 
-  // const CalendarCustomInput = forwardRef(
-  //   ({ value, onClick, className }, ref) => (
-  //     <button className={className} onClick={onClick} ref={ref}>
-  //       {value}
-  //     </button>
-  //   )
-  // );
-
-  // CalendarCustomInput.displayName = "CalendarCustomInput";
-
   return (
     <div
       className={`bg-white rounded-lg py-5 h-hfull clg:mx-auto ${
