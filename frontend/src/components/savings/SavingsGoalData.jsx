@@ -96,6 +96,8 @@ const SavingsGoalData = ({ goals, savingsCurrentAmount, goalInfoLoading }) => {
       if (response.status === 200) {
         setShowStartDate(false);
         setShowEndDate(false);
+        setCongratsMsgStart(false);
+        setCongratsMsg(true);
         dispatchGoalData({ type: "update", payload: json });
         setGoalLoading(true);
         setUpdateLoading(false);
@@ -135,27 +137,29 @@ const SavingsGoalData = ({ goals, savingsCurrentAmount, goalInfoLoading }) => {
 
     const endOnly = end.diff(start, "day");
 
-    if (goals.startDate && goals.endDate) {
-      return (
-        setShowStartDate(false),
-        setShowEndDate(false),
-        setRemainingDays(startEnd + 1)
-      );
-    }
+    if (!goalInfoLoading) {
+      if (goals.startDate && goals.endDate) {
+        return (
+          setShowStartDate(false),
+          setShowEndDate(false),
+          setRemainingDays(startEnd + 1)
+        );
+      }
 
-    if (goals.startDate && !goals.endDate) {
-      return (
-        setShowStartDate(true),
-        setRemainingDays(startOnly + 1),
-        setCongratsMsg(false),
-        setCongratsMsgStart(true)
-      );
-    }
+      if (goals.startDate && !goals.endDate) {
+        return (
+          setShowStartDate(true),
+          setRemainingDays(startOnly + 1),
+          setCongratsMsg(false),
+          setCongratsMsgStart(true)
+        );
+      }
 
-    if (!goals.startDate && goals.endDate) {
-      return setShowEndDate(true), setRemainingDays(endOnly + 1);
+      if (!goals.startDate && goals.endDate) {
+        return setShowEndDate(true), setRemainingDays(endOnly + 1);
+      }
     }
-  }, [goals.startDate, goals.endDate, goals]);
+  }, [goals.startDate, goals.endDate, goals, goalInfoLoading]);
 
   // goal title length validation
   const titleInput = (event) => {

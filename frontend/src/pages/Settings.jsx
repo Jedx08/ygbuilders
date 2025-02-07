@@ -12,6 +12,7 @@ import {
   FaInfoCircle,
   FaCheckCircle,
 } from "react-icons/fa";
+import { FaExclamationCircle } from "react-icons/fa";
 import { PiArrowFatLeftFill } from "react-icons/pi";
 import SelectAvatar from "../components/SelectAvatar";
 import { CalendarContext } from "../context/CalendarContext";
@@ -552,14 +553,20 @@ const Settings = () => {
                   </div>
 
                   {successMsg && (
-                    <div className="text-greens text-xs text-center mt-2">
-                      {successMsg}
+                    <div className="text-greens text-sm text-center mt-2 flex justify-center items-center space-x-2">
+                      <div>
+                        <FaCheckCircle />
+                      </div>
+                      <div>{successMsg}</div>
                     </div>
                   )}
 
                   {errMsg && (
-                    <div className="text-[red] text-xs text-center mt-2">
-                      {errMsg}
+                    <div className="text-[red] text-sm text-center mt-2 flex justify-center items-center space-x-2">
+                      <div>
+                        <FaExclamationCircle />
+                      </div>
+                      <div>{errMsg}</div>
                     </div>
                   )}
 

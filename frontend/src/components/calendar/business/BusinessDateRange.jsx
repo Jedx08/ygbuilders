@@ -10,10 +10,8 @@ import businessExpensesIcon from "../../../media/bus_expenses.png";
 import businessEProfitIcon from "../../../media/bus_profit.png";
 import { PiChartLineUp, PiChartLineDown } from "react-icons/pi";
 
-const BusinessDateRange = () => {
+const BusinessDateRange = ({ startDate, endDate }) => {
   const {
-    startDate,
-    endDate,
     businessIncomeData,
     businessIncomeLoading,
     setBusinessIncomeLoading,
@@ -77,11 +75,11 @@ const BusinessDateRange = () => {
         <div className="bg-white rounded-lg py-5 shadow-sm">
           <div className="flex flex-wrap items-center justify-evenly space-x-5">
             {/* Gross */}
-            <div>
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
               <div className="text-base font-semibold text-center mdd:text-sm">
                 Capital
               </div>
-              <div className="flex items-center font-semibold px-5 py-2 rounded-md bg-subCon">
+              <div className="flex items-center font-semibold px-5 py-2">
                 <div className={`flex space-x-3 items-center justify-center`}>
                   <img
                     src={businessCapitalIcon}
@@ -95,29 +93,29 @@ const BusinessDateRange = () => {
               </div>
             </div>
             {/* Sales */}
-            <div>
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
               <div className="text-base font-semibold text-center mdd:text-sm">
                 Sales
               </div>
-              <div className="flex items-center font-semibold px-5 py-2 rounded-md bg-subCon">
+              <div className="flex items-center font-semibold px-5 py-2">
                 <div className={`flex space-x-3 items-center justify-center`}>
                   <img
                     src={businessSalesIcon}
                     alt="sales"
                     className={`w-14 mdd:w-11 sm:w-9`}
                   />
-                  <p className="text-greens font-bold text-2xl mdd:text-xl sm:text-lg">
+                  <p className="text-[#399CB4] font-bold text-2xl mdd:text-xl sm:text-lg">
                     {salesRange.toLocaleString()}
                   </p>
                 </div>
               </div>
             </div>
             {/* Expenses */}
-            <div>
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
               <div className="text-base font-semibold text-center mdd:text-sm">
                 Expenses
               </div>
-              <div className="flex items-center font-semibold px-5 py-2 rounded-md bg-subCon">
+              <div className="flex items-center font-semibold px-5 py-2">
                 <div className={`flex space-x-3 items-center justify-center`}>
                   <img
                     src={businessExpensesIcon}
@@ -131,11 +129,11 @@ const BusinessDateRange = () => {
               </div>
             </div>
             {/* Profit */}
-            <div>
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
               <div className="text-base font-semibold text-center mdd:text-sm">
                 Profit
               </div>
-              <div className="bg-subCon px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+              <div className="px-5 py-2 flex items-center justify-center space-x-3">
                 <div>
                   <img
                     src={businessEProfitIcon}
@@ -194,7 +192,7 @@ const BusinessDateRange = () => {
                         className="w-8 sm:w-6"
                       />
                       {/* <p className="text-sm">Gross</p> */}
-                      <span className="text-greens text-base font-semibold">
+                      <span className="text-[#399CB4] text-base font-semibold">
                         {data.sales.toLocaleString()}
                       </span>
                     </div>

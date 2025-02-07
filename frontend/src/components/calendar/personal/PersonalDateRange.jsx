@@ -9,10 +9,8 @@ import expensesIcon from "../../../media/expenses.png";
 import networth from "../../../media/networth.png";
 import { PiChartLineUp, PiChartLineDown } from "react-icons/pi";
 
-const PersonalDateRange = () => {
+const PersonalDateRange = ({ startDate, endDate }) => {
   const {
-    startDate,
-    endDate,
     personalIncomeData,
     personalIncomeLoading,
     setPersonalIncomeLoading,
@@ -36,11 +34,6 @@ const PersonalDateRange = () => {
   const getDatesInRange = (data, startDate, endDate) => {
     const start = dayjs(startDate);
     const end = dayjs(endDate);
-
-    if (startDate && endDate) {
-      const daysDiff = end.diff(start, "day");
-      console.log(daysDiff + 1);
-    }
 
     return data.filter((item) => {
       const itemDate = dayjs(item.day);
@@ -79,11 +72,11 @@ const PersonalDateRange = () => {
         <div className="bg-white rounded-lg py-5 shadow-sm">
           <div className="flex flex-wrap items-center justify-evenly space-x-5">
             {/* Gross */}
-            <div>
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
               <div className="text-base font-semibold text-center mdd:text-sm">
                 Gross
               </div>
-              <div className="flex items-center font-semibold px-5 py-2 rounded-md bg-subCon">
+              <div className="flex items-center font-semibold px-5 py-2">
                 <div className={`flex space-x-3 items-center justify-center`}>
                   <img
                     src={pouch}
@@ -97,11 +90,11 @@ const PersonalDateRange = () => {
               </div>
             </div>
             {/* Expenses */}
-            <div>
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
               <div className="text-base font-semibold text-center mdd:text-sm">
                 Expenses
               </div>
-              <div className="flex items-center font-semibold px-5 py-2 rounded-md bg-subCon">
+              <div className="flex items-center font-semibold px-5 py-2">
                 <div className={`flex space-x-3 items-center justify-center`}>
                   <img
                     src={expensesIcon}
@@ -115,11 +108,11 @@ const PersonalDateRange = () => {
               </div>
             </div>
             {/* Net */}
-            <div>
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
               <div className="text-base font-semibold text-center mdd:text-sm">
                 Net
               </div>
-              <div className="bg-subCon px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+              <div className="px-5 py-2 flex items-center justify-center space-x-3">
                 <div>
                   <img
                     src={networth}

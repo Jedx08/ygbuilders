@@ -172,7 +172,7 @@ const RegisterForm = ({ previous, inMobile }) => {
   return (
     <>
       <div className="mt-10">
-        <h1 className={`font-bold text-4xl mb-5`}>Sign Up</h1>
+        <h1 className={`font-bold text-4xl mb-5 text-oranges`}>Sign Up</h1>
         <section>
           <form onSubmit={handleSubmit}>
             {/* Username */}
@@ -423,11 +423,17 @@ const RegisterForm = ({ previous, inMobile }) => {
                     </span>
                     <p>
                       By checking this button, you agree to our{" "}
-                      <Link to={"/privacy-policy"}>
-                        <span className="text-greens underline">
-                          Terms and Privacy Policy
+                      <Link to="/terms-of-use" target="_blank">
+                        <span className="text-oranges underline font-medium">
+                          Terms
                         </span>
-                      </Link>
+                      </Link>{" "}
+                      and{" "}
+                      <Link to="/privacy-policy" target="_blank">
+                        <span className="text-oranges underline font-medium">
+                          Privacy Policy
+                        </span>
+                      </Link>{" "}
                     </p>
                   </div>
                   {isChecked ? (

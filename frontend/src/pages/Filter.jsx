@@ -1,17 +1,59 @@
-import { useContext, useState } from "react";
-import { CalendarContext } from "../context/CalendarContext";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 import Sidebar from "../components/Sidebar";
 import FooterNav from "../components/FooterNav";
 import Footer from "../components/Footer";
 import BusinessDateRange from "../components/calendar/business/BusinessDateRange";
 import PersonalDateRange from "../components/calendar/personal/PersonalDateRange";
 import Navbar from "../components/Navbar";
+import DatePicker from "react-datepicker";
+import { FaExclamationCircle } from "react-icons/fa";
 
 const DateRange = () => {
-  const { startDate, setStartDate, endDate, setEndDate } =
-    useContext(CalendarContext);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
-  const [selectedView, setSelectedView] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const params = new URLSearchParams(location.search);
+  const tab = params.get("tab");
+
+  const [totalDays, setTotalDays] = useState(0);
+  const [errStyle, setErrStyle] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
+
+  useEffect(() => {
+    if (!tab) {
+      navigate("/filter?tab=Personal", { replace: true });
+    }
+  }, [tab, navigate]);
+
+  const changeTab = (tabName) => {
+    navigate(`?tab=${tabName}`, { replace: true });
+  };
+
+  useEffect(() => {
+    const start = dayjs(startDate);
+    const end = dayjs(endDate);
+
+    if (startDate && endDate) {
+      const daysDiff = end.diff(start, "day");
+      setTotalDays(daysDiff);
+
+      if (totalDays < 0) {
+        setErrStyle(true);
+        setErrMsg("End date is before start date. Please check the dates.");
+      } else {
+        setErrStyle(false);
+        setErrMsg("");
+      }
+    } else {
+      setTotalDays(0);
+      setErrStyle(false);
+      setErrMsg("");
+    }
+  }, [startDate, endDate, totalDays]);
 
   return (
     <div className="flex lg:flex-col">
@@ -25,28 +67,28 @@ const DateRange = () => {
           <div className="flex justify-center space-x-5 pt-5">
             <div
               onClick={() => {
-                setSelectedView(false);
+                changeTab("Personal");
               }}
               className={`px-5 py-3 rounded-md font-bold
-              ${
-                !selectedView
-                  ? "bg-lgreens text-white cursor-default"
-                  : "bg-white cursor-pointer hover:text-lgreens shadow-md"
-              }
+                ${
+                  tab === "Personal" || !params.get("tab")
+                    ? "bg-lgreens text-white cursor-default"
+                    : "bg-white cursor-pointer hover:text-lgreens shadow-md"
+                }
              `}
             >
               Personal
             </div>
             <div
               onClick={() => {
-                setSelectedView(true);
+                changeTab("Business");
               }}
               className={`px-5 py-3 rounded-md font-bold
-              ${
-                !selectedView
-                  ? "bg-white cursor-pointer hover:text-loranges shadow-md"
-                  : "bg-loranges text-white cursor-default"
-              }
+                ${
+                  tab === "Business"
+                    ? "bg-loranges text-white cursor-default"
+                    : "bg-white cursor-pointer hover:text-loranges shadow-md"
+                }
             `}
             >
               Business
@@ -55,36 +97,56 @@ const DateRange = () => {
 
           {/* Date range */}
           <div className="mt-8 px-5 xl:pl-24 lg:pl-5">
-            <div className="bg-white rounded-lg flex justify-center space-x-10 py-5 shadow-sm sm:space-x-3">
-              <div className="flex justify-center items-center space-x-2">
-                <p>From:</p>
-                <input
-                  className="justify-center text-center cursor-pointer text-lg border border-[#A6ACAF] py-1 rounded-md mdd:text-base"
-                  type="date"
-                  id="start"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                />
+            <div className="bg-white rounded-lg shadow-sm py-5">
+              <div className="flex justify-center space-x-10 sm:space-x-3">
+                <div className="flex justify-center items-center space-x-2">
+                  <p>From:</p>
+                  <DatePicker
+                    showIcon
+                    toggleCalendarOnIconClick
+                    className="border border-inputLight w-40 font-medium rounded-md py-1 text-center cursor-pointer outline-none text-base placeholder:font-normal"
+                    selected={startDate}
+                    onChange={(date) => setStartDate(date)}
+                    placeholderText="Start Date"
+                    dateFormat="MMM d, yyyy"
+                  />
+                </div>
+                <div className="flex justify-center items-center space-x-2">
+                  <p>To:</p>
+                  <DatePicker
+                    showIcon
+                    className="border border-inputLight w-40 font-medium rounded-md py-1 text-center cursor-pointer outline-none text-base placeholder:font-normal"
+                    selected={endDate}
+                    onChange={(date) => setEndDate(date)}
+                    placeholderText="End Date"
+                    dateFormat="MMM d, yyyy"
+                  />
+                </div>
               </div>
-              <div className="flex justify-center items-center space-x-2">
-                <p>To:</p>
-                <input
-                  className="justify-center text-center cursor-pointer text-lg border border-[#A6ACAF] py-1 rounded-md mdd:text-base"
-                  type="date"
-                  id="end"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                />
+              <div>
+                {errStyle && (
+                  <div className="pt-2 text-sm text-[red] font-medium flex justify-center items-center space-x-2">
+                    <div>
+                      <FaExclamationCircle />
+                    </div>
+                    <div>{errMsg}</div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
           {/* Calendar Display Personal/Business */}
           <div>
-            {selectedView ? <BusinessDateRange /> : <PersonalDateRange />}
+            {tab === "Personal" && (
+              <PersonalDateRange startDate={startDate} endDate={endDate} />
+            )}
+            {tab === "Business" && (
+              <BusinessDateRange startDate={startDate} endDate={endDate} />
+            )}
           </div>
         </div>
-        <div className="mt-5 lg:mb-[5rem]">
+        <div className="mt-20 lg:mb-[5rem]">
           <Footer />
         </div>
       </div>
