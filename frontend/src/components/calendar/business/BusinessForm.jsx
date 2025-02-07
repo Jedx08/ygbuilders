@@ -11,6 +11,7 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { GoChecklist } from "react-icons/go";
 import { IoClose } from "react-icons/io5";
 import { BsBackspace } from "react-icons/bs";
+import { FaExclamationCircle } from "react-icons/fa";
 
 const BusinessForm = () => {
   const axiosPrivate = useAxiosPrivate();
@@ -423,7 +424,12 @@ const BusinessForm = () => {
 
           {/* Error Message */}
           {errStyle && (
-            <p className="text-center mt-2 text-[red] text-sm">{errMsg}</p>
+            <p className="text-center mt-2 text-[red] text-sm flex justify-center items-center space-x-2">
+              <div>
+                <FaExclamationCircle />
+              </div>
+              <div>{errMsg}</div>
+            </p>
           )}
 
           {!confirmDelete && (

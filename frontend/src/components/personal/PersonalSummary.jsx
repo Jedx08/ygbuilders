@@ -324,16 +324,16 @@ const PersonalSummary = () => {
     <div className="">
       <div className="bg-white shadow-sm rounded-lg mb-5 py-5 mt-5 mx-5 xl:ml-24 lg:ml-5">
         <div
-          className={`flex justify-center items-center text-greens font-bold text-2xl sm:text-xl`}
+          className={`flex justify-center items-center text-greens font-bold pb-2 text-2xl sm:text-xl`}
         >
           Overall Income
         </div>
         <div className="flex items-center justify-evenly flex-wrap gap-2 mt-1 xl:px-3">
-          <div>
+          <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
             <div className="text-base font-semibold text-center mdd:text-sm">
               Net
             </div>
-            <div className="bg-subCon border border-light shadow-sm px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+            <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
               <div>
                 <img
                   src={networth}
@@ -361,15 +361,15 @@ const PersonalSummary = () => {
               </div>
             </div>
           </div>
-          <div>
+          <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
             <div className="text-base font-semibold text-center mdd:text-sm">
               Gross
             </div>
-            <div className="bg-subCon border border-light shadow-sm px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+            <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
               <div>
                 <img src={pouch} alt="gross" className="w-14 mdd:w-11 sm:w-9" />
               </div>
-              <div className="text-greens font-bold text-2xl mdd:text-xl sm:text-lg">
+              <div className="text-oranges font-bold text-2xl mdd:text-xl sm:text-lg">
                 {/* {gross.toLocaleString()} */}
                 {
                   <NumberFlow
@@ -381,11 +381,11 @@ const PersonalSummary = () => {
               </div>
             </div>
           </div>
-          <div>
+          <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
             <div className="text-base font-semibold text-center mdd:text-sm">
               Expenses
             </div>
-            <div className="bg-subCon border border-light shadow-sm px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+            <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
               <div>
                 <img
                   src={expensesIcon}
@@ -502,13 +502,15 @@ const PersonalSummary = () => {
                 </div>
                 <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 border border-light bg-white shadow-sm rounded-md px-5 py-3">
                   <div className="flex items-center justify-center gap-2 xs:flex-col">
-                    <div className="text-md font-medium sm:text-sm">Gross</div>
+                    <div className="text-base font-semibold sm:text-sm">
+                      Gross
+                    </div>
                   </div>
-                  <div className="bg-subCon px-4 rounded-md py-2 flex gap-3 text-2xl text-greens font-bold sm:text-xl ssm:font-semibold">
+                  <div className=" px-4 rounded-md py-2 flex gap-3 text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
                     <img
                       src={monthlyGrossIcon}
                       alt="yearly capital"
-                      className="w-9 sm:w-7"
+                      className="w-11 sm:w-9"
                     />
                     <NumberFlow
                       value={monthlyGross}
@@ -519,15 +521,15 @@ const PersonalSummary = () => {
                 </div>
                 <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 border border-light bg-white shadow-sm rounded-md px-5 py-3">
                   <div className="flex items-center justify-center gap-2 xs:flex-col">
-                    <div className="text-md font-medium sm:text-sm">
+                    <div className="text-base font-semibold sm:text-sm">
                       Expenses
                     </div>
                   </div>
-                  <div className="bg-subCon px-4 rounded-md py-2 flex gap-3 text-2xl text-[red] font-bold sm:text-xl ssm:font-semibold">
+                  <div className=" px-4 rounded-md py-2 flex gap-3 text-2xl text-[red] font-bold sm:text-xl ssm:font-semibold">
                     <img
                       src={monthlyExpensesIcon}
                       alt="yearly expenses"
-                      className="w-9 sm:w-7"
+                      className="w-11 sm:w-9"
                     />
                     <NumberFlow
                       value={monthExpenses + monthlyExpenses}
@@ -538,19 +540,21 @@ const PersonalSummary = () => {
                 </div>
                 <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 border border-light bg-white shadow-sm rounded-md px-5 py-3">
                   <div className="flex items-center justify-center gap-2 xs:flex-col">
-                    <div className="text-md font-medium sm:text-sm">Net</div>
+                    <div className="text-base font-semibold sm:text-sm">
+                      Net
+                    </div>
                   </div>
                   <div
                     className={
                       monthlyNet < 0
-                        ? "bg-subCon px-4 rounded-md py-2 flex gap-3 text-2xl font-bold text-[red] sm:text-xl ssm:font-semibold"
-                        : "bg-subCon px-4 rounded-md py-2 flex gap-3 text-2xl font-bold text-greens sm:text-xl ssm:font-semibold"
+                        ? " px-4 rounded-md py-2 flex gap-3 text-2xl font-bold text-[red] sm:text-xl ssm:font-semibold"
+                        : " px-4 rounded-md py-2 flex gap-3 text-2xl font-bold text-greens sm:text-xl ssm:font-semibold"
                     }
                   >
                     <img
                       src={monthlyNetIcon}
                       alt="yearly net"
-                      className="w-9 sm:w-7"
+                      className="w-11 sm:w-9"
                     />
                     <NumberFlow
                       value={monthlyNet}

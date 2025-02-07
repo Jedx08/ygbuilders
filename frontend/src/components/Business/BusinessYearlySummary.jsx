@@ -338,7 +338,7 @@ const BusinessYearlySummary = () => {
 
   return (
     <>
-      <div className="w-full gap-5 pb-5 px-5">
+      <div className="w-full gap-5 pb-5 px-5 shadow-sm">
         {isLoading ? (
           <div className="w-full  bg-white p-5 rounded-lg flex items-center flex-col md:w-full">
             <div className="w-[35%]">
@@ -354,7 +354,7 @@ const BusinessYearlySummary = () => {
               <div className="border border-light shadow-sm w-full bg-white rounded-md h-hfull p-5">
                 <div className="flex flex-col items-center justify-center gap-2">
                   <div className="flex gap-2">
-                    <div className="text-md font-medium sm:text-sm">
+                    <div className="text-base font-semibold sm:text-sm">
                       Capital
                     </div>
                   </div>
@@ -363,7 +363,7 @@ const BusinessYearlySummary = () => {
                       <img
                         src={yearlyCapitalIcon}
                         alt="yearly capital"
-                        className="w-9 sm:w-7"
+                        className="w-11 sm:w-9"
                       />
                       <NumberFlow
                         value={yearlyCapital}
@@ -377,14 +377,16 @@ const BusinessYearlySummary = () => {
               <div className="border border-light shadow-sm w-full bg-white rounded-md h-hfull p-5">
                 <div className="flex flex-col items-center justify-center gap-2">
                   <div className="flex gap-2">
-                    <div className="text-md font-medium sm:text-sm">Sales</div>
+                    <div className="text-base font-semibold sm:text-sm">
+                      Sales
+                    </div>
                   </div>
-                  <div className="text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
+                  <div className="text-2xl text-[#399CB4] font-bold sm:text-xl ssm:font-semibold">
                     <div className="flex gap-3">
                       <img
                         src={yearlySalesIcon}
                         alt="yearly capital"
-                        className="w-9 sm:w-7"
+                        className="w-11 sm:w-9"
                       />
                       <NumberFlow
                         value={yearlySales}
@@ -398,7 +400,7 @@ const BusinessYearlySummary = () => {
               <div className="border border-light shadow-sm w-full bg-white rounded-md h-hfull p-5">
                 <div className="flex flex-col items-center justify-center gap-2">
                   <div className="flex gap-2">
-                    <div className="text-md font-medium sm:text-sm">
+                    <div className="text-base font-semibold sm:text-sm">
                       Expenses
                     </div>
                   </div>
@@ -408,7 +410,7 @@ const BusinessYearlySummary = () => {
                       <img
                         src={yearlyExpensesIcon}
                         alt="yearly capital"
-                        className="w-9 sm:w-7"
+                        className="w-11 sm:w-9"
                       />
                       {/* {(
                         yearlyExpenses + thisYearMonthlyExpenses
@@ -425,7 +427,9 @@ const BusinessYearlySummary = () => {
               <div className="border border-light shadow-sm w-full bg-white rounded-md h-hfull p-5">
                 <div className="flex flex-col items-center justify-center gap-2">
                   <div className="flex gap-2">
-                    <div className="text-md font-medium sm:text-sm">Profit</div>
+                    <div className="text-base font-semibold sm:text-sm">
+                      Profit
+                    </div>
                   </div>
                   <div
                     className={
@@ -438,7 +442,7 @@ const BusinessYearlySummary = () => {
                       <img
                         src={yearlyProfitIcon}
                         alt="yearly capital"
-                        className="w-9 sm:w-7"
+                        className="w-11 sm:w-9"
                       />
                       <NumberFlow
                         value={yearlyProfit}

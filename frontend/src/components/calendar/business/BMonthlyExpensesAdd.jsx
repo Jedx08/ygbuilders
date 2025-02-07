@@ -5,6 +5,7 @@ import { BsBackspace } from "react-icons/bs";
 import { MdOutlinePostAdd } from "react-icons/md";
 import dayjs from "dayjs";
 import { ThreeDot } from "react-loading-indicators";
+import { FaExclamationCircle } from "react-icons/fa";
 import expensesIcon from "../../../media/bus_expenses.png";
 
 const BMonthlyExpensesAdd = () => {
@@ -132,7 +133,14 @@ const BMonthlyExpensesAdd = () => {
         </div>
 
         {/* Error Message */}
-        <div className="mt-2 text-xs text-center text-[red]">{error}</div>
+        {errorStyle && (
+          <div className="mt-2 text-xs text-center text-[red] flex justify-center items-center space-x-2">
+            <div>
+              <FaExclamationCircle />
+            </div>
+            <div>{error}</div>
+          </div>
+        )}
 
         <div className="flex items-center mx-auto gap-3 px-2 h-2 mt-4 w-fit rounded-md overflow-hidden">
           {addLoading ? (

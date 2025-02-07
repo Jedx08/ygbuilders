@@ -65,7 +65,7 @@ const Navbar = () => {
                       setAccountMenu(true);
                     }
                   }}
-                  className="cursor-pointer flex items-center space-x-1"
+                  className="cursor-pointer flex items-center space-x-1 pr-3"
                 >
                   <p className="font-medium">
                     {capitalizeFirstLetter(userInfo.foundUsername)}
@@ -77,7 +77,7 @@ const Navbar = () => {
                       className="w-9"
                     />
                   </div>
-                  <div className="absolute w-fit right-1 top-8 border-2 border-white bg-oranges rounded-full">
+                  <div className="absolute w-fit right-4 top-8 border-2 border-white bg-oranges rounded-full">
                     <FaAngleDown className="text-sm text-white" />
                   </div>
                 </div>

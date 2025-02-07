@@ -21,7 +21,7 @@ const BusinessData = ({ businessDataLoading, monthData }) => {
           <div
             className={`flex gap-3 justify-center items-center px-1 py-1 text-oranges font-bold text-xl/[24px] sm:text-lg`}
           >
-            <p>Income</p>
+            <p>Daily Income</p>
           </div>
           <div className="flex items-center justify-evenly py-1">
             <div className="flex space-x-1 items-center justify-center">
@@ -105,7 +105,7 @@ const BusinessData = ({ businessDataLoading, monthData }) => {
                             className={`w-8 sm:w-6`}
                           />
                           <p className="ml-1 text-[#D0D0D0]">:</p>
-                          <p className="text-greens text-base font-semibold">
+                          <p className="text-[#399CB4] text-base font-semibold">
                             {d.sales.toLocaleString()}
                           </p>
                         </div>

@@ -9,10 +9,11 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { ThreeDot } from "react-loading-indicators";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { FaExclamationCircle } from "react-icons/fa";
 import arrow from "../../media/arrow.png";
-import arrowS from "../../media/arrow_savings.png";
+import arrowMoney from "../../media/arrow_money.png";
 
-const SavingsGoalData = ({ goals, savingsCurrentAmount }) => {
+const SavingsGoalData = ({ goals, savingsCurrentAmount, goalInfoLoading }) => {
   const { dispatchGoalData, setGoalLoading } = useContext(CalendarContext);
   const axiosPrivate = useAxiosPrivate();
 
@@ -63,7 +64,7 @@ const SavingsGoalData = ({ goals, savingsCurrentAmount }) => {
 
     if (!updateTitle || !updateAmount) {
       return (
-        setErrMsg("Please fill out the fields"),
+        setErrMsg("Please fill out Title and Amount fields"),
         setErrStyle(true),
         setUpdateLoading(false)
       );
@@ -217,7 +218,9 @@ const SavingsGoalData = ({ goals, savingsCurrentAmount }) => {
             {/* title */}
             <div className="px-10 justify-center mt-5">
               <div
-                className={`bg-white border border-inputLight rounded-md overflow-hidden flex items-center mx-auto w-[70%]`}
+                className={`bg-white border rounded-md overflow-hidden flex items-center mx-auto w-[70%] ${
+                  errStyle ? "border-[red]" : "border-inputLight"
+                }`}
               >
                 <div className="pl-2">
                   <img src={arrow} className={`w-10`} />
@@ -234,10 +237,12 @@ const SavingsGoalData = ({ goals, savingsCurrentAmount }) => {
             {/* amount */}
             <div className="px-10 justify-center mt-5">
               <div
-                className={`bg-white border border-inputLight rounded-md overflow-hidden flex items-center mx-auto w-[70%]`}
+                className={`bg-white border rounded-md overflow-hidden flex items-center mx-auto w-[70%] ${
+                  errStyle ? "border-[red]" : "border-inputLight"
+                }`}
               >
                 <div className="pl-2">
-                  <img src={arrowS} className={`w-10`} />
+                  <img src={arrowMoney} className={`w-10`} />
                 </div>
                 <input
                   type="number"
@@ -274,6 +279,16 @@ const SavingsGoalData = ({ goals, savingsCurrentAmount }) => {
           </div>
         </div>
       )}
+
+      {errStyle && (
+        <div className="mt-3 text-sm text-[red] flex justify-center items-center space-x-2">
+          <div>
+            <FaExclamationCircle />
+          </div>
+          <div>{errMsg}</div>
+        </div>
+      )}
+
       {/* button */}
       {!confirmDelete && (
         <>
@@ -305,7 +320,11 @@ const SavingsGoalData = ({ goals, savingsCurrentAmount }) => {
           )}
           {updateConfirm && (
             <>
-              <div className="flex items-center justify-evenly mt-3">
+              <div
+                className={`flex items-center justify-evenly ${
+                  errStyle ? "mt-3" : "mt-7"
+                }`}
+              >
                 {updateLoading ? (
                   <>
                     <div className="flex flex-col items-center">
@@ -359,8 +378,6 @@ const SavingsGoalData = ({ goals, savingsCurrentAmount }) => {
           )}
         </>
       )}
-
-      {errStyle && <div className="text-center">{errMsg}</div>}
 
       {confirmDelete && (
         <div className="bg-subCon py-3 rounded-md mt-3">
@@ -418,18 +435,52 @@ const SavingsGoalData = ({ goals, savingsCurrentAmount }) => {
       )}
 
       {/* info */}
-      {!confirmDelete && !updateConfirm && (
-        <div className="bg-subCon py-3 rounded-md mt-3">
-          <div className="text-sm font-medium px-5 text-[#555]">
-            {savingsCurrentAmount >= goals.amount ? (
-              <></>
-            ) : (
-              <>
-                {goals.startDate && goals.endDate && (
+      {!goalInfoLoading && (
+        <>
+          {!confirmDelete && !updateConfirm && (
+            <div className="bg-subCon py-3 rounded-md mt-3">
+              <div className="text-sm font-medium px-5 text-[#555]">
+                {savingsCurrentAmount >= goals.amount ? (
+                  <></>
+                ) : (
                   <>
-                    You need to save atleast{" "}
-                    <span className="text-greens font-bold text-base underline">
-                      {(goals.amount / goals.totalDays).toLocaleString(
+                    {goals.startDate && goals.endDate && (
+                      <>
+                        You need to save atleast{" "}
+                        <span className="text-greens font-bold text-base underline">
+                          {(goals.amount / goals.totalDays).toLocaleString(
+                            "en-US",
+                            {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }
+                          )}
+                        </span>{" "}
+                        amount everyday.
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+              <div className="text-sm font-medium px-5 text-[#555]">
+                {savingsCurrentAmount >= goals.amount ? (
+                  <div className="text-center">
+                    {congratsMsg && <>Congratulations you reached your Goal</>}
+                    {congratsMsgStart && (
+                      <>
+                        Congratulations you reached your Goal in{" "}
+                        <span className="text-base font-bold text-greens underline">
+                          {remainingDays}
+                        </span>{" "}
+                        days
+                      </>
+                    )}
+                  </div>
+                ) : (
+                  <>
+                    Remaining amount:{" "}
+                    <span className="text-base font-bold text-[red] underline">
+                      {(goals.amount - savingsCurrentAmount).toLocaleString(
                         "en-US",
                         {
                           minimumFractionDigits: 0,
@@ -437,83 +488,53 @@ const SavingsGoalData = ({ goals, savingsCurrentAmount }) => {
                         }
                       )}
                     </span>{" "}
-                    amount everyday.
-                  </>
-                )}
-              </>
-            )}
-          </div>
-          <div className="text-sm font-medium px-5 text-[#555]">
-            {savingsCurrentAmount >= goals.amount ? (
-              <div className="text-center mt-5">
-                {congratsMsg && <>Congratulations you reached your Goal</>}
-                {congratsMsgStart && (
-                  <>
-                    Congratulations you reached your Goal in{" "}
-                    <span className="text-base font-bold text-greens underline">
-                      {remainingDays}
-                    </span>{" "}
-                    days
+                    amount
                   </>
                 )}
               </div>
-            ) : (
-              <>
-                Remaining amount:{" "}
-                <span className="text-base font-bold text-[red] underline">
-                  {(goals.amount - savingsCurrentAmount).toLocaleString(
-                    "en-US",
-                    {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 2,
-                    }
-                  )}
-                </span>{" "}
-                amount
-              </>
-            )}
-          </div>
-          <div className="text-sm font-medium px-5 text-[#555]">
-            {savingsCurrentAmount >= goals.amount ? (
-              <></>
-            ) : (
-              <>
-                {goals.startDate && goals.endDate && (
+              <div className="text-sm font-medium px-5 text-[#555]">
+                {savingsCurrentAmount >= goals.amount ? (
+                  <></>
+                ) : (
                   <>
-                    Remaining days:{" "}
-                    <span
-                      className={`text-base font-bold underline ${
-                        remainingDays > 0 ? "text-greens" : "text-[red]"
-                      }`}
-                    >
-                      {remainingDays}
-                    </span>
+                    {goals.startDate && goals.endDate && (
+                      <>
+                        Remaining days:{" "}
+                        <span
+                          className={`text-base font-bold underline ${
+                            remainingDays > 0 ? "text-greens" : "text-[red]"
+                          }`}
+                        >
+                          {remainingDays}
+                        </span>
+                      </>
+                    )}
+                    {showStartDate && (
+                      <>
+                        Days count:{" "}
+                        <span className="text-base font-bold text-[red] underline">
+                          {remainingDays}
+                        </span>
+                      </>
+                    )}
+                    {showEndDate && (
+                      <>
+                        Remaining days:{" "}
+                        <span
+                          className={`text-base font-bold underline ${
+                            remainingDays > 0 ? "text-greens" : "text-[red]"
+                          }`}
+                        >
+                          {remainingDays}
+                        </span>
+                      </>
+                    )}
                   </>
                 )}
-                {showStartDate && (
-                  <>
-                    Days count:{" "}
-                    <span className="text-base font-bold text-[red] underline">
-                      {remainingDays}
-                    </span>
-                  </>
-                )}
-                {showEndDate && (
-                  <>
-                    Remaining days:{" "}
-                    <span
-                      className={`text-base font-bold underline ${
-                        remainingDays > 0 ? "text-greens" : "text-[red]"
-                      }`}
-                    >
-                      {remainingDays}
-                    </span>
-                  </>
-                )}
-              </>
-            )}
-          </div>
-        </div>
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

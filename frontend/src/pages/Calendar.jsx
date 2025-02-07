@@ -81,7 +81,7 @@ const Calendar = () => {
             {tab === "Business" && <BusinessCalendar />}
           </div>
         </div>
-        <div className="mt-5 lg:mb-[5rem]">
+        <div className="mt-20 lg:mb-[5rem]">
           <Footer />
         </div>
       </div>

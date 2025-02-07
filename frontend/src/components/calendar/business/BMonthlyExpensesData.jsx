@@ -5,6 +5,7 @@ import { GoChecklist } from "react-icons/go";
 import { BsBackspace } from "react-icons/bs";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import { ThreeDot } from "react-loading-indicators";
+import { FaExclamationCircle } from "react-icons/fa";
 import expensesIcon from "../../../media/bus_expenses.png";
 
 const BMonthlyExpensesData = ({ expensesData }) => {
@@ -201,7 +202,14 @@ const BMonthlyExpensesData = ({ expensesData }) => {
               </div>
 
               {/* Error Message */}
-              <div className="mt-2 text-xs text-center text-[red]">{error}</div>
+              {errorStyle && (
+                <div className="mt-2 text-xs text-center text-[red] flex justify-center items-center space-x-2">
+                  <div>
+                    <FaExclamationCircle />
+                  </div>
+                  <div>{error}</div>
+                </div>
+              )}
 
               {updateLoading ? (
                 <div className="mt-6 mb-3 w-full flex justify-center items-center space-x-2 px-2 h-2 rounded-md overflow-hidden">

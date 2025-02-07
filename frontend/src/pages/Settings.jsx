@@ -1,15 +1,20 @@
 import { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { ThreeDot, OrbitProgress } from "react-loading-indicators";
-import { FaInfoCircle } from "react-icons/fa";
 import { FaCheck, FaXmark } from "react-icons/fa6";
-import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
+import {
+  FaRegEyeSlash,
+  FaRegEye,
+  FaInfoCircle,
+  FaCheckCircle,
+} from "react-icons/fa";
+import { PiArrowFatLeftFill } from "react-icons/pi";
 import SelectAvatar from "../components/SelectAvatar";
 import { CalendarContext } from "../context/CalendarContext";
-import { FaCheckCircle } from "react-icons/fa";
 import avatar1 from "../media/avatar1.png";
 import avatar2 from "../media/avatar2.png";
 import avatar3 from "../media/avatar3.png";
@@ -280,6 +285,14 @@ const Settings = () => {
             <h1 className="font-bold text-2xl">Account Settings</h1>
           </div>
           <div className="bg-white mt-5 px-10 py-5 overflow-hidden w-fit h-hfit mx-auto shadow-lg rounded-md xs:px-0">
+            <Link to="/summary">
+              <div className="ml-[-30px] mb-3 flex items-center space-x-2 text-oranges font-medium underline cursor-pointer xs:ml-0">
+                <div className="text-2xl">
+                  <PiArrowFatLeftFill />
+                </div>
+                <div>Back to dashboard</div>
+              </div>
+            </Link>
             <div
               onClick={() => {
                 setIsAvatar(true);
@@ -583,7 +596,7 @@ const Settings = () => {
                   onClick={() => {
                     setConfirmDelForm(true);
                   }}
-                  className="w-fit rounded-md px-3 py-2 font-semibold cursor-pointer text-white bg-[#FF4242] hover:bg-[red]"
+                  className="w-fit rounded-md px-3 py-2 font-semibold cursor-pointer text-white bg-[#FF4242] hover:bg-[red] text-center"
                 >
                   Delete account
                 </div>
@@ -591,7 +604,7 @@ const Settings = () => {
                   onClick={() => {
                     setClearData(true);
                   }}
-                  className="w-fit rounded-md px-3 py-2 font-semibold cursor-pointer hover:bg-inputLight bg-[#e0e1e4]"
+                  className="w-fit rounded-md px-3 py-2 font-semibold cursor-pointer hover:bg-inputLight bg-[#e0e1e4] text-center"
                 >
                   Clear data
                 </div>

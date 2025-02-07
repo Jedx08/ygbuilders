@@ -46,18 +46,6 @@ const FooterNav = () => {
             <p className="text-sm">Filter</p>
           </div>
         </Link>
-        <Link to="/settings" className="w-full">
-          <div
-            className={`flex flex-col items-center p-2 gap-2 hover:bg-light rounded-md cursor-pointer ${
-              location.pathname === "/settings" ? "bg-light" : ""
-            }`}
-          >
-            <div className="flex justify-center">
-              <FaGear className="text-xl text-[#b8b8b8]" />
-            </div>
-            <p className="text-sm">Settings</p>
-          </div>
-        </Link>
       </div>
     </div>
   );

@@ -4,9 +4,10 @@ import dayjs from "dayjs";
 import { IoClose } from "react-icons/io5";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import arrow from "../../media/arrow.png";
-import arrowS from "../../media/arrow_savings.png";
+import arrowMoney from "../../media/arrow_money.png";
 import { MdOutlinePostAdd } from "react-icons/md";
 import { ThreeDot } from "react-loading-indicators";
+import { FaExclamationCircle } from "react-icons/fa";
 import SavingsGoalData from "./SavingsGoalData";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -16,6 +17,7 @@ const SavingsGoal = ({
   goalDataLoading,
   goalFloat,
   savingsCurrentAmount,
+  goalInfoLoading,
 }) => {
   const { showGoalForm, setShowGoalForm, dispatchGoalData, setGoalLoading } =
     useContext(CalendarContext);
@@ -60,7 +62,7 @@ const SavingsGoal = ({
 
     if (!title || !amount) {
       return (
-        setErrMsg("Please fill out the fields"),
+        setErrMsg("Please fill out Title and Amount fields"),
         setErrStyle(true),
         setAddLoading(false)
       );
@@ -160,7 +162,7 @@ const SavingsGoal = ({
         )}
 
         <div className="text-center">
-          <h1 className="font-bold text-lg text-yellows mb-2">Goal</h1>
+          <h1 className="font-bold text-lg text-yellows mb-2">Target Goal</h1>
         </div>
 
         {/* Monthly Expenses Data */}
@@ -176,7 +178,9 @@ const SavingsGoal = ({
               {/* title */}
               <div className="px-10 justify-center mt-5">
                 <div
-                  className={`border border-inputLight rounded-md overflow-hidden flex items-center mx-auto w-[70%]`}
+                  className={`border rounded-md overflow-hidden flex items-center mx-auto w-[70%] ${
+                    errStyle ? "border-[red]" : "border-inputLight"
+                  }`}
                 >
                   <div className="pl-2">
                     <img src={arrow} className={`w-10`} />
@@ -193,10 +197,12 @@ const SavingsGoal = ({
               {/* amount */}
               <div className="px-10 justify-center mt-5">
                 <div
-                  className={`border border-inputLight rounded-md overflow-hidden flex items-center mx-auto w-[70%]`}
+                  className={`border rounded-md overflow-hidden flex items-center mx-auto w-[70%] ${
+                    errStyle ? "border-[red]" : "border-inputLight"
+                  }`}
                 >
                   <div className="pl-2">
-                    <img src={arrowS} className={`w-10`} />
+                    <img src={arrowMoney} className={`w-10`} />
                   </div>
                   <input
                     type="number"
@@ -234,7 +240,12 @@ const SavingsGoal = ({
               </div>
               {/* error message */}
               {errStyle && (
-                <div className="mt-3 text-sm text-[red]">{errMsg}</div>
+                <div className="mt-3 text-sm text-[red] flex justify-center items-center space-x-2">
+                  <div>
+                    <FaExclamationCircle />
+                  </div>
+                  <div>{errMsg}</div>
+                </div>
               )}
               {/* add button */}
               {addLoading ? (
@@ -255,7 +266,7 @@ const SavingsGoal = ({
                 <div
                   onClick={handleSubmit}
                   className={`${
-                    errStyle ? "mt-4" : "mt-9"
+                    errStyle ? "mt-2" : "mt-9"
                   } mx-auto py-1 rounded-md px-6 bg-yellows text-base font-semibold text-white hover:bg-lyellows flex gap-1 items-center cursor-pointer w-fit`}
                 >
                   <span className="text-3xl">
@@ -278,6 +289,7 @@ const SavingsGoal = ({
                 <SavingsGoalData
                   goals={d}
                   savingsCurrentAmount={savingsCurrentAmount}
+                  goalInfoLoading={goalInfoLoading}
                 />
               </React.Fragment>
             );

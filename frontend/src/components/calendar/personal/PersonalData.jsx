@@ -17,7 +17,7 @@ const PersonalData = ({ personalDataLoading, monthData }) => {
           <div
             className={`flex gap-3 justify-center items-center py-1 px-1 text-greens font-bold text-xl/[24px] sm:text-lg`}
           >
-            Income
+            Daily Income
           </div>
           <div className="flex items-center justify-evenly py-1">
             <div className="flex space-x-1 items-center justify-center">

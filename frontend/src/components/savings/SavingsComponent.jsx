@@ -37,6 +37,8 @@ const SavingsComponent = () => {
   const [savingsAmountYear, setSavingsAmountYear] = useState(0);
   const [savingsCurrentAmount, setSavingsCurrentAmount] = useState(0);
 
+  const [goalInfoLoading, setGoalInfoLoading] = useState(true);
+
   useEffect(() => {
     if (savingsIncomeLoading) {
       setSavingsDataLoading(true);
@@ -69,6 +71,7 @@ const SavingsComponent = () => {
         setSavingsDataLoading(false);
         setSavingsButton(true);
         setMonthlyDataLoading(false);
+        setGoalInfoLoading(false);
       };
 
       savingsIncomeDB();
@@ -204,6 +207,7 @@ const SavingsComponent = () => {
             savingsCurrentAmount={savingsCurrentAmount}
             goalDataLoading={goalDataLoading}
             goalFloat={goalFloat}
+            goalInfoLoading={goalInfoLoading}
           />
         </div>
       </div>

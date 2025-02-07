@@ -58,16 +58,6 @@ const Sidebar = () => {
               <p className="xl:hidden xl:group-hover:block">Filter</p>
             </div>
           </Link>
-          <Link to="/settings">
-            <div
-              className={`flex pl-7 p-2 gap-2 hover:bg-light rounded-md cursor-pointer ${
-                location.pathname === "/settings" ? "bg-light" : ""
-              }`}
-            >
-              <FaGear className="text-2xl text-[#b8b8b8]" />
-              <p className="xl:hidden xl:group-hover:block">Settings</p>
-            </div>
-          </Link>
         </div>
       </div>
     </>

@@ -6,6 +6,7 @@ import { MdOutlinePostAdd } from "react-icons/md";
 import expensesIcon from "../../../media/expenses.png";
 import dayjs from "dayjs";
 import { ThreeDot } from "react-loading-indicators";
+import { FaExclamationCircle } from "react-icons/fa";
 
 const PMonthlyExpensesAdd = () => {
   const {
@@ -49,7 +50,9 @@ const PMonthlyExpensesAdd = () => {
     }
 
     if (isNaN(numAmount)) {
-      return setError("Invalid value, Amount must be a number");
+      return (
+        setErrorStyle(true), setError("Invalid value, Amount must be a number")
+      );
     }
 
     setAddLoading(true);
@@ -74,6 +77,7 @@ const PMonthlyExpensesAdd = () => {
     } catch (err) {
       if (err.response?.status === 400) {
         setError("Invalid value, Amount must be a number");
+        setErrorStyle(true);
       }
     }
   }
@@ -132,7 +136,14 @@ const PMonthlyExpensesAdd = () => {
         </div>
 
         {/* Error Message */}
-        <div className="mb-2 text-xs text-center text-[red]">{error}</div>
+        {errorStyle && (
+          <div className="mb-2 text-xs text-center text-[red] flex justify-center items-center space-x-2">
+            <div>
+              <FaExclamationCircle />
+            </div>
+            <div>{error}</div>
+          </div>
+        )}
 
         <div className="flex items-center mx-auto gap-3 px-2 h-2 mt-4 w-fit rounded-md overflow-hidden">
           {addLoading ? (

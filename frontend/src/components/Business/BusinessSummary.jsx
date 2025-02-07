@@ -291,16 +291,16 @@ const BusinessSummary = () => {
     <>
       <div className="bg-white shadow-sm rounded-lg mb-5 py-5 mt-5 mx-5 xl:ml-24 lg:ml-5">
         <div
-          className={`flex justify-center items-center text-oranges font-bold text-2xl sm:text-xl`}
+          className={`flex justify-center items-center text-oranges font-bold pb-2 text-2xl sm:text-xl`}
         >
           Overall Income
         </div>
         <div className="flex items-center justify-evenly flex-wrap gap-2 mt-1 xl:px-3">
-          <div>
+          <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
             <div className="text-base font-semibold text-center mdd:text-sm">
               Profit
             </div>
-            <div className="bg-subCon border border-light shadow-sm px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+            <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
               <div>
                 <img
                   src={profitIcon}
@@ -328,11 +328,11 @@ const BusinessSummary = () => {
               </div>
             </div>
           </div>
-          <div>
+          <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
             <div className="text-base font-semibold text-center mdd:text-sm">
               Capital
             </div>
-            <div className="bg-subCon border border-light shadow-sm px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+            <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
               <div>
                 <img
                   src={capitalIcon}
@@ -340,7 +340,7 @@ const BusinessSummary = () => {
                   className="w-14 mdd:w-11 sm:w-9"
                 />
               </div>
-              <div className="text-greens font-bold text-2xl mdd:text-xl sm:text-lg">
+              <div className="text-oranges font-bold text-2xl mdd:text-xl sm:text-lg">
                 <NumberFlow
                   value={capital}
                   trend={5}
@@ -349,11 +349,11 @@ const BusinessSummary = () => {
               </div>
             </div>
           </div>
-          <div>
+          <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
             <div className="text-base font-semibold text-center mdd:text-sm">
               Sales
             </div>
-            <div className="bg-subCon border border-light shadow-sm px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+            <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
               <div>
                 <img
                   src={salesIcon}
@@ -361,7 +361,7 @@ const BusinessSummary = () => {
                   className="w-14 mdd:w-11 sm:w-9"
                 />
               </div>
-              <div className="text-greens font-bold text-2xl mdd:text-xl sm:text-lg">
+              <div className="text-[#399CB4] font-bold text-2xl mdd:text-xl sm:text-lg">
                 <NumberFlow
                   value={sales}
                   trend={5}
@@ -370,11 +370,11 @@ const BusinessSummary = () => {
               </div>
             </div>
           </div>
-          <div>
+          <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
             <div className="text-base font-semibold text-center mdd:text-sm">
               Expenses
             </div>
-            <div className="bg-subCon border border-light shadow-sm px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+            <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
               <div>
                 <img
                   src={expensesIcon}
@@ -395,7 +395,7 @@ const BusinessSummary = () => {
         </div>
       </div>
 
-      <div className="bg-white p-5 mx-5 mb-5 rounded-lg">
+      <div className="bg-white p-5 mx-5 mb-5 rounded-lg shadow-sm">
         <div className="bg-light font-pops">
           {isLoading ? (
             <div className="w-[60%] mx-auto bg-white p-5 rounded-lg flex items-center flex-col md:w-[90%] ">
@@ -495,14 +495,16 @@ const BusinessSummary = () => {
                     {/* Total Capital */}
                     <div className="bg-white h-hfull rounded-lg shadow-sm border border-light w-full min-w-[30%]">
                       <div className="flex items-center justify-center gap-2 pb-1 px-2 pt-3 xs:px-3">
-                        <p className="sm:text-sm font-medium">Capital</p>
+                        <p className="sm:text-sm text-base font-semibold">
+                          Capital
+                        </p>
                       </div>
                       <div className="flex justify-center text-2xl text-oranges font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
-                        <div className="flex justify-center items-center gap-3 px-5 py-2 rounded-md bg-subCon">
+                        <div className="flex justify-center items-center gap-3 px-5 py-2 rounded-md">
                           <img
                             src={monthlyCapitalIcon}
                             alt="puch"
-                            className="w-9 sm:w-7"
+                            className="w-11 sm:w-9"
                           />
                           <NumberFlow
                             value={monthlyCapital}
@@ -518,14 +520,16 @@ const BusinessSummary = () => {
                     {/* Sales */}
                     <div className="bg-white h-hfull rounded-lg shadow-sm border border-light w-full min-w-[30%]">
                       <div className="flex items-center justify-center gap-2 pb-1 px-2 pt-3 xs:px-3">
-                        <p className="sm:text-sm font-medium">Sales</p>
+                        <p className="sm:text-sm text-base font-semibold">
+                          Sales
+                        </p>
                       </div>
                       <div className="flex justify-center text-2xl text-[#399CB4] font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
-                        <div className="flex justify-center items-center gap-3 px-5 py-2 rounded-md bg-subCon">
+                        <div className="flex justify-center items-center gap-3 px-5 py-2 rounded-md">
                           <img
                             src={monthlySalesIcon}
                             alt="puch"
-                            className="w-9 sm:w-7"
+                            className="w-11 sm:w-9"
                           />
                           <NumberFlow
                             value={monthlySales}
@@ -541,14 +545,16 @@ const BusinessSummary = () => {
                     {/* Expenses */}
                     <div className="bg-white h-hfull rounded-lg shadow-sm border border-light w-full min-w-[30%]">
                       <div className="flex items-center justify-center gap-2 pb-1 px-2 pt-3 xs:px-3">
-                        <p className="sm:text-sm font-medium">Expenses</p>
+                        <p className="sm:text-sm text-base font-semibold">
+                          Expenses
+                        </p>
                       </div>
                       <div className="flex justify-center text-2xl text-[red] font-bold pb-2 text-center ssm:font-semibold sm:text-lg">
-                        <div className="flex justify-center items-center gap-3 px-5 py-2 rounded-md bg-subCon">
+                        <div className="flex justify-center items-center gap-3 px-5 py-2 rounded-md">
                           <img
                             src={monthlyExpensesIcon}
                             alt="puch"
-                            className="w-9 sm:w-7"
+                            className="w-11 sm:w-9"
                           />
                           {/* {(monthlyExpenses + monthExpenses).toLocaleString()} */}
                           <NumberFlow
@@ -566,7 +572,9 @@ const BusinessSummary = () => {
                     {/* Total Profit */}
                     <div className="bg-white h-hfull rounded-lg shadow-sm border border-light w-full min-w-[30%]">
                       <div className="flex items-center justify-center gap-2 pb-1 pt-3 xs:px-3">
-                        <p className="sm:text-sm font-medium">Profit</p>
+                        <p className="sm:text-sm text-base font-semibold">
+                          Profit
+                        </p>
                       </div>
                       <div
                         className={
@@ -575,11 +583,11 @@ const BusinessSummary = () => {
                             : "flex justify-center text-2xl text-greens font-bold pb-2 text-center ssm:font-semibold  sm:text-lg"
                         }
                       >
-                        <div className="flex justify-center items-center gap-3 px-5 py-2 rounded-md bg-subCon">
+                        <div className="flex justify-center items-center gap-3 px-5 py-2 rounded-md">
                           <img
                             src={monthlyProfitIcon}
                             alt="puch"
-                            className="w-9 sm:w-7"
+                            className="w-11 sm:w-9"
                           />
                           <NumberFlow
                             value={monthlyProfit}

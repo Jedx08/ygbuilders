@@ -8,6 +8,7 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { BsBackspace } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
 import { ThreeDot } from "react-loading-indicators";
+import { FaExclamationCircle } from "react-icons/fa";
 
 const SavingsForm = () => {
   const axiosPrivate = useAxiosPrivate();
@@ -265,7 +266,12 @@ const SavingsForm = () => {
 
         {/* Error Message */}
         {errStyle && (
-          <div className="text-center mt-2 text-[red] text-sm">{errMsg}</div>
+          <div className="text-center mt-2 text-[red] text-sm flex justify-center items-center space-x-2">
+            <div>
+              <FaExclamationCircle />
+            </div>
+            <div>{errMsg}</div>
+          </div>
         )}
 
         {!confirmDelete && (

@@ -286,13 +286,15 @@ const BusinessYearlySummary = () => {
             >
               <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 border border-light bg-white shadow-sm rounded-md px-5 py-3">
                 <div className="flex items-center justify-center gap-2">
-                  <div className="text-md font-medium sm:text-sm">Gross</div>
+                  <div className="text-base font-semibold sm:text-sm">
+                    Gross
+                  </div>
                 </div>
-                <div className="bg-subCon px-4 rounded-md py-2 flex justify-center gap-3 text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
+                <div className=" px-4 rounded-md py-2 flex justify-center gap-3 text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
                   <img
                     src={yearlyGrossIcon}
                     alt="yearly capital"
-                    className="w-9 sm:w-7"
+                    className="w-11 sm:w-9"
                   />
                   <NumberFlow
                     value={yearlyGross}
@@ -303,13 +305,15 @@ const BusinessYearlySummary = () => {
               </div>
               <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 border border-light bg-white shadow-sm rounded-md px-5 py-3">
                 <div className="flex items-center justify-center gap-2">
-                  <div className="text-md font-medium sm:text-sm">Expenses</div>
+                  <div className="text-base font-semibold sm:text-sm">
+                    Expenses
+                  </div>
                 </div>
-                <div className="bg-subCon px-4 rounded-md py-2 flex justify-center gap-3 text-2xl text-[red] font-bold sm:text-xl ssm:font-semibold">
+                <div className=" px-4 rounded-md py-2 flex justify-center gap-3 text-2xl text-[red] font-bold sm:text-xl ssm:font-semibold">
                   <img
                     src={yearlyExpensesIcon}
                     alt="yearly expenses"
-                    className="w-9 sm:w-7"
+                    className="w-11 sm:w-9"
                   />
                   {/* {(yearlyExpenses + thisYearMonthlyExpenses).toLocaleString()} */}
                   <NumberFlow
@@ -321,19 +325,19 @@ const BusinessYearlySummary = () => {
               </div>
               <div className="flex flex-col w-full h-hfull justify-center items-center gap-2 border border-light bg-white shadow-sm rounded-md px-5 py-3">
                 <div className="flex items-center justify-center gap-2">
-                  <div className="text-md font-medium sm:text-sm">Net</div>
+                  <div className="text-base font-semibold sm:text-sm">Net</div>
                 </div>
                 <div
                   className={
                     yearlyNet < 0
-                      ? "bg-subCon px-4 rounded-md py-2 flex justify-center gap-3 text-2xl font-bold text-[red] sm:text-xl ssm:font-semibold"
-                      : "bg-subCon px-4 rounded-md py-2 flex justify-center gap-3 text-2xl font-bold text-greens sm:text-xl ssm:font-semibold"
+                      ? " px-4 rounded-md py-2 flex justify-center gap-3 text-2xl font-bold text-[red] sm:text-xl ssm:font-semibold"
+                      : " px-4 rounded-md py-2 flex justify-center gap-3 text-2xl font-bold text-greens sm:text-xl ssm:font-semibold"
                   }
                 >
                   <img
                     src={yearlyNetIcon}
                     alt="yearly net"
-                    className="w-9 sm:w-7"
+                    className="w-11 sm:w-9"
                   />
                   <NumberFlow
                     value={yearlyNet}

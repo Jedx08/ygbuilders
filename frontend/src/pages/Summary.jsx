@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import BusinessSummary from "../components/business/BusinessSummary";
 import PersonalSummary from "../components/personal/PersonalSummary";
 // import BusinessSummary from "../components/calendar/business/BusinessSummary";
+import Navbar from "../components/Navbar";
 import { CalendarContext } from "../context/CalendarContext";
 import { useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
@@ -39,6 +40,7 @@ const Summary = () => {
         <Sidebar />
       </div>
       <div className="w-full bg-light">
+        <Navbar />
         <div className="font-pops  min-h-[100vh]">
           {/* Calendar Switch View */}
           <div className="flex justify-center space-x-5 pt-5">
@@ -76,7 +78,7 @@ const Summary = () => {
             {personalSummaryView ? <PersonalSummary /> : <BusinessSummary />}
           </div>
         </div>
-        <div className="mt-5 lg:mb-[5rem]">
+        <div className="mt-20 lg:mb-[5rem]">
           <Footer />
         </div>
       </div>
