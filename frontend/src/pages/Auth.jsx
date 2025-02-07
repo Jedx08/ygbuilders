@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -13,11 +13,17 @@ import login_img from "../media/login_img.png";
 
 const Auth = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const params = new URLSearchParams(location.search);
+  const tab = params.get("tab");
+
   const { auth } = useAuth();
 
   const [authToken, setAuthToken] = useState(false);
 
   const [inMobile, setInMobile] = useState(false);
+
+  let sliderRef = useRef(null);
 
   useEffect(() => {
     const token = auth?.accessToken;
@@ -41,13 +47,38 @@ const Auth = () => {
     }
   }, []);
 
-  let sliderRef = useRef(null);
+  useEffect(() => {
+    if (!tab) {
+      navigate("/login?tab=login", { replace: true });
+    }
+  }, [tab, navigate]);
+
+  useEffect(() => {
+    if (!sliderRef) return;
+
+    if (tab === "register") {
+      sliderRef.slickGoTo(1);
+    }
+
+    if (tab === "login") {
+      sliderRef.slickGoTo(0);
+    }
+  }, [tab]);
+
+  const changeTab = (tabName) => {
+    navigate(`?tab=${tabName}`, { replace: true });
+  };
+
   const next = () => {
     sliderRef.slickNext();
+    changeTab("register"); // Updates URL to ?tab=register
   };
+
   const previous = () => {
     sliderRef.slickPrev();
+    changeTab("login"); // Updates URL to ?tab=login
   };
+
   const settings = {
     infinite: false,
     speed: 500,
