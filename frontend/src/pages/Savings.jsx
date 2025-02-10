@@ -1,10 +1,24 @@
+import { CalendarContext } from "../context/CalendarContext";
+import useAuth from "../hooks/useAuth";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import FooterNav from "../components/FooterNav";
 import Sidebar from "../components/Sidebar";
 import SavingsComponent from "../components/savings/SavingsComponent";
+import { useContext, useEffect } from "react";
 
 const Savings = () => {
+  const { auth } = useAuth();
+  const { setLoggedIn } = useContext(CalendarContext);
+
+  useEffect(() => {
+    if (!auth.accessToken && !auth._id) {
+      setLoggedIn(false);
+    } else {
+      setLoggedIn(true);
+    }
+  }, []);
+
   return (
     <div className="flex lg:flex-col">
       <div className="lg:hidden">

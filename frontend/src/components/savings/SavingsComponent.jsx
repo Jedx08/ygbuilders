@@ -9,6 +9,11 @@ import SavingsMonth from "./SavingsMonth";
 import SavingsForm from "./SavingsForm";
 import SavingsData from "./SavingsData";
 import SavingsGoal from "./SavingsGoal";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
+import useAuth from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { BsInfoCircle } from "react-icons/bs";
 
 const SavingsComponent = () => {
   const {
@@ -23,6 +28,9 @@ const SavingsComponent = () => {
     goalData,
     setShowGoalForm,
   } = useContext(CalendarContext);
+
+  const { userInfo } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
 
   const [currentMonth, setCurrentMonth] = useState(getMonth());
 
@@ -121,6 +129,8 @@ const SavingsComponent = () => {
 
   const [goalFloat, setGoalFloat] = useState(false);
 
+  const [instructions, setInstructions] = useState(null);
+
   useEffect(() => {
     if (goalLoading) {
       setGoalDataLoading(true);
@@ -175,8 +185,114 @@ const SavingsComponent = () => {
     };
   }, []);
 
+  // identifier if instructions is already shown
+  useEffect(() => {
+    const showInstructions = async () => {
+      try {
+        await userInfo.instructions;
+        setInstructions(userInfo.instructions);
+        if (userInfo?.instructions?.savings) {
+          console.log(userInfo.instructions.savings);
+          showTour();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    showInstructions();
+  }, []);
+
+  // saving instructions to db
+  useEffect(() => {
+    const toggleInstructions = async () => {
+      try {
+        if (instructions) {
+          await axiosPrivate.patch(
+            "/user/instructions",
+            JSON.stringify({ instructions: instructions })
+          );
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    toggleInstructions();
+  }, [instructions]);
+
+  // driver js tour content
+  const showTour = async () => {
+    if (userInfo.instructions.savings) {
+      const driverObj = driver({
+        showProgress: true,
+        steps: [
+          {
+            element: "#summary",
+            popover: {
+              title: "Savings' Summary",
+              description:
+                "In this section, you can view your monthly, yearly, and total savings",
+            },
+          },
+          {
+            element: "#calendar",
+            popover: {
+              title: "Savings' Calendar",
+              description:
+                "Just like the income calendar, you can select a date in here to add your data.",
+            },
+          },
+          {
+            element: "#addData",
+            popover: {
+              title: "Data Editor",
+              description:
+                "After selecting a date, you can save or edit your data in here.",
+            },
+          },
+          {
+            element: "#goal",
+            popover: {
+              title: "Saving's Goal",
+              description:
+                "This section shows description for your saving's goal, how many days it will take, and if you've finished you desired goal.",
+            },
+          },
+          {
+            element: "#dataOverview",
+            popover: {
+              title: "Data Overview",
+              description:
+                "In this section you can view all of your savings' data and its date.",
+            },
+          },
+        ],
+      });
+
+      driverObj.drive();
+
+      setInstructions((prev) => ({ ...prev, savings: false }));
+    }
+  };
+
+  console.log(instructions);
+
   return (
     <>
+      {/* instructions */}
+      <div
+        id="howtouse"
+        onClick={() => {
+          showTour();
+        }}
+        className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white hover:border-lgreens text-sm mmd:text-xs md:py-1 mx-auto`}
+      >
+        <BsInfoCircle className={`text-oranges text-2xl mmd:text-xl`} />
+        <p>
+          How to use? <span className="font-bold">Instructions</span>
+        </p>
+      </div>
       <div className="px-5 mt-5 xl:pl-24 lg:pl-5">
         <SavingsSummary
           savingsCurrentAmount={savingsCurrentAmount}
@@ -189,7 +305,10 @@ const SavingsComponent = () => {
       {/* components */}
       <div className="grid grid-cols-3 gap-4 mt-2 py-1 px-5 xl:pl-24 lg:pl-5 clg:grid-cols-2 clg:grid-rows-2">
         {/* calendar */}
-        <div className="bg-white shadow-sm rounded-lg pt-4 min-w-[350px] h-[360px] relative mmd:pt-2 mmd:col-span-2 mmd:h-hfull">
+        <div
+          id="calendar"
+          className="bg-white shadow-sm rounded-lg pt-4 min-w-[350px] h-[360px] relative mmd:pt-2 mmd:col-span-2 mmd:h-hfull"
+        >
           <SavingsMonth
             monthData={monthData}
             month={currentMonth}
@@ -197,11 +316,17 @@ const SavingsComponent = () => {
           />
         </div>
         {/* form */}
-        <div className="bg-white shadow-sm rounded-lg pt-8 min-w-[350px] h-[360px] mmd:hidden">
+        <div
+          id="addData"
+          className="bg-white shadow-sm rounded-lg pt-8 min-w-[350px] h-[360px] mmd:hidden"
+        >
           <SavingsForm />
         </div>
         {/* goal */}
-        <div className="bg-white shadow-sm rounded-lg min-w-[350px] max-h-[360px] clg:col-span-2 clg:row-span-full clg:h-[400px]">
+        <div
+          id="goal"
+          className="bg-white shadow-sm rounded-lg min-w-[350px] max-h-[360px] clg:col-span-2 clg:row-span-full clg:h-[400px]"
+        >
           <SavingsGoal
             goalGetData={goalGetData}
             savingsCurrentAmount={savingsCurrentAmount}

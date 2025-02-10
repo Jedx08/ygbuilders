@@ -239,7 +239,10 @@ const BusinessYearlySummary = () => {
 
   return (
     <>
-      <div className="bg-white mx-5 px-5 rounded-lg shadow-sm">
+      <div
+        id="yearlyIncome"
+        className="bg-white mx-5 px-5 rounded-lg shadow-sm"
+      >
         <div className="w-full grid grid-flow-col justify-center place-items-center gap-2 xs:pt-2 xxs:flex xxs:flex-col xxs:items-center xxs:justify-center xxs:gap-0">
           <div className="font-bold text-2xl text-center items-center justify-center py-5 sm:text-2xl xxs:py-2">
             Yearly Summary
@@ -360,7 +363,7 @@ const BusinessYearlySummary = () => {
               </div>
             </div>
 
-            <div className="w-[65%] xs:w-full">
+            <div id="barGraph" className="w-[65%] xs:w-full">
               <div className="w-full bg-white p-5 rounded-lg border border-light overflow-y-auto shadow-sm">
                 <div className="h-[400px] w-full lg:w-[800px]">
                   <Bar
