@@ -12,6 +12,10 @@ import PersonalMonthlySummary from "./PersonalMonthlySummary";
 import { BsInfoCircle } from "react-icons/bs";
 import { FaRegEye } from "react-icons/fa";
 import monthExpensesIcon from "../../../media/monexpenses.png";
+import useAuth from "../../../hooks/useAuth";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 const PersonalCalendar = () => {
   const {
@@ -29,6 +33,9 @@ const PersonalCalendar = () => {
   } = useContext(CalendarContext);
   const [currentMonth, setCurrentMonth] = useState(getMonth());
 
+  const { userInfo } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
+
   const getPersonalData = useGetData();
 
   const [monthData, setMonthData] = useState(null);
@@ -37,6 +44,8 @@ const PersonalCalendar = () => {
 
   const [grossCount, setGrossCount] = useState(0);
   const [expensesCount, setExpensesCount] = useState(0);
+
+  const [instructions, setInstructions] = useState(null);
 
   useEffect(() => {
     if (personalIncomeLoading) {
@@ -157,14 +166,100 @@ const PersonalCalendar = () => {
     };
   }, []);
 
+  // identifier if instructions is already shown
+  useEffect(() => {
+    const showInstructions = async () => {
+      try {
+        setInstructions(userInfo.instructions);
+        if (userInfo?.instructions?.income) {
+          showTour();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    showInstructions();
+  }, [userInfo.instructions]);
+
+  // saving instructions to db
+  useEffect(() => {
+    const toggleInstructions = async () => {
+      try {
+        if (instructions) {
+          await axiosPrivate.patch(
+            "/user/instructions",
+            JSON.stringify({ instructions: instructions })
+          );
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    toggleInstructions();
+  }, [instructions]);
+
+  // driver js tour content
+  const showTour = async () => {
+    const driverObj = driver({
+      showProgress: true,
+      steps: [
+        {
+          element: "#monthlySummary",
+          popover: {
+            title: "Personal Monthly Income",
+            description: "In here, you can view you overall personal Income",
+          },
+        },
+        {
+          element: "#calendar",
+          popover: {
+            title: "Calendar",
+            description: "You can select any date you want to add data into.",
+          },
+        },
+        {
+          element: "#addData",
+          popover: {
+            title: "Data Editor",
+            description:
+              "After clicking a date in the calendar, you can add or edit your data in this section.",
+          },
+        },
+        {
+          element: "#monthlyExpenses",
+          popover: {
+            title: "Monthly Expenses",
+            description: "You can add or edit your Monthly Expenses in here.",
+          },
+        },
+        {
+          element: "#dataOverview",
+          popover: {
+            title: "Data Overview",
+            description:
+              "In this section you can view all of your data including everyday gross, expenses, and net income.",
+          },
+        },
+      ],
+    });
+
+    driverObj.drive();
+
+    setInstructions((prev) => ({ ...prev, income: false }));
+  };
+
+  console.log(instructions);
+
   return (
     <>
       {/* instructions */}
       <div
         id="howtouse"
-        // onClick={() => {
-        //   showTour();
-        // }}
+        onClick={() => {
+          showTour();
+        }}
         className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white hover:border-lgreens text-sm mmd:text-xs md:py-1 mx-auto`}
       >
         <BsInfoCircle className={`text-oranges text-2xl mmd:text-xl`} />
@@ -184,17 +279,26 @@ const PersonalCalendar = () => {
 
       {/* components */}
       <div className="grid grid-cols-3 gap-4 mt-2 py-1 px-5 overflow-hidden xl:pl-24 lg:pl-5 clg:grid-cols-2 clg:grid-rows-2">
-        <div className="bg-white shadow-sm rounded-lg pt-8 min-w-[350px] h-[406px] relative mmd:pt-2 mmd:col-span-2 mmd:h-hfull">
+        <div
+          id="calendar"
+          className="bg-white shadow-sm rounded-lg pt-8 min-w-[350px] h-[406px] relative mmd:pt-2 mmd:col-span-2 mmd:h-hfull"
+        >
           <PersonalMonth
             month={currentMonth}
             monthData={monthData}
             personalDataLoading={personalDataLoading}
           />
         </div>
-        <div className="bg-white shadow-sm rounded-lg pt-8 min-w-[350px] h-[406px] mmd:hidden">
+        <div
+          id="addData"
+          className="bg-white shadow-sm rounded-lg pt-8 min-w-[350px] h-[406px] mmd:hidden"
+        >
           <PersonalForm />
         </div>
-        <div className="bg-white shadow-sm rounded-lg min-w-[350px] max-h-[406px] clg:col-span-2 clg:row-span-full clg:h-hfit">
+        <div
+          id="monthlyExpenses"
+          className="bg-white shadow-sm rounded-lg min-w-[350px] max-h-[406px] clg:col-span-2 clg:row-span-full clg:h-hfit"
+        >
           {!personalExpensesFloat && (
             <PMonthlyExpensesForm
               expensesDataLoading={expensesDataLoading}
@@ -205,7 +309,7 @@ const PersonalCalendar = () => {
           )}
           {personalExpensesFloat && (
             <>
-              <div className="text-center py-1">
+              <div id="monthlyExpenses" className="text-center py-1">
                 <h1 className="text-lg text-greens mb-2 font-bold clg:mb-0 sm:text-base">
                   Monthly Expenses
                 </h1>

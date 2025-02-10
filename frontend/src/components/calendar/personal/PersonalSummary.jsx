@@ -21,6 +21,7 @@ import PersonalYearlySummary from "./PersonalYearlySummary";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import { PiChartLineUp, PiChartLineDown } from "react-icons/pi";
+import { BsInfoCircle } from "react-icons/bs";
 import NumberFlow from "@number-flow/react";
 
 const PersonalSummary = () => {
@@ -35,7 +36,7 @@ const PersonalSummary = () => {
     setPersonalExpensesLoading,
   } = useContext(CalendarContext);
 
-  const { userInfo } = useAuth();
+  const { userInfo, setUserInfo } = useAuth();
 
   const thisMonth = dayjs().month(monthIndex).format("MMMM");
 
@@ -217,12 +218,20 @@ const PersonalSummary = () => {
     overallData();
   }, [personalIncomeData, personalExpensesData]);
 
+  // next and prev month functions
+  function handlePrevMonth() {
+    setMonthIndex(monthIndex - 1);
+  }
+  function handleNextMonth() {
+    setMonthIndex(monthIndex + 1);
+  }
+
   // identifier if instructions is already shown
   useEffect(() => {
     const showInstructions = async () => {
       try {
         setInstructions(userInfo.instructions);
-        if (userInfo.instructions.summary && !isLoading) {
+        if (userInfo?.instructions?.dashboard) {
           showTour();
         }
       } catch (err) {
@@ -231,7 +240,7 @@ const PersonalSummary = () => {
     };
 
     showInstructions();
-  }, [isLoading]);
+  }, []);
 
   // saving instructions to db
   useEffect(() => {
@@ -251,63 +260,33 @@ const PersonalSummary = () => {
     toggleInstructions();
   }, [instructions]);
 
-  // next and prev month functions
-  function handlePrevMonth() {
-    setMonthIndex(monthIndex - 1);
-  }
-  function handleNextMonth() {
-    setMonthIndex(monthIndex + 1);
-  }
-
   // driver js tour content
   const showTour = async () => {
     const driverObj = driver({
       showProgress: true,
       steps: [
         {
-          element: "#summaryView",
-          popover: {
-            title: "Personal-Business button",
-            description: "You can change the summary view using these buttons.",
-            side: "left",
-          },
-        },
-        {
-          element: "#lineGraph",
-          popover: {
-            title: "Monthly Line Graph",
-            description:
-              "In here, you can view your Income with a Line Graph. You can change the graph view by clicking the colored buttons.",
-          },
-        },
-        {
-          element: "#lineGraphOverview",
-          popover: {
-            title: "Line Graph Overview",
-            description:
-              "In this section you can easily see your monthly income information",
-          },
-        },
-        {
-          element: "#barGraph",
-          popover: {
-            title: "Yearly Bar Graph",
-            description:
-              "Just like the first graph, in this section you can monitor your yearly Income",
-          },
-        },
-        {
-          element: "#barGraphOverview",
-          popover: {
-            title: "Bar Graph Overview",
-            description: "Just like the title says",
-          },
-        },
-        {
-          element: "#overall",
+          element: "#overallIncome",
           popover: {
             title: "Overall Income",
-            description: "Here you can see the overall income information",
+            description:
+              "Displays a summary of your financial performance, including net income, gross income, and total expenses. This helps you quickly assess your financial status.",
+          },
+        },
+        {
+          element: "#monthlyIncome",
+          popover: {
+            title: "Monthly Income",
+            description:
+              "Shows a detailed breakdown of your gross income, expenses, and net income for the selected month. You can change the graph view by clicking the colored buttons.",
+          },
+        },
+        {
+          element: "#yearlyIncome",
+          popover: {
+            title: "Yearly Income",
+            description:
+              "Provides an annual financial overview, displaying gross income, expenses, and net income across all months. A bar chart helps visualize income and spending trends for better financial planning.",
           },
         },
       ],
@@ -315,12 +294,31 @@ const PersonalSummary = () => {
 
     driverObj.drive();
 
-    setInstructions((prev) => ({ ...prev, summary: false }));
+    setInstructions((prev) => ({ ...prev, dashboard: false }));
   };
 
+  console.log(instructions);
+
   return (
-    <div className="">
-      <div className="bg-white shadow-sm rounded-lg mb-5 py-5 mt-5 mx-5 xl:ml-24 lg:ml-5">
+    <div>
+      {/* instructions */}
+      <div
+        id="howtouse"
+        onClick={() => {
+          showTour();
+        }}
+        className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white hover:border-lgreens text-sm mmd:text-xs md:py-1 mx-auto`}
+      >
+        <BsInfoCircle className={`text-oranges text-2xl mmd:text-xl`} />
+        <p>
+          How to use? <span className="font-bold">Instructions</span>
+        </p>
+      </div>
+
+      <div
+        id="overallIncome"
+        className="bg-white shadow-sm rounded-lg mb-5 py-5 mt-5 mx-5 xl:ml-24 lg:ml-5"
+      >
         <div
           className={`flex justify-center items-center text-greens font-bold pb-2 text-2xl sm:text-xl`}
         >
@@ -372,7 +370,6 @@ const PersonalSummary = () => {
                 <img src={pouch} alt="gross" className="w-14 mdd:w-11 sm:w-9" />
               </div>
               <div className="text-oranges font-bold text-2xl mdd:text-xl sm:text-lg">
-                {/* {gross.toLocaleString()} */}
                 {
                   <NumberFlow
                     value={gross}
@@ -415,7 +412,11 @@ const PersonalSummary = () => {
         </div>
       </div>
 
-      <div className="bg-white mb-5 py-5 mx-5 rounded-lg shadow-sm">
+      <></>
+      <div
+        id="monthlyIncome"
+        className="bg-white mb-5 py-5 mx-5 rounded-lg shadow-sm"
+      >
         <div className="bg-light font-pops">
           {isLoading ? (
             <div className="w-[60%] bg-white p-5 rounded-lg flex items-center flex-col md:w-[90%] ">
@@ -427,9 +428,12 @@ const PersonalSummary = () => {
               </div>
             </div>
           ) : (
-            <div className="bg-white w-full flex gap-5 px-5 xs:flex-col">
+            <div
+              id="lineGraph"
+              className="bg-white w-full flex gap-5 px-5 xs:flex-col"
+            >
               <div className="w-[65%] xs:w-full">
-                <span id="lineGraph">
+                <span>
                   <div className="bg-white border border-light py-4 rounded-md shadow-sm overflow-y-auto px-3">
                     <div className="w-full flex justify-center text-xl text-greens font-pops font-bold py-3">
                       <div className="flex w-[20%] gap-2 items-center">
@@ -504,7 +508,7 @@ const PersonalSummary = () => {
                 </span>
               </div>
               <div
-                id="barGraphOverview"
+                id="lineGraphOverview"
                 className="w-[35%] flex flex-col gap-5 rounded-md justify-center items-center md:p-0 xs:w-full xs:flex-row"
               >
                 <div className="font-bold text-greens text-2xl text-center items-center justify-center lg:text-2xl ssm:text-xl">

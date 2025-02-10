@@ -25,11 +25,10 @@ const userSchema = new Schema(
       default: "yourgross", // 'local' for email/password, 'facebook' for Facebook
     },
     instructions: {
-      home: Boolean,
-      calendarP: Boolean,
-      calendarB: Boolean,
-      summary: Boolean,
+      income: Boolean,
+      dashboard: Boolean,
       savings: Boolean,
+      filter: Boolean,
     },
     avatar: {
       type: String,

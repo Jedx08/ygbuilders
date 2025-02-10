@@ -17,7 +17,7 @@ const PersonalMonthlySummary = ({
   return (
     <div>
       {/* Monthly Summary */}
-      <div className="bg-white h-hfit rounded-lg shadow-sm">
+      <div id="monthlySummary" className="bg-white h-hfit rounded-lg shadow-sm">
         <div>
           <div
             className={`px-1 pt-3 pb-1 font-bold text-xl clg:py-1 sm:text-lg text-center`}

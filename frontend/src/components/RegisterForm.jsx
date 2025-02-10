@@ -87,11 +87,10 @@ const RegisterForm = ({ previous, inMobile }) => {
           password,
           avatar: "avatar1",
           instructions: {
-            home: true,
-            calendarP: true,
-            calendarB: true,
-            summary: true,
+            dashboard: true,
+            income: true,
             savings: true,
+            filter: true,
           },
         }),
         {
