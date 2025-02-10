@@ -159,250 +159,260 @@ const PasswordReset = () => {
   };
 
   return (
-    <div className="h-s100 bg-light font-pops overflow-hidden">
-      <NavbarDefault />
-      <div className="bg-white mx-auto mt-32 shadow-md rounded-lg max-w-[500px] py-5 px-5 relative">
-        {/* unverified token */}
-        {!tokenVerified && (
-          <>
-            <div className="font-bold text-2xl">{pageInfo}</div>
-            {tokenExpiredMsg && (
-              <>
-                <div className="text-sm mt-3">
-                  It looks like your password reset link has expired. For
-                  security reasons, tokens are only valid for a limited time.
-                </div>
-                <div className="text-sm mt-3">
-                  Please request a new password reset link.
-                </div>
-                <div className="w-fit">
-                  <Link to="/forgot-password">
-                    <div className="py-1 rounded-md px-6 bg-oranges hover:bg-loranges font-semibold text-white cursor-pointer  w-fit mt-3">
-                      Request New Link
-                    </div>
-                  </Link>
-                </div>
-              </>
-            )}
-          </>
-        )}
-
-        {/* token verified */}
-        {tokenVerified && (
-          <>
-            {resetPassSuccess && (
-              <>
-                <div className="font-bold text-2xl">
-                  Password Reset Successful
-                </div>
-                <div className="text-sm mt-3">
-                  Your password has been successfully reset. You can now log in
-                  with your new password.
-                </div>
-                <div className="flex justify-end">
+    <>
+      <div className="h-s80 bg-light font-pops overflow-hidden">
+        <NavbarDefault />
+        <div className="bg-white mx-auto mt-32 shadow-md rounded-lg max-w-[500px] py-5 px-5 relative">
+          {/* unverified token */}
+          {!tokenVerified && (
+            <>
+              <div className="font-bold text-2xl">{pageInfo}</div>
+              {tokenExpiredMsg && (
+                <>
+                  <div className="text-sm mt-3">
+                    It looks like your password reset link has expired. For
+                    security reasons, tokens are only valid for a limited time.
+                  </div>
+                  <div className="text-sm mt-3">
+                    Please request a new password reset link.
+                  </div>
                   <div className="w-fit">
-                    <Link to="/Login">
-                      <div className="py-1 mt-3 rounded-md px-6 bg-oranges hover:bg-loranges font-semibold text-white cursor-pointer w-fit">
-                        Login
+                    <Link to="/forgot-password">
+                      <div className="py-1 rounded-md px-6 bg-oranges hover:bg-loranges font-semibold text-white cursor-pointer  w-fit mt-3">
+                        Request New Link
                       </div>
                     </Link>
                   </div>
-                </div>
-              </>
-            )}
+                </>
+              )}
+            </>
+          )}
 
-            {!resetPassSuccess && (
-              <>
-                <div className="font-bold text-2xl">Reset Your Password</div>
-
-                {/* New password */}
-                <div className="mt-3">
-                  <label htmlFor="register_password" className={`text-xs flex`}>
-                    New Password:
-                    <FaCheck
-                      className={`ml-1 text-lg text-greens font-bold mb-[-2px] ${
-                        validPassword ? "valid" : "hidden"
-                      }`}
-                    />
-                    <FaXmark
-                      className={`ml-1 text-lg text-[red] font-bold mb-[-2px] ${
-                        validPassword || !password ? "hidden" : "invalid"
-                      }`}
-                    />
-                  </label>
-                  <div className="flex items-center justify-between md:justify-normal border border-inputLight rounded-md pl-3 pr-2 mb-2">
-                    <input
-                      type={!showPassword ? "password" : "text"}
-                      id="register_password"
-                      onChange={passInput}
-                      value={password}
-                      required
-                      aria-invalid={validPassword ? "false" : "true"}
-                      aria-describedby="pwdnote"
-                      onFocus={() => setPasswordFocus(true)}
-                      onBlur={() => setPasswordFocus(false)}
-                      className={`rounded-md w-full focus:outline-none py-1 text-sm`}
-                    />
-                    {password ? (
-                      <>
-                        {!showPassword ? (
-                          <FaRegEyeSlash
-                            onClick={() => {
-                              setShowPassword(true);
-                            }}
-                            className={`cursor-pointer`}
-                          />
-                        ) : (
-                          <FaRegEye
-                            onClick={() => {
-                              setShowPassword(false);
-                            }}
-                            className={`cursor-pointer`}
-                          />
-                        )}
-                      </>
-                    ) : (
-                      <></>
-                    )}
+          {/* token verified */}
+          {tokenVerified && (
+            <>
+              {resetPassSuccess && (
+                <>
+                  <div className="font-bold text-2xl">
+                    Password Reset Successful
                   </div>
-                  <div>
-                    <p
-                      id="pwdnote"
-                      className={`text-xs bg-inputLight p-2 rounded-md shadow-lg mr-5  ${
-                        passwordFocus && !validPassword ? "absolute" : "hidden"
-                      }`}
-                    >
-                      <span className="flex items-center">
-                        <FaInfoCircle className="mr-1" />8 to 24 characters.
-                      </span>
-                      Must include uppercase and lowercase letters, a number and
-                      a special character.
-                      <br />
-                      Allowed special characters:{" "}
-                      <span aria-label="exclamation mark">!</span>{" "}
-                      <span aria-label="at symbol">@</span>{" "}
-                      <span aria-label="hashtag">#</span>{" "}
-                      <span aria-label="dollar sign">$</span>{" "}
-                      <span aria-label="percent">%</span>
-                    </p>
+                  <div className="text-sm mt-3">
+                    Your password has been successfully reset. You can now log
+                    in with your new password.
                   </div>
-                </div>
-
-                {/* Confirm Password */}
-                <div className="mt-3">
-                  <label htmlFor="confirm-password" className={`text-xs flex`}>
-                    Confirm Password:
-                    <FaCheck
-                      className={`ml-1 text-lg text-greens font-bold mb-[-2px] ${
-                        validMatch && matchPassword ? "valid" : "hidden"
-                      }`}
-                    />
-                    <FaXmark
-                      className={`ml-1 text-lg text-[red] font-bold mb-[-2px] ${
-                        validMatch || !matchPassword ? "hidden" : "invalid"
-                      }`}
-                    />
-                  </label>
-                  <div className="flex items-center justify-between md:justify-normal border border-inputLight rounded-md pl-3 pr-2 mb-2">
-                    <input
-                      type={!showMatchPassword ? "password" : "text"}
-                      id="confirm-password"
-                      onChange={confirmPassInput}
-                      value={matchPassword}
-                      required
-                      aria-invalid={validMatch ? "false" : "true"}
-                      aria-describedby="confirmnote"
-                      onFocus={() => setMatchFocus(true)}
-                      onBlur={() => setMatchFocus(false)}
-                      className={`border-inputLight w-full rounded-md focus:outline-none py-1 text-sm`}
-                    />
-                    {matchPassword ? (
-                      <>
-                        {!showMatchPassword ? (
-                          <FaRegEyeSlash
-                            onClick={() => {
-                              setShowMatchPassword(true);
-                            }}
-                            className={`cursor-pointer`}
-                          />
-                        ) : (
-                          <FaRegEye
-                            onClick={() => {
-                              setShowMatchPassword(false);
-                            }}
-                            className={`cursor-pointer`}
-                          />
-                        )}
-                      </>
-                    ) : (
-                      <></>
-                    )}
-                  </div>
-                  <div>
-                    <p
-                      id="confirmnote"
-                      className={`text-xs bg-inputLight p-2 rounded-md shadow-lg ${
-                        matchFocus && !validMatch ? "absolute" : "hidden"
-                      }`}
-                    >
-                      <span className="flex items-center">
-                        <FaInfoCircle className="mr-1" />
-                        Must match the first
-                      </span>
-                      password input field.
-                    </p>
-                  </div>
-                </div>
-
-                {errStyle && (
-                  <div className="text-center mt-2 text-xs text-[#ff3a33] flex items-center justify-center space-x-2">
-                    <div className="text-base">
-                      <FaXmark />
+                  <div className="flex justify-end">
+                    <div className="w-fit">
+                      <Link to="/Login">
+                        <div className="py-1 mt-3 rounded-md px-6 bg-oranges hover:bg-loranges font-semibold text-white cursor-pointer w-fit">
+                          Login
+                        </div>
+                      </Link>
                     </div>
-                    <div>{errMsg}</div>
                   </div>
-                )}
+                </>
+              )}
 
-                {successStyle && (
-                  <div className="text-center mt-2 text-xs text-[#32ca5b] flex items-center justify-center space-x-2">
-                    <div className="text-base">
-                      <FaCheck />
+              {!resetPassSuccess && (
+                <>
+                  <div className="font-bold text-2xl">Reset Your Password</div>
+
+                  {/* New password */}
+                  <div className="mt-3">
+                    <label
+                      htmlFor="register_password"
+                      className={`text-xs flex`}
+                    >
+                      New Password:
+                      <FaCheck
+                        className={`ml-1 text-lg text-greens font-bold mb-[-2px] ${
+                          validPassword ? "valid" : "hidden"
+                        }`}
+                      />
+                      <FaXmark
+                        className={`ml-1 text-lg text-[red] font-bold mb-[-2px] ${
+                          validPassword || !password ? "hidden" : "invalid"
+                        }`}
+                      />
+                    </label>
+                    <div className="flex items-center justify-between md:justify-normal border border-inputLight rounded-md pl-3 pr-2 mb-2">
+                      <input
+                        type={!showPassword ? "password" : "text"}
+                        id="register_password"
+                        onChange={passInput}
+                        value={password}
+                        required
+                        aria-invalid={validPassword ? "false" : "true"}
+                        aria-describedby="pwdnote"
+                        onFocus={() => setPasswordFocus(true)}
+                        onBlur={() => setPasswordFocus(false)}
+                        className={`rounded-md w-full focus:outline-none py-1 text-sm`}
+                      />
+                      {password ? (
+                        <>
+                          {!showPassword ? (
+                            <FaRegEyeSlash
+                              onClick={() => {
+                                setShowPassword(true);
+                              }}
+                              className={`cursor-pointer`}
+                            />
+                          ) : (
+                            <FaRegEye
+                              onClick={() => {
+                                setShowPassword(false);
+                              }}
+                              className={`cursor-pointer`}
+                            />
+                          )}
+                        </>
+                      ) : (
+                        <></>
+                      )}
                     </div>
-                    <div>{successMsg}</div>
-                  </div>
-                )}
-
-                <div className="flex justify-end mt-3">
-                  <div className="flex space-x-3">
-                    {isLoading ? (
-                      <div className="py-2 rounded-md px-6 bg-loranges font-semibold text-white">
-                        <ThreeDot
-                          style={{ fontSize: "7px" }}
-                          variant="pulsate"
-                          color="#fff"
-                          text=""
-                          textColor=""
-                        />
-                      </div>
-                    ) : (
-                      <div
-                        onClick={handleSubmit}
-                        className="py-2 rounded-md px-6 bg-oranges hover:bg-loranges font-semibold text-white cursor-pointer"
+                    <div>
+                      <p
+                        id="pwdnote"
+                        className={`text-xs bg-inputLight p-2 rounded-md shadow-lg mr-5  ${
+                          passwordFocus && !validPassword
+                            ? "absolute"
+                            : "hidden"
+                        }`}
                       >
-                        Reset
-                      </div>
-                    )}
+                        <span className="flex items-center">
+                          <FaInfoCircle className="mr-1" />8 to 24 characters.
+                        </span>
+                        Must include uppercase and lowercase letters, a number
+                        and a special character.
+                        <br />
+                        Allowed special characters:{" "}
+                        <span aria-label="exclamation mark">!</span>{" "}
+                        <span aria-label="at symbol">@</span>{" "}
+                        <span aria-label="hashtag">#</span>{" "}
+                        <span aria-label="dollar sign">$</span>{" "}
+                        <span aria-label="percent">%</span>
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </>
-            )}
-          </>
-        )}
+
+                  {/* Confirm Password */}
+                  <div className="mt-3">
+                    <label
+                      htmlFor="confirm-password"
+                      className={`text-xs flex`}
+                    >
+                      Confirm Password:
+                      <FaCheck
+                        className={`ml-1 text-lg text-greens font-bold mb-[-2px] ${
+                          validMatch && matchPassword ? "valid" : "hidden"
+                        }`}
+                      />
+                      <FaXmark
+                        className={`ml-1 text-lg text-[red] font-bold mb-[-2px] ${
+                          validMatch || !matchPassword ? "hidden" : "invalid"
+                        }`}
+                      />
+                    </label>
+                    <div className="flex items-center justify-between md:justify-normal border border-inputLight rounded-md pl-3 pr-2 mb-2">
+                      <input
+                        type={!showMatchPassword ? "password" : "text"}
+                        id="confirm-password"
+                        onChange={confirmPassInput}
+                        value={matchPassword}
+                        required
+                        aria-invalid={validMatch ? "false" : "true"}
+                        aria-describedby="confirmnote"
+                        onFocus={() => setMatchFocus(true)}
+                        onBlur={() => setMatchFocus(false)}
+                        className={`border-inputLight w-full rounded-md focus:outline-none py-1 text-sm`}
+                      />
+                      {matchPassword ? (
+                        <>
+                          {!showMatchPassword ? (
+                            <FaRegEyeSlash
+                              onClick={() => {
+                                setShowMatchPassword(true);
+                              }}
+                              className={`cursor-pointer`}
+                            />
+                          ) : (
+                            <FaRegEye
+                              onClick={() => {
+                                setShowMatchPassword(false);
+                              }}
+                              className={`cursor-pointer`}
+                            />
+                          )}
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                    <div>
+                      <p
+                        id="confirmnote"
+                        className={`text-xs bg-inputLight p-2 rounded-md shadow-lg ${
+                          matchFocus && !validMatch ? "absolute" : "hidden"
+                        }`}
+                      >
+                        <span className="flex items-center">
+                          <FaInfoCircle className="mr-1" />
+                          Must match the first
+                        </span>
+                        password input field.
+                      </p>
+                    </div>
+                  </div>
+
+                  {errStyle && (
+                    <div className="text-center mt-2 text-xs text-[#ff3a33] flex items-center justify-center space-x-2">
+                      <div className="text-base">
+                        <FaXmark />
+                      </div>
+                      <div>{errMsg}</div>
+                    </div>
+                  )}
+
+                  {successStyle && (
+                    <div className="text-center mt-2 text-xs text-[#32ca5b] flex items-center justify-center space-x-2">
+                      <div className="text-base">
+                        <FaCheck />
+                      </div>
+                      <div>{successMsg}</div>
+                    </div>
+                  )}
+
+                  <div className="flex justify-end mt-3">
+                    <div className="flex space-x-3">
+                      {isLoading ? (
+                        <div className="py-2 rounded-md px-6 bg-loranges font-semibold text-white">
+                          <ThreeDot
+                            style={{ fontSize: "7px" }}
+                            variant="pulsate"
+                            color="#fff"
+                            text=""
+                            textColor=""
+                          />
+                        </div>
+                      ) : (
+                        <div
+                          onClick={handleSubmit}
+                          className="py-2 rounded-md px-6 bg-oranges hover:bg-loranges font-semibold text-white cursor-pointer"
+                        >
+                          Reset
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
+            </>
+          )}
+        </div>
       </div>
-      <div className="bottom-0 absolute w-full">
+      <div className="w-full">
         <Footer />
       </div>
-    </div>
+    </>
   );
 };
 

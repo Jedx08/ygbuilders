@@ -18,9 +18,6 @@ const PrivacyPolicy = () => {
           <div className="px-10 py-3 bg-subCon rounded-lg">
             We collect personal information, including your name, email address,
             and financial data, when you register for and use our services.
-            Additionally, with your consent, we obtain this information from
-            trusted sources such as Facebook if you choose to log in using those
-            accounts.
           </div>{" "}
           <br /> <span className="font-semibold">Use of Information</span>{" "}
           <br /> <br />
@@ -85,16 +82,25 @@ const PrivacyPolicy = () => {
           have the right to request a copy of your personal information in a
           structured, commonly used, and machine-readable format. This allows
           you to transfer your data to another service provider if you wish.{" "}
-          <br /> <br /> 6.
+          <br /> <br /> 6.{" "}
           <span className="font-semibold">Right to Withdraw Consent</span>: If
           you have provided consent for us to process your personal information,
           you have the right to withdraw that consent at any time. This
           withdrawal will not affect the lawfulness of any processing carried
-          out before your withdrawal. <br /> <br /> To exercise any of these
-          rights, please contact us at help@yourgross.ph. We will respond to
-          your request within a reasonable timeframe and in accordance with
-          applicable laws. Your rights are important to us, and we are committed
-          to ensuring that they are respected and upheld. <br /> <br />
+          out before your withdrawal. <br /> <br /> 7.{" "}
+          <span className="font-semibold">
+            Right to Delete Account and Clear Data
+          </span>
+          : You have the right to delete your account and clear your data
+          through the settings page on our website. When you choose to delete
+          your account, all associated personal information will be permanently
+          removed from our systems, unless retention is required by law or
+          legitimate business purposes. <br /> <br />
+          To exercise any of these rights, please contact us at
+          support@yourgross.ph. We will respond to your request within a
+          reasonable timeframe and in accordance with applicable laws. Your
+          rights are important to us, and we are committed to ensuring that they
+          are respected and upheld. <br /> <br />
           <span className="flex justify-center font-semibold text-xl py-1">
             Contact Us
           </span>{" "}

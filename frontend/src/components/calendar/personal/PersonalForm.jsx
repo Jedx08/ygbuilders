@@ -385,11 +385,11 @@ const PersonalForm = () => {
                       {/* Add data */}
                       {!addLoading && (
                         <div
-                          onClick={() => {
+                          onClick={(e) => {
                             if (!loggedIn) {
                               navigate("/login");
                             } else {
-                              handleSubmit();
+                              handleSubmit(e);
                             }
                           }}
                           className="mx-auto py-1 rounded-md px-6 bg-greens text-base font-semibold text-white hover:bg-lgreens flex gap-1 items-center cursor-pointer"

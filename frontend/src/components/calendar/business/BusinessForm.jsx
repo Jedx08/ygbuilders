@@ -449,11 +449,11 @@ const BusinessForm = () => {
                       {!addLoading && (
                         <div className="flex flex-col items-center ">
                           <div
-                            onClick={() => {
+                            onClick={(e) => {
                               if (!loggedIn) {
                                 navigate("/login");
                               } else {
-                                handleSubmit();
+                                handleSubmit(e);
                               }
                             }}
                           >
