@@ -56,6 +56,8 @@ const BusinessForm = () => {
 
   const [businessFormFloat, setBusinessFormFloat] = useState(false);
 
+  const [dateStyle, setDateStyle] = useState(false);
+
   useEffect(() => {
     if (businessFormSelectedDate) {
       setToggleSaveButton(false);
@@ -74,6 +76,13 @@ const BusinessForm = () => {
     setErrStyleSales(false);
     setErrStyleExpenses(false);
   }, [exactDaySelected, businessFormSelectedDate]);
+
+  useEffect(() => {
+    setDateStyle(true);
+    setTimeout(() => {
+      setDateStyle(false);
+    }, 1000);
+  }, [exactDaySelected]);
 
   useEffect(() => {
     if (businessButton) {
@@ -322,7 +331,7 @@ const BusinessForm = () => {
         <div
           className={`text-center ${
             businessFormFloat && showBusinessForm
-              ? "rounded-md bg-white overflow-hidden shadow-lg w-80 px-2 py-5 relative"
+              ? "rounded-md bg-white overflow-hidden shadow-lg w-80 px-2 py-5 relative border border-[#ebebeb]"
               : ""
           }`}
         >
@@ -346,7 +355,13 @@ const BusinessForm = () => {
           >
             <IoClose className="text-loranges hover:text-oranges" />
           </div>
-          <div className="font-semibold">
+          <div
+            className={`text-base w-fit mx-auto ${
+              dateStyle
+                ? "bg-loranges font-bold text-white px-3 rounded-sm"
+                : "font-semibold"
+            }`}
+          >
             {exactDaySelected.format("MMMM D, YYYY")}
           </div>
           {/* Add Capital */}

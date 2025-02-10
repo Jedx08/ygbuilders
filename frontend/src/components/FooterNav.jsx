@@ -1,61 +1,88 @@
 import { FaChartLine } from "react-icons/fa";
 import { FaPiggyBank } from "react-icons/fa6";
 import { FaCalendarAlt } from "react-icons/fa";
+import { MdSavings } from "react-icons/md";
 import { FaFilter } from "react-icons/fa";
+import { GrLineChart } from "react-icons/gr";
+import { GiReceiveMoney } from "react-icons/gi";
 import { Link, useLocation } from "react-router-dom";
 
 const FooterNav = () => {
   const location = useLocation();
 
   return (
-    <div className="fixed bottom-0 bg-white w-full pt-2">
-      <div className="flex justify-between gap-7 w-full px-20 sm:px-10 xs:px-5">
+    <div className="font-pops fixed bottom-0 bg-white w-full border-t border-[#ebebeb]">
+      <div className="flex justify-between w-full ">
         <Link to="/dashboard" className="w-full">
           <div
-            className={`flex flex-col items-center p-2 gap-2 hover:bg-light rounded-md cursor-pointer ${
-              location.pathname === "/dashboard" ? "bg-light" : ""
+            className={`flex flex-col items-center p-2 gap-2 hover:bg-light cursor-pointer ${
+              location.pathname === "/dashboard" ? "bg-subCon text-oranges" : ""
             }`}
           >
             <div className="flex justify-center">
-              <FaChartLine className="text-xl text-[#b8b8b8]" />
+              <GrLineChart
+                className={`text-xl ${
+                  location.pathname === "/dashboard"
+                    ? "text-loranges"
+                    : "text-[#b8b8b8]"
+                }`}
+              />
             </div>
-            <p className="text-sm">Dashboard</p>
+            <p className="text-sm font-medium">Dashboard</p>
           </div>
         </Link>
-        <Link to="/calendar" className="w-full">
+        <Link to="/income" className="w-full">
           <div
-            className={`flex flex-col items-center p-2 gap-2 hover:bg-light rounded-md cursor-pointer ${
-              location.pathname === "/calendar" ? "bg-light" : ""
+            className={`flex flex-col items-center p-2 gap-2 hover:bg-light cursor-pointer ${
+              location.pathname === "/income" ? "bg-subCon text-oranges" : ""
             }`}
           >
             <div className="flex justify-center">
-              <FaCalendarAlt className="text-xl text-[#b8b8b8]" />
+              <GiReceiveMoney
+                className={`text-xl ${
+                  location.pathname === "/income"
+                    ? "text-loranges"
+                    : "text-[#b8b8b8]"
+                }`}
+              />
             </div>
-            <p className="text-sm">Calendar</p>
+            <p className="text-sm font-medium">Income</p>
           </div>
         </Link>
         <Link to="/savings" className="w-full">
           <div
-            className={`flex flex-col items-center p-2 gap-2 hover:bg-light rounded-md cursor-pointer ${
-              location.pathname === "/savings" ? "bg-light" : ""
+            className={`flex flex-col items-center p-2 gap-2 hover:bg-light cursor-pointer ${
+              location.pathname === "/savings" ? "bg-subCon text-oranges" : ""
             }`}
           >
             <div className="flex justify-center">
-              <FaPiggyBank className="text-xl text-[#b8b8b8]" />
+              <MdSavings
+                className={`text-2xl ${
+                  location.pathname === "/savings"
+                    ? "text-loranges"
+                    : "text-[#b8b8b8]"
+                }`}
+              />
             </div>
-            <p className="text-sm">Savings</p>
+            <p className="text-sm font-medium">Savings</p>
           </div>
         </Link>
         <Link to="/filter" className="w-full">
           <div
-            className={`flex flex-col items-center p-2 gap-2 hover:bg-light rounded-md cursor-pointer ${
-              location.pathname === "/filter" ? "bg-light" : ""
+            className={`flex flex-col items-center p-2 gap-2 hover:bg-light cursor-pointer ${
+              location.pathname === "/filter" ? "bg-subCon text-oranges" : ""
             }`}
           >
             <div className="flex justify-center">
-              <FaFilter className="text-xl text-[#b8b8b8]" />
+              <FaFilter
+                className={`text-xl ${
+                  location.pathname === "/filter"
+                    ? "text-loranges"
+                    : "text-[#b8b8b8]"
+                }`}
+              />
             </div>
-            <p className="text-sm">Filter</p>
+            <p className="text-sm font-medium">Filter</p>
           </div>
         </Link>
       </div>

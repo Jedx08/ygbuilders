@@ -22,7 +22,7 @@ const Footer = () => {
           <div className="flex flex-col space-y-4 font-medium">
             <div className="text-[#737373]">Services</div>
             <div className="cursor-pointer hover:text-loranges">Dashboard</div>
-            <div className="cursor-pointer hover:text-loranges">Calendar</div>
+            <div className="cursor-pointer hover:text-loranges">Income</div>
             <div className="cursor-pointer hover:text-loranges">Savings</div>
             <div className="cursor-pointer hover:text-loranges">
               Filter Data

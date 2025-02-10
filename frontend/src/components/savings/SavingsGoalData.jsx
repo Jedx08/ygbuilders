@@ -189,10 +189,10 @@ const SavingsGoalData = ({ goals, savingsCurrentAmount, goalInfoLoading }) => {
           <div className="bg-subCon py-2 rounded-md">
             <div className="flex justify-center space-y-2 space-x-4">
               <div className="pl-3 flex justify-start items-center">
-                <img src={target} alt="goal" className="w-11" />
+                <img src={target} alt="goal" className="w-11 mmd:w-9" />
               </div>
               <div>
-                <div className="text-lg font-semibold">
+                <div className="text-lg font-semibold mdd:text-sm sm:text-xs">
                   <span
                     style={{
                       WebkitLineClamp: 1,
@@ -443,7 +443,7 @@ const SavingsGoalData = ({ goals, savingsCurrentAmount, goalInfoLoading }) => {
         <>
           {!confirmDelete && !updateConfirm && (
             <div className="bg-subCon py-3 rounded-md mt-3">
-              <div className="text-sm font-medium px-5 text-[#555]">
+              <div className="text-sm font-medium px-5 text-[#555] mdd:text-sm sm:text-xs">
                 {savingsCurrentAmount >= goals.amount ? (
                   <></>
                 ) : (
@@ -466,7 +466,7 @@ const SavingsGoalData = ({ goals, savingsCurrentAmount, goalInfoLoading }) => {
                   </>
                 )}
               </div>
-              <div className="text-sm font-medium px-5 text-[#555]">
+              <div className="text-sm font-medium px-5 text-[#555] mdd:text-sm sm:text-xs">
                 {savingsCurrentAmount >= goals.amount ? (
                   <div className="text-center">
                     {congratsMsg && <>Congratulations you reached your Goal</>}
@@ -496,7 +496,7 @@ const SavingsGoalData = ({ goals, savingsCurrentAmount, goalInfoLoading }) => {
                   </>
                 )}
               </div>
-              <div className="text-sm font-medium px-5 text-[#555]">
+              <div className="text-sm font-medium px-5 text-[#555] mdd:text-sm sm:text-xs">
                 {savingsCurrentAmount >= goals.amount ? (
                   <></>
                 ) : (

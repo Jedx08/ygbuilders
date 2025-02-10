@@ -41,6 +41,8 @@ const SavingsForm = () => {
 
   const [savingsFormFloat, setSavingsFormFloat] = useState(false);
 
+  const [dateStyle, setDateStyle] = useState(false);
+
   useEffect(() => {
     if (savingsFormSelectedData) {
       setToggleSaveButton(false);
@@ -53,6 +55,13 @@ const SavingsForm = () => {
     setErrStyle(false);
     setErrStyleAmount(false);
   }, [exactDaySelected, savingsFormSelectedData]);
+
+  useEffect(() => {
+    setDateStyle(true);
+    setTimeout(() => {
+      setDateStyle(false);
+    }, 1000);
+  }, [exactDaySelected]);
 
   useEffect(() => {
     if (savingsButton) {
@@ -241,7 +250,13 @@ const SavingsForm = () => {
         >
           <IoClose className="text-lyellows hover:text-yellows" />
         </div>
-        <div className="text-base font-semibold">
+        <div
+          className={`text-base w-fit mx-auto ${
+            dateStyle
+              ? "bg-lyellows font-bold text-white px-3 rounded-sm"
+              : "font-semibold"
+          }`}
+        >
           {exactDaySelected.format("MMMM D, YYYY")}
         </div>
         {/* Add Amount */}

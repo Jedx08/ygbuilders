@@ -40,7 +40,7 @@ const PMonthlyExpensesForm = ({
       <div
         className={`${
           personalExpensesFloat && showPersonalExpenseForm
-            ? "rounded-md bg-white overflow-hidden px-5 shadow-lg w-fit mx-auto py-5 relative min-w-[441px]"
+            ? "rounded-md bg-white overflow-hidden px-5 shadow-lg w-fit mx-auto py-5 relative min-w-[441px] border border-[#ebebeb]"
             : ""
         }`}
       >

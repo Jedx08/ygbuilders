@@ -29,7 +29,7 @@ const BMonthlyCapitalForm = ({
 
   return (
     <div className="h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-50">
-      <div className="rounded-md bg-white overflow-hidden px-5 py-5 shadow-lg relative min-w-[441px]">
+      <div className="rounded-md bg-white overflow-hidden px-5 py-5 shadow-lg relative min-w-[441px] border border-[#ebebeb]">
         {/* close button */}
         <div
           onClick={() => {

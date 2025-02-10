@@ -28,7 +28,7 @@ const Calendar = () => {
 
   useEffect(() => {
     if (!tab) {
-      navigate("/calendar?tab=Personal", { replace: true });
+      navigate("/income?tab=Personal", { replace: true });
     }
   }, [tab, navigate]);
 

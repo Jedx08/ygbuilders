@@ -51,7 +51,12 @@ const Navbar = () => {
         <div className="bg-white shadow-sm flex justify-end px-2 py-2 pl-2">
           <div>
             {loggedIn ? (
-              <>
+              <div
+                tabIndex={0}
+                onBlur={() => {
+                  setAccountMenu(false);
+                }}
+              >
                 <div
                   onClick={() => {
                     if (accountMenu) {
@@ -78,7 +83,12 @@ const Navbar = () => {
                 </div>
                 {/* Dropdown */}
                 {accountMenu && (
-                  <div className="absolute right-2 px-2 py-2 border border-[#2222] bg-white shadow-lg rounded-md mt-2 text-lg font-semibold space-y-2">
+                  <div
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                    }}
+                    className="absolute right-2 px-2 py-2 border border-[#2222] bg-white shadow-lg rounded-md mt-2 text-lg font-semibold space-y-2"
+                  >
                     <Link to="/settings">
                       <div className="flex items-center space-x-2 cursor-pointer hover:text-[#1877f2]">
                         <div className="border border-light bg-[#2222] p-2 rounded-[50%]">
@@ -99,7 +109,7 @@ const Navbar = () => {
                     </div>
                   </div>
                 )}
-              </>
+              </div>
             ) : (
               <Link to="/login">
                 <div className="flex space-x-1 items-center hover:text-lgreens">

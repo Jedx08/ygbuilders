@@ -58,10 +58,10 @@ function App() {
             {/* Dashboard Page start */}
 
             {/* Calendar Page start */}
-            <Route path="calendar" element={<Calendar />} />
+            <Route path="income" element={<Calendar />} />
             <Route
-              path="calendar"
-              element={<Navigate to="/calendar?tab=Personal" replace />}
+              path="income"
+              element={<Navigate to="/income?tab=Personal" replace />}
             />
             {/* Calendar Page end */}
             <Route path="savings" element={<Savings />} />

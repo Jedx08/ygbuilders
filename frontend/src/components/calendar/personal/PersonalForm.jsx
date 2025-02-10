@@ -51,6 +51,8 @@ const PersonalForm = () => {
 
   const [personalFormFloat, setPersonalFormFloat] = useState(false);
 
+  const [dateStyle, setDateStyle] = useState(false);
+
   useEffect(() => {
     if (formSelectedDate) {
       setToggleSaveButton(false);
@@ -66,6 +68,13 @@ const PersonalForm = () => {
     setErrStyleGross(false);
     setErrStyleExpenses(false);
   }, [exactDaySelected, formSelectedDate]);
+
+  useEffect(() => {
+    setDateStyle(true);
+    setTimeout(() => {
+      setDateStyle(false);
+    }, 1000);
+  }, [exactDaySelected]);
 
   useEffect(() => {
     if (personalButton) {
@@ -283,7 +292,7 @@ const PersonalForm = () => {
         <div
           className={`text-center ${
             personalFormFloat && showPersonalForm
-              ? "rounded-md bg-white overflow-hidden shadow-lg w-80 px-2 py-5 relative"
+              ? "rounded-md bg-white overflow-hidden shadow-lg w-80 px-2 py-5 relative border border-[#ebebeb]"
               : ""
           }`}
         >
@@ -307,7 +316,13 @@ const PersonalForm = () => {
           >
             <IoClose className="text-lgreens hover:text-greens" />
           </div>
-          <div className="text-base font-semibold">
+          <div
+            className={`text-base w-fit mx-auto ${
+              dateStyle
+                ? "bg-lgreens font-bold text-white px-3 rounded-sm"
+                : "font-semibold"
+            }`}
+          >
             {exactDaySelected.format("MMMM D, YYYY")}
           </div>
           {/* Add Gross */}
