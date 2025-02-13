@@ -289,21 +289,29 @@ const PersonalSummary = () => {
               "Provides an annual financial overview, displaying gross income, expenses, and net income across all months. A bar chart helps visualize income and spending trends for better financial planning.",
           },
         },
+        {
+          element: "#instructions",
+          popover: {
+            description:
+              "You can always come back in this button to run the instructions again",
+          },
+        },
       ],
     });
 
     driverObj.drive();
 
-    setInstructions((prev) => ({ ...prev, dashboard: false }));
+    setUserInfo((prev) => ({
+      ...prev,
+      instructions: { ...prev.instructions, dashboard: false },
+    }));
   };
-
-  console.log(instructions);
 
   return (
     <div>
       {/* instructions */}
       <div
-        id="howtouse"
+        id="instructions"
         onClick={() => {
           showTour();
         }}
@@ -496,6 +504,37 @@ const PersonalSummary = () => {
                                 font: {
                                   size: 14,
                                 },
+                                usePointStyle: true,
+                                generateLabels: function (chart) {
+                                  const labels =
+                                    Chart.defaults.plugins.legend.labels.generateLabels(
+                                      chart
+                                    );
+                                  labels.forEach((label, index) => {
+                                    label.hidden =
+                                      !chart.isDatasetVisible(index);
+                                  });
+                                  return labels;
+                                },
+                              },
+                              onClick: (e, legendItem, legend) => {
+                                const index = legendItem.datasetIndex;
+                                const chart = legend.chart;
+
+                                // Toggle dataset visibility
+                                chart.setDatasetVisibility(
+                                  index,
+                                  !chart.isDatasetVisible(index)
+                                );
+
+                                // Update the chart
+                                chart.update();
+                              },
+                              onHover: (event, legendItem) => {
+                                event.native.target.style.cursor = "pointer";
+                              },
+                              onLeave: (event) => {
+                                event.native.target.style.cursor = "default";
                               },
                             },
                             ChartDataLabels,

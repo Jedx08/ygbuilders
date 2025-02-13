@@ -15,6 +15,8 @@ import useBusinessCapital from "../../../hooks/useBusinessCapital";
 import BusinessMonthlySummary from "./BusinessMonthlySummary";
 import expensesIcon from "../../../media/busmon_expenses.png";
 import profitIcon from "../../../media/busmon_pouch.png";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 const BusinessCalendar = () => {
   const {
@@ -197,17 +199,78 @@ const BusinessCalendar = () => {
     }
   }, [businessCapitalData, monthIndex]);
 
-  // -------------------
+  // driver js tour content
+  const showTour = async () => {
+    const driverObj = driver({
+      showProgress: true,
+      steps: [
+        {
+          element: "#monthlySummary",
+          popover: {
+            title: "Personal Monthly Income",
+            description:
+              "In here, you can view the summary of your monthly business income",
+          },
+        },
+        {
+          element: "#calendar",
+          popover: {
+            title: "Calendar",
+            description: "You can select any date you want to add data into.",
+          },
+        },
+        {
+          element: "#addData",
+          popover: {
+            title: "Data Editor",
+            description:
+              "After clicking a date in the calendar, you can add or edit your data in this section.",
+          },
+        },
+        {
+          element: "#monthlyCapital",
+          popover: {
+            title: "Monthly Expenses",
+            description: "You can add or edit your Monthly Capital in here.",
+          },
+        },
+        {
+          element: "#monthlyExpenses",
+          popover: {
+            title: "Monthly Expenses",
+            description: "You can add or edit your Monthly Expenses in here.",
+          },
+        },
+        {
+          element: "#dataOverview",
+          popover: {
+            title: "Data Overview",
+            description:
+              "In this section you can view all of your data including everyday capital, sales, expenses, and profit.",
+          },
+        },
+        {
+          element: "#instructions",
+          popover: {
+            description:
+              "You can always come back in this button to run the instructions again",
+          },
+        },
+      ],
+    });
+
+    driverObj.drive();
+  };
 
   return (
     <>
       {/* Instructions */}
       <div className={`items-center flex justify-center `}>
         <div
-          id="howtouse"
-          // onClick={() => {
-          //   showTour();
-          // }}
+          id="instructions"
+          onClick={() => {
+            showTour();
+          }}
           className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white hover:border-loranges text-sm mmd:text-xs md:py-1 mx-auto`}
         >
           <BsInfoCircle className={`text-oranges text-2xl mmd:text-xl`} />
@@ -217,7 +280,7 @@ const BusinessCalendar = () => {
         </div>
       </div>
 
-      <div className="px-5 mt-5 xl:pl-24 lg:pl-5">
+      <div id="monthlySummary" className="px-5 mt-5 xl:pl-24 lg:pl-5">
         <BusinessMonthlySummary
           capitalCount={capitalCount}
           salesCount={salesCount}
@@ -231,7 +294,10 @@ const BusinessCalendar = () => {
       {/* Components */}
       <div className="grid grid-cols-3 gap-4 mt-2 py-1 px-5 overflow-hidden xl:pl-24 lg:pl-5 clg:grid-cols-2 clg:grid-rows-2">
         {/* Calendar */}
-        <div className="bg-white shadow-sm rounded-lg pt-14 min-w-[350px] h-[480px] relative mmd:pt-2 mmd:col-span-2 mmd:h-hfull">
+        <div
+          id="calendar"
+          className="bg-white shadow-sm rounded-lg pt-14 min-w-[350px] h-[480px] relative mmd:pt-2 mmd:col-span-2 mmd:h-hfull"
+        >
           <BusinessMonth
             month={currentMonth}
             monthData={monthData}
@@ -239,13 +305,19 @@ const BusinessCalendar = () => {
           />
         </div>
         {/* Data Form */}
-        <div className="bg-white shadow-sm rounded-lg pt-8 min-w-[350px] h-[480px] mmd:hidden">
+        <div
+          id="addData"
+          className="bg-white shadow-sm rounded-lg pt-8 min-w-[350px] h-[480px] mmd:hidden"
+        >
           <BusinessForm />
         </div>
         {/* Monthly */}
         <div className="bg-white shadow-sm rounded-lg min-w-[350px] max-h-[480px] flex flex-col justify-evenly items-center px-8 clg:col-span-2 clg:row-span-full clg:h-hfit clg:flex-row clg:space-x-2">
           {/* Monthly Capital Form */}
-          <div className=" w-full text-center py-3 rounded-lg clg:py-1">
+          <div
+            id="monthlyCapital"
+            className=" w-full text-center py-3 rounded-lg clg:py-1"
+          >
             <h1 className="text-lg text-loranges mb-2 font-bold clg:mb-0 sm:text-base">
               Monthly Capital
             </h1>
@@ -283,7 +355,10 @@ const BusinessCalendar = () => {
             </div>
           </div>
           {/* Monthly Expenses Form */}
-          <div className=" w-full text-center py-3 rounded-lg clg:py-1">
+          <div
+            id="monthlyExpenses"
+            className=" w-full text-center py-3 rounded-lg clg:py-1"
+          >
             <h1 className="text-lg text-loranges mb-2 font-bold clg:mb-0 sm:text-base">
               Monthly Expenses
             </h1>
@@ -335,7 +410,7 @@ const BusinessCalendar = () => {
       </div>
 
       {/* Business Data */}
-      <div className="px-5 mt-5 xl:pl-24 lg:pl-5">
+      <div id="dataOverview" className="px-5 mt-5 xl:pl-24 lg:pl-5">
         <BusinessData
           businessDataLoading={businessDataLoading}
           monthData={monthData}

@@ -445,6 +445,7 @@ const RegisterForm = ({ previous, inMobile }) => {
                   ) : (
                     <button
                       disabled={!isChecked}
+                      type="submit"
                       className="mx-auto bg-[#d1d1d1] py-1 px-6 rounded-md font-bold text-white"
                     >
                       Register

@@ -33,7 +33,7 @@ const PersonalCalendar = () => {
   } = useContext(CalendarContext);
   const [currentMonth, setCurrentMonth] = useState(getMonth());
 
-  const { userInfo } = useAuth();
+  const { userInfo, setUserInfo } = useAuth();
   const axiosPrivate = useAxiosPrivate();
 
   const getPersonalData = useGetData();
@@ -209,7 +209,8 @@ const PersonalCalendar = () => {
           element: "#monthlySummary",
           popover: {
             title: "Personal Monthly Income",
-            description: "In here, you can view you overall personal Income",
+            description:
+              "In here, you can view the summary of your personal monthly income",
           },
         },
         {
@@ -242,21 +243,29 @@ const PersonalCalendar = () => {
               "In this section you can view all of your data including everyday gross, expenses, and net income.",
           },
         },
+        {
+          element: "#instructions",
+          popover: {
+            description:
+              "You can always come back in this button to run the instructions again",
+          },
+        },
       ],
     });
 
     driverObj.drive();
 
-    setInstructions((prev) => ({ ...prev, income: false }));
+    setUserInfo((prev) => ({
+      ...prev,
+      instructions: { ...prev.instructions, income: false },
+    }));
   };
-
-  console.log(instructions);
 
   return (
     <>
       {/* instructions */}
       <div
-        id="howtouse"
+        id="instructions"
         onClick={() => {
           showTour();
         }}

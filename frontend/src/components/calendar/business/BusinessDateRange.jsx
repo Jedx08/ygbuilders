@@ -72,7 +72,7 @@ const BusinessDateRange = ({ startDate, endDate }) => {
   return (
     <>
       <div className="mt-3 px-5 xl:pl-24 lg:pl-5">
-        <div className="bg-white rounded-lg py-5 shadow-sm">
+        <div id="summary" className="bg-white rounded-lg py-5 shadow-sm">
           <div className="flex flex-wrap items-center justify-evenly space-x-5">
             {/* Gross */}
             <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
@@ -172,7 +172,10 @@ const BusinessDateRange = ({ startDate, endDate }) => {
           </div>
         </div>
 
-        <div className="bg-white mt-3 py-3 w-full rounded-lg items-center justify-center shadow-sm min-h-[280px] max-h-[592px] overflow-auto">
+        <div
+          id="dataOverview"
+          className="bg-white mt-3 py-3 w-full rounded-lg items-center justify-center shadow-sm min-h-[280px] max-h-[592px] overflow-auto"
+        >
           {sortedRange.length === 0 && (
             <div className="bg-white py-3 text-center rounded-md text-base text-[#A6ACAF] sm:text-sm">
               No data to show

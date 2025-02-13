@@ -17,7 +17,7 @@ import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const DateRange = () => {
-  const { auth, userInfo } = useAuth();
+  const { auth, userInfo, setUserInfo } = useAuth();
   const { setLoggedIn } = useContext(CalendarContext);
 
   const [startDate, setStartDate] = useState("");
@@ -34,7 +34,7 @@ const DateRange = () => {
   const [errStyle, setErrStyle] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
-  const [instructionsFilter, setInstructionsFilter] = useState(null);
+  const [instructions, setInstructions] = useState(null);
 
   useEffect(() => {
     if (!auth.accessToken && !auth._id) {
@@ -80,9 +80,8 @@ const DateRange = () => {
   useEffect(() => {
     const showInstructions = async () => {
       try {
-        await userInfo.instructions;
-        setInstructionsFilter(userInfo.instructions);
-        if (instructionsFilter?.filter) {
+        setInstructions(userInfo.instructions);
+        if (userInfo?.instructions?.filter) {
           showTour();
         }
       } catch (err) {
@@ -97,10 +96,10 @@ const DateRange = () => {
   useEffect(() => {
     const toggleInstructions = async () => {
       try {
-        if (instructionsFilter) {
+        if (instructions) {
           await axiosPrivate.patch(
             "/user/instructions",
-            JSON.stringify({ instructions: instructionsFilter })
+            JSON.stringify({ instructions: instructions })
           );
         }
       } catch (err) {
@@ -109,7 +108,7 @@ const DateRange = () => {
     };
 
     toggleInstructions();
-  }, [instructionsFilter]);
+  }, [instructions]);
 
   // driver js tour content
   const showTour = async () => {
@@ -140,10 +139,10 @@ const DateRange = () => {
           },
         },
         {
+          element: "#instructions",
           popover: {
-            title: "Data Overview",
             description:
-              "Also, in this section, you can see every detail within the range of the date selected.",
+              "You can always come back in this button to run the instructions again",
           },
         },
       ],
@@ -151,10 +150,11 @@ const DateRange = () => {
 
     driverObj.drive();
 
-    setInstructionsFilter((prev) => ({ ...prev, filter: false }));
+    setUserInfo((prev) => ({
+      ...prev,
+      instructions: { ...prev.instructions, filter: false },
+    }));
   };
-
-  console.log(instructionsFilter);
 
   return (
     <div className="flex lg:flex-col">
@@ -198,11 +198,15 @@ const DateRange = () => {
 
           {/* instructions */}
           <div
-            id="howtouse"
+            id="instructions"
             onClick={() => {
               showTour();
             }}
-            className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white hover:border-lgreens text-sm mmd:text-xs md:py-1 mx-auto`}
+            className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white text-sm mmd:text-xs md:py-1 mx-auto ${
+              tab === "Personal"
+                ? "hover:border-lgreens"
+                : "hover:border-loranges"
+            }`}
           >
             <BsInfoCircle className={`text-oranges text-2xl mmd:text-xl`} />
             <p>

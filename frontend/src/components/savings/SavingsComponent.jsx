@@ -29,7 +29,7 @@ const SavingsComponent = () => {
     setShowGoalForm,
   } = useContext(CalendarContext);
 
-  const { userInfo } = useAuth();
+  const { userInfo, setUserInfo } = useAuth();
   const axiosPrivate = useAxiosPrivate();
 
   const [currentMonth, setCurrentMonth] = useState(getMonth());
@@ -192,7 +192,6 @@ const SavingsComponent = () => {
         await userInfo.instructions;
         setInstructions(userInfo.instructions);
         if (userInfo?.instructions?.savings) {
-          console.log(userInfo.instructions.savings);
           showTour();
         }
       } catch (err) {
@@ -223,70 +222,76 @@ const SavingsComponent = () => {
 
   // driver js tour content
   const showTour = async () => {
-    if (userInfo.instructions.savings) {
-      const driverObj = driver({
-        showProgress: true,
-        steps: [
-          {
-            element: "#summary",
-            popover: {
-              title: "Savings' Summary",
-              description:
-                "In this section, you can view your monthly, yearly, and total savings",
-            },
+    const driverObj = driver({
+      showProgress: true,
+      steps: [
+        {
+          element: "#summary",
+          popover: {
+            title: "Savings' Summary",
+            description:
+              "In this section, you can view your monthly, yearly, and total savings",
           },
-          {
-            element: "#calendar",
-            popover: {
-              title: "Savings' Calendar",
-              description:
-                "Just like the income calendar, you can select a date in here to add your data.",
-            },
+        },
+        {
+          element: "#calendar",
+          popover: {
+            title: "Savings' Calendar",
+            description:
+              "Just like the income calendar, you can select a date in here to add your data.",
           },
-          {
-            element: "#addData",
-            popover: {
-              title: "Data Editor",
-              description:
-                "After selecting a date, you can save or edit your data in here.",
-            },
+        },
+        {
+          element: "#addData",
+          popover: {
+            title: "Data Editor",
+            description:
+              "After selecting a date, you can save or edit your data in here.",
           },
-          {
-            element: "#goal",
-            popover: {
-              title: "Saving's Goal",
-              description:
-                "This section shows description for your saving's goal, how many days it will take, and if you've finished you desired goal.",
-            },
+        },
+        {
+          element: "#goal",
+          popover: {
+            title: "Saving's Goal",
+            description:
+              "This section shows description for your saving's goal, how many days it will take, and if you've finished you desired goal.",
           },
-          {
-            element: "#dataOverview",
-            popover: {
-              title: "Data Overview",
-              description:
-                "In this section you can view all of your savings' data and its date.",
-            },
+        },
+        {
+          element: "#dataOverview",
+          popover: {
+            title: "Data Overview",
+            description:
+              "In this section you can view all of your savings' data and its date.",
           },
-        ],
-      });
+        },
+        {
+          element: "#instructions",
+          popover: {
+            description:
+              "You can always come back in this button to run the instructions again",
+          },
+        },
+      ],
+    });
 
-      driverObj.drive();
+    driverObj.drive();
 
-      setInstructions((prev) => ({ ...prev, savings: false }));
-    }
+    setUserInfo((prev) => ({
+      ...prev,
+      instructions: { ...prev.instructions, savings: false },
+    }));
   };
-
-  console.log(instructions);
 
   return (
     <>
       {/* instructions */}
       <div
-        id="howtouse"
+        id="instructions"
         onClick={() => {
           showTour();
         }}
-        className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white hover:border-lgreens text-sm mmd:text-xs md:py-1 mx-auto`}
+        className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white hover:border-lyellows text-sm mmd:text-xs md:py-1 mx-auto`}
       >
         <BsInfoCircle className={`text-oranges text-2xl mmd:text-xl`} />
         <p>

@@ -20,6 +20,9 @@ import monthlyProfitIcon from "../../../media/busmon_net.png";
 import BusinessYearlySummary from "./BusinessYearlySummary";
 import { PiChartLineUp, PiChartLineDown } from "react-icons/pi";
 import NumberFlow from "@number-flow/react";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
+import { BsInfoCircle } from "react-icons/bs";
 
 const BusinessSummary = () => {
   const {
@@ -285,9 +288,67 @@ const BusinessSummary = () => {
     setMonthIndex(monthIndex - 12);
   };
 
+  // driver js tour content
+  const showTour = async () => {
+    const driverObj = driver({
+      showProgress: true,
+      steps: [
+        {
+          element: "#overallIncome",
+          popover: {
+            title: "Overall Income",
+            description:
+              "Displays a summary of your financial performance, including profit, capital, sales, and total expenses. This helps you quickly assess your financial status.",
+          },
+        },
+        {
+          element: "#monthlyIncome",
+          popover: {
+            title: "Monthly Income",
+            description:
+              "Shows a detailed breakdown of your capital, sales, expenses, and profit for the selected month. You can change the graph view by clicking the colored buttons.",
+          },
+        },
+        {
+          element: "#yearlyIncome",
+          popover: {
+            title: "Yearly Income",
+            description:
+              "Provides an annual financial overview, displaying capital, sales, expenes, and profit across all months. A bar chart helps visualize income and spending trends for better financial planning.",
+          },
+        },
+        {
+          element: "#instructions",
+          popover: {
+            description:
+              "You can always come back in this button to run the instructions again",
+          },
+        },
+      ],
+    });
+
+    driverObj.drive();
+  };
+
   return (
     <>
-      <div className="bg-white shadow-sm rounded-lg mb-5 py-5 mt-5 mx-5 xl:ml-24 lg:ml-5">
+      {/* instructions */}
+      <div
+        id="instructions"
+        onClick={() => {
+          showTour();
+        }}
+        className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white hover:border-lyellows text-sm mmd:text-xs md:py-1 mx-auto`}
+      >
+        <BsInfoCircle className={`text-oranges text-2xl mmd:text-xl`} />
+        <p>
+          How to use? <span className="font-bold">Instructions</span>
+        </p>
+      </div>
+      <div
+        id="overallIncome"
+        className="bg-white shadow-sm rounded-lg mb-5 py-5 mt-5 mx-5 xl:ml-24 lg:ml-5"
+      >
         <div
           className={`flex justify-center items-center text-oranges font-bold pb-2 text-2xl sm:text-xl`}
         >
@@ -409,7 +470,10 @@ const BusinessSummary = () => {
         </div>
       </div>
 
-      <div className="bg-white p-5 mx-5 mb-5 rounded-lg shadow-sm">
+      <div
+        id="monthlyIncome"
+        className="bg-white p-5 mx-5 mb-5 rounded-lg shadow-sm"
+      >
         <div className="bg-light font-pops">
           {isLoading ? (
             <div className="w-[60%] mx-auto bg-white p-5 rounded-lg flex items-center flex-col md:w-[90%] ">
@@ -492,6 +556,36 @@ const BusinessSummary = () => {
                               font: {
                                 size: 14,
                               },
+                              usePointStyle: true,
+                              generateLabels: function (chart) {
+                                const labels =
+                                  Chart.defaults.plugins.legend.labels.generateLabels(
+                                    chart
+                                  );
+                                labels.forEach((label, index) => {
+                                  label.hidden = !chart.isDatasetVisible(index);
+                                });
+                                return labels;
+                              },
+                            },
+                            onClick: (e, legendItem, legend) => {
+                              const index = legendItem.datasetIndex;
+                              const chart = legend.chart;
+
+                              // Toggle dataset visibility
+                              chart.setDatasetVisibility(
+                                index,
+                                !chart.isDatasetVisible(index)
+                              );
+
+                              // Update the chart
+                              chart.update();
+                            },
+                            onHover: (event, legendItem) => {
+                              event.native.target.style.cursor = "pointer";
+                            },
+                            onLeave: (event) => {
+                              event.native.target.style.cursor = "default";
                             },
                           },
                           ChartDataLabels,

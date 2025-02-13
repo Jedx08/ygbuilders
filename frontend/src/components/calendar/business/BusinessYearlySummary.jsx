@@ -337,7 +337,7 @@ const BusinessYearlySummary = () => {
 
   return (
     <>
-      <div className="w-full gap-5 pb-5 px-5 shadow-sm">
+      <div id="yearlyIncome" className="w-full gap-5 pb-5 px-5 shadow-sm">
         {isLoading ? (
           <div className="w-full  bg-white p-5 rounded-lg flex items-center flex-col md:w-full">
             <div className="w-[35%]">
@@ -516,10 +516,41 @@ const BusinessYearlySummary = () => {
                         },
                       },
                       legend: {
+                        align: "center",
                         labels: {
                           font: {
                             size: 15,
                           },
+                          usePointStyle: true,
+                          generateLabels: function (chart) {
+                            const labels =
+                              Chart.defaults.plugins.legend.labels.generateLabels(
+                                chart
+                              );
+                            labels.forEach((label, index) => {
+                              label.hidden = !chart.isDatasetVisible(index);
+                            });
+                            return labels;
+                          },
+                        },
+                        onClick: (e, legendItem, legend) => {
+                          const index = legendItem.datasetIndex;
+                          const chart = legend.chart;
+
+                          // Toggle dataset visibility
+                          chart.setDatasetVisibility(
+                            index,
+                            !chart.isDatasetVisible(index)
+                          );
+
+                          // Update the chart
+                          chart.update();
+                        },
+                        onHover: (event, legendItem) => {
+                          event.native.target.style.cursor = "pointer";
+                        },
+                        onLeave: (event) => {
+                          event.native.target.style.cursor = "default";
                         },
                       },
                     },
