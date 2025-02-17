@@ -33,14 +33,16 @@ const BusinessMonthlySummary = ({
           </div>
         </div>
         <div>
-          <div className="flex flex-wrap items-center justify-evenly py-2 px-5 gap-2 lg:px-2">
+          <div className="grid grid-cols-4 py-2 px-5 lg:px-2 lg:grid-cols-2 lg:grid-rows-2 xxs:grid-rows-4 xxs:grid-cols-1">
             {/* Monthly Capital */}
-            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full">
               <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
                 Capital
               </div>
               <div className="flex items-center font-semibold">
-                <div className={`flex space-x-1 items-center justify-center`}>
+                <div
+                  className={`flex space-x-1 items-center justify-center lg:mx-auto`}
+                >
                   <img
                     src={monthCapitalIcon}
                     alt="mon_capital"
@@ -63,12 +65,14 @@ const BusinessMonthlySummary = ({
               </div>
             </div>
             {/* Monthly Sales */}
-            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full">
               <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
                 Sales
               </div>
               <div className="flex items-center font-semibold">
-                <div className={`flex space-x-1 items-center justify-center`}>
+                <div
+                  className={`flex space-x-1 items-center justify-center lg:mx-auto`}
+                >
                   <img
                     src={monthSalesIcon}
                     alt="mon_sales"
@@ -89,13 +93,16 @@ const BusinessMonthlySummary = ({
                 </div>
               </div>
             </div>
+
             {/* Monthly Expenses */}
-            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full">
               <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
                 Expenses
               </div>
               <div className="flex items-center font-semibold">
-                <div className={`flex space-x-1 items-center justify-center`}>
+                <div
+                  className={`flex space-x-1 items-center justify-center lg:mx-auto`}
+                >
                   <img
                     src={monthExpensesIcon}
                     alt="mon_expenses"
@@ -118,12 +125,14 @@ const BusinessMonthlySummary = ({
               </div>
             </div>
             {/* Monthly Profit */}
-            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full">
               <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
                 Profit
               </div>
               <div className="flex items-center font-semibold">
-                <div className={`flex space-x-1 items-center justify-center`}>
+                <div
+                  className={`flex space-x-1 items-center justify-center lg:mx-auto`}
+                >
                   <img
                     src={monthProfitIcon}
                     alt="mon_profit"

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalendarContext } from "../../../context/CalendarContext";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
@@ -14,7 +14,7 @@ import { IoClose } from "react-icons/io5";
 import { BsBackspace } from "react-icons/bs";
 import { FaExclamationCircle } from "react-icons/fa";
 
-const BusinessForm = () => {
+const BusinessForm = ({ businessFormFloat }) => {
   const axiosPrivate = useAxiosPrivate();
   const {
     exactDaySelected,
@@ -26,6 +26,7 @@ const BusinessForm = () => {
     showBusinessForm,
     setShowBusinessForm,
     loggedIn,
+    inMobile,
   } = useContext(CalendarContext);
 
   const navigate = useNavigate();
@@ -53,8 +54,6 @@ const BusinessForm = () => {
   const [errStyleCapital, setErrStyleCapital] = useState(false);
   const [errStyleSales, setErrStyleSales] = useState(false);
   const [errStyleExpenses, setErrStyleExpenses] = useState(false);
-
-  const [businessFormFloat, setBusinessFormFloat] = useState(false);
 
   const [dateStyle, setDateStyle] = useState(false);
 
@@ -298,37 +297,38 @@ const BusinessForm = () => {
     setErrStyleExpenses(false);
   };
 
-  useEffect(() => {
-    const personalFloat = () => {
-      if (window.innerWidth <= 658) {
-        setBusinessFormFloat(true);
-      } else {
-        setBusinessFormFloat(false);
-        setShowBusinessForm(false);
-      }
-    };
-    window.addEventListener("resize", personalFloat);
-    if (window.innerWidth <= 658) {
-      setBusinessFormFloat(true);
-    } else {
-      setBusinessFormFloat(false);
+  // to close form when clicked outside form
+  const childRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (childRef.current && !childRef.current.contains(event.target)) {
       setShowBusinessForm(false);
     }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      window.removeEventListener("resize", personalFloat);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleClickInside = (event) => {
+    event.stopPropagation();
+  };
 
   return (
     <>
       <div
         className={`mx-auto ${
           businessFormFloat && showBusinessForm
-            ? "h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-50"
+            ? "h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-50 z-20"
             : ""
         }`}
       >
         <div
+          ref={childRef}
+          onMouseDown={handleClickInside}
           className={`text-center ${
             businessFormFloat && showBusinessForm
               ? "rounded-md bg-white overflow-hidden shadow-lg w-80 px-2 py-5 relative border border-[#ebebeb]"
@@ -349,9 +349,9 @@ const BusinessForm = () => {
               }
               e.preventDefault(), setShowBusinessForm(false);
             }}
-            className={`cursor-pointer hover:bg-light hover:rounded-full font-bold absolute top-1 right-0 mb-5 p-1 text-2xl ${
+            className={`cursor-pointer hover:bg-btnHov active:bg-btnAct hover:rounded-full font-bold absolute top-1 mb-5 p-1 text-2xl ${
               businessFormFloat && showBusinessForm ? "" : "hidden"
-            }`}
+            }  ${inMobile ? "right-2" : "right-1"}`}
           >
             <IoClose className="text-loranges hover:text-oranges" />
           </div>
@@ -365,7 +365,11 @@ const BusinessForm = () => {
             {exactDaySelected.format("MMMM D, YYYY")}
           </div>
           {/* Add Capital */}
-          <div className="px-10 justify-center mt-5">
+          <div
+            className={`px-10 justify-center mt-5 clg:px-5 ${
+              inMobile ? "xxs:px-5" : ""
+            }`}
+          >
             <div className="font-semibold">
               Capital:{" "}
               <span className="text-xs text-[#A6ACAF] font-normal">
@@ -389,7 +393,11 @@ const BusinessForm = () => {
             </div>
           </div>
           {/* Add Sales */}
-          <div className="px-10 justify-center mt-3">
+          <div
+            className={`px-10 justify-center mt-3 clg:px-5 ${
+              inMobile ? "xxs:px-5" : ""
+            }`}
+          >
             <div className="font-semibold">Sales:</div>
             <div
               className={`border rounded-md overflow-hidden flex items-center mx-auto w-[70%] ${
@@ -408,7 +416,11 @@ const BusinessForm = () => {
             </div>
           </div>
           {/* Add Expenses */}
-          <div className="px-10 justify-center mt-3">
+          <div
+            className={`px-10 justify-center mt-3 clg:px-5 ${
+              inMobile ? "xxs:px-5" : ""
+            }`}
+          >
             <div className="font-semibold">Expenses:</div>
             <div
               className={`border rounded-md overflow-hidden flex items-center mx-auto w-[70%] ${
@@ -427,7 +439,11 @@ const BusinessForm = () => {
             </div>
           </div>
           {/* Profit */}
-          <div className="px-10 justify-center mt-3">
+          <div
+            className={`px-10 justify-center mt-3 clg:px-5 ${
+              inMobile ? "xxs:px-5" : ""
+            }`}
+          >
             <div className="font-semibold">Profit:</div>
             <div className="bg-subCon flex items-center rounded-md mx-auto py-2 w-[70%]">
               <div className="pl-2">

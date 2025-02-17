@@ -128,7 +128,7 @@ export const CalendarContextProvider = (props) => {
   const [exactDaySelected, setExactDaySelected] = useState(dayjs()); // selected date
   const [personalIncomeLoading, setPersonalIncomeLoading] = useState(true); // to get data from DB and save to local storage
   const [personalExpensesLoading, setPersonalExpensesLoading] = useState(true); // to get data from DB and save to local storage
-  const [showPersonalExpenseForm, setShowPersonalExpensesForm] =
+  const [showPersonalExpensesForm, setShowPersonalExpensesForm] =
     useState(false);
   const [businessIncomeLoading, setBusinessIncomeLoading] = useState(true);
   const [businessExpensesLoading, setBusinessExpensesLoading] = useState(true);
@@ -187,7 +187,7 @@ export const CalendarContextProvider = (props) => {
         dispatchPersonalIncomeData,
         personalIncomeLoading,
         setPersonalIncomeLoading,
-        showPersonalExpenseForm,
+        showPersonalExpensesForm,
         setShowPersonalExpensesForm,
         personalExpensesData,
         dispatchPersonalExpensesData,

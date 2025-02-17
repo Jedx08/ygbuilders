@@ -131,7 +131,7 @@ const BMonthlyExpensesData = ({ expensesData }) => {
   };
 
   return (
-    <div className="px-5 font-pops bg-white py-[1px]">
+    <div className="px-5 font-pops bg-white py-[1px] clg:px-0">
       <div
         className={` ${
           editButton
@@ -170,7 +170,7 @@ const BMonthlyExpensesData = ({ expensesData }) => {
               <div className="text-oranges text-center font-semibold">
                 Edit monthly expenses
               </div>
-              <div className="flex justify-center gap-2 mt-2">
+              <div className="flex justify-center gap-2 mt-2 px-2">
                 <div
                   className={`col-span-1 flex border rounded-md overflow-hidden items-center pl-2 py-1 ${
                     errorStyle ? "border-[red]" : "border-inputLight"
@@ -183,7 +183,7 @@ const BMonthlyExpensesData = ({ expensesData }) => {
                     onChange={updateTitleInput}
                     value={updateTitle}
                     className={`focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs ${
-                      editButton ? "w-32" : ""
+                      editButton ? "w-full" : ""
                     }`}
                   />
                 </div>
@@ -198,7 +198,7 @@ const BMonthlyExpensesData = ({ expensesData }) => {
                     onChange={updateAmountInput}
                     value={updateAmount}
                     className={`focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs text-center ${
-                      editButton ? "w-32" : ""
+                      editButton ? "w-full" : ""
                     }`}
                   />
                 </div>
@@ -260,9 +260,12 @@ const BMonthlyExpensesData = ({ expensesData }) => {
         {!editButton && (
           <>
             {!confirmDelete && (
-              <div className="flex space-x-4 items-center px-2 h-2 w-fit rounded-md overflow-hidden">
-                <div onClick={() => setEditButton(true)}>
-                  <FaRegPenToSquare className="text-oranges hover:text-loranges cursor-pointer text-xl" />
+              <div className="flex items-center w-fit rounded-md overflow-hidden">
+                <div
+                  onClick={() => setEditButton(true)}
+                  className="p-2 rounded-[50%] cursor-pointer hover:bg-btnHov active:bg-btnAct"
+                >
+                  <FaRegPenToSquare className="text-oranges text-xl" />
                 </div>
 
                 <div
@@ -271,8 +274,9 @@ const BMonthlyExpensesData = ({ expensesData }) => {
                       setDeleteStyle(true),
                       setErrorStyle(false);
                   }}
+                  className="p-2 rounded-[50%] cursor-pointer hover:text-[red] hover:bg-btnHov active:bg-btnAct"
                 >
-                  <FaRegTrashCan className="text-[#FF4242] hover:text-[red] cursor-pointer text-xl" />
+                  <FaRegTrashCan className="text-[#FF4242] text-xl" />
                 </div>
               </div>
             )}
@@ -305,7 +309,7 @@ const BMonthlyExpensesData = ({ expensesData }) => {
                 {amount.toLocaleString()}
               </div>
             </div>
-            <div className="mt-2 pt-1">
+            <div className="mt-2 pt-1 px-2">
               <p className="text-xs text-center">
                 Confirm deletion for{" "}
                 <span className="text-xs text-[red] font-semibold">

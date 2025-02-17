@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import useRefreshToken from "../hooks/useRefreshToken";
 import useAuth from "../hooks/useAuth";
 import logo from "../media/YG_LOGO.png";
+import dayMsg from "../data/data";
 
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -27,11 +28,25 @@ const PersistLogin = () => {
     !auth?.accessToken ? verifyRefreshToken() : setIsLoading(false);
   }, []);
 
+  function getRandomIndex(array) {
+    const randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex].message;
+  }
+
+  const randomMsg = getRandomIndex(dayMsg);
+
   return (
     <>
       {isLoading ? (
-        <div className="flex justify-center items-center bg-light bg-opacity-70  h-s100 w-full">
-          <img src={logo} alt="YG" className="w-60 shadow-lg rounded-full" />
+        <div className="bg-light flex flex-col items-center justify-center bg-opacity-70 h-s100 w-full font-pops">
+          <img
+            src={logo}
+            alt="logo"
+            className="w-28 shadow-lg rounded-full mx-auto"
+          />
+          <p className="mx-auto max-w-[436px] mt-2 text-base font-medium text-center">
+            {randomMsg}
+          </p>
         </div>
       ) : (
         <Outlet />

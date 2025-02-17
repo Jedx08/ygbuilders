@@ -12,7 +12,7 @@ const PersonalMonthlySummary = ({
   expensesCount,
   monthlyExpenses,
 }) => {
-  const { monthIndex } = useContext(CalendarContext);
+  const { monthIndex, inMobile } = useContext(CalendarContext);
 
   return (
     <div>
@@ -29,14 +29,18 @@ const PersonalMonthlySummary = ({
           </div>
         </div>
         <div>
-          <div className="flex flex-wrap items-center justify-evenly py-2 px-5 gap-2 lg:px-2">
+          <div
+            className={`grid grid-cols-3 py-2 px-5 lg:px-2 sm:grid-cols-2 sm:grid-rows-2 xxs:grid-rows-3 xxs:grid-cols-1`}
+          >
             {/* Monthly Gross */}
-            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full sm:col-span-1 xxs:col-span-1">
               <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
                 Gross
               </div>
               <div className="flex items-center font-semibold">
-                <div className={`flex space-x-1 items-center justify-center`}>
+                <div
+                  className={`flex space-x-1 items-center justify-center mx-auto`}
+                >
                   <img
                     src={monGrossIcon}
                     alt="mon_gross"
@@ -58,12 +62,14 @@ const PersonalMonthlySummary = ({
               </div>
             </div>
             {/* Monthly Expenses */}
-            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full sm:col-span-1 xxs:col-span-1">
               <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
                 Expenses
               </div>
               <div className="flex items-center font-semibold">
-                <div className={`flex space-x-1 items-center justify-center`}>
+                <div
+                  className={`flex space-x-1 items-center justify-center mx-auto`}
+                >
                   <img
                     src={monExpensesIcon}
                     alt="mon_expenses"
@@ -86,12 +92,14 @@ const PersonalMonthlySummary = ({
               </div>
             </div>
             {/* Monthly Net */}
-            <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+            <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full sm:col-span-2 xxs:col-span-1">
               <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
                 Net
               </div>
               <div className="flex items-center font-semibold">
-                <div className={`flex space-x-1 items-center justify-center`}>
+                <div
+                  className={`flex space-x-1 items-center justify-center mx-auto`}
+                >
                   <img
                     src={monNetIcon}
                     alt="mon_net"

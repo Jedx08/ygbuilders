@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import React, { useContext } from "react";
+import React, { useContext, useRef, useEffect } from "react";
 import { CalendarContext } from "../../../context/CalendarContext";
 import { IoClose } from "react-icons/io5";
 import { MdOutlinePostAdd } from "react-icons/md";
@@ -19,6 +19,7 @@ const BMonthlyCapitalForm = ({
     setShowBusinessCapitalInput,
     showBusinessCapitalInput,
     loggedIn,
+    inMobile,
   } = useContext(CalendarContext);
 
   const navigate = useNavigate();
@@ -27,17 +28,43 @@ const BMonthlyCapitalForm = ({
     setShowBusinessCapitalInput(true);
   }
 
+  // to close form when clicked outside form
+  const childRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (childRef.current && !childRef.current.contains(event.target)) {
+      setShowBusinessCapitalForm(false), setShowBusinessCapitalInput(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleClickInside = (event) => {
+    event.stopPropagation();
+  };
+
   return (
-    <div className="h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-50">
-      <div className="rounded-md bg-white overflow-hidden px-5 py-5 shadow-lg relative min-w-[441px] border border-[#ebebeb]">
+    <div className="h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-50 z-20">
+      <div
+        ref={childRef}
+        onMouseDown={handleClickInside}
+        className="rounded-md bg-white overflow-hidden px-5 py-5 shadow-lg relative border border-[#ebebeb] max-w-[441px] w-full"
+      >
         {/* close button */}
         <div
           onClick={() => {
             setShowBusinessCapitalForm(false);
           }}
-          className={`cursor-pointer hover:bg-light hover:rounded-full font-bold absolute top-1 right-1 mb-5 p-1 text-2xl`}
+          className={`cursor-pointer hover:bg-btnHov active:bg-btnAct hover:rounded-full font-bold absolute top-1 mb-5 p-1 text-2xl ${
+            inMobile ? "right-2" : "right-1"
+          }`}
         >
-          <IoClose className="text-loranges hover:text-oranges" />
+          <IoClose className="text-oranges" />
         </div>
 
         <div className="flex items-center justify-center w-full">
@@ -59,7 +86,7 @@ const BMonthlyCapitalForm = ({
 
         {/* Monthly Capital Data */}
         <div
-          className={`h-[158px] mx-auto max-w-[608px] ${
+          className={`h-[158px] mx-auto w-full ${
             showBusinessCapitalInput ? "" : "overflow-auto"
           }`}
         >

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import { CalendarContext } from "../../../context/CalendarContext";
@@ -19,8 +19,9 @@ const PMonthlyExpensesForm = ({
     showPersonalExpenseInput,
     setShowPersonalExpensesInput,
     loggedIn,
-    showPersonalExpenseForm,
+    showPersonalExpensesForm,
     setShowPersonalExpensesForm,
+    inMobile,
   } = useContext(CalendarContext);
 
   const navigate = useNavigate();
@@ -29,30 +30,54 @@ const PMonthlyExpensesForm = ({
     setShowPersonalExpensesInput(true);
   }
 
+  // to close form when clicked outside form
+  const childRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (childRef.current && !childRef.current.contains(event.target)) {
+      setShowPersonalExpensesForm(false), setShowPersonalExpensesInput(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleClickInside = (event) => {
+    event.stopPropagation();
+  };
+
   return (
     <div
       className={`bg-white rounded-lg py-5 h-hfull clg:mx-auto ${
-        personalExpensesFloat && showPersonalExpenseForm
-          ? "h-s100 w-full fixed left-0 top-0 bg-light bg-opacity-50 flex justify-center items-center"
+        personalExpensesFloat && showPersonalExpensesForm
+          ? "h-s100 w-full fixed left-0 top-0 bg-light bg-opacity-50 flex justify-center items-center z-20"
           : "relative"
       }`}
     >
       <div
+        ref={childRef}
+        onMouseDown={handleClickInside}
         className={`${
-          personalExpensesFloat && showPersonalExpenseForm
-            ? "rounded-md bg-white overflow-hidden px-5 shadow-lg w-fit mx-auto py-5 relative min-w-[441px] border border-[#ebebeb]"
+          personalExpensesFloat && showPersonalExpensesForm
+            ? "rounded-md bg-white overflow-hidden px-5 shadow-lg mx-auto py-5 relative border border-[#ebebeb] max-w-[441px] w-full"
             : ""
         }`}
       >
         {/* Close button */}
-        {personalExpensesFloat && showPersonalExpenseForm ? (
+        {personalExpensesFloat && showPersonalExpensesForm ? (
           <div
             onClick={() => {
               setShowPersonalExpensesForm(false);
             }}
-            className={`cursor-pointer hover:bg-light hover:rounded-full font-bold absolute top-1 right-1 mb-5 p-1 text-2xl`}
+            className={`cursor-pointer hover:bg-btnHov active:bg-btnAct hover:rounded-full font-bold absolute top-1  mb-5 p-1 text-2xl ${
+              inMobile ? "right-2" : "right-1"
+            }`}
           >
-            <IoClose className="text-lgreens hover:text-greens" />
+            <IoClose className="text-greens" />
           </div>
         ) : (
           <></>
@@ -74,7 +99,7 @@ const PMonthlyExpensesForm = ({
 
         {/* Monthly Expenses Data */}
         <div
-          className={`h-[158px] clg:mx-auto clg:max-w-[608px] ${
+          className={`h-[158px] clg:mx-auto w-full ${
             showPersonalExpenseInput ? "" : "overflow-auto"
           }`}
         >

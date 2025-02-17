@@ -37,6 +37,8 @@ const BusinessCalendar = () => {
     setBusinessButton,
     exactDaySelected,
     setBusinessFormSelectedDate,
+    inMobile,
+    setShowBusinessForm,
   } = useContext(CalendarContext);
   const [currentMonth, setCurrentMonth] = useState(getMonth());
 
@@ -55,6 +57,8 @@ const BusinessCalendar = () => {
   const [monthData, setMonthData] = useState(null);
   const [businessDataLoading, setBusinessDataLoading] = useState(true);
   const [monthlyDataLoading, setMonthlyDataLoading] = useState(true);
+
+  const [businessFormFloat, setBusinessFormFloat] = useState(false);
 
   useEffect(() => {
     if (businessIncomeLoading) {
@@ -199,6 +203,55 @@ const BusinessCalendar = () => {
     }
   }, [businessCapitalData, monthIndex]);
 
+  // for business form modal
+  useEffect(() => {
+    const personalFloat = () => {
+      if (window.innerWidth <= 658) {
+        setBusinessFormFloat(true);
+      } else {
+        setBusinessFormFloat(false);
+        setShowBusinessForm(false);
+      }
+    };
+    window.addEventListener("resize", personalFloat);
+    if (window.innerWidth <= 658) {
+      setBusinessFormFloat(true);
+    } else {
+      setBusinessFormFloat(false);
+      setShowBusinessForm(false);
+    }
+    return () => {
+      window.removeEventListener("resize", personalFloat);
+    };
+  }, []);
+
+  // for business form scroll disabled
+  useEffect(() => {
+    if (businessFormFloat && showBusinessForm) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [businessFormFloat, showBusinessForm]);
+
+  // for business capital form scroll disabled
+  useEffect(() => {
+    if (showBusinessCapitalForm) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [showBusinessCapitalForm]);
+
+  // for business expenses form scroll disabled
+  useEffect(() => {
+    if (showBusinessExpenseForm) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [showBusinessExpenseForm]);
+
   // driver js tour content
   const showTour = async () => {
     const driverObj = driver({
@@ -271,7 +324,7 @@ const BusinessCalendar = () => {
           onClick={() => {
             showTour();
           }}
-          className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white hover:border-loranges text-sm mmd:text-xs md:py-1 mx-auto`}
+          className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white hover:border-loranges text-sm mmd:text-xs md:py-1 mx-auto select-none`}
         >
           <BsInfoCircle className={`text-oranges text-2xl mmd:text-xl`} />
           <p>
@@ -296,7 +349,9 @@ const BusinessCalendar = () => {
         {/* Calendar */}
         <div
           id="calendar"
-          className="bg-white shadow-sm rounded-lg pt-14 min-w-[350px] h-[480px] relative mmd:pt-2 mmd:col-span-2 mmd:h-hfull"
+          className={`bg-white shadow-sm rounded-lg pt-14 h-[480px] relative mmd:pt-2 mmd:col-span-2 mmd:h-hfull ${
+            inMobile ? "w-full" : "min-w-[350px]"
+          }`}
         >
           <BusinessMonth
             month={currentMonth}
@@ -312,17 +367,29 @@ const BusinessCalendar = () => {
           <BusinessForm />
         </div>
         {/* Monthly */}
-        <div className="bg-white shadow-sm rounded-lg min-w-[350px] max-h-[480px] flex flex-col justify-evenly items-center px-8 clg:col-span-2 clg:row-span-full clg:h-hfit clg:flex-row clg:space-x-2">
+        <div
+          className={`bg-white shadow-sm rounded-lg max-h-[480px] flex flex-col justify-evenly items-center clg:col-span-2 clg:row-span-full clg:h-hfit clg:flex-row clg:space-x-2 ${
+            inMobile ? "w-full px-2 xxss:flex-wrap" : "min-w-[350px] px-8"
+          }`}
+        >
           {/* Monthly Capital Form */}
           <div
             id="monthlyCapital"
-            className=" w-full text-center py-3 rounded-lg clg:py-1"
+            className="w-full text-center py-3 rounded-lg clg:py-1"
           >
             <h1 className="text-lg text-loranges mb-2 font-bold clg:mb-0 sm:text-base">
               Monthly Capital
             </h1>
-            <div className="text-sm font-bold mb-3 text-center clg:mb-1">
-              <span className="text-xs text-[#A6ACAF] font-normal sm:text-[10px]">
+            <div className="mb-3 text-center clg:mb-1">
+              <span
+                style={{
+                  WebkitLineClamp: 1,
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                  display: "-webkit-box",
+                }}
+                className="text-xs text-[#A6ACAF] font-normal sm:text-[10px]"
+              >
                 (Cash, Assets etc...)
               </span>
             </div>
@@ -330,9 +397,7 @@ const BusinessCalendar = () => {
               <div className="px-5 mb-2 flex items-center space-x-2 justify-center">
                 <div className="rounded-md py-1 text-center w-fit clg:py-0">
                   <div className="flex justify-center items-center">
-                    <div className="pl-2">
-                      <img src={profitIcon} className="w-11 mr-2 mdd:w-9" />
-                    </div>
+                    <img src={profitIcon} className="w-11 mr-2 mdd:w-9" />
                     <div className="mt-[0.15rem]">
                       <p className="text-[red] font-bold text-xl/[24px] mdd:text-lg sm:text-base">
                         {monthlyCapital.toLocaleString()}
@@ -357,7 +422,7 @@ const BusinessCalendar = () => {
           {/* Monthly Expenses Form */}
           <div
             id="monthlyExpenses"
-            className=" w-full text-center py-3 rounded-lg clg:py-1"
+            className="w-full text-center py-3 rounded-lg clg:py-1"
           >
             <h1 className="text-lg text-loranges mb-2 font-bold clg:mb-0 sm:text-base">
               Monthly Expenses
@@ -379,9 +444,7 @@ const BusinessCalendar = () => {
               <div className="px-5 mb-2 flex items-center space-x-2 justify-center">
                 <div className="rounded-md py-1 text-center w-fit clg:py-0">
                   <div className="flex justify-center items-center">
-                    <div className="pl-2">
-                      <img src={expensesIcon} className="w-11 mr-2 mdd:w-9" />
-                    </div>
+                    <img src={expensesIcon} className="w-11 mr-2 mdd:w-9" />
                     <div className="mt-[0.15rem]">
                       <p className="text-[red] font-bold text-xl/[24px] mdd:text-lg sm:text-base">
                         {monthlyExpenses.toLocaleString()}
@@ -405,7 +468,7 @@ const BusinessCalendar = () => {
           </div>
         </div>
       </div>
-      <div className="hidden mx-5 py-1 bg-white rounded-md text-center text-sm text-[#A6ACAF] font-normal mmd:block">
+      <div className="hidden mx-5 py-1 bg-white rounded-sm text-center text-sm text-[#A6ACAF] font-normal mmd:block">
         ( Click a date to add/edit data )
       </div>
 
@@ -417,16 +480,6 @@ const BusinessCalendar = () => {
         />
       </div>
 
-      {showBusinessExpenseForm && (
-        <>
-          <BMonthlyExpensesForm
-            expensesDataLoading={expensesDataLoading}
-            expensesData={expensesData}
-            monthlyExpenses={monthlyExpenses}
-          />
-        </>
-      )}
-
       {showBusinessCapitalForm && (
         <>
           <BMonthlyCapitalForm
@@ -437,7 +490,19 @@ const BusinessCalendar = () => {
         </>
       )}
 
-      {showBusinessForm && <BusinessForm />}
+      {showBusinessExpenseForm && (
+        <>
+          <BMonthlyExpensesForm
+            expensesDataLoading={expensesDataLoading}
+            expensesData={expensesData}
+            monthlyExpenses={monthlyExpenses}
+          />
+        </>
+      )}
+
+      {showBusinessForm && (
+        <BusinessForm businessFormFloat={businessFormFloat} />
+      )}
     </>
   );
 };

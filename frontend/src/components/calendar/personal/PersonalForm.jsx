@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalendarContext } from "../../../context/CalendarContext";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
@@ -13,7 +13,7 @@ import { IoClose } from "react-icons/io5";
 import { ThreeDot } from "react-loading-indicators";
 import { FaExclamationCircle } from "react-icons/fa";
 
-const PersonalForm = () => {
+const PersonalForm = ({ personalFormFloat }) => {
   const axiosPrivate = useAxiosPrivate();
   const {
     exactDaySelected,
@@ -25,6 +25,7 @@ const PersonalForm = () => {
     showPersonalForm,
     setShowPersonalForm,
     loggedIn,
+    inMobile,
   } = useContext(CalendarContext);
 
   const navigate = useNavigate();
@@ -48,8 +49,6 @@ const PersonalForm = () => {
   const [errStyle, setErrStyle] = useState(false);
   const [errStyleGross, setErrStyleGross] = useState(false);
   const [errStyleExpenses, setErrStyleExpenses] = useState(false);
-
-  const [personalFormFloat, setPersonalFormFloat] = useState(false);
 
   const [dateStyle, setDateStyle] = useState(false);
 
@@ -259,37 +258,38 @@ const PersonalForm = () => {
     setErrStyleExpenses(false);
   };
 
-  useEffect(() => {
-    const personalFloat = () => {
-      if (window.innerWidth <= 658) {
-        setPersonalFormFloat(true);
-      } else {
-        setPersonalFormFloat(false);
-        setShowPersonalForm(false);
-      }
-    };
-    window.addEventListener("resize", personalFloat);
-    if (window.innerWidth <= 658) {
-      setPersonalFormFloat(true);
-    } else {
-      setPersonalFormFloat(false);
+  // to close form when clicked outside form
+  const childRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (childRef.current && !childRef.current.contains(event.target)) {
       setShowPersonalForm(false);
     }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      window.removeEventListener("resize", personalFloat);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleClickInside = (event) => {
+    event.stopPropagation();
+  };
 
   return (
     <>
       <div
         className={`mx-auto ${
           personalFormFloat && showPersonalForm
-            ? "h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-50"
+            ? "h-s100 w-full fixed left-0 top-0 flex justify-center items-center bg-light bg-opacity-50 z-20"
             : ""
         }`}
       >
         <div
+          ref={childRef}
+          onMouseDown={handleClickInside}
           className={`text-center ${
             personalFormFloat && showPersonalForm
               ? "rounded-md bg-white overflow-hidden shadow-lg w-80 px-2 py-5 relative border border-[#ebebeb]"
@@ -310,11 +310,11 @@ const PersonalForm = () => {
               }
               e.preventDefault(), setShowPersonalForm(false);
             }}
-            className={`cursor-pointer hover:bg-light hover:rounded-full font-bold absolute top-1 right-0 mb-5 p-1 text-2xl ${
+            className={`cursor-pointer hover:bg-btnHov active:bg-btnAct hover:rounded-full font-bold absolute top-1 mb-5 p-1 text-2xl ${
               personalFormFloat && showPersonalForm ? "" : "hidden"
-            }`}
+            } ${inMobile ? "right-2" : "right-1"}`}
           >
-            <IoClose className="text-lgreens hover:text-greens" />
+            <IoClose className="text-greens hover:text-greens" />
           </div>
           <div
             className={`text-base w-fit mx-auto ${
@@ -326,7 +326,11 @@ const PersonalForm = () => {
             {exactDaySelected.format("MMMM D, YYYY")}
           </div>
           {/* Add Gross */}
-          <div className="px-10 justify-center mt-5">
+          <div
+            className={`px-10 justify-center mt-5 clg:px-5 ${
+              inMobile ? "xxs:px-5" : ""
+            }`}
+          >
             <div className="font-semibold">Gross:</div>
             <div
               className={`border rounded-md overflow-hidden flex items-center mx-auto w-[70%] ${
@@ -345,7 +349,11 @@ const PersonalForm = () => {
             </div>
           </div>
           {/* Add Expenses */}
-          <div className="px-10 justify-center mt-3">
+          <div
+            className={`px-10 justify-center mt-3 clg:px-5 ${
+              inMobile ? "xxs:px-5" : ""
+            }`}
+          >
             <div className="font-semibold">Expenses:</div>
             <div
               className={`border rounded-md overflow-hidden flex items-center mx-auto w-[70%] ${
@@ -364,7 +372,11 @@ const PersonalForm = () => {
             </div>
           </div>
           {/* Net Pay */}
-          <div className="px-10 justify-center mt-3">
+          <div
+            className={`px-10 justify-center mt-3 clg:px-5 ${
+              inMobile ? "xxs:px-5" : ""
+            }`}
+          >
             <div className="font-semibold">Net:</div>
             <div className="bg-light flex items-center rounded-md mx-auto py-2 w-[70%]">
               <div className="pl-2">

@@ -26,10 +26,12 @@ const PersonalCalendar = () => {
     setFormSelectedDate,
     exactDaySelected,
     showPersonalForm,
-    showPersonalExpenseForm,
+    setShowPersonalForm,
+    showPersonalExpensesForm,
+    setShowPersonalExpensesForm,
     personalExpensesLoading,
     personalExpensesData,
-    setShowPersonalExpensesForm,
+    inMobile,
   } = useContext(CalendarContext);
   const [currentMonth, setCurrentMonth] = useState(getMonth());
 
@@ -46,6 +48,8 @@ const PersonalCalendar = () => {
   const [expensesCount, setExpensesCount] = useState(0);
 
   const [instructions, setInstructions] = useState(null);
+
+  const [personalFormFloat, setPersonalFormFloat] = useState(false);
 
   useEffect(() => {
     if (personalIncomeLoading) {
@@ -166,6 +170,46 @@ const PersonalCalendar = () => {
     };
   }, []);
 
+  // for personal form modal
+  useEffect(() => {
+    const personalFloat = () => {
+      if (window.innerWidth <= 658) {
+        setPersonalFormFloat(true);
+      } else {
+        setPersonalFormFloat(false);
+        setShowPersonalForm(false);
+      }
+    };
+    window.addEventListener("resize", personalFloat);
+    if (window.innerWidth <= 658) {
+      setPersonalFormFloat(true);
+    } else {
+      setPersonalFormFloat(false);
+      setShowPersonalForm(false);
+    }
+    return () => {
+      window.removeEventListener("resize", personalFloat);
+    };
+  }, []);
+
+  // for personal form scroll disabled
+  useEffect(() => {
+    if (personalFormFloat && showPersonalForm) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [personalFormFloat, showPersonalForm]);
+
+  // for personal expenses form scroll disabled
+  useEffect(() => {
+    if (personalExpensesFloat && showPersonalExpensesForm) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [showPersonalExpensesForm, personalExpensesFloat]);
+
   // identifier if instructions is already shown
   useEffect(() => {
     const showInstructions = async () => {
@@ -269,7 +313,7 @@ const PersonalCalendar = () => {
         onClick={() => {
           showTour();
         }}
-        className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white hover:border-lgreens text-sm mmd:text-xs md:py-1 mx-auto`}
+        className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white hover:border-lgreens text-sm mmd:text-xs md:py-1 mx-auto select-none`}
       >
         <BsInfoCircle className={`text-oranges text-2xl mmd:text-xl`} />
         <p>
@@ -290,7 +334,9 @@ const PersonalCalendar = () => {
       <div className="grid grid-cols-3 gap-4 mt-2 py-1 px-5 overflow-hidden xl:pl-24 lg:pl-5 clg:grid-cols-2 clg:grid-rows-2">
         <div
           id="calendar"
-          className="bg-white shadow-sm rounded-lg pt-8 min-w-[350px] h-[406px] relative mmd:pt-2 mmd:col-span-2 mmd:h-hfull"
+          className={`bg-white shadow-sm rounded-lg pt-8 h-[406px] relative mmd:pt-2 mmd:col-span-2 mmd:h-hfull ${
+            inMobile ? "w-full" : "min-w-[350px]"
+          }`}
         >
           <PersonalMonth
             month={currentMonth}
@@ -306,7 +352,9 @@ const PersonalCalendar = () => {
         </div>
         <div
           id="monthlyExpenses"
-          className="bg-white shadow-sm rounded-lg min-w-[350px] max-h-[406px] clg:col-span-2 clg:row-span-full clg:h-hfit"
+          className={`bg-white shadow-sm rounded-lg max-h-[406px] clg:col-span-2 clg:row-span-full clg:h-hfit ${
+            inMobile ? "w-full" : "min-w-[350px]"
+          }`}
         >
           {!personalExpensesFloat && (
             <PMonthlyExpensesForm
@@ -362,7 +410,7 @@ const PersonalCalendar = () => {
           )}
         </div>
       </div>
-      <div className="hidden mx-5 py-1 bg-white rounded-md text-center text-sm text-[#A6ACAF] font-normal mmd:block">
+      <div className="hidden mx-5 py-1 bg-white rounded-sm text-center text-sm text-[#A6ACAF] font-normal mmd:block">
         ( Click a date to add/edit data )
       </div>
 
@@ -374,7 +422,7 @@ const PersonalCalendar = () => {
         />
       </div>
 
-      {showPersonalExpenseForm && (
+      {showPersonalExpensesForm && (
         <PMonthlyExpensesForm
           expensesDataLoading={expensesDataLoading}
           expensesData={expensesData}
@@ -382,7 +430,9 @@ const PersonalCalendar = () => {
           personalExpensesFloat={personalExpensesFloat}
         />
       )}
-      {showPersonalForm && <PersonalForm />}
+      {showPersonalForm && (
+        <PersonalForm personalFormFloat={personalFormFloat} />
+      )}
     </>
   );
 };

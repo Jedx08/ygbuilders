@@ -1,7 +1,16 @@
+import { useEffect } from "react";
 import icon from "../media/404.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const NotFound = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 2000);
+  }, []);
+
   return (
     <div className="h-s100 font-pops bg-gradient-to-b from-[#000000] via-[#313131] to-[#3e3e3e]">
       <div className="justify-center items-center flex flex-col">
@@ -16,7 +25,7 @@ const NotFound = () => {
         </div>
         <Link to="/">
           <div className="w-fit cursor-pointer text-[#f0eded] text-lg bg-oranges hover:bg-loranges px-3 py-1 rounded-md font-semibold mt-5">
-            Back to Home
+            Back to Dashboard
           </div>
         </Link>
       </div>

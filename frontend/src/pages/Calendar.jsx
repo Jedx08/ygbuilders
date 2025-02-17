@@ -53,8 +53,8 @@ const Calendar = () => {
               className={`px-5 py-3 rounded-md font-bold
               ${
                 tab === "Personal" || !params.get("tab")
-                  ? "bg-lgreens text-white cursor-default"
-                  : "bg-white cursor-pointer hover:text-lgreens shadow-md"
+                  ? "bg-lgreens text-white cursor-default select-none"
+                  : "bg-white cursor-pointer hover:text-lgreens shadow-md select-none"
               }
              `}
             >
@@ -67,8 +67,8 @@ const Calendar = () => {
               className={`px-5 py-3 rounded-md font-bold
               ${
                 tab === "Business"
-                  ? "bg-loranges text-white cursor-default"
-                  : "bg-white cursor-pointer hover:text-loranges shadow-md"
+                  ? "bg-loranges text-white cursor-default select-none"
+                  : "bg-white cursor-pointer hover:text-loranges shadow-md select-none"
               }
             `}
             >

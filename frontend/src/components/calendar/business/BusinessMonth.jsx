@@ -5,7 +5,7 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import BusinessDay from "./BusinessDay";
 
 const BusinessMonth = ({ month, monthData, businessDataLoading }) => {
-  const { monthIndex, setMonthIndex } = useContext(CalendarContext);
+  const { monthIndex, setMonthIndex, inMobile } = useContext(CalendarContext);
 
   function handlePrevMonth() {
     setMonthIndex(monthIndex - 1);
@@ -20,19 +20,25 @@ const BusinessMonth = ({ month, monthData, businessDataLoading }) => {
         <div>
           {/* Month and Year */}
           <div className={`flex justify-between items-center text-3xl pr-2`}>
-            <div className="flex">
-              <FaAngleLeft
-                className={`text-oranges hover:text-loranges cursor-pointer `}
-                onClick={handlePrevMonth}
-              />
-              <FaAngleRight
-                className={`text-oranges hover:text-loranges cursor-pointer `}
-                onClick={handleNextMonth}
-              />
+            <div className="flex items-center pl-1">
+              <div className="p-[2px] rounded-[50%] hover:bg-btnHov active:bg-btnAct flex justify-center">
+                <FaAngleLeft
+                  className={`text-oranges hover:text-loranges cursor-pointer `}
+                  onClick={handlePrevMonth}
+                />
+              </div>
+              <div className="p-[2px] rounded-[50%] hover:bg-btnHov active:bg-btnAct flex justify-center">
+                <FaAngleRight
+                  className={`text-oranges hover:text-loranges cursor-pointer `}
+                  onClick={handleNextMonth}
+                />
+              </div>
             </div>
             <div>
               <h1
-                className={`font-extrabold text-center text-oranges select-none`}
+                className={`font-extrabold text-center text-oranges select-none ${
+                  inMobile ? "xxss:text-2xl" : ""
+                }`}
               >
                 {
                   /* display current month and year */
@@ -46,7 +52,7 @@ const BusinessMonth = ({ month, monthData, businessDataLoading }) => {
         </div>
 
         <div
-          className={`bg-white grid grid-flow-col text-center font-semibold rounded-md mt-3`}
+          className={`bg-white grid grid-flow-col text-center font-semibold rounded-md mt-3 select-none`}
         >
           <div className="text-loranges">SUN</div>
           <div className="text-lgreens">MON</div>
@@ -58,7 +64,9 @@ const BusinessMonth = ({ month, monthData, businessDataLoading }) => {
         </div>
         <div
           id="calendar"
-          className={`flex-1 grid grid-cols-7 grid-rows-6 mt-1 overflow-auto h-[250px] min-w-[350px] mmd:h-hfull`}
+          className={`flex-1 grid grid-cols-7 grid-rows-6 mt-1 overflow-auto h-[250px] mmd:h-hfull ${
+            inMobile ? "w-full" : "min-w-[350px]"
+          }`}
         >
           {month.map((row, i) => (
             <React.Fragment key={i}>

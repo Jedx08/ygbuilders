@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
@@ -23,7 +23,7 @@ import avatar3 from "../media/avatar3.png";
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 const Settings = () => {
-  const { userInfo, setAuth, setUserInfo } = useAuth();
+  const { auth, userInfo, setAuth, setUserInfo } = useAuth();
   const axiosPrivate = useAxiosPrivate();
 
   // const navigate = useNavigate();
@@ -38,7 +38,16 @@ const Settings = () => {
     setBusinessExpensesLoading,
     setSavingsIncomeLoading,
     setGoalLoading,
+    setLoggedIn,
   } = useContext(CalendarContext);
+
+  useEffect(() => {
+    if (!auth.accessToken && !auth._id) {
+      setLoggedIn(false);
+    } else {
+      setLoggedIn(true);
+    }
+  }, []);
 
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);

@@ -117,7 +117,7 @@ const BMonthlyCapitalAdd = () => {
               ref={expensesRef}
               onChange={titleInput}
               value={title}
-              className="w-36 focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs"
+              className="w-full focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs"
             />
           </div>
           <div
@@ -130,7 +130,7 @@ const BMonthlyCapitalAdd = () => {
               placeholder="Amount"
               onChange={amountInput}
               value={amount}
-              className="w-36 focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs"
+              className="w-full focus:outline-none focus:border-oranges pl-2 py-1 placeholder:text-xs"
             />
           </div>
         </div>

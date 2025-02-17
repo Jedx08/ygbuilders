@@ -38,6 +38,8 @@ export default {
       xxs: { max: "425px" },
       // => @media (max-width: 425px) { ... }
 
+      xxss: { max: "380px" },
+
       // @media for Calendar
       clg: { max: "1181px" },
     },
@@ -77,6 +79,8 @@ export default {
       yellows: "#ffb81f",
       lyellows: "#ffcb5a",
       facebook: "#1877f2",
+      btnHov: "#f0f1f3",
+      btnAct: "#e5e5e6",
     },
     extend: {
       fontFamily: {

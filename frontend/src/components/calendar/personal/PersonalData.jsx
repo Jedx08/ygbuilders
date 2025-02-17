@@ -19,7 +19,7 @@ const PersonalData = ({ personalDataLoading, monthData }) => {
           >
             Daily Income
           </div>
-          <div className="flex items-center justify-evenly py-1">
+          <div className="flex flex-wrap items-center justify-evenly py-1 px-1 space-x-1">
             <div className="flex space-x-1 items-center justify-center">
               <img src={grossIcon} alt="gross" className={`w-8 sm:w-6`} />
               <p className="text-sm font-normal">Gross</p>
@@ -59,7 +59,7 @@ const PersonalData = ({ personalDataLoading, monthData }) => {
                     setFormSelectedDate(d);
                   }}
                   key={i}
-                  className="bg-white border border-light cursor-pointer hover:border-lgreens rounded-sm"
+                  className="bg-white border border-light cursor-pointer hover:border-lgreens rounded-sm px-1"
                 >
                   <div className="text-base font-medium text-center">
                     {dayjs(d.day).format("MMMM D")}

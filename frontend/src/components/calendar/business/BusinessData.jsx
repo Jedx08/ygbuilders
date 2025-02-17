@@ -19,24 +19,24 @@ const BusinessData = ({ businessDataLoading, monthData }) => {
       <div className="bg-white shadow-sm rounded-lg">
         <div className={`border border-light font-bold rounded-md py-2`}>
           <div
-            className={`flex gap-3 justify-center items-center px-1 py-1 text-oranges font-bold text-xl/[24px] sm:text-lg`}
+            className={`text-center py-1 text-oranges font-bold text-xl/[24px] sm:text-lg`}
           >
             <p>Daily Income</p>
           </div>
-          <div className="flex items-center justify-evenly py-1">
-            <div className="flex space-x-1 items-center justify-center">
+          <div className="flex flex-wrap items-center justify-evenly px-1 space-x-1">
+            <div className="flex space-x-1 items-center justify-center py-1">
               <img src={capitalIcon} alt="capital" className={`w-8 sm:w-6`} />
               <p className="text-sm font-normal">Capital</p>
             </div>
-            <div className="flex space-x-1 items-center justify-center">
+            <div className="flex space-x-1 items-center justify-center py-1">
               <img src={salesIcon} alt="sales" className={`w-8 sm:w-6`} />
               <p className="text-sm font-normal">Sales</p>
             </div>
-            <div className="flex space-x-1 items-center justify-center">
+            <div className="flex space-x-1 items-center justify-center py-1">
               <img src={expensesIcon} alt="expenses" className={`w-8 sm:w-6`} />
               <p className="text-sm font-normal">Expenses</p>
             </div>
-            <div className="flex space-x-1 items-center justify-center">
+            <div className="flex space-x-1 items-center justify-center py-1">
               <img src={profitIcon} alt="profit" className={`w-8 sm:w-6`} />
               <p className="text-sm font-normal">Profit</p>
             </div>
@@ -67,7 +67,7 @@ const BusinessData = ({ businessDataLoading, monthData }) => {
                     setBusinessFormSelectedDate(d);
                   }}
                   key={i}
-                  className="bg-white border border-light cursor-pointer hover:border-loranges rounded-md"
+                  className="bg-white border border-light cursor-pointer hover:border-loranges rounded-md px-1"
                 >
                   <div className="text-base font-medium text-center">
                     {dayjs(d.day).format("MMMM D")}
