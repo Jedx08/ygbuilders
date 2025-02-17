@@ -61,8 +61,6 @@ const BusinessSummary = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  Chart.register(ChartDataLabels);
-
   const overallProfit = sales - expenses - overallMonthlyExpenses - capital;
 
   const monthlyProfit =
@@ -472,7 +470,7 @@ const BusinessSummary = () => {
 
       <div
         id="monthlyIncome"
-        className="bg-white p-5 mx-5 mb-5 rounded-lg shadow-sm"
+        className="bg-white p-5 mx-5 mb-5 rounded-lg shadow-sm xl:ml-24 lg:ml-5"
       >
         <div className="bg-light font-pops">
           {isLoading ? (
@@ -486,10 +484,142 @@ const BusinessSummary = () => {
             </div>
           ) : (
             <>
-              <div className="bg-white w-full flex gap-5 xs:flex-col">
-                <div className="bg-white w-[65%]  xs:w-full p-4 border border-light rounded-lg shadow-sm overflow-y-auto">
+              <div className="bg-white w-full flex gap-5 lg:flex-col">
+                <div className="hidden bg-white shadow-sm rounded-lg mb-5 py-5 mx-5 lg:block">
+                  <div
+                    className={`flex justify-center items-center text-oranges font-bold pb-2 text-2xl sm:text-xl`}
+                  >
+                    Monthly Summary
+                  </div>
+                  <div className="flex items-center justify-evenly flex-wrap gap-2 mt-1 xl:px-3">
+                    <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+                      <div className="text-base font-semibold text-center mdd:text-sm">
+                        Profit
+                      </div>
+                      <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+                        <div>
+                          <img
+                            src={monthlyProfitIcon}
+                            alt="net"
+                            className="w-14 mdd:w-11 sm:w-9"
+                          />
+                        </div>
+                        <div
+                          className={`font-bold text-2xl mdd:text-xl sm:text-lg ${
+                            monthlyProfit < 0 ? "text-[red]" : "text-greens"
+                          }`}
+                        >
+                          <NumberFlow
+                            value={monthlyProfit}
+                            trend={5}
+                            spinTiming={{
+                              duration: 1500,
+                              easing: "ease-in-out",
+                            }}
+                            format={{
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }}
+                          />
+                        </div>
+                        <div>
+                          {monthlyProfit < 0 ? (
+                            <PiChartLineDown className="text-3xl mdd:text-2xl sm:text-xl text-[#ff3a33]" />
+                          ) : (
+                            <PiChartLineUp className="text-3xl mdd:text-2xl sm:text-xl text-[#32ca5b]" />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+                      <div className="text-base font-semibold text-center mdd:text-sm">
+                        Capital
+                      </div>
+                      <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+                        <div>
+                          <img
+                            src={monthlyCapitalIcon}
+                            alt="gross"
+                            className="w-14 mdd:w-11 sm:w-9"
+                          />
+                        </div>
+                        <div className="text-oranges font-bold text-2xl mdd:text-xl sm:text-lg">
+                          <NumberFlow
+                            value={monthlyCapital}
+                            trend={5}
+                            spinTiming={{
+                              duration: 1500,
+                              easing: "ease-in-out",
+                            }}
+                            format={{
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+                      <div className="text-base font-semibold text-center mdd:text-sm">
+                        Sales
+                      </div>
+                      <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+                        <div>
+                          <img
+                            src={monthlySalesIcon}
+                            alt="gross"
+                            className="w-14 mdd:w-11 sm:w-9"
+                          />
+                        </div>
+                        <div className="text-[#399CB4] font-bold text-2xl mdd:text-xl sm:text-lg">
+                          <NumberFlow
+                            value={monthlySales}
+                            trend={5}
+                            spinTiming={{
+                              duration: 1500,
+                              easing: "ease-in-out",
+                            }}
+                            format={{
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+                      <div className="text-base font-semibold text-center mdd:text-sm">
+                        Expenses
+                      </div>
+                      <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+                        <div>
+                          <img
+                            src={monthlyExpensesIcon}
+                            alt="expenses"
+                            className="w-14 mdd:w-11 sm:w-9"
+                          />
+                        </div>
+                        <div className="text-[red] font-bold text-2xl mdd:text-xl sm:text-lg">
+                          <NumberFlow
+                            value={monthlyExpenses + monthExpenses}
+                            trend={5}
+                            spinTiming={{
+                              duration: 1500,
+                              easing: "ease-in-out",
+                            }}
+                            format={{
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white w-[65%] lg:w-full p-4 border border-light rounded-lg shadow-sm overflow-y-auto">
                   <div className="w-full flex justify-center text-xl text-oranges font-pops font-bold py-3">
-                    <div className="flex w-[20%] gap-2 items-center">
+                    <div className="flex w-full gap-2 items-center">
                       <div className="flex justify-start">
                         <div>
                           <FaAngleLeft
@@ -507,7 +637,7 @@ const BusinessSummary = () => {
                       {thisMonth}
                     </div>
                   </div>
-                  <div className="h-[400px] w-full lg:w-[800px]">
+                  <div className="h-[400px] w-full lg:w-full">
                     <Line
                       className="w-full"
                       data={{
@@ -595,7 +725,7 @@ const BusinessSummary = () => {
                     />
                   </div>
                 </div>
-                <div className="w-[35%]  xs:w-full">
+                <div className="w-[35%] lg:hidden xs:w-full">
                   <div className="h-hfull w-full flex flex-col items-center justify-center gap-2 md:w-[90%] ssm:w-[100%] xs:flex-row">
                     <div className="flex font-bold text-2xl text-center text-oranges items-center justify-center pb-3 ssm:text-xl">
                       Monthly Summary
@@ -731,7 +861,7 @@ const BusinessSummary = () => {
           )}
         </div>
       </div>
-      <div className="bg-white rounded-lg mx-5">
+      <div className="bg-white rounded-lg mx-5 xl:ml-24 lg:ml-5">
         <div className="grid grid-flow-col justify-center place-items-center gap-2 xxs:flex xxs:items-center xxs:justify-center xxs:gap-0">
           <div className="font-bold text-2xl text-center items-center justify-center py-5">
             Yearly Summary

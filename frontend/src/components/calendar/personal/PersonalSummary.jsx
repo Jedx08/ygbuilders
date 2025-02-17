@@ -64,7 +64,8 @@ const PersonalSummary = () => {
 
   const monthlyNet = monthlyGross - monthlyExpenses;
 
-  Chart.register(ChartDataLabels);
+  // data labels (numbers in charts)
+  // Chart.register(ChartDataLabels);
 
   //number of days per month using dayjs
   const monthCount = dayjs().month(monthIndex).daysInMonth();
@@ -423,9 +424,110 @@ const PersonalSummary = () => {
       <></>
       <div
         id="monthlyIncome"
-        className="bg-white mb-5 py-5 mx-5 rounded-lg shadow-sm"
+        className="bg-white mb-5 py-5 mx-5 rounded-lg shadow-sm xl:ml-24 lg:ml-5"
       >
-        <div className="bg-light font-pops">
+        <div className="font-pops">
+          <div
+            id="overallIncome"
+            className="hidden bg-white shadow-sm rounded-lg mb-5 py-5 mx-5 xl:ml-24 lg:block lg:ml-5"
+          >
+            <div
+              className={`flex justify-center items-center text-greens font-bold pb-2 text-2xl sm:text-xl`}
+            >
+              Monthly Summary
+            </div>
+            <div className="flex items-center justify-evenly flex-wrap gap-2 mt-1 xl:px-3">
+              <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+                <div className="text-base font-semibold text-center mdd:text-sm">
+                  Net
+                </div>
+                <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+                  <div>
+                    <img
+                      src={monthlyNetIcon}
+                      alt="net"
+                      className="w-14 mdd:w-11 sm:w-9"
+                    />
+                  </div>
+                  <div
+                    className={`font-bold text-2xl mdd:text-xl sm:text-lg ${
+                      overallNet < 0 ? "text-[red]" : "text-greens"
+                    }`}
+                  >
+                    <NumberFlow
+                      value={monthlyNet}
+                      trend={5}
+                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
+                  </div>
+                  <div>
+                    {overallNet < 0 ? (
+                      <PiChartLineDown className="text-3xl mdd:text-2xl sm:text-xl text-[#ff3a33]" />
+                    ) : (
+                      <PiChartLineUp className="text-3xl mdd:text-2xl sm:text-xl text-[#32ca5b]" />
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+                <div className="text-base font-semibold text-center mdd:text-sm">
+                  Gross
+                </div>
+                <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+                  <div>
+                    <img
+                      src={monthlyGrossIcon}
+                      alt="gross"
+                      className="w-14 mdd:w-11 sm:w-9"
+                    />
+                  </div>
+                  <div className="text-oranges font-bold text-2xl mdd:text-xl sm:text-lg">
+                    {
+                      <NumberFlow
+                        value={monthlyGross}
+                        trend={5}
+                        spinTiming={{ duration: 1500, easing: "linear" }}
+                        format={{
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2,
+                        }}
+                      />
+                    }
+                  </div>
+                </div>
+              </div>
+              <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+                <div className="text-base font-semibold text-center mdd:text-sm">
+                  Expenses
+                </div>
+                <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+                  <div>
+                    <img
+                      src={monthlyExpensesIcon}
+                      alt="expenses"
+                      className="w-14 mdd:w-11 sm:w-9"
+                    />
+                  </div>
+                  <div className="text-[red] font-bold text-2xl mdd:text-xl sm:text-lg">
+                    <NumberFlow
+                      value={monthExpenses + monthlyExpenses}
+                      trend={5}
+                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                      format={{
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {isLoading ? (
             <div className="w-[60%] bg-white p-5 rounded-lg flex items-center flex-col md:w-[90%] ">
               <div className="w-[35%]">
@@ -436,15 +538,12 @@ const PersonalSummary = () => {
               </div>
             </div>
           ) : (
-            <div
-              id="lineGraph"
-              className="bg-white w-full flex gap-5 px-5 xs:flex-col"
-            >
-              <div className="w-[65%] xs:w-full">
+            <div className="bg-white w-full flex gap-5 px-5 xs:flex-col">
+              <div className="w-[65%] lg:w-full">
                 <span>
                   <div className="bg-white border border-light py-4 rounded-md shadow-sm overflow-y-auto px-3">
                     <div className="w-full flex justify-center text-xl text-greens font-pops font-bold py-3">
-                      <div className="flex w-[20%] gap-2 items-center">
+                      <div className="flex w-full gap-2 items-center">
                         <div className="flex justify-start">
                           <div>
                             <FaAngleLeft
@@ -462,7 +561,7 @@ const PersonalSummary = () => {
                         {thisMonth}
                       </div>
                     </div>
-                    <div className="h-[400px] w-full lg:w-[800px]">
+                    <div className="h-[400px] w-full">
                       <Line
                         className="w-full"
                         data={{
@@ -546,10 +645,7 @@ const PersonalSummary = () => {
                   </div>
                 </span>
               </div>
-              <div
-                id="lineGraphOverview"
-                className="w-[35%] flex flex-col gap-5 rounded-md justify-center items-center md:p-0 xs:w-full xs:flex-row"
-              >
+              <div className="w-[35%] flex flex-col gap-5 rounded-md justify-center items-center lg:hidden md:p-0 xs:w-full xs:flex-row">
                 <div className="font-bold text-greens text-2xl text-center items-center justify-center lg:text-2xl ssm:text-xl">
                   Monthly Summary{" "}
                 </div>
