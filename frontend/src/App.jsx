@@ -37,16 +37,15 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Layout />}>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="login" element={<Auth />} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-use" element={<TermOfUse />} />
           <Route path="reset-password" element={<ResetPassword />} />
 
           {/* Protected Routes */}
           <Route element={<PersistLogin />}>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="login" element={<Auth />} />
-            <Route path="forgot-password" element={<ForgotPassword />} />
-
             {/* uncomment RequireAuth after ads added */}
             {/* <Route element={<RequireAuth />}> */}
             {/* Dashboard Page start */}

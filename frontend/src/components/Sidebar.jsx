@@ -10,7 +10,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="group bg-white font-pops h-[100vh] w-fit flex flex-col border-r border-[#ebebeb] py-5 px-[1px] sticky top-0 shadow-lg gap-10 xl:p-0 xl:hover:w-[230px] xl:fixed xl:left-0 transition-all duration-300 z-20">
+      <nav className="group bg-white font-pops h-[100vh] w-fit flex flex-col border-r border-[#ebebeb] py-5 px-[1px] sticky top-0 shadow-lg gap-10 xl:p-0 xl:hover:w-[230px] xl:fixed xl:left-0 transition-all duration-300 z-20">
         <Link to="/">
           <div className="flex items-center justify-center space-x-2 p-5">
             <img src={logo} className="w-12" />
@@ -99,7 +99,7 @@ const Sidebar = () => {
             </div>
           </Link>
         </div>
-      </div>
+      </nav>
     </>
   );
 };

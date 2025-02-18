@@ -157,121 +157,121 @@ const DateRange = () => {
   };
 
   return (
-    <div className="flex lg:flex-col">
-      <div className="lg:hidden">
-        <Sidebar />
+    // <div className="flex lg:flex-col">
+    //   <div className="lg:hidden">
+    //     <Sidebar />
+    //   </div>
+    //   <div className="w-full bg-light">
+    //     <Navbar />
+    //     {/* filter components */}
+    //     <div className="mt-20 lg:mb-[5rem]">
+    //       <Footer />
+    //     </div>
+    //   </div>
+
+    //   <div className="hidden lg:block">
+    //     <FooterNav />
+    //   </div>
+    // </div>
+
+    <div className="font-pops  min-h-[100vh]">
+      {/* Calendar Switch View */}
+      <div className="flex justify-center space-x-5 pt-5">
+        <div
+          onClick={() => {
+            changeTab("Personal");
+          }}
+          className={`px-5 py-3 rounded-md font-bold
+      ${
+        tab === "Personal" || !params.get("tab")
+          ? "bg-lgreens text-white cursor-default"
+          : "bg-white cursor-pointer hover:text-lgreens shadow-md"
+      }
+   `}
+        >
+          Personal
+        </div>
+        <div
+          onClick={() => {
+            changeTab("Business");
+          }}
+          className={`px-5 py-3 rounded-md font-bold
+      ${
+        tab === "Business"
+          ? "bg-loranges text-white cursor-default"
+          : "bg-white cursor-pointer hover:text-loranges shadow-md"
+      }
+  `}
+        >
+          Business
+        </div>
       </div>
-      <div className="w-full bg-light">
-        <Navbar />
-        <div className="font-pops  min-h-[100vh]">
-          {/* Calendar Switch View */}
-          <div className="flex justify-center space-x-5 pt-5">
-            <div
-              onClick={() => {
-                changeTab("Personal");
-              }}
-              className={`px-5 py-3 rounded-md font-bold
-                ${
-                  tab === "Personal" || !params.get("tab")
-                    ? "bg-lgreens text-white cursor-default"
-                    : "bg-white cursor-pointer hover:text-lgreens shadow-md"
-                }
-             `}
-            >
-              Personal
-            </div>
-            <div
-              onClick={() => {
-                changeTab("Business");
-              }}
-              className={`px-5 py-3 rounded-md font-bold
-                ${
-                  tab === "Business"
-                    ? "bg-loranges text-white cursor-default"
-                    : "bg-white cursor-pointer hover:text-loranges shadow-md"
-                }
-            `}
-            >
-              Business
-            </div>
-          </div>
 
-          {/* instructions */}
-          <div
-            id="instructions"
-            onClick={() => {
-              showTour();
-            }}
-            className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white text-sm mmd:text-xs md:py-1 mx-auto ${
-              tab === "Personal"
-                ? "hover:border-lgreens"
-                : "hover:border-loranges"
-            }`}
-          >
-            <BsInfoCircle className={`text-oranges text-2xl mmd:text-xl`} />
-            <p>
-              How to use? <span className="font-bold">Instructions</span>
-            </p>
-          </div>
+      {/* instructions */}
+      <div
+        id="instructions"
+        onClick={() => {
+          showTour();
+        }}
+        className={`bg-white flex items-center gap-2 w-fit px-3 py-2 shadow-sm rounded-md mt-5 cursor-pointer border border-white text-sm mmd:text-xs md:py-1 mx-auto ${
+          tab === "Personal" ? "hover:border-lgreens" : "hover:border-loranges"
+        }`}
+      >
+        <BsInfoCircle className={`text-oranges text-2xl mmd:text-xl`} />
+        <p>
+          How to use? <span className="font-bold">Instructions</span>
+        </p>
+      </div>
 
-          {/* Date range */}
-          <div className="mt-8 px-5 xl:pl-24 lg:pl-5">
-            <div id="datePicker" className="bg-white rounded-lg shadow-sm py-5">
-              <div className="flex justify-center space-x-10 sm:space-x-3">
-                <div className="flex justify-center items-center space-x-2">
-                  <p>From:</p>
-                  <DatePicker
-                    showIcon
-                    toggleCalendarOnIconClick
-                    className="border border-inputLight w-40 font-medium rounded-md py-1 text-center cursor-pointer outline-none text-base placeholder:font-normal"
-                    selected={startDate}
-                    onChange={(date) => setStartDate(date)}
-                    placeholderText="Start Date"
-                    dateFormat="MMM d, yyyy"
-                  />
-                </div>
-                <div className="flex justify-center items-center space-x-2">
-                  <p>To:</p>
-                  <DatePicker
-                    showIcon
-                    className="border border-inputLight w-40 font-medium rounded-md py-1 text-center cursor-pointer outline-none text-base placeholder:font-normal"
-                    selected={endDate}
-                    onChange={(date) => setEndDate(date)}
-                    placeholderText="End Date"
-                    dateFormat="MMM d, yyyy"
-                  />
-                </div>
-              </div>
-              <div>
-                {errStyle && (
-                  <div className="pt-2 text-sm text-[red] font-medium flex justify-center items-center space-x-2">
-                    <div>
-                      <FaExclamationCircle />
-                    </div>
-                    <div>{errMsg}</div>
-                  </div>
-                )}
-              </div>
+      {/* Date range */}
+      <div className="mt-8 px-5 xl:pl-24 lg:pl-5">
+        <div id="datePicker" className="bg-white rounded-lg shadow-sm py-5">
+          <div className="flex justify-center space-x-10 sm:space-x-3">
+            <div className="flex justify-center items-center space-x-2">
+              <p>From:</p>
+              <DatePicker
+                showIcon
+                toggleCalendarOnIconClick
+                className="border border-inputLight w-40 font-medium rounded-md py-1 text-center cursor-pointer outline-none text-base placeholder:font-normal"
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                placeholderText="Start Date"
+                dateFormat="MMM d, yyyy"
+              />
+            </div>
+            <div className="flex justify-center items-center space-x-2">
+              <p>To:</p>
+              <DatePicker
+                showIcon
+                className="border border-inputLight w-40 font-medium rounded-md py-1 text-center cursor-pointer outline-none text-base placeholder:font-normal"
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                placeholderText="End Date"
+                dateFormat="MMM d, yyyy"
+              />
             </div>
           </div>
-
-          {/* Calendar Display Personal/Business */}
           <div>
-            {tab === "Personal" && (
-              <PersonalDateRange startDate={startDate} endDate={endDate} />
-            )}
-            {tab === "Business" && (
-              <BusinessDateRange startDate={startDate} endDate={endDate} />
+            {errStyle && (
+              <div className="pt-2 text-sm text-[red] font-medium flex justify-center items-center space-x-2">
+                <div>
+                  <FaExclamationCircle />
+                </div>
+                <div>{errMsg}</div>
+              </div>
             )}
           </div>
         </div>
-        <div className="mt-20 lg:mb-[5rem]">
-          <Footer />
-        </div>
       </div>
 
-      <div className="hidden lg:block">
-        <FooterNav />
+      {/* Calendar Display Personal/Business */}
+      <div>
+        {tab === "Personal" && (
+          <PersonalDateRange startDate={startDate} endDate={endDate} />
+        )}
+        {tab === "Business" && (
+          <BusinessDateRange startDate={startDate} endDate={endDate} />
+        )}
       </div>
     </div>
   );

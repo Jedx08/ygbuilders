@@ -13,6 +13,7 @@ import yearlySalesIcon from "../../../media/busyear_sales.png";
 import yearlyExpensesIcon from "../../../media/busyear_expenses.png";
 import yearlyProfitIcon from "../../../media/busyear_net.png";
 import NumberFlow from "@number-flow/react";
+import { PiChartLineUp, PiChartLineDown } from "react-icons/pi";
 
 const BusinessYearlySummary = () => {
   const getBusinessData = useGetBusinessData();
@@ -349,21 +350,57 @@ const BusinessYearlySummary = () => {
           </div>
         ) : (
           <>
-            <div className="w-full gap-5 mb-5 flex">
-              <div className="border border-light shadow-sm w-full bg-white rounded-md h-hfull p-5">
-                <div className="flex flex-col items-center justify-center gap-2">
-                  <div className="flex gap-2">
-                    <div className="text-base font-semibold sm:text-sm">
-                      Capital
+            <div className="bg-white shadow-sm rounded-lg p-5">
+              <div className="flex items-center justify-evenly flex-wrap gap-2 mt-1 xl:px-3">
+                <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+                  <div className="text-base font-semibold text-center mdd:text-sm">
+                    Profit
+                  </div>
+                  <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+                    <div>
+                      <img
+                        src={yearlyProfitIcon}
+                        alt="net"
+                        className="w-14 mdd:w-11 sm:w-9"
+                      />
+                    </div>
+                    <div
+                      className={`font-bold text-2xl mdd:text-xl sm:text-lg ${
+                        yearlyProfit < 0 ? "text-[red]" : "text-greens"
+                      }`}
+                    >
+                      <NumberFlow
+                        value={yearlyProfit}
+                        trend={5}
+                        spinTiming={{ duration: 1500, easing: "ease-in-out" }}
+                        format={{
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2,
+                        }}
+                      />
+                    </div>
+                    <div>
+                      {yearlyProfit < 0 ? (
+                        <PiChartLineDown className="text-3xl mdd:text-2xl sm:text-xl text-[#ff3a33]" />
+                      ) : (
+                        <PiChartLineUp className="text-3xl mdd:text-2xl sm:text-xl text-[#32ca5b]" />
+                      )}
                     </div>
                   </div>
-                  <div className="text-2xl text-oranges font-bold sm:text-xl ssm:font-semibold">
-                    <div className="flex gap-3">
+                </div>
+                <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+                  <div className="text-base font-semibold text-center mdd:text-sm">
+                    Capital
+                  </div>
+                  <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+                    <div>
                       <img
                         src={yearlyCapitalIcon}
-                        alt="yearly capital"
-                        className="w-11 sm:w-9"
+                        alt="gross"
+                        className="w-14 mdd:w-11 sm:w-9"
                       />
+                    </div>
+                    <div className="text-oranges font-bold text-2xl mdd:text-xl sm:text-lg">
                       <NumberFlow
                         value={yearlyCapital}
                         trend={5}
@@ -376,21 +413,19 @@ const BusinessYearlySummary = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="border border-light shadow-sm w-full bg-white rounded-md h-hfull p-5">
-                <div className="flex flex-col items-center justify-center gap-2">
-                  <div className="flex gap-2">
-                    <div className="text-base font-semibold sm:text-sm">
-                      Sales
-                    </div>
+                <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+                  <div className="text-base font-semibold text-center mdd:text-sm">
+                    Sales
                   </div>
-                  <div className="text-2xl text-[#399CB4] font-bold sm:text-xl ssm:font-semibold">
-                    <div className="flex gap-3">
+                  <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+                    <div>
                       <img
                         src={yearlySalesIcon}
-                        alt="yearly capital"
-                        className="w-11 sm:w-9"
+                        alt="gross"
+                        className="w-14 mdd:w-11 sm:w-9"
                       />
+                    </div>
+                    <div className="text-[#399CB4] font-bold text-2xl mdd:text-xl sm:text-lg">
                       <NumberFlow
                         value={yearlySales}
                         trend={5}
@@ -403,60 +438,21 @@ const BusinessYearlySummary = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="border border-light shadow-sm w-full bg-white rounded-md h-hfull p-5">
-                <div className="flex flex-col items-center justify-center gap-2">
-                  <div className="flex gap-2">
-                    <div className="text-base font-semibold sm:text-sm">
-                      Expenses
-                    </div>
+                <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
+                  <div className="text-base font-semibold text-center mdd:text-sm">
+                    Expenses
                   </div>
-
-                  <div className="text-2xl text-[red] font-bold sm:text-xl ssm:font-semibold">
-                    <div className="flex gap-3">
+                  <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
+                    <div>
                       <img
                         src={yearlyExpensesIcon}
-                        alt="yearly capital"
-                        className="w-11 sm:w-9"
+                        alt="expenses"
+                        className="w-14 mdd:w-11 sm:w-9"
                       />
-                      {/* {(
-                        yearlyExpenses + thisYearMonthlyExpenses
-                      ).toLocaleString()} */}
+                    </div>
+                    <div className="text-[red] font-bold text-2xl mdd:text-xl sm:text-lg">
                       <NumberFlow
                         value={yearlyExpenses + thisYearMonthlyExpenses}
-                        trend={5}
-                        spinTiming={{ duration: 1500, easing: "ease-in-out" }}
-                        format={{
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 2,
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="border border-light shadow-sm w-full bg-white rounded-md h-hfull p-5">
-                <div className="flex flex-col items-center justify-center gap-2">
-                  <div className="flex gap-2">
-                    <div className="text-base font-semibold sm:text-sm">
-                      Profit
-                    </div>
-                  </div>
-                  <div
-                    className={
-                      yearlyProfit < 0
-                        ? "text-2xl font-bold text-[red] sm:text-xl ssm:font-semibold"
-                        : "text-2xl font-bold text-greens sm:text-xl ssm:font-semibold"
-                    }
-                  >
-                    <div className="flex gap-3">
-                      <img
-                        src={yearlyProfitIcon}
-                        alt="yearly capital"
-                        className="w-11 sm:w-9"
-                      />
-                      <NumberFlow
-                        value={yearlyProfit}
                         trend={5}
                         spinTiming={{ duration: 1500, easing: "ease-in-out" }}
                         format={{
@@ -472,7 +468,7 @@ const BusinessYearlySummary = () => {
             <div className="border border-light w-full h-hfull bg-white p-4 rounded-lg shadow-sm overflow-y-auto">
               <div className="h-[400px] w-full">
                 <Bar
-                  className="h-hfull"
+                  className="w-full"
                   data={{
                     labels: newMonths,
                     datasets: [
