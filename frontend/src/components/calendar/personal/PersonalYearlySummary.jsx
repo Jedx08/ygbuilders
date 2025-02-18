@@ -245,9 +245,14 @@ const BusinessYearlySummary = () => {
         className="bg-white mx-5 px-5 rounded-lg shadow-sm xl:ml-24 lg:ml-5"
       >
         <div className="w-full grid grid-flow-col justify-center place-items-center gap-2 xs:pt-2 xxs:flex xxs:flex-col xxs:items-center xxs:justify-center xxs:gap-0">
-          <div className="font-bold text-2xl text-center items-center justify-center py-5 sm:text-2xl xxs:py-2">
+          <div className="font-bold text-2xl text-greens text-center items-center justify-center py-5 lg:text-xl xxs:py-2">
             Yearly Summary
           </div>
+          {/* <div
+            className={`px-1 pt-3 pb-1 font-bold text-xl clg:py-1 sm:text-lg text-center`}
+          >
+            <div className="text-greens">Monthly Summary</div>
+          </div> */}
           <div className="flex items-center text-3xl justify-center xxs:pb-3">
             <div className="p-[2px] rounded-[50%] hover:bg-btnHov active:bg-btnAct flex justify-center">
               <FaAngleLeft
@@ -283,94 +288,117 @@ const BusinessYearlySummary = () => {
             </div>
           </div>
         ) : (
-          <div className="w-full flex pb-5 lg:flex-col gap-5 xs:pb-5">
-            <div className="hidden bg-white shadow-sm rounded-lg p-5 lg:block">
-              <div className="flex items-center justify-evenly flex-wrap gap-2 mt-1 xl:px-3">
-                <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
-                  <div className="text-base font-semibold text-center mdd:text-sm">
-                    Net
-                  </div>
-                  <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
-                    <div>
-                      <img
-                        src={yearlyNetIcon}
-                        alt="net"
-                        className="w-14 mdd:w-11 sm:w-9"
-                      />
+          <div className="w-full flex pb-5 gap-5 lg:flex-col lg:gap-0 xs:pb-5">
+            <div>
+              <div className="hidden lg:block">
+                <div
+                  className={`grid grid-cols-3 gap-2 py-2 sm:grid-cols-2 sm:grid-rows-2 xxs:grid-rows-3 xxs:grid-cols-1`}
+                >
+                  {/* Yearly Gross */}
+                  <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full sm:col-span-1 xxs:col-span-1">
+                    <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
+                      Gross
                     </div>
-                    <div
-                      className={`font-bold text-2xl mdd:text-xl sm:text-lg ${
-                        yearlyNet < 0 ? "text-[red]" : "text-greens"
-                      }`}
-                    >
-                      <NumberFlow
-                        value={yearlyNet}
-                        trend={5}
-                        spinTiming={{ duration: 1500, easing: "ease-in-out" }}
-                        format={{
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 2,
-                        }}
-                      />
-                    </div>
-                    <div>
-                      {yearlyNet < 0 ? (
-                        <PiChartLineDown className="text-3xl mdd:text-2xl sm:text-xl text-[#ff3a33]" />
-                      ) : (
-                        <PiChartLineUp className="text-3xl mdd:text-2xl sm:text-xl text-[#32ca5b]" />
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
-                  <div className="text-base font-semibold text-center mdd:text-sm">
-                    Gross
-                  </div>
-                  <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
-                    <div>
-                      <img
-                        src={yearlyGrossIcon}
-                        alt="gross"
-                        className="w-14 mdd:w-11 sm:w-9"
-                      />
-                    </div>
-                    <div className="text-oranges font-bold text-2xl mdd:text-xl sm:text-lg">
-                      {
-                        <NumberFlow
-                          value={yearlyGross}
-                          trend={5}
-                          spinTiming={{ duration: 1500, easing: "linear" }}
-                          format={{
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 2,
-                          }}
+                    <div className="flex items-center font-semibold">
+                      <div
+                        className={`flex space-x-1 items-center justify-center mx-auto`}
+                      >
+                        <img
+                          src={yearlyGrossIcon}
+                          alt="mon_gross"
+                          className={`w-14 mdd:w-10`}
                         />
-                      }
+                        <p className="ml-1 text-[#D0D0D0]">:</p>
+                        <p className="text-oranges font-bold text-xl/[24px] mdd:text-lg">
+                          <NumberFlow
+                            value={yearlyGross}
+                            trend={5}
+                            spinTiming={{
+                              duration: 1500,
+                              easing: "ease-in-out",
+                            }}
+                            format={{
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }}
+                          />
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
-                  <div className="text-base font-semibold text-center mdd:text-sm">
-                    Expenses
-                  </div>
-                  <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
-                    <div>
-                      <img
-                        src={yearlyExpensesIcon}
-                        alt="expenses"
-                        className="w-14 mdd:w-11 sm:w-9"
-                      />
+
+                  {/* Yearly Expenses */}
+                  <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full sm:col-span-1 xxs:col-span-1">
+                    <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
+                      Expenses
                     </div>
-                    <div className="text-[red] font-bold text-2xl mdd:text-xl sm:text-lg">
-                      <NumberFlow
-                        value={yearlyExpenses + thisYearMonthlyExpenses}
-                        trend={5}
-                        spinTiming={{ duration: 1500, easing: "ease-in-out" }}
-                        format={{
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 2,
-                        }}
-                      />
+                    <div className="flex items-center font-semibold">
+                      <div
+                        className={`flex space-x-1 items-center justify-center mx-auto`}
+                      >
+                        <img
+                          src={yearlyExpensesIcon}
+                          alt="mon_expenses"
+                          className={`w-14 mdd:w-10`}
+                        />
+                        <p className="ml-1 text-[#D0D0D0]">:</p>
+                        <p className="text-[red] font-bold text-xl/[24px] mdd:text-lg">
+                          <NumberFlow
+                            value={yearlyExpenses + thisYearMonthlyExpenses}
+                            trend={5}
+                            spinTiming={{
+                              duration: 1500,
+                              easing: "ease-in-out",
+                            }}
+                            format={{
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }}
+                          />
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Yearly Net */}
+                  <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full sm:col-span-2 xxs:col-span-1">
+                    <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
+                      Net
+                    </div>
+                    <div className="flex items-center font-semibold">
+                      <div
+                        className={`flex space-x-1 items-center justify-center mx-auto`}
+                      >
+                        <img
+                          src={yearlyNetIcon}
+                          alt="mon_net"
+                          className={`w-14 mdd:w-10`}
+                        />
+                        <p className="ml-1 text-[#D0D0D0]">:</p>
+                        <p
+                          className={`font-bold text-xl/[24px] mdd:text-lg ${
+                            yearlyNet < 0 ? "text-[red]" : "text-greens"
+                          }`}
+                        >
+                          <NumberFlow
+                            value={yearlyNet}
+                            trend={5}
+                            spinTiming={{
+                              duration: 1500,
+                              easing: "ease-in-out",
+                            }}
+                            format={{
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }}
+                          />
+                        </p>
+                        {yearlyNet < 0 ? (
+                          <PiChartLineDown className="text-2xl text-[#ff3a33] mdd:text-lg" />
+                        ) : (
+                          <PiChartLineUp className="text-2xl text-[#32ca5b] mdd:text-lg" />
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -416,7 +444,6 @@ const BusinessYearlySummary = () => {
                     alt="yearly expenses"
                     className="w-11 sm:w-9"
                   />
-                  {/* {(yearlyExpenses + thisYearMonthlyExpenses).toLocaleString()} */}
                   <NumberFlow
                     value={yearlyExpenses + thisYearMonthlyExpenses}
                     trend={5}

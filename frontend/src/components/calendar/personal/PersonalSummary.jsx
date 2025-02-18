@@ -427,101 +427,128 @@ const PersonalSummary = () => {
         className="bg-white mb-5 py-5 mx-5 rounded-lg shadow-sm xl:ml-24 lg:ml-5"
       >
         <div className="font-pops">
-          <div
-            id="overallIncome"
-            className="hidden bg-white shadow-sm rounded-lg mb-5 py-5 mx-5 xl:ml-24 lg:block lg:ml-5"
-          >
+          <div>
+            {/* Monthly Summary */}
             <div
-              className={`flex justify-center items-center text-greens font-bold pb-2 text-2xl sm:text-xl`}
+              id="monthlySummary"
+              className="bg-white h-hfit rounded-lg shadow-sm hidden lg:block"
             >
-              Monthly Summary
-            </div>
-            <div className="flex items-center justify-evenly flex-wrap gap-2 mt-1 xl:px-3">
-              <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
-                <div className="text-base font-semibold text-center mdd:text-sm">
-                  Net
-                </div>
-                <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
-                  <div>
-                    <img
-                      src={monthlyNetIcon}
-                      alt="net"
-                      className="w-14 mdd:w-11 sm:w-9"
-                    />
-                  </div>
-                  <div
-                    className={`font-bold text-2xl mdd:text-xl sm:text-lg ${
-                      overallNet < 0 ? "text-[red]" : "text-greens"
-                    }`}
-                  >
-                    <NumberFlow
-                      value={monthlyNet}
-                      trend={5}
-                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
-                      format={{
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 2,
-                      }}
-                    />
-                  </div>
-                  <div>
-                    {overallNet < 0 ? (
-                      <PiChartLineDown className="text-3xl mdd:text-2xl sm:text-xl text-[#ff3a33]" />
-                    ) : (
-                      <PiChartLineUp className="text-3xl mdd:text-2xl sm:text-xl text-[#32ca5b]" />
-                    )}
-                  </div>
+              <div>
+                <div
+                  className={`px-1 pt-3 pb-1 font-bold text-xl clg:py-1 sm:text-lg text-center`}
+                >
+                  <div className="text-greens">Monthly Summary</div>
                 </div>
               </div>
-              <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
-                <div className="text-base font-semibold text-center mdd:text-sm">
-                  Gross
-                </div>
-                <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
-                  <div>
-                    <img
-                      src={monthlyGrossIcon}
-                      alt="gross"
-                      className="w-14 mdd:w-11 sm:w-9"
-                    />
+              <div>
+                <div
+                  className={`grid grid-cols-3 gap-2 py-2 px-5 sm:grid-cols-2 sm:grid-rows-2 xxs:grid-rows-3 xxs:grid-cols-1`}
+                >
+                  {/* Monthly Gross */}
+                  <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full sm:col-span-1 xxs:col-span-1">
+                    <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
+                      Gross
+                    </div>
+                    <div className="flex items-center font-semibold">
+                      <div
+                        className={`flex space-x-1 items-center justify-center mx-auto`}
+                      >
+                        <img
+                          src={monthlyGrossIcon}
+                          alt="mon_gross"
+                          className={`w-14 mdd:w-10`}
+                        />
+                        <p className="ml-1 text-[#D0D0D0]">:</p>
+                        <p className="text-oranges font-bold text-xl/[24px] mdd:text-lg">
+                          <NumberFlow
+                            value={monthlyGross}
+                            trend={5}
+                            spinTiming={{
+                              duration: 1500,
+                              easing: "ease-in-out",
+                            }}
+                            format={{
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }}
+                          />
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-oranges font-bold text-2xl mdd:text-xl sm:text-lg">
-                    {
-                      <NumberFlow
-                        value={monthlyGross}
-                        trend={5}
-                        spinTiming={{ duration: 1500, easing: "linear" }}
-                        format={{
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 2,
-                        }}
-                      />
-                    }
+
+                  {/* Monthly Expenses */}
+                  <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full sm:col-span-1 xxs:col-span-1">
+                    <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
+                      Expenses
+                    </div>
+                    <div className="flex items-center font-semibold">
+                      <div
+                        className={`flex space-x-1 items-center justify-center mx-auto`}
+                      >
+                        <img
+                          src={monthlyExpensesIcon}
+                          alt="mon_expenses"
+                          className={`w-14 mdd:w-10`}
+                        />
+                        <p className="ml-1 text-[#D0D0D0]">:</p>
+                        <p className="text-[red] font-bold text-xl/[24px] mdd:text-lg">
+                          <NumberFlow
+                            value={monthExpenses + monthlyExpenses}
+                            trend={5}
+                            spinTiming={{
+                              duration: 1500,
+                              easing: "ease-in-out",
+                            }}
+                            format={{
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }}
+                          />
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
-                <div className="text-base font-semibold text-center mdd:text-sm">
-                  Expenses
-                </div>
-                <div className="px-5 py-2 rounded-md flex items-center justify-center space-x-3">
-                  <div>
-                    <img
-                      src={monthlyExpensesIcon}
-                      alt="expenses"
-                      className="w-14 mdd:w-11 sm:w-9"
-                    />
-                  </div>
-                  <div className="text-[red] font-bold text-2xl mdd:text-xl sm:text-lg">
-                    <NumberFlow
-                      value={monthExpenses + monthlyExpenses}
-                      trend={5}
-                      spinTiming={{ duration: 1500, easing: "ease-in-out" }}
-                      format={{
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 2,
-                      }}
-                    />
+                  {/* Monthly Net */}
+                  <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full sm:col-span-2 xxs:col-span-1">
+                    <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
+                      Net
+                    </div>
+                    <div className="flex items-center font-semibold">
+                      <div
+                        className={`flex space-x-1 items-center justify-center mx-auto`}
+                      >
+                        <img
+                          src={monthlyNetIcon}
+                          alt="mon_net"
+                          className={`w-14 mdd:w-10`}
+                        />
+                        <p className="ml-1 text-[#D0D0D0]">:</p>
+                        <p
+                          className={`font-bold text-xl/[24px] mdd:text-lg ${
+                            monthlyNet < 0 ? "text-[red]" : "text-greens"
+                          }`}
+                        >
+                          <NumberFlow
+                            value={monthlyNet}
+                            trend={5}
+                            spinTiming={{
+                              duration: 1500,
+                              easing: "ease-in-out",
+                            }}
+                            format={{
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }}
+                          />
+                        </p>
+                        {monthlyNet < 0 ? (
+                          <PiChartLineDown className="text-2xl text-[#ff3a33] mdd:text-lg" />
+                        ) : (
+                          <PiChartLineUp className="text-2xl text-[#32ca5b] mdd:text-lg" />
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

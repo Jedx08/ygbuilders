@@ -350,7 +350,7 @@ const BusinessYearlySummary = () => {
           </div>
         ) : (
           <>
-            <div className="bg-white shadow-sm rounded-lg p-5">
+            {/* <div className="bg-white shadow-sm rounded-lg p-5">
               <div className="flex items-center justify-evenly flex-wrap gap-2 mt-1 xl:px-3">
                 <div className="border border-light shadow-sm px-5 py-2 rounded-lg">
                   <div className="text-base font-semibold text-center mdd:text-sm">
@@ -464,7 +464,156 @@ const BusinessYearlySummary = () => {
                   </div>
                 </div>
               </div>
+            </div> */}
+
+            <div>
+              {/* Yearly Summary */}
+              <div className="hidden bg-white h-hfit rounded-lg lg:block">
+                <div>
+                  <div className="grid grid-cols-4 gap-2 py-2 lg:grid-cols-2 lg:grid-rows-2 xxs:grid-rows-4 xxs:grid-cols-1">
+                    {/* Yearly Capital */}
+                    <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full">
+                      <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
+                        Capital
+                      </div>
+                      <div className="flex items-center font-semibold">
+                        <div
+                          className={`flex space-x-1 items-center justify-center lg:mx-auto`}
+                        >
+                          <img
+                            src={yearlyCapitalIcon}
+                            alt="mon_capital"
+                            className={`w-14 mdd:w-10`}
+                          />
+                          <p className="ml-1 text-[#D0D0D0]">:</p>
+                          <p className="text-oranges font-bold text-xl/[24px] mdd:text-lg">
+                            <NumberFlow
+                              value={yearlyCapital}
+                              trend={5}
+                              spinTiming={{
+                                duration: 1500,
+                                easing: "ease-in-out",
+                              }}
+                              format={{
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 2,
+                              }}
+                            />
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    {/* Yearly Sales */}
+                    <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full">
+                      <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
+                        Sales
+                      </div>
+                      <div className="flex items-center font-semibold">
+                        <div
+                          className={`flex space-x-1 items-center justify-center lg:mx-auto`}
+                        >
+                          <img
+                            src={yearlySalesIcon}
+                            alt="mon_sales"
+                            className={`w-14 mdd:w-10`}
+                          />
+                          <p className="ml-1 text-[#D0D0D0]">:</p>
+                          <p className="text-[#399CB4] font-bold text-xl/[24px] mdd:text-lg">
+                            <NumberFlow
+                              value={yearlySales}
+                              trend={5}
+                              spinTiming={{
+                                duration: 1500,
+                                easing: "ease-in-out",
+                              }}
+                              format={{
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 2,
+                              }}
+                            />
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Yearly Expenses */}
+                    <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full">
+                      <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
+                        Expenses
+                      </div>
+                      <div className="flex items-center font-semibold">
+                        <div
+                          className={`flex space-x-1 items-center justify-center lg:mx-auto`}
+                        >
+                          <img
+                            src={yearlyExpensesIcon}
+                            alt="mon_expenses"
+                            className={`w-14 mdd:w-10`}
+                          />
+                          <p className="ml-1 text-[#D0D0D0]">:</p>
+                          <p className="text-[red] font-bold text-xl/[24px] mdd:text-lg">
+                            <NumberFlow
+                              value={yearlyExpenses + thisYearMonthlyExpenses}
+                              trend={5}
+                              spinTiming={{
+                                duration: 1500,
+                                easing: "ease-in-out",
+                              }}
+                              format={{
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 2,
+                              }}
+                            />
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    {/* Yearly Profit */}
+                    <div className="border border-light shadow-sm px-5 py-2 rounded-lg w-fit mx-auto lg:w-full">
+                      <div className="text-base font-semibold text-center mdd:text-sm sm:text-xs">
+                        Profit
+                      </div>
+                      <div className="flex items-center font-semibold">
+                        <div
+                          className={`flex space-x-1 items-center justify-center lg:mx-auto`}
+                        >
+                          <img
+                            src={yearlyProfitIcon}
+                            alt="mon_profit"
+                            className={`w-14 mdd:w-10`}
+                          />
+                          <p className="ml-1 text-[#D0D0D0]">:</p>
+                          <p
+                            className={`font-bold text-xl/[24px] mdd:text-lg ${
+                              yearlyProfit < 0 ? "text-[red]" : "text-greens"
+                            }`}
+                          >
+                            <NumberFlow
+                              value={yearlyProfit}
+                              trend={5}
+                              spinTiming={{
+                                duration: 1500,
+                                easing: "ease-in-out",
+                              }}
+                              format={{
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 2,
+                              }}
+                            />
+                          </p>
+                          {yearlyProfit < 0 ? (
+                            <PiChartLineDown className="text-2xl text-[#ff3a33] mdd:text-lg" />
+                          ) : (
+                            <PiChartLineUp className="text-2xl text-[#32ca5b] mdd:text-lg" />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+
             <div className="border border-light w-full h-hfull bg-white p-4 rounded-lg shadow-sm overflow-y-auto">
               <div className="h-[400px] w-full">
                 <Bar
